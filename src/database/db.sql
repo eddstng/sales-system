@@ -1,4 +1,4 @@
-\ c sales_system_db;
+\c sales_system_db;
 
 DROP TABLE IF EXISTS orders_items;
 
@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS items;
 
 DROP TABLE IF EXISTS customers;
 
-\ c postgres;
+\c postgres;
 
 DROP OWNED BY sales_system_db;
 
@@ -20,7 +20,9 @@ DROP ROLE IF EXISTS sales_system_db;
 
 CREATE ROLE sales_system_db WITH LOGIN;
 
-\ c sales_system_db;
+ALTER USER sales_system_db WITH PASSWORD 'salessystemdb';
+
+\c sales_system_db;
 
 CREATE TABLE items (
     id SERIAL PRIMARY KEY,
@@ -38,14 +40,16 @@ CREATE TABLE customers (
 );
 
 CREATE TABLE orders_items (
-    id SERIAL PRIMARY KEY --  item_id INT FOREIGN KEY REFERENCES items (id)
+    id SERIAL PRIMARY KEY 
+    --  item_id INT FOREIGN KEY REFERENCES items (id)
     --  order_id INT FOREIGN KEY REFERENCES orders (id)
 );
 
 CREATE TABLE orders (
     id SERIAL PRIMARY KEY,
     total FLOAT,
-    timestamp TIMESTAMP --  customer_id INT FOREIGN KEY REFERENCES customers (id)
+    timestamp TIMESTAMP 
+    --  customer_id INT FOREIGN KEY REFERENCES customers (id)
 );
 
 ALTER TABLE
