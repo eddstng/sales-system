@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "start": "nodemon src/app.ts --exec ts-node"
+    "start": "nodemon src/app.ts --exec ts-node",
+    "db:create": "cd ./src/database && psql -f db.sql postgres"
   },
   "author": "edstngdv",
   "license": "ISC",

@@ -1,10 +1,26 @@
-\ c postgres DROP DATABASE IF EXISTS postgres;
+\ c sales_system_db;
 
-CREATE DATABASE postgres;
+DROP TABLE IF EXISTS orders_items;
 
-CREATE ROLE postgres WITH LOGIN;
+DROP TABLE IF EXISTS orders;
+
+DROP TABLE IF EXISTS items;
+
+DROP TABLE IF EXISTS customers;
 
 \ c postgres;
+
+DROP OWNED BY sales_system_db;
+
+DROP DATABASE IF EXISTS sales_system_db;
+
+CREATE DATABASE sales_system_db;
+
+DROP ROLE IF EXISTS sales_system_db;
+
+CREATE ROLE sales_system_db WITH LOGIN;
+
+\ c sales_system_db;
 
 CREATE TABLE items (
     id SERIAL PRIMARY KEY,
@@ -62,19 +78,19 @@ ALTER TABLE
 ADD
     CONSTRAINT fk_customers FOREIGN KEY (customer_id) REFERENCES customers (id);
 
-GRANT ALL PRIVILEGES ON TABLE items TO postgres;
+GRANT ALL PRIVILEGES ON TABLE items TO sales_system_db;
 
-GRANT ALL PRIVILEGES ON TABLE orders_items TO postgres;
+GRANT ALL PRIVILEGES ON TABLE orders_items TO sales_system_db;
 
-GRANT ALL PRIVILEGES ON TABLE orders TO postgres;
+GRANT ALL PRIVILEGES ON TABLE orders TO sales_system_db;
 
-GRANT ALL PRIVILEGES ON TABLE customers TO postgres;
+GRANT ALL PRIVILEGES ON TABLE customers TO sales_system_db;
 
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO postgres;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO sales_system_db;
 
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO postgres;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO sales_system_db;
 
-GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO postgres;
+GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO sales_system_db;
 
 INSERT INTO
     items (price, name_eng, name_chn)
