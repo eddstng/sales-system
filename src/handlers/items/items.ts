@@ -1,4 +1,4 @@
-import { PrismaClient, itemsCreateInput } from "@prisma/client";
+import { PrismaClient, itemsCreateInput, items } from "@prisma/client";
 import { IsNotEmpty } from "class-validator";
 import { validateClassFields } from "../utils";
 
@@ -19,6 +19,22 @@ export async function getAllItems(prisma: PrismaClient): Promise<Record<string, 
     try {
         const allItems = await prisma.items.findMany()
         return allItems;
+    } catch (err) {
+        throw new Error(`${err}`)
+    }
+}
+
+export async function getOneItem(prisma: PrismaClient, id: number): Promise<items> {
+    try {
+        const oneItem = await prisma.items.findUnique({
+            where: {
+                id: id,
+            },
+        })
+        if (oneItem !== null) {
+            return oneItem
+        }
+        return <items><unknown>[]
     } catch (err) {
         throw new Error(`${err}`)
     }
