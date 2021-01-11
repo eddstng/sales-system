@@ -32,6 +32,7 @@ export async function getOneItem(prisma: PrismaClient, id: number): Promise<item
             },
         })
         if (oneItem !== null) {
+            await validateClassFields(Item, <JSON><unknown>oneItem)
             return oneItem
         }
         return <items><unknown>[]
