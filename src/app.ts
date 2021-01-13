@@ -2,11 +2,11 @@ import startServer from './server'
 import { PrismaClient } from "@prisma/client"
 import 'reflect-metadata';
 
-const prisma = new PrismaClient()
+export const prisma = new PrismaClient()
 
 async function main() {
     try {
-        startServer(prisma)
+        startServer()
     } catch (err) {
         throw err
     } finally {
