@@ -20,7 +20,7 @@ const customColours = {
 winston.addColors(customColours.colors);
 
 const customFormat = printf(({ level, message, label, timestamp }) => {
-    return `${timestamp} [${label}] | [${level}]: ${message}`;
+    return `${timestamp} [${level}] | [${label}]: ${message}`;
 });
 
 const config = {

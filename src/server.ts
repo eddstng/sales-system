@@ -1,8 +1,9 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 
-import { getAllItems, createItem, getOneItem, deleteOneItem } from './handlers/items/items';
+import { getAllItems, createItem, getOneItem, deleteOneItem, updateItem } from './handlers/items/items';
 import { logger } from '../src/logging/logger';
+import { itemsUpdateInput } from '@prisma/client';
 
 export default function startServer(): void {
     const port = 3000
@@ -32,6 +33,13 @@ export default function startServer(): void {
             res.status(500).send({ error: err.toString() });
         }
     })
+    app.put('/put/items/update/id/:id', async (req, res) => {
+        try {
+            res.status(200).json(await updateItem(parseInt(req.params.id), <itemsUpdateInput>req.body))
+        } catch (err) {
+            res.status(500).send({ error: err.toString() });
+        }
+    })
     app.delete('/delete/items/delete/id/:id', async (req, res) => {
         try {
             res.status(200).json(await deleteOneItem(parseInt(req.params.id)))
@@ -41,6 +49,6 @@ export default function startServer(): void {
     })
 
     app.listen(port, () => {
-        logger.info('Server started on http://localhost:3000.')
+        logger.info('[server] Server started on http://localhost:3000.')
     })
 }
