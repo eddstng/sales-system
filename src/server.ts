@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import { getAllItems, createItem, getOneItem, deleteOneItem, updateItem } from './handlers/items/items';
 import { logger } from '../src/logging/logger';
 import { itemsUpdateInput, customersUpdateInput } from '@prisma/client';
-import { getAllCustomers, getOneCustomer, createCustomer, updateCustomer, deleteOneCustomer } from './handlers/customers.ts/customers';
+import { getAllCustomers, getOneCustomer, createCustomer, updateCustomer, deleteOneCustomer } from './handlers/customers/customers';
 
 export default function startServer(): void {
     const port = 3000
