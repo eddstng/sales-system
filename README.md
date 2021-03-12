@@ -1,0 +1,13 @@
+Routes:
+```
+app.get('/get/items/all'
+app.get('/get/items/id/:id'
+app.post('/post/items/create'
+app.put('/put/items/update/id/:id'
+app.delete('/delete/items/delete/id/:id'
+app.get('/get/customers/all'
+app.get('/get/customers/id/:id'
+app.post('/post/customers/create'
+app.put('/put/customers/update/id/:id'
+app.delete('/delete/customers/delete/id/:id'
+```
