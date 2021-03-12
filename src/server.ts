@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 
 import { getAllItems, createItem, getOneItem, deleteOneItem, updateItem } from './handlers/items/items';
 import { logger } from '../src/logging/logger';
-import { itemsUpdateInput, customersUpdateInput } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { getAllCustomers, getOneCustomer, createCustomer, updateCustomer, deleteOneCustomer } from './handlers/customers/customers';
 
 export default function startServer(): void {
@@ -37,7 +37,7 @@ export default function startServer(): void {
     })
     app.put('/put/items/update/id/:id', async (req, res) => {
         try {
-            res.status(200).json(await updateItem(parseInt(req.params.id), <itemsUpdateInput>req.body))
+            res.status(200).json(await updateItem(parseInt(req.params.id), <Prisma.itemsUpdateInput>req.body))
         } catch (err) {
             res.status(500).send({ error: err.toString() });
         }
@@ -74,7 +74,7 @@ export default function startServer(): void {
     })
     app.put('/put/customers/update/id/:id', async (req, res) => {
         try {
-            res.status(200).json(await updateCustomer(parseInt(req.params.id), <customersUpdateInput>req.body))
+            res.status(200).json(await updateCustomer(parseInt(req.params.id), <Prisma.customersUpdateInput>req.body))
         } catch (err) {
             res.status(500).send({ error: err.toString() });
         }

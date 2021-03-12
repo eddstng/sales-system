@@ -1,8 +1,9 @@
-import { customersCreateInput, customers, customersUpdateInput } from "@prisma/client";
 import { IsNotEmpty, IsString, IsOptional } from "class-validator";
 import { validateClassFields } from "../utils";
 import { prisma } from '../../app'
 import { logInfo, logError } from '../../logging/utils'
+import { customers } from "@prisma/client";
+import { Prisma } from '@prisma/client';
 
 export class Customer {
     id!: number;
@@ -63,7 +64,7 @@ export async function getOneCustomer(id: number): Promise<customers> {
 export async function createCustomer(body: JSON) {
     try {
         await validateClassFields(Customer, body)
-        const res = await prisma.customers.create({ data: <customersCreateInput>body })
+        const res = await prisma.customers.create({ data: <Prisma.customersCreateInput>body })
         logInfo(createCustomer.name, `[✓] Customer Created: {id: ${res.id}, name: ${res.name}, phone: ${res.phone}, address: ${res.address}, note: ${res.note}}`)
     } catch (err) {
         logError(createCustomer.name, err, `[✗]`);
@@ -83,7 +84,7 @@ export async function deleteOneCustomer(id: number): Promise<void> {
     }
 }
 
-export async function updateCustomer(id: number, customer: customersUpdateInput): Promise<void> {
+export async function updateCustomer(id: number, customer: Prisma.customersUpdateInput): Promise<void> {
     try {
         const res = await prisma.customers.update({
             where: { id: id },

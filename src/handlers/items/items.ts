@@ -1,4 +1,4 @@
-import { itemsCreateInput, items, itemsUpdateInput } from "@prisma/client";
+import { Prisma, items } from "@prisma/client";
 import { IsNotEmpty } from "class-validator";
 import { validateClassFields } from "../utils";
 import { prisma } from '../../app'
@@ -58,7 +58,7 @@ export async function getOneItem(id: number): Promise<items> {
 export async function createItem(body: JSON) {
     try {
         await validateClassFields(Item, body)
-        const res = await prisma.items.create({ data: <itemsCreateInput>body })
+        const res = await prisma.items.create({ data: <Prisma.itemsCreateInput>body })
         logInfo(createItem.name, `[✓] Item Created: {id: ${res.id}, price: ${res.price}, name_eng: ${res.name_eng}, name_chn: ${res.name_chn}}`)
     } catch (err) {
         logError(createItem.name, err, `[✗]`);
@@ -78,7 +78,7 @@ export async function deleteOneItem(id: number): Promise<void> {
     }
 }
 
-export async function updateItem(id: number, item: itemsUpdateInput): Promise<void> {
+export async function updateItem(id: number, item: Prisma.itemsUpdateInput): Promise<void> {
     try {
         const res = await prisma.items.update({
             where: { id: id },
