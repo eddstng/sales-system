@@ -5,6 +5,7 @@ import { getAllItems, createItem, getOneItem, deleteOneItem, updateItem } from '
 import { logger } from '../src/logging/logger';
 import { Prisma } from '@prisma/client';
 import { getAllCustomers, getOneCustomer, createCustomer, updateCustomer, deleteOneCustomer } from './handlers/customers/customers';
+import { createOrder, deleteOneOrder, getAllOrders, getOneOrder, updateOrder } from './handlers/orders/orders';
 
 export default function startServer(): void {
     const port = 3000
@@ -82,6 +83,43 @@ export default function startServer(): void {
     app.delete('/delete/customers/delete/id/:id', async (req, res) => {
         try {
             res.status(200).json(await deleteOneCustomer(parseInt(req.params.id)))
+        } catch (err) {
+            res.status(500).send({ error: err.toString() });
+        }
+    })
+
+    // Orders
+    app.get('/get/orders/all', async (_req, res) => {
+        try {
+            res.status(200).json(await getAllOrders())
+        } catch (err) {
+            res.status(500).send({ error: err.toString() });
+        }
+    })
+    app.get('/get/orders/id/:id', async (req, res) => {
+        try {
+            res.status(200).json(await getOneOrder(parseInt(req.params.id)))
+        } catch (err) {
+            res.status(500).send({ error: err.toString() });
+        }
+    })
+    app.post('/post/orders/create', async (req, res) => {
+        try {
+            res.status(200).json(await createOrder(req.body))
+        } catch (err) {
+            res.status(500).send({ error: err.toString() });
+        }
+    })
+    app.put('/put/orders/update/id/:id', async (req, res) => {
+        try {
+            res.status(200).json(await updateOrder(parseInt(req.params.id), <Prisma.ordersUpdateInput>req.body))
+        } catch (err) {
+            res.status(500).send({ error: err.toString() });
+        }
+    })
+    app.delete('/delete/orders/delete/id/:id', async (req, res) => {
+        try {
+            res.status(200).json(await deleteOneOrder(parseInt(req.params.id)))
         } catch (err) {
             res.status(500).send({ error: err.toString() });
         }
