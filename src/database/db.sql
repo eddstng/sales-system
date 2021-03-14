@@ -1,5 +1,3 @@
-\c sales_system_db;
-
 DROP TABLE IF EXISTS orders_items;
 
 DROP TABLE IF EXISTS orders;
@@ -25,14 +23,14 @@ ALTER USER sales_system_db WITH PASSWORD 'salessystemdb';
 \c sales_system_db;
 
 CREATE TABLE items (
-    id SERIAL PRIMARY KEY,
+    id SERIAL NOT NULL PRIMARY KEY,
     price FLOAT,
     name_eng VARCHAR(30) UNIQUE,
     name_chn VARCHAR(30) UNIQUE
 );
 
 CREATE TABLE customers (
-    id SERIAL PRIMARY KEY,
+    id SERIAL NOT NULL PRIMARY KEY,
     name VARCHAR(30),
     phone VARCHAR(30),
     address TEXT,
@@ -40,15 +38,15 @@ CREATE TABLE customers (
 );
 
 CREATE TABLE orders_items (
-    id SERIAL PRIMARY KEY 
+    id SERIAL NOT NULL PRIMARY KEY
     --  item_id INT FOREIGN KEY REFERENCES items (id)
     --  order_id INT FOREIGN KEY REFERENCES orders (id)
 );
 
 CREATE TABLE orders (
-    id SERIAL PRIMARY KEY,
+    id SERIAL NOT NULL PRIMARY KEY,
     total FLOAT,
-    timestamp TIMESTAMP 
+    timestamp TIMESTAMP WITHOUT TIME ZONE DEFAULT (NOW())
     --  customer_id INT FOREIGN KEY REFERENCES customers (id)
 );
 
