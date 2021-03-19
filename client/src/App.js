@@ -1,12 +1,12 @@
 import './App.css';
-import Sidebar from './components/Sidebar'
+import Main from './components/Main'
 import { ChakraProvider } from "@chakra-ui/react"
 
 function App() {
   return (
     <div className="App">
       <ChakraProvider>
-        <Sidebar />
+        <Main />
       </ChakraProvider>
     </div>
   );
