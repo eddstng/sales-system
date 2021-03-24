@@ -1,8 +1,32 @@
 import React from 'react';
+import axios from 'axios';
 import { SimpleGrid, Button } from "@chakra-ui/react"
 
-
 class Order extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            items: []
+        }
+        this.getItems = this.getItems.bind(this);
+    }
+
+    getItems() {
+        axios.get(`http://localhost:3000/get/items/all`)
+            .then(res => {
+                const items = res.data;
+                this.setState({ items: items })
+                console.log(items)
+            })
+            .catch(error => {
+                console.log(error.response)
+            })
+    }
+
+    componentDidMount() {
+        this.getItems();
+    }
+
     render() {
         return (
             <div>
@@ -17,42 +41,14 @@ class Order extends React.Component {
                     rounded="lg"
                     color="gray.400"
                 >
+                    {this.state.items.map((item) =>
                         <Button boxShadow="md" mt="1" height="10em" rounded="md" bg="gray.300" color='black'>
-                            ORDER
+                            {item.id} <br/>
+                            {item.name_eng} <br/>
+                            {item.name_chn}<br/>
+                            {item.price}
                         </Button>
-                        <Button boxShadow="md" mt="1" height="10em" rounded="md" bg="gray.300" color='black'>
-                            HISTORY
-                        </Button>
-                        <Button boxShadow="md" mt="1" height="10em" rounded="md" bg="gray.300" color='black'>
-                            HOME
-                        </Button>
-                        <Button boxShadow="md" mt="1" height="10em" rounded="md" bg="gray.300" color='black'>
-                            HOME
-                        </Button>
-                        <Button boxShadow="md" mt="1" height="10em" rounded="md" bg="gray.300" color='black'>
-                            ORDER
-                        </Button>
-                        <Button boxShadow="md" mt="1" height="10em" rounded="md" bg="gray.300" color='black'>
-                            HISTORY
-                        </Button>
-                        <Button boxShadow="md" mt="1" height="10em" rounded="md" bg="gray.300" color='black'>
-                            HOME
-                        </Button>
-                        <Button boxShadow="md" mt="1" height="10em" rounded="md" bg="gray.300" color='black'>
-                            HOME
-                        </Button>
-                        <Button boxShadow="md" mt="1" height="10em" rounded="md" bg="gray.300" color='black'>
-                            ORDER
-                        </Button>
-                        <Button boxShadow="md" mt="1" height="10em" rounded="md" bg="gray.300" color='black'>
-                            HISTORY
-                        </Button>
-                        <Button boxShadow="md" mt="1" height="10em" rounded="md" bg="gray.300" color='black'>
-                            HOME
-                        </Button>
-                        <Button boxShadow="md" mt="1" height="10em" rounded="md" bg="gray.300" color='black'>
-                            HOME
-                        </Button>
+                    )}
                 </SimpleGrid>
             </div>
         )
