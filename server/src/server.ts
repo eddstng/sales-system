@@ -1,5 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 
 import { getAllItems, createItem, getOneItem, deleteOneItem, updateItem } from './handlers/items/items';
 import { logger } from '../src/logging/logger';
@@ -11,6 +12,7 @@ import { getAllOrderItem, createOrderItem, updateOrderItem, deleteOneOrderItem, 
 export default function startServer(): void {
     const port = 3000
     const app = express()
+    app.use(cors())
 
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
