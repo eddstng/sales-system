@@ -25,16 +25,16 @@ ALTER USER sales_system_db WITH PASSWORD 'salessystemdb';
 CREATE TABLE items (
     id SERIAL NOT NULL PRIMARY KEY,
     price FLOAT,
-    name_eng VARCHAR(30) UNIQUE,
-    name_chn VARCHAR(30) UNIQUE,
+    name_eng VARCHAR(100) UNIQUE,
+    name_chn VARCHAR(100) UNIQUE,
     sizes JSON,
     additional TEXT[]
 );
 
 CREATE TABLE customers (
     id SERIAL NOT NULL PRIMARY KEY,
-    name VARCHAR(30),
-    phone VARCHAR(30),
+    name VARCHAR(100),
+    phone VARCHAR(100),
     address TEXT,
     note TEXT
 );
@@ -95,21 +95,6 @@ GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO sales_system_db;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO sales_system_db;
 
 GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO sales_system_db;
-
-INSERT INTO
-    items (price, name_eng, name_chn, sizes, additional)
-VALUES
-    (9.50, 'BBQ Duck', '燒烤鴨', null, null);
-
-INSERT INTO
-    items (price, name_eng, name_chn, sizes, additional)
-VALUES
-    (8.50, 'Lettuce Wrap', '蜂蜜燒烤豬肉', null, '{"Chicken", "Beef", "Pork"}');
-
-INSERT INTO
-    items (price, name_eng, name_chn, sizes, additional)
-VALUES
-    (8.20, 'DF Wonton w/ SS', '炸雲吞', '{"small": 8.20, "large": 12.50}', null);
 
 INSERT INTO
     customers (name, phone, address)
