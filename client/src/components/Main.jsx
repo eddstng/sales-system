@@ -38,7 +38,7 @@ class Main extends React.Component {
                         rounded="lg"
                         mt='10%'
                         color="gray.400"
-                        position='absolute'
+                        position='fixed'
                     >
                         <Button onClick={() => this.setComponent('order')} boxShadow="md" mt="1" height="10em" rounded="md" bg="gray.300" color='black'>
                             ORDER
