@@ -1,7 +1,7 @@
 import React from 'react';
 import Home from './Home'
 import Order from './Order'
-import { Button, Container, SimpleGrid, Box } from "@chakra-ui/react"
+import { Button, SimpleGrid, Box } from "@chakra-ui/react"
 
 
 class Main extends React.Component {

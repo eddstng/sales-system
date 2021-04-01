@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Container, SimpleGrid } from "@chakra-ui/react"
+import {Container } from "@chakra-ui/react"
 
 class Home extends React.Component {
     render() {
