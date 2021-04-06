@@ -1,0 +1,45 @@
+<template>
+  <v-card class="pa-2 fill-height" outlined tile>
+    <v-container class="grey lighten-5 fill-height">
+      <template>
+        <v-container>
+          <v-row>
+            <v-col>
+              <div>
+                <div>
+                  <v-btn
+                    class="my-2"
+                    x-large
+                    color="success"
+                    dark
+                    height="180px"
+                    width="100%"
+                    >HOME</v-btn
+                  >
+                  <v-btn
+                    class="my-2"
+                    x-large
+                    color="success"
+                    dark
+                    height="180px"
+                    width="100%"
+                    >ORDER</v-btn
+                  >
+                  <v-btn
+                    class="my-2"
+                    x-large
+                    color="success"
+                    dark
+                    height="180px"
+                    width="100%"
+                    >SETTINGS</v-btn
+                  >
+                </div>
+              </div>
+            </v-col>
+          </v-row>
+        </v-container>
+      </template>
+    </v-container>
+  </v-card>
+</template>
