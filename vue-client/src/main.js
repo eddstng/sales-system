@@ -1,10 +1,25 @@
-import Vue from 'vue'
-import App from './App.vue'
-import vuetify from './plugins/vuetify';
+import Vue from "vue";
+import App from "./App.vue";
+import vuetify from "./plugins/vuetify";
+import { store } from "./store/store";
+import axios from "axios";
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 new Vue({
+  methods: {
+    async init() {
+      // Set Items
+      store.commit(
+        "setItems",
+        (await axios.get("http://localhost:3000/get/items/all")).data
+      );
+    },
+  },
+  mounted() {
+    this.init();
+  },
   vuetify,
-  render: h => h(App)
-}).$mount('#app')
+  store,
+  render: (h) => h(App),
+}).$mount("#app");

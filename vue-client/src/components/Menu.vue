@@ -9,48 +9,15 @@
     <v-container class="grey lighten-5 fill-height">
       <v-container>
         <div v-scroll.self="onScroll" class="overflow-y-auto" max-height="400">
-          <v-btn color="secondary" x-large dark height="180px" width="50%">
-            Accept Terms
-          </v-btn>
-          <v-btn color="secondary" x-large dark height="180px" width="50%">
-            Accept Terms
-          </v-btn>
-          <v-btn color="secondary" x-large dark height="180px" width="50%">
-            Accept Terms
-          </v-btn>
-          <v-btn color="secondary" x-large dark height="180px" width="50%">
-            Accept Terms
-          </v-btn>
-          <v-btn color="secondary" x-large dark height="180px" width="50%">
-            Accept Terms
-          </v-btn>
-          <v-btn color="secondary" x-large dark height="180px" width="50%">
-            Accept Terms
-          </v-btn>
-          <v-btn color="secondary" x-large dark height="180px" width="50%">
-            Accept Terms
-          </v-btn>
-          <v-btn color="secondary" x-large dark height="180px" width="50%">
-            Accept Terms
-          </v-btn>
-          <v-btn color="secondary" x-large dark height="180px" width="50%">
-            Accept Terms
-          </v-btn>
-          <v-btn color="secondary" x-large dark height="180px" width="50%">
-            Accept Terms
-          </v-btn>
-          <v-btn color="secondary" x-large dark height="180px" width="50%">
-            Accept Terms
-          </v-btn>
-          <v-btn color="secondary" x-large dark height="180px" width="50%">
-            Accept Terms
-          </v-btn>
-          <v-btn color="secondary" x-large dark height="180px" width="50%">
-            Accept Terms
-          </v-btn>
-          <v-btn color="secondary" x-large dark height="180px" width="50%">
-            Accept Terms
-          </v-btn>
+          <v-btn
+            v-for="item in $store.state.items"
+            v-bind:key="item"
+            x-large
+            dark
+            height="180px"
+            width="50%"
+            >{{ item.name_eng }}<br/>{{ item.name_chn }}<br/>{{ item.price }}</v-btn
+          >
         </div>
       </v-container>
     </v-container>
