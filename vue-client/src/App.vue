@@ -7,13 +7,15 @@
         </v-col>
         <v-col lg="4">
           <v-card class="pa-2 fill-height" outlined tile>
-            <v-container class="grey lighten-5 fill-height"> Bill </v-container>
+            <v-container class="grey lighten-5 fill-height">
+              <MenuDisplay />
+            </v-container>
           </v-card>
         </v-col>
         <v-col lg="6" height="100vh">
           <v-card class="fill-height" tile>
             <v-container class="grey lighten-5 fill-height">
-              <Menu />
+              <MenuButtons />
             </v-container>
           </v-card>
         </v-col>
@@ -24,13 +26,15 @@
 
 <script>
 import Sidebar from "@/components/Sidebar";
-import Menu from "@/components/Menu";
+import MenuButtons from "@/components/MenuButtons";
+import MenuDisplay from "@/components/MenuDisplay";
 
 export default {
   name: "App",
   components: {
     Sidebar,
-    Menu
+    MenuButtons,
+    MenuDisplay,
   },
 
   data: () => ({
