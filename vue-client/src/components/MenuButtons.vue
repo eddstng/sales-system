@@ -43,14 +43,12 @@ export default {
     return {};
   },
   mounted() {
-  this.scrollToElement();
-},
+    this.scrollToElement();
+  },
   methods: {
     scrollToElement() {
       const el = this.$refs.scrollToMe;
-
       if (el) {
-        // Use el.scrollIntoView() to instantly scroll to the element
         el.scrollIntoView({ behavior: "smooth" });
       }
     },
