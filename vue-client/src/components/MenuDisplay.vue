@@ -3,7 +3,6 @@
     <v-card
       outlined
       tile
-      v-scroll.self="onScroll"
       class="overflow-y-auto d-block"
       height="77.5vh"
       v-chat-scroll
@@ -35,9 +34,9 @@
           <div class="menu-display-text mt-5">Total:</div>
         </v-list-item-content>
         <v-list-item-content>
-          <div class="menu-display-text text-right">5</div>
-          <div class="menu-display-text text-right">5</div>
-          <div class="menu-display-text text-right mt-5 mb-0">123</div>
+          <div class="menu-display-text text-right">{{$store.state.priceDetails.subtotal}}</div>
+          <div class="menu-display-text text-right">{{$store.state.priceDetails.gst}}</div>
+          <div class="menu-display-text text-right mt-5 mb-0">{{$store.state.priceDetails.total}}</div>
         </v-list-item-content>
       </v-list-item>
     </v-card>
@@ -49,30 +48,3 @@
   font-size: 1.5em;
 }
 </style>
-
-<script>
-import { store } from "../store/store";
-export default {
-  data() {
-    return {};
-  },
-  mounted() {
-  this.scrollToElement();
-},
-  methods: {
-    scrollToElement() {
-      const el = this.$refs.scrollToMe;
-
-      if (el) {
-        // Use el.scrollIntoView() to instantly scroll to the element
-        el.scrollIntoView({ behavior: "smooth" });
-      }
-    },
-    addItemToSelectedItems(item) {
-      const selectedItems = store.state.selectedItems;
-      selectedItems.push(item);
-      store.commit("setSelectedItems", selectedItems);
-    },
-  },
-};
-</script>
