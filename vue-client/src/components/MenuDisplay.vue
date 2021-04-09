@@ -11,17 +11,20 @@
         <v-card
           class="mx-auto pt-2"
           outlined
-          v-for="item in $store.state.selectedItems"
-          v-bind:key="item"
+          v-for="(value) in $store.state.selectedItems"
+          v-bind:key="value"
           height="7em"
           width="100vw"
         >
           <v-list-item three-line>
             <v-list-item-content>
-              <div class="menu-display-text">{{ item.name_eng }}</div>
-              <div class="menu-display-text">{{ item.name_chn }}</div>
+              <div class="menu-display-text">{{ value.node.name_eng }}</div>
+              <div class="menu-display-text">{{ value.node.name_chn }}</div>
             </v-list-item-content>
-            <Button class="menu-display-text">{{ item.price }}</Button>
+            <v-list-item-content>
+            <div class="menu-display-text text-right">x{{  value.quantity }}</div>
+            <div class="menu-display-text text-right">{{  value.node.price *  value.quantity }}</div>
+            </v-list-item-content>
           </v-list-item>
         </v-card>
       </template>
@@ -46,5 +49,9 @@
 <style>
 .menu-display-text {
   font-size: 1.5em;
+}
+
+.text-right {
+  position:right
 }
 </style>

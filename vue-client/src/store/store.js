@@ -5,8 +5,13 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   state: {
-    items: [], // all of the items from the items table
-    selectedItems: [], // the items that are displayed on the menu display
+    // all of the items from the items table
+    // Items[]
+    items: [], 
+    // the items that are displayed on the menu display
+    // Record<string, Record<string, unknown>
+    selectedItems: {}, 
+    //the price details that are displayed on the menu display
     priceDetails: {
       subtotal: 0,
       gst: 0,
