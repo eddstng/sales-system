@@ -2,20 +2,68 @@
   <v-card outlined tile class="overflow-y-auto" height="95vh">
     <v-container class="grey lighten-5 fill-height">
       <v-container>
-        <div class="p-0" max-height="400">
+        <div
+          class="d-inline"
+          v-for="item in $store.state.items"
+          v-bind:key="item.name_eng"
+        >
           <v-btn
+            v-if="item.sizes === null"
             class="menu-button-text"
-            v-for="item in $store.state.items"
-            v-bind:key="item.name_eng"
             x-large
-            dark
             height="180px"
             width="50%"
             v-on:click="onClickMenuButton(item)"
-            >{{ item.name_eng }}<br />{{ item.name_chn }}<br />{{
-              item.price
-            }}</v-btn
           >
+            <div>
+               {{ item.id }}<br /> <br />
+              {{ item.name_eng }}<br />{{ item.name_chn }}<br /><br />{{ item.price }}
+            </div>
+          </v-btn>
+
+          <template v-if="item.sizes !== null">
+            <div class="d-inline">
+              <v-dialog v-model="dialog" width="500">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    class="menu-button-text"
+                    x-large
+                    height="180px"
+                    width="50%"
+                    v-on:click="onClickMenuButton(item)"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    <div>
+                                     {{ item.id }}<br /> <br />
+                      {{ item.name_eng }}<br />{{ item.name_chn }}<br /><br />S: {{ item.sizes.small }} <br/> L: {{ item.sizes.large }} 
+                    </div>
+                  </v-btn>
+                </template>
+                <v-card>
+                  <v-card-title class="headline grey lighten-2">
+                    Privacy Policy
+                  </v-card-title>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      class="menu-button-text"
+                      x-large
+                      height="180px"
+                      width="50%"
+                      v-on:click="onClickMenuButton(item)"
+                      v-bind="attrs"
+                      v-on="on"
+                      v-for="(size, index) of item.sizes"
+                      v-bind:key="index"
+                    >
+                      <div>{{ index }}<br />{{ size }}<br /></div>
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </div>
+          </template>
         </div>
       </v-container>
     </v-container>
@@ -26,6 +74,8 @@
 .menu-button-text {
   font-size: 1.2em;
   overflow: hidden;
+  border-style: solid;
+  border-color: white;
 }
 </style>
 overflow: hidden;
@@ -69,7 +119,10 @@ export default {
       const selectedItems = store.state.selectedItems;
       Object.keys(selectedItems).forEach((key) => {
         console.log(key, selectedItems[key]);
-        priceDetails.subtotal = (parseFloat(selectedItems[key].node.price) * selectedItems[key].quantity) + priceDetails.subtotal;
+        priceDetails.subtotal =
+          parseFloat(selectedItems[key].node.price) *
+            selectedItems[key].quantity +
+          priceDetails.subtotal;
         priceDetails.gst = parseFloat(
           (priceDetails.subtotal * 0.05).toFixed(2)
         );
