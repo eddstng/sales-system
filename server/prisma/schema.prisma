@@ -21,13 +21,15 @@ model items {
   price        Float?
   name_eng     String?        @unique
   name_chn     String?        @unique
+  sizes        Json?
+  additional   String[]
   orders_items orders_items[]
 }
 
 model orders {
   id           Int            @id @default(autoincrement())
   total        Float?
-  timestamp    DateTime?
+  timestamp    DateTime?      @default(now())
   customer_id  Int?
   customers    customers?     @relation(fields: [customer_id], references: [id])
   orders_items orders_items[]
