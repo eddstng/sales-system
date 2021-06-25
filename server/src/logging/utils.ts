@@ -5,7 +5,9 @@ export function logInfo(func: string, log: string) {
     logger.info(message)
 }
 
-export function logError(func: string, err: Error, string?: string | undefined,) {
+export function logError(func: string, err: Error | unknown, string?: string | undefined,) {
+    if (err instanceof Error) {
     const message = `[${func}] ${string} Error: ${err.toString().replace(/\s{2,}/g, '  ')}`;
     logger.error(message)
+    }
 }
