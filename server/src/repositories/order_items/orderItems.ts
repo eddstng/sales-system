@@ -56,7 +56,7 @@ export async function createOrderItem(body: JSON) {
     try {
         await validateClassFields(OrderItem, body)
         const res = await prisma.orders_items.create({ data: <Prisma.orders_itemsCreateInput>body })
-        logInfo(createOrderItem.name, `[✓] OrderItem Created: {id: ${res.id}, total: ${res.order_id}, customer_id: ${res.item_id}`)
+        logInfo(createOrderItem.name, `[✓] OrderItem Created: {id: ${res.id}, order_id: ${res.order_id}, item_id: ${res.item_id}`)
     } catch (err) {
         logError(createOrderItem.name, err, `[✗]`);
         throw new Error(`${err} `)

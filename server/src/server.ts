@@ -2,12 +2,12 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 
-import { getAllItems, createItem, getOneItem, deleteOneItem, updateItem } from './handlers/items/items';
+import { getAllItems, createItem, getOneItem, deleteOneItem, updateItem } from './repositories/items/items';
 import { logger } from '../src/logging/logger';
 import { Prisma } from '@prisma/client';
-import { getAllCustomers, getOneCustomer, createCustomer, updateCustomer, deleteOneCustomer } from './handlers/customers/customers';
-import { createOrder, deleteOneOrder, getAllOrders, getOneOrder, updateOrder } from './handlers/orders/orders';
-import { getAllOrderItem, createOrderItem, updateOrderItem, deleteOneOrderItem, getOneOrderItem } from './handlers/order_items/orderItems';
+import { getAllCustomers, getOneCustomer, createCustomer, updateCustomer, deleteOneCustomer } from './repositories/customers/customers';
+import { createOrder, deleteOneOrder, getAllOrders, getOneOrder, updateOrder } from './repositories/orders/orders';
+import { getAllOrderItem, createOrderItem, updateOrderItem, deleteOneOrderItem, getOneOrderItem } from './repositories/order_items/orderItems';
 
 export default function startServer(): void {
     const port = 3000

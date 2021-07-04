@@ -54,11 +54,12 @@ export async function getOneOrder(id: number): Promise<orders> {
     }
 }
 
-export async function createOrder(body: JSON) {
+export async function createOrder(body: JSON): Promise<orders> {
     try {
         await validateClassFields(Order, body)
         const res = await prisma.orders.create({ data: <Prisma.ordersCreateInput>body })
         logInfo(createOrder.name, `[✓] Order Created: {id: ${res.id}, total: ${res.total}, customer_id: ${res.customer_id}, timestamp: ${res.timestamp}}`)
+        return res;
     } catch (err) {
         logError(createOrder.name, err, `[✗]`);
         throw new Error(`${err} `)
