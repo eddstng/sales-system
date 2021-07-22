@@ -7,7 +7,7 @@ import { logger } from '../src/logging/logger';
 import { Prisma } from '@prisma/client';
 import { getAllCustomers, getOneCustomer, createCustomer, updateCustomer, deleteOneCustomer } from './repositories/customers/customers';
 import { createOrder, deleteOneOrder, getAllOrders, getOneOrder, updateOrder } from './repositories/orders/orders';
-import { getAllOrderItem, createOrderItem, updateOrderItem, deleteOneOrderItem, getOneOrderItem } from './repositories/order_items/orderItems';
+import { getAllOrdersItems, createOrdersItems, updateOrdersItems, deleteOneOrdersItems, getOneOrdersItems } from './repositories/ordersItems/ordersItems';
 
 export default function startServer(): void {
     const port = 3000
@@ -129,37 +129,37 @@ export default function startServer(): void {
     })
 
     // OrdersItem
-    app.get('/get/orderitems/all', async (_req, res) => {
+    app.get('/get/ordersitems/all', async (_req, res) => {
         try {
-            res.status(200).json(await getAllOrderItem())
+            res.status(200).json(await getAllOrdersItems())
         } catch (err: unknown) {
             res.status(500).send({ error: err as string });
         }
     })
-    app.get('/get/orderitems/id/:id', async (req, res) => {
+    app.get('/get/ordersitems/id/:id', async (req, res) => {
         try {
-            res.status(200).json(await getOneOrderItem(parseInt(req.params.id)))
+            res.status(200).json(await getOneOrdersItems(parseInt(req.params.id)))
         } catch (err: unknown) {
             res.status(500).send({ error: err as string });
         }
     })
-    app.post('/post/orderitems/create', async (req, res) => {
+    app.post('/post/ordersitems/create', async (req, res) => {
         try {
-            res.status(200).json(await createOrderItem(req.body))
+            res.status(200).json(await createOrdersItems(req.body))
         } catch (err: unknown) {
             res.status(500).send({ error: err as string });
         }
     })
-    app.put('/put/orderitems/update/id/:id', async (req, res) => {
+    app.put('/put/ordersitems/update/id/:id', async (req, res) => {
         try {
-            res.status(200).json(await updateOrderItem(parseInt(req.params.id), <Prisma.orders_itemsUncheckedUpdateInput>req.body))
+            res.status(200).json(await updateOrdersItems(parseInt(req.params.id), <Prisma.orders_itemsUncheckedUpdateInput>req.body))
         } catch (err: unknown) {
             res.status(500).send({ error: err as string });
         }
     })
-    app.delete('/delete/orderitems/delete/id/:id', async (req, res) => {
+    app.delete('/delete/ordersitems/delete/id/:id', async (req, res) => {
         try {
-            res.status(200).json(await deleteOneOrderItem(parseInt(req.params.id)))
+            res.status(200).json(await deleteOneOrdersItems(parseInt(req.params.id)))
         } catch (err: unknown) {
             res.status(500).send({ error: err as string });
         }

@@ -8,19 +8,19 @@ export class Item {
   id!: number;
 
   @IsNotEmpty()
+  menu_id!: number;
+
+  @IsNotEmpty()
   name_eng!: string;
 
   @IsNotEmpty()
   name_chn!: string;
 
   @IsNotEmpty()
-  price_0!: number;
+  price!: number;
 
-  price_1?: number | null;
-  price_2?: number | null;
-  option_0?: string | null;
-  option_1?: string | null;
-  option_2?: string | null;
+  @IsNotEmpty()
+  category!: number;
 }
 
 export async function getAllItems(): Promise<Record<string, unknown>[]> {
@@ -65,7 +65,7 @@ export async function createItem(body: JSON) {
     const res = await prisma.items.create({
       data: <Prisma.itemsCreateInput>body,
     });
-    logInfo(createItem.name, `[✓] Item Created: {id: ${res.id}, price: ${res.price_0}, name_eng: ${res.name_eng}, name_chn: ${res.name_chn}}`)
+    logInfo(createItem.name, `[✓] Item Created: {id: ${res.id}, price: ${res.price}, name_eng: ${res.name_eng}, name_chn: ${res.name_chn}, category: ${res.category}}`)
   } catch (err) {
     logError(createItem.name, err, `[✗]`);
     throw new Error(`${err} `);
@@ -77,7 +77,7 @@ export async function deleteOneItem(id: number): Promise<void> {
     const res = await prisma.items.delete({
       where: { id: id },
     });
-    logInfo(deleteOneItem.name, `[✓] Item Deleted: {id: ${res.id}, price_0: ${res.price_0}, name_eng: ${res.name_eng}, name_chn: ${res.name_chn}}`)
+    logInfo(deleteOneItem.name, `[✓] Item Deleted: {id: ${res.id}, price: ${res.price}, name_eng: ${res.name_eng}, name_chn: ${res.name_chn}, category: ${res.category}}`)
   } catch (err) {
     logError(deleteOneItem.name, err, `[✗]`);
     throw new Error(`${err} `);
@@ -94,15 +94,12 @@ export async function updateItem(
       data: {
         name_eng: item.name_eng,
         name_chn: item.name_chn,
-        price_0: item.price_0,
-        price_1: item.price_1,
-        price_2: item.price_2,
-        option_0: item.option_0,
-        option_1: item.option_1,
-        option_2: item.option_2
+        price: item.price,
+        menu_id: item.menu_id,
+        category: item.category,
       },
     });
-    logInfo(updateItem.name, `[✓] Item Updated: {id: ${res.id}, price: ${res.price_0}, name_eng: ${res.name_eng}, name_chn: ${res.name_chn}}`)
+    logInfo(updateItem.name, `[✓] Item Updated: {id: ${res.id}, price: ${res.price}, name_eng: ${res.name_eng}, name_chn: ${res.name_chn}, category: ${res.category}}`)
   } catch (err) {
     logError(updateItem.name, err, `[✗]`);
     throw new Error(`${err} `);

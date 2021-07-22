@@ -24,14 +24,11 @@ ALTER USER sales_system_db WITH PASSWORD 'salessystemdb';
 
 CREATE TABLE items (
     id SERIAL NOT NULL PRIMARY KEY,
-    price_0 FLOAT,
-    price_1 FLOAT,
-    price_2 FLOAT,
+    menu_id INTEGER,
+    price FLOAT,
     name_eng VARCHAR(100) UNIQUE,
     name_chn VARCHAR(100) UNIQUE,
-    option_0 VARCHAR(30),
-    option_1 VARCHAR(30),
-    option_2 VARCHAR(30)
+    category INTEGER
 );
 
 CREATE TABLE customers (
@@ -43,12 +40,9 @@ CREATE TABLE customers (
 );
 
 CREATE TABLE orders_items (
-    id SERIAL NOT NULL PRIMARY KEY,
+    id SERIAL NOT NULL PRIMARY KEY
     --  item_id INT FOREIGN KEY REFERENCES items (id)
     --  order_id INT FOREIGN KEY REFERENCES orders (id)
-    size VARCHAR(1),
-    price FLOAT,
-    option VARCHAR(30)
 );
 
 CREATE TABLE orders (
