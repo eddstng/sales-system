@@ -1,0 +1,132 @@
+{
+	"info": {
+		"_postman_id": "d7ecd98d-a258-4873-9e5d-2ffca7fcdfff",
+		"name": "sales_system - items",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/get/items/all",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/get/items/all",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"get",
+						"items",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/get/items/id/:id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/get/items/id/1",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"get",
+						"items",
+						"id",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/post/items/create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"menu_id\": 999,\n    \"name_eng\": \"name_eng_test\",\n    \"name_chn\": \"name_chn_test\",\n    \"price\": 99.99,\n    \"category\": 999\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/post/items/create",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"items",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/put/items/update/id/196",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"menu_id\": 9999,\n    \"name_eng\": \"name_eng_test2\",\n    \"name_chn\": \"name_chn_test2\",\n    \"price\": 99.99,\n    \"category\": 9999\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/put/items/update/id/196",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"put",
+						"items",
+						"update",
+						"id",
+						"196"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/delete/items/delete/id/196",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/delete/items/delete/id/196",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"delete",
+						"items",
+						"delete",
+						"id",
+						"196"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

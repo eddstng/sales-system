@@ -1,0 +1,132 @@
+{
+	"info": {
+		"_postman_id": "de007e3d-c2fa-41ff-8b6c-e78ed2fcfd95",
+		"name": "sales_system - orders_items",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/post/orderitems/create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"order_id\": 1,\n    \"item_id\": 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/post/ordersitems/create",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"post",
+						"ordersitems",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/get/orderitems/all",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/get/ordersitems/all",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"get",
+						"ordersitems",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/get/ordersitems/id/:id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/get/ordersitems/id/5",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"get",
+						"ordersitems",
+						"id",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/put/ordersitems/update/id/:id",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 5,\n    \"item_id\": 9,\n    \"order_id\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/put/ordersitems/update/id/5",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"put",
+						"ordersitems",
+						"update",
+						"id",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/delete/ordersitems/delete/id/:id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/delete/ordersitems/delete/id/5",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"delete",
+						"ordersitems",
+						"delete",
+						"id",
+						"5"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
