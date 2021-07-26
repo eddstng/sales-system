@@ -20,6 +20,7 @@
           >
            </template>  -->
 
+
 <v-dialog v-model="dialog" width="500">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
@@ -42,20 +43,24 @@
                 </template>
 
                 <v-card>
-                  <v-card-title class="headline grey lighten-2">
-                    Privacy Policy
-                  </v-card-title>
-
-                  <v-card-text>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Duis aute irure dolor in reprehenderit in voluptate velit
-                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                    occaecat cupidatat non proident, sunt in culpa qui officia
-                    deserunt mollit anim id est laborum.
-                  </v-card-text>
+                  <div>
+                    <br/>
+                    <v-col>
+<v-form
+    ref="form"
+    v-model="valid"
+    lazy-validation
+  >
+    <v-text-field
+      v-model="name"
+      :counter="10"
+      :rules="nameRules"
+      label="Phone Number"
+      required
+    ></v-text-field>
+  </v-form>
+  </v-col>
+                  </div>
 
                   <v-divider></v-divider>
 
