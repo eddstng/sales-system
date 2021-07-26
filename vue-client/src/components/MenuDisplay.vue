@@ -5,12 +5,82 @@
       tile
     height="15vh">
     <div class="menu-display-customer-text">
-      <p> 
-      #10 <br/>
-      TAKE OUT <br/>
-      123-123-1234 <br/>
-      1234 Street Lane <br/>
-       </p>
+        <div class="p-0" max-height="400">
+           <!-- <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            class="menu-button-text"
+            x-large
+            dark
+            height="180px"
+            width="97%"
+            v-on:click="onClickMenuButton(item)"
+                      v-bind="attrs"
+          v-on="on"
+            >SELECT A CUSTOMER</v-btn
+          >
+           </template>  -->
+
+<v-dialog v-model="dialog" width="500">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    class="menu-button-text mt-5"
+                    x-large
+            width="97%"
+            min-height="100%"
+                    v-on:click="
+                      onClickMenuButton(item);
+                      dialog = true;
+                    "
+                    style="height: 10vh;"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    <div>
+                      SELECT A CUSTOMER
+                    </div>
+                  </v-btn>
+                </template>
+
+                <v-card>
+                  <v-card-title class="headline grey lighten-2">
+                    Privacy Policy
+                  </v-card-title>
+
+                  <v-card-text>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Duis aute irure dolor in reprehenderit in voluptate velit
+                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+                    occaecat cupidatat non proident, sunt in culpa qui officia
+                    deserunt mollit anim id est laborum.
+                  </v-card-text>
+
+                  <v-divider></v-divider>
+
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="primary" text @click="dialog = false">
+                      I accept
+                    </v-btn>
+
+                    <v-btn
+                      class="menu-button-text"
+                      x-large
+                      height="180px"
+                      width="50%"
+                      v-on:click="
+                        dialog = false;
+                      "
+                      @click="dialog = false"
+                    >
+                      <div>123123123<br /></div>
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+        </div>
       </div>
       </v-card>
     <v-card
@@ -83,3 +153,12 @@
   position: right;
 }
 </style>
+
+<script>
+export default {
+  data() {
+    return {
+      dialog: true,
+    };
+  }
+}
