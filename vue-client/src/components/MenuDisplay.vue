@@ -1,12 +1,16 @@
 <template>
   <v-container>
-    <v-card 
+    <v-card
       outlined
       tile
-    height="15vh">
-    <div class="menu-display-customer-text">
-        <div class="p-0" max-height="400">
-           <!-- <template v-slot:activator="{ on, attrs }">
+      height="15vh"
+    >
+      <div class="menu-display-customer-text">
+        <div
+          class="p-0"
+          max-height="400"
+        >
+          <!-- <template v-slot:activator="{ on, attrs }">
           <v-btn
             class="menu-button-text"
             x-large
@@ -20,74 +24,82 @@
           >
            </template>  -->
 
-
-<v-dialog v-model="dialog" width="500">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    class="menu-button-text mt-5"
-                    x-large
-            width="97%"
-            min-height="100%"
-                    v-on:click="
-                      onClickMenuButton(item);
+          <v-dialog
+            v-model="dialog"
+            width="500"
+          >
+            <template v-slot:activator="{ attrs }">
+              <v-btn
+                class="menu-button-text mt-5"
+                x-large
+                width="97%"
+                min-height="100%"
+                v-on:click="
                       dialog = true;
                     "
-                    style="height: 10vh;"
-                    v-bind="attrs"
-                    v-on="on"
+                style="height: 10vh;"
+                v-bind="attrs"
+              >
+                <div>
+                  SELECT A CUSTOMER
+                </div>
+              </v-btn>
+            </template>
+
+            <v-card>
+              <div>
+                <br />
+                <v-col>
+                  <v-form
+                    ref="form"
+                    lazy-validation
                   >
-                    <div>
-                      SELECT A CUSTOMER
-                    </div>
-                  </v-btn>
-                </template>
-
-                <v-card>
+                    <v-text-field
+                      v-model="phone"
+                      :counter="10"
+                      label="Phone Number"
+                      required
+                      @change="this.suggestCustomerFromPhone()"
+                    ></v-text-field>
+                  </v-form>
+                </v-col>
+                <div>
                   <div>
-                    <br/>
-                    <v-col>
-<v-form
-    ref="form"
-    v-model="valid"
-    lazy-validation
-  >
-    <v-text-field
-      v-model="name"
-      :counter="10"
-      :rules="nameRules"
-      label="Phone Number"
-      required
-    ></v-text-field>
-  </v-form>
-  </v-col>
+                    {{this.suggestedCustomer}}
                   </div>
+                </div>
+              </div>
 
-                  <v-divider></v-divider>
+              <v-divider></v-divider>
 
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="primary" text @click="dialog = false">
-                      I accept
-                    </v-btn>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="primary"
+                  text
+                  @click="dialog = false"
+                >
+                  I accept
+                </v-btn>
 
-                    <v-btn
-                      class="menu-button-text"
-                      x-large
-                      height="180px"
-                      width="50%"
-                      v-on:click="
+                <v-btn
+                  class="menu-button-text"
+                  x-large
+                  height="180px"
+                  width="50%"
+                  v-on:click="
                         dialog = false;
                       "
-                      @click="dialog = false"
-                    >
-                      <div>123123123<br /></div>
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
+                  @click="dialog = false"
+                >
+                  <div>123123123<br /></div>
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </div>
       </div>
-      </v-card>
+    </v-card>
     <v-card
       outlined
       tile
@@ -163,7 +175,32 @@
 export default {
   data() {
     return {
-      dialog: true,
+      dialog: false,
+      phone: "",
+      suggestedCustomer: {},
     };
-  }
-}
+  },
+  watch: {
+    // whenever question changes, this function will run
+    phone: function () {
+      this.suggestCustomerFromPhone();
+    },
+    deep: true,
+  },
+  methods: {
+    suggestCustomerFromPhone: function () {
+      console.log("=======");
+      if (this.$store.state.customers.length <= 0) {
+        console.log("error in suggestCustomerFromPhone");
+      }
+      const customerArr = this.$store.state.customers;
+      customerArr.forEach((v) => {
+        if (this.phone === v.phone) {
+          this.suggestedCustomer = v;
+        }
+      });
+      return;
+    },
+  },
+};
+</script>

@@ -16,6 +16,10 @@ new Vue({
         "setItems",
         (await axios.get("http://localhost:3000/get/items/all")).data
       );
+      store.commit(
+        "setCustomers",
+        (await axios.get("http://localhost:3000/get/customers/all")).data
+      )
     },
   },
   mounted() {

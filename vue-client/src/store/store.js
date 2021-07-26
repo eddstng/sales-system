@@ -8,6 +8,7 @@ export const store = new Vuex.Store({
     // all of the items from the items table
     // Items[]
     items: [], 
+    customers: [],
     // the items that are displayed on the menu display
     // Record<string, Record<string, unknown>
     selectedItems: {}, 
@@ -21,6 +22,9 @@ export const store = new Vuex.Store({
   mutations: {
     setItems(state, items) {
       state.items = items;
+    },
+    setCustomers(state, customers) {
+      state.customers = customers;
     },
     setSelectedItems(state, selectedItems) {
       state.selectedItems = selectedItems;

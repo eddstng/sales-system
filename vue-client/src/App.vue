@@ -1,6 +1,10 @@
+
 <template>
   <v-app>
     <template>
+<v-system-bar
+  height="30"
+>01/02/98        -        12:35PM</v-system-bar>
       <v-row no-gutters>
         <v-col lg="2">
           <Sidebar />
