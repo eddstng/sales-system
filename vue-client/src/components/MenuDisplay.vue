@@ -59,13 +59,28 @@
                       :counter="10"
                       label="Phone Number"
                       required
+                      autocomplete="off"
                       @change="this.suggestCustomerFromPhone()"
                     ></v-text-field>
                   </v-form>
                 </v-col>
                 <div>
-                  <div>
-                    {{this.suggestedCustomer}}
+                  <div
+                    v-for="value in this.suggestedCustomer"
+                    :tweet="tweet"
+                    :key="value.id"
+                  >
+                    {{ value.phone}} {{value.name}}
+
+                    <v-btn
+                      class="menu-button-text"
+                      x-large
+                      v-on:click="
+                        dialog = false;
+                      "
+                    >
+                      <div>SELECT<br /></div>
+                    </v-btn>
                   </div>
                 </div>
               </div>
@@ -75,24 +90,29 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                  color="primary"
-                  text
-                  @click="dialog = false"
-                >
-                  I accept
-                </v-btn>
-
-                <v-btn
                   class="menu-button-text"
                   x-large
-                  height="180px"
+                  height="100pxx"
                   width="50%"
                   v-on:click="
                         dialog = false;
                       "
                   @click="dialog = false"
                 >
-                  <div>123123123<br /></div>
+                  <div>CANCEL<br /></div>
+                </v-btn>
+
+                <v-btn
+                  class="menu-button-text"
+                  x-large
+                  height="100pxx"
+                  width="50%"
+                  v-on:click="
+                        dialog = false;
+                      "
+                  @click="dialog = false"
+                >
+                  <div>CREATE<br /></div>
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -177,7 +197,7 @@ export default {
     return {
       dialog: false,
       phone: "",
-      suggestedCustomer: {},
+      suggestedCustomer: [],
     };
   },
   watch: {
@@ -189,16 +209,20 @@ export default {
   },
   methods: {
     suggestCustomerFromPhone: function () {
-      console.log("=======");
+      this.suggestedCustomer = [];
       if (this.$store.state.customers.length <= 0) {
         console.log("error in suggestCustomerFromPhone");
       }
       const customerArr = this.$store.state.customers;
-      customerArr.forEach((v) => {
-        if (this.phone === v.phone) {
-          this.suggestedCustomer = v;
-        }
-      });
+      if (this.phone.length < 3) {
+        this.suggestedCustomer = [];
+      } else {
+        customerArr.forEach((v) => {
+          if (v.phone.includes(this.phone)) {
+            this.suggestedCustomer.push(v);
+          }
+        });
+      }
       return;
     },
   },
