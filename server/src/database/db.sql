@@ -35,6 +35,9 @@ CREATE TABLE customers (
     id SERIAL NOT NULL PRIMARY KEY,
     name VARCHAR(100),
     phone VARCHAR(100),
+    unit_number VARCHAR(5),
+    street_number INTEGER,
+    street_name VARCHAR(30),
     address TEXT,
     note TEXT
 );
@@ -97,28 +100,37 @@ GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO sales_system_db;
 GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO sales_system_db;
 
 INSERT INTO
-    customers (name, phone, address)
+    customers (name, phone, address, unit_number, street_number, street_name)
 VALUES
     (
         'Austin Wallace',
-        '604-123-0987',
-        '5340 Charleston Crt'
+        '6041230987',
+        '5340 Charleston Crt',
+        NULL,
+        5340,
+        'Charleston Crt'
     );
 
 INSERT INTO
-    customers (name, phone, address)
+    customers (name, phone, address, unit_number, street_number, street_name)
 VALUES
     (
         'Beatrix Harley',
-        '604-421-1341',
-        '910-1022 Bearton St'
+        '6044211341',
+        '9101022 Bearton St',
+        '910',
+        1022,
+        'Bearton St'
     );
 
 INSERT INTO
-    customers (name, phone, address)
+    customers (name, phone, address, unit_number, street_number, street_name)
 VALUES
     (
         'Catherine Trix',
-        '604-122-2114',
-        '1391 Horton Ave'
+        '6041222114',
+        '1391 Horton Ave',
+        NULL,
+        1391,
+        'Horton Ave'
     );
