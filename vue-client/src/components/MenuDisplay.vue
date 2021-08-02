@@ -64,7 +64,7 @@
                   >
                     <v-text-field
                       v-model="selectCustomerFormPhone"
-                      :counter="10"
+                      :counter="16"
                       label="Phone Number"
                       required
                       autocomplete="off"
@@ -133,10 +133,12 @@
                   >
                     <v-text-field
                       v-model="selectCustomerFormPhone"
-                      :counter="10"
+                      :counter="16"
                       label="Phone Number"
                       required
+                      :rules="rules"
                       autocomplete="off"
+                      autofocus
                       @change="this.suggestCustomerFromPhone()"
                     ></v-text-field>
                     <v-text-field
@@ -145,7 +147,6 @@
                       label="Address"
                       required
                       autocomplete="off"
-                      @change="this.suggestCustomerFromPhone()"
                     ></v-text-field>
                     <v-text-field
                       v-model="selectCustomerFormName"
@@ -153,7 +154,6 @@
                       label="Name"
                       required
                       autocomplete="off"
-                      @change="this.suggestCustomerFromPhone()"
                     ></v-text-field>
                     <v-text-field
                       v-model="selectCustomerFormNote"
@@ -161,11 +161,9 @@
                       label="Note"
                       required
                       autocomplete="off"
-                      @change="this.suggestCustomerFromPhone()"
                     ></v-text-field>
                   </v-form>
                 </v-col>
-
                 <div v-if="this.suggestedCustomer.length > 0">
                   <p class="text-center"> Suggested Customers </p>
                   <v-btn
@@ -179,11 +177,8 @@
                   >{{ customer.phone }} - {{ customer.name }}</v-btn>
                 </div>
                 <br />
-
               </div>
-
               <v-divider></v-divider>
-
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
@@ -199,7 +194,6 @@
                 >
                   <div>CANCEL<br /></div>
                 </v-btn>
-
                 <v-btn
                   class="menu-button-text"
                   x-large
@@ -309,6 +303,16 @@ export default {
       this.suggestCustomerFromPhone();
     },
     deep: true,
+  },
+  computed: {
+    rules() {
+      const rules = [];
+      const regex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+      if (!regex.test(this.selectCustomerFormPhone)) {
+        rules.push("Invalid Phone Number");
+      }
+      return rules;
+    },
   },
   methods: {
     setSelectedCustomer: function (selectedCustomer) {
