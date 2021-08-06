@@ -5,212 +5,7 @@
       tile
       height="15vh"
     >
-      <div class="menu-display-customer-text">
-        <div
-          class="p-0"
-          max-height="400"
-        >
-          <v-dialog
-            v-model="selectCustomerFormDialogue"
-            width="500"
-          >
-            <!-- Select Customer  -->
-            <!-- Select Customer Button / Customer Display  -->
-            <template v-slot:activator="{ attrs }">
-              <v-btn
-                v-if="Object.keys($store.state.selectedCustomer).length === 0"
-                class="menu-button-text mt-5"
-                x-large
-                width="97%"
-                min-height="100%"
-                v-on:click="
-                      selectCustomerFormDialogue = true;
-                    "
-                style="height: 10vh;"
-                v-bind="attrs"
-              >
-                <div>
-                  SELECT A CUSTOMER
-                </div>
-              </v-btn>
-              <v-btn
-                v-else
-                class="menu-button-text mt-5"
-                x-large
-                width="97%"
-                min-height="100%"
-                v-on:click="
-                      selectCustomerFormDialogue = true;
-                    "
-                style="height: 10vh;"
-                v-bind="attrs"
-              >
-                <div>
-                  {{ $store.state.selectedCustomer.phone }} <br />
-                  {{ $store.state.selectedCustomer.address }} <br />
-                  {{ $store.state.selectedCustomer.name }} <br />
-                  {{ $store.state.selectedCustomer.note }}
-                </div>
-              </v-btn>
-            </template>
-            <!-- Select Customer Phone Number Search Form Dialogue -->
-            <v-card>
-              <div>
-                <br />
-                <v-col>
-                  <v-form
-                    ref="form"
-                    lazy-validation
-                  >
-                    <v-text-field
-                      v-model="selectCustomerFormPhone"
-                      :counter="16"
-                      label="Phone Number"
-                      required
-                      autocomplete="off"
-                      autofocus
-                      @change="this.suggestCustomerFromPhone()"
-                    ></v-text-field>
-                  </v-form>
-                </v-col>
-                <div v-if="this.suggestedCustomer.length > 0">
-                  <p class="text-center"> Suggested Customers </p>
-                  <v-btn
-                    class="menu-button-text"
-                    v-for="customer in this.suggestedCustomer"
-                    :key="customer.id"
-                    x-large
-                    dark
-                    width="100%"
-                    v-on:click="onClickMenuButton(item)"
-                  >{{ customer.phone }} - {{ customer.name }}</v-btn>
-                </div>
-                <br />
-              </div>
-              <v-divider></v-divider>
-              <!-- Select Customer Phone Number Search Form Buttons-->
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                  class="menu-button-text"
-                  x-large
-                  height="100pxx"
-                  width="50%"
-                  v-on:click="
-                    selectCustomerFormPhone = ''
-                    selectCustomerFormDialogue = false
-                  "
-                >
-                  <div>CANCEL<br /></div>
-                </v-btn>
-                <v-btn
-                  class="menu-button-text"
-                  x-large
-                  height="100pxx"
-                  width="50%"
-                  v-on:click="
-                    selectCustomerFormDialogue = false;
-                    createCustomerFormDialogue = true;
-                  "
-                >
-                  <div>CREATE<br /></div>
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-          <!-- Create Customer Form Dialogue-->
-          <v-dialog
-            v-model="createCustomerFormDialogue"
-            width="500"
-          >
-            <v-card>
-              <div>
-                <br />
-                <v-col>
-                  <v-form
-                    ref="form"
-                    lazy-validation
-                  >
-                    <v-text-field
-                      v-model="selectCustomerFormPhone"
-                      :counter="16"
-                      label="Phone Number"
-                      required
-                      :rules="rules"
-                      autocomplete="off"
-                      autofocus
-                      @change="this.suggestCustomerFromPhone()"
-                    ></v-text-field>
-                    <v-text-field
-                      v-model="selectCustomerFormAddress"
-                      :counter="50"
-                      label="Address"
-                      required
-                      autocomplete="off"
-                    ></v-text-field>
-                    <v-text-field
-                      v-model="selectCustomerFormName"
-                      :counter="30"
-                      label="Name"
-                      required
-                      autocomplete="off"
-                    ></v-text-field>
-                    <v-text-field
-                      v-model="selectCustomerFormNote"
-                      :counter="100"
-                      label="Note"
-                      required
-                      autocomplete="off"
-                    ></v-text-field>
-                  </v-form>
-                </v-col>
-                <div v-if="this.suggestedCustomer.length > 0">
-                  <p class="text-center"> Suggested Customers </p>
-                  <v-btn
-                    class="menu-button-text"
-                    v-for="customer in this.suggestedCustomer"
-                    :key="customer.id"
-                    x-large
-                    dark
-                    width="100%"
-                    v-on:click="onClickMenuButton(item)"
-                  >{{ customer.phone }} - {{ customer.name }}</v-btn>
-                </div>
-                <br />
-              </div>
-              <v-divider></v-divider>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                  class="menu-button-text"
-                  x-large
-                  height="100pxx"
-                  width="50%"
-                  v-on:click="
-                    selectCustomerFormPhone = ''
-                    selectCustomerFormDialogue = false
-                  "
-                  @click="createCustomerFormDialogue = false"
-                >
-                  <div>CANCEL<br /></div>
-                </v-btn>
-                <v-btn
-                  class="menu-button-text"
-                  x-large
-                  height="100pxx"
-                  width="50%"
-                  v-on:click="
-                        createCustomerFormDialogue = false;
-                      "
-                  @click="createCustomerFormDialogue = false"
-                >
-                  <div>CREATE<br /></div>
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-        </div>
-      </div>
+      <CustomerSelect />
     </v-card>
     <v-card
       outlined
@@ -284,8 +79,11 @@
 </style>
 
 <script>
-import { store } from "../store/store";
+import CustomerSelect from "@/components/CustomerSelect";
 export default {
+  components: {
+    CustomerSelect,
+  },
   data() {
     return {
       selectCustomerFormDialogue: false,
@@ -312,31 +110,6 @@ export default {
         rules.push("Invalid Phone Number");
       }
       return rules;
-    },
-  },
-  methods: {
-    setSelectedCustomer: function (selectedCustomer) {
-      console.log("=======");
-      console.log(selectedCustomer);
-
-      store.commit("setSelectedCustomer", selectedCustomer);
-    },
-    suggestCustomerFromPhone: function () {
-      this.suggestedCustomer = [];
-      if (this.$store.state.customers.length <= 0) {
-        console.log("error in suggestCustomerFromPhone");
-      }
-      const customerArr = this.$store.state.customers;
-      if (this.selectCustomerFormPhone.length < 3) {
-        this.suggestedCustomer = [];
-      } else {
-        customerArr.forEach((v) => {
-          if (v.phone.includes(this.selectCustomerFormPhone)) {
-            this.suggestedCustomer.push(v);
-          }
-        });
-      }
-      return;
     },
   },
 };

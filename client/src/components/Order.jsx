@@ -33,7 +33,6 @@ class Order extends React.Component {
       .then((res) => {
         const items = res.data;
         this.setState({ items: items });
-        console.log(items);
       })
       .catch((error) => {
         console.log(error.response);

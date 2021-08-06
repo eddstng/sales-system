@@ -8,12 +8,15 @@ datasource db {
 }
 
 model customers {
-  id      Int      @id @default(autoincrement())
-  name    String?
-  phone   String?
-  address String?
-  note    String?
-  orders  orders[]
+  id            Int      @id @default(autoincrement())
+  name          String?
+  phone         String?
+  unit_number   String?
+  street_number Int?
+  street_name   String?
+  address       String?
+  note          String?
+  orders        orders[]
 }
 
 model items {
