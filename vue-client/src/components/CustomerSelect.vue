@@ -58,7 +58,6 @@
                 required
                 autocomplete="off"
                 autofocus
-                @change="this.suggestCustomerFromPhoneInput()"
               ></v-text-field>
             </v-form>
           </v-col>
@@ -122,7 +121,6 @@
                 :rules="rules"
                 autocomplete="off"
                 autofocus
-                @change="this.suggestCustomerFromPhoneInput()"
               ></v-text-field>
               <v-row>
                 <v-col
@@ -151,7 +149,6 @@
                 :counter="50"
                 label="Street Name"
                 autocomplete="off"
-                @change="this.suggestStreetNameFromStreetNameInput()"
               ></v-text-field>
               <v-text-field
                 v-model="selectedCustomer.name"
@@ -176,6 +173,17 @@
               width="100%"
               v-on:click="setSelectedCustomer(customer)"
             >{{ customer.phone }} - {{ customer.name }}</v-btn>
+          </div>
+          <div v-if="this.selectedCustomer.streetName.length >  3">
+            <p class="text-center"> Suggested Hello </p>
+            <v-btn
+              v-for="streetName in this.suggestedStreetName"
+              :key="streetName"
+              x-large
+              dark
+              width="100%"
+              v-on:click="setCustomerSelectedCustomerStreetName(streetName)"
+            >{{ streetName }}</v-btn>
           </div>
           <br />
         </div>
@@ -236,6 +244,9 @@ export default {
     "selectedCustomer.phone": function () {
       this.suggestCustomerFromPhoneInput();
     },
+    "selectedCustomer.streetName": function () {
+      this.suggestStreetNameFromStreetNameInput();
+    },
     deep: true,
   },
   computed: {
@@ -275,16 +286,16 @@ export default {
       }
       return;
     },
+    setCustomerSelectedCustomerStreetName: function (streetName) {
+      this.selectedCustomer.streetName = streetName;
+    },
     suggestStreetNameFromStreetNameInput: function () {
       this.suggestedStreetName = [];
-      if (this.$store.state.customers.length <= 0) {
-        console.log("error in suggestStreetNameFromStreetNameInput");
-      }
-      if (this.streetName.length < 3) {
+      if (this.selectedCustomer.streetName.length === 0) {
         this.suggestedStreetName = [];
       } else {
         streetNameArr.forEach((v) => {
-          if (v.includes(this.streetName)) {
+          if (v.toLowerCase().includes(this.selectedCustomer.streetName)) {
             this.suggestedStreetName.push(v);
           }
         });
