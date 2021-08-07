@@ -150,6 +150,13 @@
                 label="Street Name"
                 autocomplete="off"
               ></v-text-field>
+              <br />
+              <v-select
+                v-model="selectedCustomer.city"
+                :items="cityNameArr"
+                label="City"
+                dense
+              ></v-select>
               <v-text-field
                 v-model="selectedCustomer.name"
                 label="Name"
@@ -222,6 +229,8 @@
 <script>
 import { store } from "../store/store";
 import { streetNameArr } from "../data/streets";
+import { cityNameArr } from "../data/cities";
+
 export default {
   data() {
     return {
@@ -233,9 +242,11 @@ export default {
         unitNumber: "",
         streetNumber: "",
         streetName: "",
+        city: "",
         name: "",
         note: "",
       },
+      cityNameArr,
       suggestedCustomers: [],
       suggestedStreetName: [],
     };

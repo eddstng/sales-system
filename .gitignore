@@ -1,3 +1,5 @@
 node_modules
 menu*
 .DS_Store
+geo*
+vue-client/src/data
