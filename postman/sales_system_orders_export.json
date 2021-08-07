@@ -11,8 +11,8 @@
 				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [],
+					"mode": "raw",
+					"raw": "{\n    \"total\": 0.00,\n    \"customer_id\": 1,\n    \"type\":0\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -41,7 +41,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"total\": 10.00,\n    \"customer_id\": 3\n}",
+					"raw": "{\n    \"total\": 10.00,\n    \"customer_id\": 3,\n    \"type\": 2\n}",
 					"options": {
 						"raw": {
 							"language": "json"
