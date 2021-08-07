@@ -3,14 +3,7 @@
     class="p-0"
     max-height="400"
   >
-    <v-dialog
-      v-model="selectCustomerFormDialogue"
-      width="500"
-    >
-      <!-- Select Customer  -->
-      <!-- Select Customer Button / Customer Display  -->
-      <template v-slot:activator="{ attrs }">
-        <v-btn
+    <!-- <v-btn
           v-if="Object.keys($store.state.selectedCustomer).length === 0"
           class="menu-button-text mt-5 ml-2"
           x-large
@@ -23,25 +16,85 @@
           <div>
             SELECT A CUSTOMER
           </div>
-        </v-btn>
+        </v-btn> -->
+    <div v-if="Object.keys($store.state.selectedCustomer).length === 0">
+      <v-row
+        align="center"
+        justify="space-around"
+      >
         <v-btn
-          v-else
-          class="menu-button-text mt-5"
-          x-large
-          width="97%"
+          class="menu-button-text mt-8"
           min-height="100%"
-          v-on:click="selectCustomerFormDialogue = true;"
+          width="25%"
+          v-on:click="
+            selectTableFormDialogue = true;
+            orderType=0;
+          "
           style="height: 10vh;"
           v-bind="attrs"
         >
           <div>
-            {{ $store.state.selectedCustomer.phone }} <br />
-            {{ $store.state.selectedCustomer.address }} <br />
-            {{ $store.state.selectedCustomer.name }} <br />
-            {{ $store.state.selectedCustomer.note }}
+            DINE IN
           </div>
         </v-btn>
-      </template>
+        <v-btn
+          class="menu-button-text mt-8"
+          x-large
+          min-height="100%"
+          width="25%"
+          v-on:click="
+            selectCustomerFormDialogue = true;
+            orderType=1;
+          "
+          style="height: 10vh;"
+          v-bind="attrs"
+        >
+          <div>
+            TAKE OUT
+          </div>
+        </v-btn>
+        <v-btn
+          class="menu-button-text mt-8"
+          x-large
+          min-height="100%"
+          width="25%"
+          v-on:click="
+            selectCustomerFormDialogue = true;
+            orderType=2;
+          "
+          style="height: 10vh;"
+          v-bind="attrs"
+        >
+          <div>
+            DELIVERY
+          </div>
+        </v-btn>
+      </v-row>
+    </div>
+    <v-btn
+      v-else
+      class="menu-button-text mt-5"
+      x-large
+      width="97%"
+      min-height="100%"
+      v-on:click="selectCustomerFormDialogue = true;"
+      style="height: 10vh;"
+      v-bind="attrs"
+    >
+      <div>
+        {{ this.orderType }} <br />
+        {{ $store.state.selectedCustomer.phone }} <br />
+        {{ $store.state.selectedCustomer.address }} <br />
+        {{ $store.state.selectedCustomer.name }} <br />
+        {{ $store.state.selectedCustomer.note }}
+      </div>
+    </v-btn>
+    <v-dialog
+      v-model="selectCustomerFormDialogue"
+      width="500"
+    >
+      <!-- Select Customer  -->
+      <!-- Select Customer Button / Customer Display  -->
       <!-- Select Customer Phone Number Search Form Dialogue -->
       <v-card>
         <div>
@@ -181,7 +234,7 @@
               v-on:click="setSelectedCustomer(customer)"
             >{{ customer.phone }} - {{ customer.name }}</v-btn>
           </div>
-          <div v-if="this.selectedCustomer.streetName.length >  3">
+          <div v-if="this.selectedCustomer.streetName.length >=  1">
             <p class="text-center"> Suggested Hello </p>
             <v-btn
               v-for="streetName in this.suggestedStreetName"
@@ -194,6 +247,15 @@
           </div>
           <br />
         </div>
+        <v-alert
+          v-if="this.createCustomerError"
+          class="ml-2 mr-2"
+          dense
+          type="error"
+          outlined
+        >
+          Error: {{this.createCustomerError}}
+        </v-alert>
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -201,9 +263,9 @@
             x-large
             width="50%"
             v-on:click="
-                phone = ''
-                selectCustomerFormDialogue = false
-                       createCustomerFormDialogue = false;
+              phone = ''
+              selectCustomerFormDialogue = false
+              sssscreateCustomerFormDialogue = false;
             "
           >
             <div>CANCEL<br /></div>
@@ -212,7 +274,7 @@
             x-large
             width="50%"
             v-on:click="
-                createCustomerFormDialogue = false;
+                createCustomerSubmit();
             "
           >
             <div>CREATE<br /></div>
@@ -234,9 +296,10 @@ import { cityNameArr } from "../data/cities";
 export default {
   data() {
     return {
+      selectTableFormDialogue: false,
       selectCustomerFormDialogue: false,
-
       createCustomerFormDialogue: false,
+      createCustomerError: null,
       selectedCustomer: {
         phone: "",
         unitNumber: "",
@@ -249,6 +312,7 @@ export default {
       cityNameArr,
       suggestedCustomers: [],
       suggestedStreetName: [],
+      orderType: null,
     };
   },
   watch: {
@@ -306,12 +370,33 @@ export default {
         this.suggestedStreetName = [];
       } else {
         streetNameArr.forEach((v) => {
-          if (v.toLowerCase().includes(this.selectedCustomer.streetName)) {
+          if (this.suggestedStreetName.length >= 5) {
+            return;
+          }
+          if (v.toLowerCase().startsWith(this.selectedCustomer.streetName)) {
             this.suggestedStreetName.push(v);
           }
         });
       }
       return;
+    },
+    validCreateCustomerForm: function () {
+      const regex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+      if (
+        !regex.test(this.selectedCustomer.phone) ||
+        this.selectedCustomer.phone === ""
+      ) {
+        this.createCustomerError = "Invalid Phone Number";
+        return false;
+      }
+      this.createCustomerError = null;
+      return true;
+    },
+    createCustomerSubmit: function () {
+      if (this.validCreateCustomerForm()) {
+        this.createCustomerFormDialogue = false;
+        return;
+      }
     },
   },
 };
