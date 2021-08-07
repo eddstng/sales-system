@@ -14,6 +14,7 @@ model customers {
   unit_number   String?
   street_number Int?
   street_name   String?
+  city          String?
   address       String?
   note          String?
   orders        orders[]
@@ -33,6 +34,7 @@ model orders {
   id           Int            @id @default(autoincrement())
   total        Float?
   timestamp    DateTime?      @default(now())
+  type         Int?
   customer_id  Int?
   customers    customers?     @relation(fields: [customer_id], references: [id])
   orders_items orders_items[]

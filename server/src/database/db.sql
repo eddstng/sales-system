@@ -52,7 +52,8 @@ CREATE TABLE orders_items (
 CREATE TABLE orders (
     id SERIAL NOT NULL PRIMARY KEY,
     total FLOAT,
-    timestamp TIMESTAMP WITHOUT TIME ZONE DEFAULT (NOW())
+    timestamp TIMESTAMP WITHOUT TIME ZONE DEFAULT (NOW()),
+    type SMALLINT
     --  customer_id INT FOREIGN KEY REFERENCES customers (id)
 );
 

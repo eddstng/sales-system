@@ -14,6 +14,9 @@ export class Order {
     total!: string;
 
     timestamp!: string;
+
+    @IsNotEmpty()
+    type!: number;
 }
 
 export async function getAllOrders(): Promise<Record<string, unknown>[]> {
@@ -58,7 +61,7 @@ export async function createOrder(body: JSON): Promise<orders> {
     try {
         await validateClassFields(Order, body)
         const res = await prisma.orders.create({ data: <Prisma.ordersCreateInput>body })
-        logInfo(createOrder.name, `[✓] Order Created: {id: ${res.id}, total: ${res.total}, customer_id: ${res.customer_id}, timestamp: ${res.timestamp}}`)
+        logInfo(createOrder.name, `[✓] Order Created: {id: ${res.id}, total: ${res.total}, customer_id: ${res.customer_id}, timestamp: ${res.timestamp}}, type: ${res.type}}`)
         return res;
     } catch (err) {
         logError(createOrder.name, err, `[✗]`);
@@ -71,7 +74,7 @@ export async function deleteOneOrder(id: number): Promise<void> {
         const res = await prisma.orders.delete({
             where: { id: id },
         })
-        logInfo(deleteOneOrder.name, `[✓] Order Deleted: {id: ${res.id}, total: ${res.total}, customer_id: ${res.customer_id}, timestamp: ${res.timestamp}}`)
+        logInfo(deleteOneOrder.name, `[✓] Order Deleted: {id: ${res.id}, total: ${res.total}, customer_id: ${res.customer_id}, timestamp: ${res.timestamp}}, type: ${res.type}}`)
     } catch (err) {
         logError(deleteOneOrder.name, err, `[✗]`);
         throw new Error(`${err} `)
@@ -85,10 +88,11 @@ export async function updateOrder(id: number, order: Prisma.ordersUncheckedUpdat
             data: {
                 total: order.total,
                 customer_id: order.customer_id,
-                timestamp: order.timestamp
+                timestamp: order.timestamp,
+                type: order.type
             },
         })
-        logInfo(updateOrder.name, `[✓] Order Updated: {id: ${res.id}, total: ${res.total}, customer_id: ${res.customer_id}, timestamp: ${res.timestamp}}`)
+        logInfo(updateOrder.name, `[✓] Order Updated: {id: ${res.id}, total: ${res.total}, customer_id: ${res.customer_id}, timestamp: ${res.timestamp}}, type: ${res.type}}`)
     } catch (err) {
         logError(updateOrder.name, err, `[✗]`);
         throw new Error(`${err} `)
