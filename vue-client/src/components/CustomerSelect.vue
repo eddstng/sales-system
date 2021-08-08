@@ -11,7 +11,6 @@
           min-height="100%"
           v-on:click="selectCustomerFormDialogue = true;"
           style="height: 10vh;"
-          v-bind="attrs"
         >
           <div>
             SELECT A CUSTOMER
@@ -31,7 +30,6 @@
             orderType=0;
           "
           style="height: 10vh;"
-          v-bind="attrs"
         >
           <div>
             DINE IN
@@ -47,7 +45,6 @@
             orderType=1;
           "
           style="height: 10vh;"
-          v-bind="attrs"
         >
           <div>
             TAKE OUT
@@ -63,7 +60,6 @@
             orderType=2;
           "
           style="height: 10vh;"
-          v-bind="attrs"
         >
           <div>
             DELIVERY
@@ -79,7 +75,6 @@
       min-height="100%"
       v-on:click="selectCustomerFormDialogue = true;"
       style="height: 10vh;"
-      v-bind="attrs"
     >
       <div>
         {{ this.orderType }} <br />
@@ -181,7 +176,7 @@
                   md="6"
                 >
                   <v-text-field
-                    v-model="selectedCustomer.unitNumber"
+                    v-model="selectedCustomer.unit_number"
                     label="Unit Number"
                     autocomplete="off"
                   ></v-text-field>
@@ -191,14 +186,14 @@
                   md="6"
                 >
                   <v-text-field
-                    v-model="selectedCustomer.streetNumber"
+                    v-model="selectedCustomer.street_number"
                     label="Street Number"
                     autocomplete="off"
                   ></v-text-field>
                 </v-col>
               </v-row>
               <v-text-field
-                v-model="selectedCustomer.streetName"
+                v-model="selectedCustomer.street_name"
                 :counter="50"
                 label="Street Name"
                 autocomplete="off"
@@ -234,7 +229,7 @@
               v-on:click="setSelectedCustomer(customer)"
             >{{ customer.phone }} - {{ customer.name }}</v-btn>
           </div>
-          <div v-if="this.selectedCustomer.streetName.length >=  1">
+          <div v-if="this.selectedCustomer.street_name.length >=  1">
             <p class="text-center"> Suggested Hello </p>
             <v-btn
               v-for="streetName in this.suggestedStreetName"
@@ -289,6 +284,7 @@
 </style>
 
 <script>
+import axios from "axios";
 import { store } from "../store/store";
 import { streetNameArr } from "../data/streets";
 import { cityNameArr } from "../data/cities";
@@ -302,9 +298,10 @@ export default {
       createCustomerError: null,
       selectedCustomer: {
         phone: "",
-        unitNumber: "",
-        streetNumber: "",
-        streetName: "",
+        unit_number: "",
+        street_number: "",
+        street_name: "",
+        address: "",
         city: "",
         name: "",
         note: "",
@@ -319,7 +316,7 @@ export default {
     "selectedCustomer.phone": function () {
       this.suggestCustomerFromPhoneInput();
     },
-    "selectedCustomer.streetName": function () {
+    "selectedCustomer.street_name": function () {
       this.suggestStreetNameFromStreetNameInput();
     },
     deep: true,
@@ -337,9 +334,9 @@ export default {
   methods: {
     setSelectedCustomer: function (selectedCustomer) {
       this.selectedCustomer.phone = selectedCustomer.phone;
-      this.selectedCustomer.unitNumber = selectedCustomer.unit_number;
-      this.selectedCustomer.streetNumber = selectedCustomer.street_number;
-      this.selectedCustomer.streetName = selectedCustomer.street_name;
+      this.selectedCustomer.unit_number = selectedCustomer.unit_number;
+      this.selectedCustomer.street_number = selectedCustomer.street_number;
+      this.selectedCustomer.street_name = selectedCustomer.street_name;
       this.selectedCustomer.name = selectedCustomer.name;
       this.selectedCustomer.note = selectedCustomer.note;
       store.commit("setSelectedCustomer", selectedCustomer);
@@ -362,18 +359,18 @@ export default {
       return;
     },
     setCustomerSelectedCustomerStreetName: function (streetName) {
-      this.selectedCustomer.streetName = streetName;
+      this.selectedCustomer.street_name = streetName;
     },
     suggestStreetNameFromStreetNameInput: function () {
       this.suggestedStreetName = [];
-      if (this.selectedCustomer.streetName.length === 0) {
+      if (this.selectedCustomer.street_name === "") {
         this.suggestedStreetName = [];
       } else {
         streetNameArr.forEach((v) => {
           if (this.suggestedStreetName.length >= 5) {
             return;
           }
-          if (v.toLowerCase().startsWith(this.selectedCustomer.streetName)) {
+          if (v.toLowerCase().startsWith(this.selectedCustomer.street_name)) {
             this.suggestedStreetName.push(v);
           }
         });
@@ -381,21 +378,96 @@ export default {
       return;
     },
     validCreateCustomerForm: function () {
+      // Validate Phone
       const regex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
       if (
         !regex.test(this.selectedCustomer.phone) ||
-        this.selectedCustomer.phone === ""
+        this.selectedCustomer.phone === "" ||
+        this.selectedCustomer.phone.length > 10
       ) {
-        this.createCustomerError = "Invalid Phone Number";
+        this.createCustomerError = "INVALID PHONE NUMBER";
         return false;
       }
+
+      // Validate Address
+      if (
+        this.selectedCustomer.street_number !== "" &&
+        this.selectedCustomer.street_name === ""
+      ) {
+        this.createCustomerError = "INVALID STREET NAME";
+        return false;
+      }
+
+      if (
+        this.selectedCustomer.street_number === "" &&
+        this.selectedCustomer.street_name !== ""
+      ) {
+        this.createCustomerError = "INVALID STREET NUMBER";
+        return false;
+      }
+
+      // Build Address
+      if (this.selectedCustomer.street_name !== "") {
+        if (this.selectedCustomer.city === "") {
+          this.createCustomerError = "INVALID CITY";
+          return false;
+        }
+        const unitNumber =
+          this.selectedCustomer.unit_number !== ""
+            ? `${this.selectedCustomer.unit_number} - `
+            : "";
+        this.suggestedCustomers.address = `${unitNumber}${this.selectedCustomer.street_number} ${this.selectedCustomer.street_name}`;
+      }
+
+      // Ensure street_number is a number.
+      if (this.selectedCustomer.street_number !== "") {
+        if (isNaN(this.selectedCustomer.street_number)) {
+          this.createCustomerError = "INVALID STREET NUMBER";
+          return false;
+        }
+      } else {
+        this.selectedCustomer.street_number = null;
+      }
+
       this.createCustomerError = null;
       return true;
     },
-    createCustomerSubmit: function () {
+    createCustomerSubmit: async function () {
       if (this.validCreateCustomerForm()) {
-        this.createCustomerFormDialogue = false;
-        return;
+        try {
+          await axios.post("http://localhost:3000/post/customers/create", {
+            ...this.selectedCustomer,
+            name:
+              this.selectedCustomer.name === ""
+                ? null
+                : this.selectedCustomer.name,
+            unit_number:
+              this.selectedCustomer.unit_number === ""
+                ? null
+                : this.selectedCustomer.unit_number,
+            street_number: parseInt(this.selectedCustomer.street_number),
+            street_name:
+              this.selectedCustomer.street_name === ""
+                ? null
+                : this.selectedCustomer.street_name,
+            city:
+              this.selectedCustomer.city === ""
+                ? null
+                : this.selectedCustomer.city,
+            address:
+              this.selectedCustomer.address === ""
+                ? null
+                : this.selectedCustomer.address,
+            note:
+              this.selectedCustomer.note === ""
+                ? null
+                : this.selectedCustomer.note,
+          });
+          this.createCustomerFormDialogue = false;
+          return;
+        } catch (err) {
+          this.createCustomerError = err.response.data;
+        }
       }
     },
   },
