@@ -8,18 +8,14 @@ import { Prisma } from '@prisma/client';
 export class Customer {
     id!: number;
 
+    name?: string;
+
     @IsNotEmpty()
-    @IsString()
-    name!: string;
+    phone!: string;
 
-    @IsString()
-    phone?: string;
-
-    @IsString()
     address?: string;
 
     @IsOptional()
-    @IsString()
     note?: string | null;
 }
 
@@ -37,8 +33,8 @@ export async function getAllCustomers(): Promise<Record<string, unknown>[]> {
         logInfo(getAllCustomers.name, `[✓]`)
         return allCustomers;
     } catch (err) {
-        logInfo(getAllCustomers.name, `[✗] Error: ${err}`)
-        throw new Error(`${err}`)
+        logInfo(getAllCustomers.name, `[✗] ${err}`)
+        throw err;
     }
 }
 
@@ -56,8 +52,8 @@ export async function getOneCustomer(id: number): Promise<customers> {
         logInfo(getOneCustomer.name, `[✓] Customer Record ID:${id} retrieved.`)
         return <customers><unknown>[]
     } catch (err) {
-        logInfo(getOneCustomer.name, `[✗] Error: ${err}`)
-        throw new Error(`${err}`)
+        logInfo(getOneCustomer.name, `[✗] ${err}`)
+        throw err;
     }
 }
 
@@ -68,7 +64,7 @@ export async function createCustomer(body: JSON) {
         logInfo(createCustomer.name, `[✓] Customer Created: {id: ${res.id}, name: ${res.name}, phone: ${res.phone}, address: ${res.address}, note: ${res.note}}`)
     } catch (err) {
         logError(createCustomer.name, err, `[✗]`);
-        throw new Error(`${err} `)
+        throw err;
     }
 }
 
@@ -80,7 +76,7 @@ export async function deleteOneCustomer(id: number): Promise<void> {
         logInfo(deleteOneCustomer.name, `[✓] Customer Deleted: {id: ${res.id}, name: ${res.name}, phone: ${res.phone}, address: ${res.address}, note: ${res.note}}`)
     } catch (err) {
         logError(deleteOneCustomer.name, err, `[✗]`);
-        throw new Error(`${err} `)
+        throw err;
     }
 }
 
@@ -98,6 +94,6 @@ export async function updateCustomer(id: number, customer: Prisma.customersUpdat
         logInfo(updateCustomer.name, `[✓] Customer Updated: {id: ${res.id}, name: ${res.name}, phone: ${res.phone}, address: ${res.address}, note: ${res.note}}`)
     } catch (err) {
         logError(updateCustomer.name, err, `[✗]`);
-        throw new Error(`${err} `)
+        throw err;
     }
 }

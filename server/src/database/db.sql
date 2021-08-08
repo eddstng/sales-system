@@ -34,7 +34,7 @@ CREATE TABLE items (
 CREATE TABLE customers (
     id SERIAL NOT NULL PRIMARY KEY,
     name VARCHAR(100),
-    phone VARCHAR(100),
+    phone VARCHAR(15) UNIQUE,
     unit_number VARCHAR(5),
     street_number INTEGER,
     street_name VARCHAR(30),

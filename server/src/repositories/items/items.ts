@@ -35,8 +35,8 @@ export async function getAllItems(): Promise<Record<string, unknown>[]> {
     logInfo(getAllItems.name, `[✓]`)
     return allItems;
   } catch (err) {
-    logInfo(getAllItems.name, `[✗] Error: ${err}`)
-    throw new Error(`${err}`);
+    logInfo(getAllItems.name, `[✗] ${err}`)
+    throw err;
   }
 }
 
@@ -54,8 +54,8 @@ export async function getOneItem(id: number): Promise<items> {
     logInfo(getOneItem.name, `[✓] Item Record ID:${id} retrieved.`)
     return <items>(<unknown>[]);
   } catch (err) {
-    logInfo(getOneItem.name, `[✗] Error: ${err}`)
-    throw new Error(`${err}`);
+    logInfo(getOneItem.name, `[✗] ${err}`)
+    throw err;
   }
 }
 
