@@ -57,11 +57,12 @@ export async function getOneCustomer(id: number): Promise<customers> {
     }
 }
 
-export async function createCustomer(body: JSON) {
+export async function createCustomer(body: JSON): Promise<customers> {
     try {
         await validateClassFields(Customer, body)
         const res = await prisma.customers.create({ data: <Prisma.customersCreateInput>body })
         logInfo(createCustomer.name, `[✓] Customer Created: {id: ${res.id}, name: ${res.name}, phone: ${res.phone}, address: ${res.address}, note: ${res.note}}`)
+        return res
     } catch (err) {
         logError(createCustomer.name, err, `[✗]`);
         throw err;

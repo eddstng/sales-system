@@ -77,7 +77,7 @@
       style="height: 10vh;"
     >
       <div>
-        {{ this.orderType }} <br />
+        {{ this.orderTypeString[this.orderType] }} <br />
         {{ $store.state.selectedCustomer.phone }} <br />
         {{ $store.state.selectedCustomer.address }} <br />
         {{ $store.state.selectedCustomer.name }} <br />
@@ -109,7 +109,7 @@
               ></v-text-field>
             </v-form>
           </v-col>
-          <div v-if="this.suggestedCustomers.length > 0 && this.selectedCustomer.phone.length < 10">
+          <div v-if="this.suggestedCustomers.length > 0">
             <p class="text-center"> Suggested Customers </p>
             <v-btn
               v-for="customer in this.suggestedCustomers"
@@ -310,6 +310,7 @@ export default {
       suggestedCustomers: [],
       suggestedStreetName: [],
       orderType: null,
+      orderTypeString: ["DINE IN", "PICK UP", "DELIVERY"],
     };
   },
   watch: {
@@ -333,13 +334,23 @@ export default {
   },
   methods: {
     setSelectedCustomer: function (selectedCustomer) {
-      this.selectedCustomer.phone = selectedCustomer.phone;
-      this.selectedCustomer.unit_number = selectedCustomer.unit_number;
-      this.selectedCustomer.street_number = selectedCustomer.street_number;
-      this.selectedCustomer.street_name = selectedCustomer.street_name;
-      this.selectedCustomer.name = selectedCustomer.name;
-      this.selectedCustomer.note = selectedCustomer.note;
-      store.commit("setSelectedCustomer", selectedCustomer);
+      const selectedCustomerWithStringEmptyValues =
+        this.selectedCustomerValueNullToEmptyString(selectedCustomer);
+      store.commit(
+        "setSelectedCustomer",
+        selectedCustomerWithStringEmptyValues
+      );
+      this.selectCustomerFormDialogue = false;
+      this.selectedCustomer = {
+        phone: "",
+        unit_number: "",
+        street_number: "",
+        street_name: "",
+        address: "",
+        city: "",
+        name: "",
+        note: "",
+      };
     },
     suggestCustomerFromPhoneInput: function () {
       this.suggestedCustomers = [];
@@ -425,44 +436,40 @@ export default {
           this.createCustomerError = "INVALID STREET NUMBER";
           return false;
         }
-      } else {
-        this.selectedCustomer.street_number = null;
       }
 
       this.createCustomerError = null;
       return true;
     },
+    selectedCustomerValueEmptyStringToNull: function (selectedCustomer) {
+      for (const key in selectedCustomer) {
+        if (selectedCustomer[key] === "") {
+          selectedCustomer[key] = null;
+        }
+      }
+      return selectedCustomer;
+    },
+    selectedCustomerValueNullToEmptyString: function (selectedCustomer) {
+      for (const key in selectedCustomer) {
+        if (selectedCustomer[key] === null) {
+          selectedCustomer[key] = "";
+        }
+      }
+      return selectedCustomer;
+    },
     createCustomerSubmit: async function () {
       if (this.validCreateCustomerForm()) {
         try {
-          await axios.post("http://localhost:3000/post/customers/create", {
-            ...this.selectedCustomer,
-            name:
-              this.selectedCustomer.name === ""
-                ? null
-                : this.selectedCustomer.name,
-            unit_number:
-              this.selectedCustomer.unit_number === ""
-                ? null
-                : this.selectedCustomer.unit_number,
-            street_number: parseInt(this.selectedCustomer.street_number),
-            street_name:
-              this.selectedCustomer.street_name === ""
-                ? null
-                : this.selectedCustomer.street_name,
-            city:
-              this.selectedCustomer.city === ""
-                ? null
-                : this.selectedCustomer.city,
-            address:
-              this.selectedCustomer.address === ""
-                ? null
-                : this.selectedCustomer.address,
-            note:
-              this.selectedCustomer.note === ""
-                ? null
-                : this.selectedCustomer.note,
-          });
+          const selectedCustomerWithNullEmptyValues =
+            this.selectedCustomerValueEmptyStringToNull(this.selectedCustomer);
+          const res = await axios.post(
+            "http://localhost:3000/post/customers/create",
+            {
+              ...selectedCustomerWithNullEmptyValues,
+              street_number: parseInt(this.selectedCustomer.street_number),
+            }
+          );
+          this.setSelectedCustomer(res.data);
           this.createCustomerFormDialogue = false;
           return;
         } catch (err) {
