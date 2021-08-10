@@ -84,33 +84,5 @@ export default {
   components: {
     CustomerSelect,
   },
-  data() {
-    return {
-      selectCustomerFormDialogue: false,
-      createCustomerFormDialogue: false,
-      selectCustomerFormPhone: "",
-      selectCustomerFormAddress: "",
-      selectCustomerFormName: "",
-      selectCustomerFormNote: "",
-      suggestedCustomer: [],
-    };
-  },
-  watch: {
-    // whenever question changes, this function will run
-    selectCustomerFormPhone: function () {
-      this.suggestCustomerFromPhone();
-    },
-    deep: true,
-  },
-  computed: {
-    rules() {
-      const rules = [];
-      const regex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-      if (!regex.test(this.selectCustomerFormPhone)) {
-        rules.push("Invalid Phone Number");
-      }
-      return rules;
-    },
-  },
 };
 </script>
