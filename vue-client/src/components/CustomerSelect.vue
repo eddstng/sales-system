@@ -25,10 +25,7 @@
           class="menu-button-text mt-8"
           min-height="100%"
           width="25%"
-          v-on:click="
-            selectTableFormDialogue = true;
-            orderType=0;
-          "
+          ff
           style="height: 10vh;"
         >
           <div>
@@ -260,7 +257,7 @@
             v-on:click="
               phone = ''
               selectCustomerFormDialogue = false
-              sssscreateCustomerFormDialogue = false;
+              createCustomerFormDialogue = false;
             "
           >
             <div>CANCEL<br /></div>

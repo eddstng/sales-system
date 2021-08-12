@@ -1,5 +1,97 @@
 <template>
   <v-container>
+    <v-dialog
+      v-model="submitOrderDialog"
+      width="900"
+    >
+      <!-- Select Customer  -->
+      <!-- Select Customer Button / Customer Display  -->
+      <!-- Select Customer Phone Number Search Form Dialogue -->
+      <v-card>
+        <div>
+          <br />
+          <v-row class="submitOrderDialogText mt-10">
+            <div>
+              <v-col :cols=15>
+                {{ $store.state.selectedCustomer.phone }} <br />
+                {{ $store.state.selectedCustomer.address }} <br />
+                {{ $store.state.selectedCustomer.name }}
+              </v-col>
+              <v-col v-if="$store.state.selectedCustomer.note">
+                * {{ $store.state.selectedCustomer.note }} <br />
+              </v-col>
+            </div>
+          </v-row>
+          <div
+            v-for="value in $store.state.selectedItems"
+            v-bind:key="value"
+          >
+            <v-row class="submitOrderDialogText mt-5 mb-5">
+              <v-col :cols=5>
+                {{value.node.name_eng}}
+              </v-col>
+              <v-col :cols=3>
+                {{value.node.name_chn}}
+              </v-col>
+              <v-col
+                :cols=2
+                class="text-center"
+              >
+                {{value.node.price}}
+              </v-col>
+              <v-col class="text-end">
+                x{{value.quantity}}
+              </v-col>
+            </v-row>
+          </div>
+
+          <v-row class="submitOrderDialogText mt-5 mb-5">
+            <v-col :cols=4>
+              Subtotal: {{ $store.state.priceDetails.subtotal }}
+            </v-col>
+            <v-col
+              :cols=4
+              class="text-end"
+            >
+              GST: {{ $store.state.priceDetails.gst }}
+            </v-col>
+            <v-col
+              :cols=4
+              class="text-end"
+            >
+              Total: ${{ $store.state.priceDetails.total }}
+            </v-col>
+          </v-row>
+
+          <br />
+        </div>
+        <v-divider></v-divider>
+        <!-- Select Customer Phone Number Search Form Buttons-->
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            x-large
+            width="50%"
+            v-on:click="
+                phone = '';
+                submitOrderDialog = false;
+            "
+          >
+            <div>CANCEL<br /></div>
+          </v-btn>
+          <v-btn
+            x-large
+            width="50%"
+            v-on:click="
+                submitOrderDialog = false;
+                createCustomerFormDialogue = true;
+            "
+          >
+            <div>SUBMIT<br /></div>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-card
       outlined
       tile
@@ -40,7 +132,10 @@
         </v-card>
       </template>
     </v-card>
-    <v-card>
+    <v-card v-on:click="
+                phone = '';
+                submitOrderDialog = true;
+            ">
       <v-list-item three-line>
         <v-list-item-content>
           <div class="menu-display-item-text">Subtotal:</div>
@@ -55,7 +150,7 @@
             {{ $store.state.priceDetails.gst }}
           </div>
           <div class="menu-display-item-text text-right mt-5 mb-0">
-            {{ $store.state.priceDetails.total }}
+            ${{ $store.state.priceDetails.total }}
           </div>
         </v-list-item-content>
       </v-list-item>
@@ -76,11 +171,38 @@
 .text-right {
   position: right;
 }
+
+.submitOrderDialogText {
+  margin-left: 15%;
+  width: 600px;
+}
 </style>
 
 <script>
 import CustomerSelect from "@/components/CustomerSelect";
 export default {
+  data() {
+    return {
+      selectTableFormDialogue: false,
+      submitOrderDialog: false,
+      createCustomerFormDialogue: false,
+      createCustomerError: null,
+      selectedCustomer: {
+        phone: "",
+        unit_number: "",
+        street_number: "",
+        street_name: "",
+        address: "",
+        city: "",
+        name: "",
+        note: "",
+      },
+      suggestedCustomers: [],
+      suggestedStreetName: [],
+      orderType: null,
+      orderTypeString: ["DINE IN", "PICK UP", "DELIVERY"],
+    };
+  },
   components: {
     CustomerSelect,
   },
