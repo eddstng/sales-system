@@ -24,7 +24,7 @@
           </v-row>
           <div
             v-for="value in $store.state.selectedItems"
-            v-bind:key="value"
+            v-bind:key="value.id"
           >
             <v-row class="submitOrderDialogText mt-5 mb-5">
               <v-col :cols=5>
@@ -111,7 +111,7 @@
           class="mx-auto pt-2"
           outlined
           v-for="value in $store.state.selectedItems"
-          v-bind:key="value"
+          v-bind:key="value.id"
           height="7em"
           width="100vw"
         >

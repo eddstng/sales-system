@@ -226,7 +226,7 @@
               v-on:click="setSelectedCustomer(customer)"
             >{{ customer.phone }} - {{ customer.name }}</v-btn>
           </div>
-          <div v-if="this.selectedCustomer.street_name.length >=  1">
+          <div v-if="this.selectedCustomer.street_name && this.selectedCustomer.street_name.length >=  1">
             <p class="text-center"> Suggested Hello </p>
             <v-btn
               v-for="streetName in this.suggestedStreetName"
