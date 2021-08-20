@@ -13,10 +13,23 @@ export class Customer {
     @IsNotEmpty()
     phone!: string;
 
-    address?: string;
-
     @IsOptional()
     note?: string | null;
+
+    @IsOptional()
+    unit_number?: string | null;
+
+    @IsOptional()
+    street_number?: string | null;
+
+    @IsOptional()
+    street_name?: string | null;
+
+    @IsOptional()
+    address?: string | null;
+
+    @IsOptional()
+    city?: string | null;
 }
 
 export async function getAllCustomers(): Promise<Record<string, unknown>[]> {
@@ -57,9 +70,25 @@ export async function getOneCustomer(id: number): Promise<customers> {
     }
 }
 
+function buildCustomerAddress(body: Customer): string | null {
+    if (body.street_number && body.street_name) {
+        const unitNumber = body.unit_number ? `${body.unit_number} - ` : '';
+        return `${body.unit_number ? unitNumber : ''}${body.street_number} ${body.street_name}` 
+    }
+    return null
+}
+
 export async function createCustomer(body: JSON): Promise<customers> {
     try {
         await validateClassFields(Customer, body)
+        const customer = {
+            ...body,
+            address: buildCustomerAddress(body as unknown as Customer)
+        }
+        console.log(customer)
+        console.log(customer)
+        console.log(customer)
+        
         const res = await prisma.customers.create({ data: <Prisma.customersCreateInput>body })
         logInfo(createCustomer.name, `[✓] Customer Created: {id: ${res.id}, name: ${res.name}, phone: ${res.phone}, address: ${res.address}, note: ${res.note}}`)
         return res
