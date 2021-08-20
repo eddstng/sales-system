@@ -134,7 +134,7 @@
     </v-card>
     <v-card v-on:click="
                 phone = '';
-                submitOrderDialog = true;
+                submitOrderDialogConditional()
             ">
       <v-list-item three-line>
         <v-list-item-content>
@@ -179,6 +179,7 @@
 </style>
 
 <script>
+import { store } from "../store/store";
 import CustomerSelect from "@/components/CustomerSelect";
 export default {
   data() {
@@ -187,21 +188,21 @@ export default {
       submitOrderDialog: false,
       createCustomerFormDialogue: false,
       createCustomerError: null,
-      selectedCustomer: {
-        phone: "",
-        unit_number: "",
-        street_number: "",
-        street_name: "",
-        address: "",
-        city: "",
-        name: "",
-        note: "",
-      },
       suggestedCustomers: [],
       suggestedStreetName: [],
       orderType: null,
       orderTypeString: ["DINE IN", "PICK UP", "DELIVERY"],
     };
+  },
+  methods: {
+    submitOrderDialogConditional: function () {
+      if (
+        this.$store.state.selectedCustomer.phone !== "" &&
+        Object.keys(store.state.selectedItems).length !== 0
+      ) {
+        this.submitOrderDialog = true;
+      }
+    },
   },
   components: {
     CustomerSelect,

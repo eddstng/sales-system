@@ -388,10 +388,13 @@ export default {
     validCreateCustomerForm: function () {
       // Validate Phone
       const regex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+      const selectedCustomer = this.selectedCustomer;
+
+      // const selectedCustomer = this.selectedCustomerValueNullToEmptyString(this.selectedCustomer);
       if (
-        !regex.test(this.selectedCustomer.phone) ||
-        this.selectedCustomer.phone === "" ||
-        this.selectedCustomer.phone.length > 10
+        !regex.test(selectedCustomer.phone) ||
+        selectedCustomer.phone === "" ||
+        selectedCustomer.phone.length > 10
       ) {
         this.createCustomerError = "INVALID PHONE NUMBER";
         return false;
@@ -399,37 +402,37 @@ export default {
 
       // Validate Address
       if (
-        this.selectedCustomer.street_number !== "" &&
-        this.selectedCustomer.street_name === ""
+        selectedCustomer.street_number !== "" &&
+        selectedCustomer.street_name === ""
       ) {
         this.createCustomerError = "INVALID STREET NAME";
         return false;
       }
 
       if (
-        this.selectedCustomer.street_number === "" &&
-        this.selectedCustomer.street_name !== ""
+        selectedCustomer.street_number === "" &&
+        selectedCustomer.street_name !== ""
       ) {
         this.createCustomerError = "INVALID STREET NUMBER";
         return false;
       }
 
       // Build Address
-      if (this.selectedCustomer.street_name !== "") {
-        if (this.selectedCustomer.city === "") {
+      if (selectedCustomer.street_name !== "") {
+        if (selectedCustomer.city === "") {
           this.createCustomerError = "INVALID CITY";
           return false;
         }
         const unitNumber =
-          this.selectedCustomer.unit_number !== ""
-            ? `${this.selectedCustomer.unit_number} - `
+          selectedCustomer.unit_number !== ""
+            ? `${selectedCustomer.unit_number} - `
             : "";
-        this.suggestedCustomers.address = `${unitNumber}${this.selectedCustomer.street_number} ${this.selectedCustomer.street_name}`;
+        this.suggestedCustomers.address = `${unitNumber}${selectedCustomer.street_number} ${selectedCustomer.street_name}`;
       }
 
       // Ensure street_number is a number.
-      if (this.selectedCustomer.street_number !== "") {
-        if (isNaN(this.selectedCustomer.street_number)) {
+      if (selectedCustomer.street_number !== "") {
+        if (isNaN(selectedCustomer.street_number)) {
           this.createCustomerError = "INVALID STREET NUMBER";
           return false;
         }
