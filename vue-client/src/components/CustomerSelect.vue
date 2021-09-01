@@ -27,6 +27,10 @@
           width="25%"
           ff
           style="height: 10vh;"
+          v-on:click="
+            selectDineInFormDialogue = true;
+            orderType=0;
+          "
         >
           <div>
             DINE IN
@@ -142,6 +146,57 @@
             "
           >
             <div>CREATE<br /></div>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+      v-model="selectDineInFormDialogue"
+      width="500"
+    >
+      <!-- Select Dine In Table Number  -->
+      <v-card>
+        <div>
+          <br />
+          <v-col>
+            <v-form
+              ref="form"
+              lazy-validation
+            >
+              <v-text-field
+                v-model="selectedCustomer.name"
+                :counter="2"
+                label="Table Number"
+                required
+                autocomplete="off"
+                autofocus
+              ></v-text-field>
+            </v-form>
+          </v-col>
+          <br />
+        </div>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            x-large
+            width="50%"
+            v-on:click="
+                selectedCustomer.name = '';
+                selectDineInFormDialogue = false;
+            "
+          >
+            <div>CANCEL<br /></div>
+          </v-btn>
+          <v-btn
+            x-large
+            width="50%"
+            v-on:click="
+                selectDineInFormDialogue = false;
+                setDineInTable(selectedCustomer.name)
+            "
+          >
+            <div>SELECT<br /></div>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -289,7 +344,7 @@ import { cityNameArr } from "../data/cities";
 export default {
   data() {
     return {
-      selectTableFormDialogue: false,
+      selectDineInFormDialogue: false,
       selectCustomerFormDialogue: false,
       createCustomerFormDialogue: false,
       createCustomerError: null,
@@ -330,6 +385,10 @@ export default {
     },
   },
   methods: {
+    setDineInTable: function (selectedTable) {
+      const selectedCustomerObj = { name: `Table #${selectedTable}` };
+      this.setSelectedCustomer(selectedCustomerObj);
+    },
     setSelectedCustomer: function (selectedCustomer) {
       const selectedCustomerWithStringEmptyValues =
         this.selectedCustomerValueNullToEmptyString(selectedCustomer);
@@ -338,6 +397,7 @@ export default {
         selectedCustomerWithStringEmptyValues
       );
       this.selectCustomerFormDialogue = false;
+      this.selectDineInFormDialogue = false;
       this.selectedCustomer = {
         phone: "",
         unit_number: "",
