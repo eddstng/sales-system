@@ -3,19 +3,6 @@
     class="p-0"
     max-height="400"
   >
-    <!-- <v-btn
-          v-if="Object.keys($store.state.selectedCustomer).length === 0"
-          class="menu-button-text mt-5 ml-2"
-          x-large
-          width="97%"
-          min-height="100%"
-          v-on:click="selectCustomerFormDialogue = true;"
-          style="height: 10vh;"
-        >
-          <div>
-            SELECT A CUSTOMER
-          </div>
-        </v-btn> -->
     <div v-if="Object.keys($store.state.selectedCustomer).length === 0">
       <v-row
         align="center"

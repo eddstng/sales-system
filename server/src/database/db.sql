@@ -105,6 +105,170 @@ INSERT INTO
     customers (name, phone, address, unit_number, street_number, street_name, city)
 VALUES
     (
+        'Table #1',
+        '0000000001',
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL
+    );
+
+INSERT INTO
+    customers (name, phone, address, unit_number, street_number, street_name, city)
+VALUES
+    (
+        'Table #2',
+        '0000000002',
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL
+    );
+
+
+INSERT INTO
+    customers (name, phone, address, unit_number, street_number, street_name, city)
+VALUES
+    (
+        'Table #3',
+        '0000000003',
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL
+    );
+
+
+INSERT INTO
+    customers (name, phone, address, unit_number, street_number, street_name, city)
+VALUES
+    (
+        'Table #4',
+        '0000000004',
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL
+    );
+
+
+INSERT INTO
+    customers (name, phone, address, unit_number, street_number, street_name, city)
+VALUES
+    (
+        'Table #5',
+        '0000000005',
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL
+    );
+
+
+INSERT INTO
+    customers (name, phone, address, unit_number, street_number, street_name, city)
+VALUES
+    (
+        'Table #6',
+        '0000000006',
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL
+    );
+
+
+INSERT INTO
+    customers (name, phone, address, unit_number, street_number, street_name, city)
+VALUES
+    (
+        'Table #7',
+        '0000000007',
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL
+    );
+
+
+INSERT INTO
+    customers (name, phone, address, unit_number, street_number, street_name, city)
+VALUES
+    (
+        'Table #8',
+        '0000000008',
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL
+    );
+
+
+INSERT INTO
+    customers (name, phone, address, unit_number, street_number, street_name, city)
+VALUES
+    (
+        'Table #9',
+        '0000000009',
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL
+    );
+
+
+INSERT INTO
+    customers (name, phone, address, unit_number, street_number, street_name, city)
+VALUES
+    (
+        'Table #10',
+        '0000000010',
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL
+    );
+
+INSERT INTO
+    customers (name, phone, address, unit_number, street_number, street_name, city)
+VALUES
+    (
+        'Table #11',
+        '0000000011',
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL
+    );
+
+INSERT INTO
+    customers (name, phone, address, unit_number, street_number, street_name, city)
+VALUES
+    (
+        'Table #12',
+        '0000000012',
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL
+    );
+
+INSERT INTO
+    customers (name, phone, address, unit_number, street_number, street_name, city)
+VALUES
+    (
         'Austin Wallace',
         '6041230987',
         '5340 Charleston Crt',

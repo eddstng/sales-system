@@ -73,7 +73,6 @@
             x-large
             width="50%"
             v-on:click="
-                phone = '';
                 submitOrderDialog = false;
             "
           >
@@ -84,7 +83,7 @@
             width="50%"
             v-on:click="
                 submitOrderDialog = false;
-                createCustomerFormDialogue = true;
+                submitOrder();
             "
           >
             <div>SUBMIT<br /></div>
@@ -179,6 +178,7 @@
 </style>
 
 <script>
+import axios from "axios";
 import { store } from "../store/store";
 import CustomerSelect from "@/components/CustomerSelect";
 export default {
@@ -186,7 +186,6 @@ export default {
     return {
       selectTableFormDialogue: false,
       submitOrderDialog: false,
-      createCustomerFormDialogue: false,
       createCustomerError: null,
       suggestedCustomers: [],
       suggestedStreetName: [],
@@ -202,6 +201,15 @@ export default {
       ) {
         this.submitOrderDialog = true;
       }
+    },
+    submitOrder: async function () {
+      console.log("hello");
+      const res = await axios.post("http://localhost:3000/post/orders/create", {
+        total: 0.0,
+        customer_id: this.$store.state.selectedCustomer.id,
+        type: 0,
+      });
+      console.log(res);
     },
   },
   components: {
