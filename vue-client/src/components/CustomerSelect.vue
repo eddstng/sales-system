@@ -146,19 +146,23 @@
         <div>
           <br />
           <v-col>
-            <v-form
-              ref="form"
-              lazy-validation
+            <div
+              class="p-0"
+              max-height="400"
             >
-              <v-text-field
-                v-model="selectedCustomer.name"
-                :counter="2"
-                label="Table Number"
-                required
-                autocomplete="off"
-                autofocus
-              ></v-text-field>
-            </v-form>
+              <v-btn
+                class="menu-button-text mt-2 ml-1 mr-1"
+                v-for="table in $store.state.tables"
+                v-bind:key="table.name_eng"
+                x-large
+                dark
+                height="100px"
+                width="31.6%"
+                v-on:click="setSelectedCustomer(table)"
+              >{{ table.name }}<br />{{ table.name_chn }}<br />{{
+              table.price
+            }}</v-btn>
+            </div>
           </v-col>
           <br />
         </div>

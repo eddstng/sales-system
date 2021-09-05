@@ -9,6 +9,7 @@ export const store = new Vuex.Store({
     // Items[]
     items: [], 
     customers: [],
+    tables: [],
     selectedCustomer: {},
     // the items that are displayed on the menu display
     // Record<string, Record<string, unknown>
@@ -26,6 +27,9 @@ export const store = new Vuex.Store({
     },
     setCustomers(state, customers) {
       state.customers = customers;
+    },
+    setTables(state, tables) {
+      state.tables = tables;
     },
     setSelectedItems(state, selectedItems) {
       state.selectedItems = selectedItems;

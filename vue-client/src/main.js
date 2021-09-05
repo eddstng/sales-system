@@ -19,7 +19,15 @@ new Vue({
       store.commit(
         "setCustomers",
         (await axios.get("http://localhost:3000/get/customers/all")).data
-      )
+      );
+      const tables = [];
+      store.state.customers.forEach(customer => {
+        if (customer.name.includes('Table #')) {
+          tables.push(customer)
+        }
+        console.log(tables)
+      })
+      store.commit("setTables", tables)
     },
   },
   mounted() {
