@@ -19,6 +19,10 @@ export const store = new Vuex.Store({
       subtotal: 0,
       gst: 0,
       total: 0,
+    },
+    currentOrder: {
+      id: null,
+      type: null,
     }
   },
   mutations: {
@@ -39,6 +43,9 @@ export const store = new Vuex.Store({
     },
     setPriceDetails(state, priceDetails) {
       state.priceDetails = priceDetails;
+    },
+    setCurrentOrder(state, order) {
+      state.currentOrder = order;
     },
   },
   getters: {

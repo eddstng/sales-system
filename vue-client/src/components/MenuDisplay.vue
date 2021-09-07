@@ -189,8 +189,6 @@ export default {
       createCustomerError: null,
       suggestedCustomers: [],
       suggestedStreetName: [],
-      orderType: null,
-      orderTypeString: ["DINE IN", "PICK UP", "DELIVERY"],
     };
   },
   methods: {
@@ -203,13 +201,26 @@ export default {
       }
     },
     submitOrder: async function () {
-      console.log("hello");
-      const res = await axios.post("http://localhost:3000/post/orders/create", {
-        total: 0.0,
-        customer_id: this.$store.state.selectedCustomer.id,
-        type: 0,
-      });
-      console.log(res);
+      try {
+        console.log({
+          total: this.$store.state.priceDetails.total,
+          customer_id: this.$store.state.selectedCustomer.id,
+          type: this.orderType,
+        });
+        const res = await axios.post(
+          "http://localhost:3000/post/orders/create",
+          {
+            total: this.$store.state.priceDetails.total,
+            customer_id: this.$store.state.selectedCustomer.id,
+            type: this.orderType,
+          }
+        );
+        console.log(res.data.id);
+        console.log("poodd");
+      } catch (err) {
+        console.log("errrrererere");
+        console.log(err);
+      }
     },
   },
   components: {

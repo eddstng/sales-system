@@ -16,7 +16,7 @@
           style="height: 10vh;"
           v-on:click="
             selectDineInFormDialogue = true;
-            orderType=0;
+            setStoreOrderType(0);
           "
         >
           <div>
@@ -30,7 +30,7 @@
           width="25%"
           v-on:click="
             selectCustomerFormDialogue = true;
-            orderType=1;
+            setStoreOrderType(1);
           "
           style="height: 10vh;"
         >
@@ -45,7 +45,7 @@
           width="25%"
           v-on:click="
             selectCustomerFormDialogue = true;
-            orderType=2;
+            setStoreOrderType(2);
           "
           style="height: 10vh;"
         >
@@ -65,7 +65,7 @@
       style="height: 10vh;"
     >
       <div>
-        {{ this.orderTypeString[this.orderType] }} <br />
+        {{ this.orderTypeString[$store.state.currentOrder.type] }} <br />
         {{ $store.state.selectedCustomer.phone }} <br />
         {{ $store.state.selectedCustomer.address }} <br />
         {{ $store.state.selectedCustomer.name }} <br />
@@ -376,6 +376,10 @@ export default {
     },
   },
   methods: {
+    setStoreOrderType: function (orderTypeNum) {
+      store.commit("setCurrentOrder", { type: orderTypeNum });
+      console.log(this.$store.state.currentOrder);
+    },
     setDineInTable: function (selectedTable) {
       const selectedCustomerObj = { name: `Table #${selectedTable}` };
       this.setSelectedCustomer(selectedCustomerObj);
