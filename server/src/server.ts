@@ -7,7 +7,7 @@ import { logger } from '../src/logging/logger';
 import { Prisma } from '@prisma/client';
 import { getAllCustomers, getOneCustomer, createCustomer, updateCustomer, deleteOneCustomer } from './repositories/customers/customers';
 import { createOrder, deleteOneOrder, getAllOrders, getOneOrder, updateOrder } from './repositories/orders/orders';
-import { getAllOrdersItems, createOrdersItems, updateOrdersItems, deleteOneOrdersItems, getOneOrdersItems } from './repositories/ordersItems/ordersItems';
+import { getAllOrdersItems, createOrdersItems, updateOrdersItems, deleteOneOrdersItems, getOneOrdersItems, createOrdersItemsBulk } from './repositories/ordersItems/ordersItems';
 
 export default function startServer(): void {
     const port = 3000
@@ -148,6 +148,13 @@ export default function startServer(): void {
     app.post('/post/ordersitems/create', async (req, res) => {
         try {
             res.status(200).json(await createOrdersItems(req.body))
+        } catch (err: unknown) {
+            res.status(500).send(`${err as string}`);
+        }
+    })
+    app.post('/post/ordersitems/create/bulk', async (req, res) => {
+        try {
+            res.status(200).json(await createOrdersItemsBulk(req.body))
         } catch (err: unknown) {
             res.status(500).send(`${err as string}`);
         }

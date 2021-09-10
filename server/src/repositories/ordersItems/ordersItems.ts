@@ -11,7 +11,10 @@ export class OrdersItems {
     item_id!: number;
 
     @IsNotEmpty()
-    order_id!: string;
+    order_id!: number;
+
+    @IsNotEmpty()
+    quantity!: number;
 }
 
 export async function getAllOrdersItems(): Promise<Record<string, unknown>[]> {
@@ -57,6 +60,21 @@ export async function createOrdersItems(body: JSON) {
         await validateClassFields(OrdersItems, body)
         const res = await prisma.orders_items.create({ data: <Prisma.orders_itemsCreateInput>body })
         logInfo(createOrdersItems.name, `[✓] OrdersItems Created: {id: ${res.id}, order_id: ${res.order_id}, item_id: ${res.item_id}`)
+    } catch (err) {
+        logError(createOrdersItems.name, err, `[✗]`);
+        throw new Error(`${err} `)
+    }
+}
+
+export async function createOrdersItemsBulk(items: JSON[]) {
+    console.log(items)
+    try {
+        items.forEach(async item => {
+            await validateClassFields(OrdersItems, item)
+        })
+        const res = await prisma.orders_items.createMany({ data: <Prisma.orders_itemsCreateManyInput>items })
+        
+        logInfo(createOrdersItems.name, `[✓] OrdersItemsBulk Created: {id: ${res})`)
     } catch (err) {
         logError(createOrdersItems.name, err, `[✗]`);
         throw new Error(`${err} `)

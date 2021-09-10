@@ -44,7 +44,8 @@ CREATE TABLE customers (
 );
 
 CREATE TABLE orders_items (
-    id SERIAL NOT NULL PRIMARY KEY
+    id SERIAL NOT NULL PRIMARY KEY,
+    quantity INTEGER
     --  item_id INT FOREIGN KEY REFERENCES items (id)
     --  order_id INT FOREIGN KEY REFERENCES orders (id)
 );
