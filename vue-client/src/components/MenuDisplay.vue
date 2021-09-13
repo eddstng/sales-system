@@ -194,7 +194,7 @@ export default {
   methods: {
     submitOrderDialogConditional: function () {
       if (
-        this.$store.state.selectedCustomer.phone !== "" &&
+        this.$store.state.selectedCustomer.phone !== undefined &&
         Object.keys(store.state.selectedItems).length !== 0
       ) {
         this.submitOrderDialog = true;
