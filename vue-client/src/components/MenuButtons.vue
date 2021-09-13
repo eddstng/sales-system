@@ -3,29 +3,25 @@
     outlined
     tile
     class="overflow-y-auto"
-    height="95vh"
+    height="92.4vh"
   >
-    <v-container class="grey lighten-5 fill-height">
-      <v-container>
-        <div
-          class="p-0"
-          max-height="400"
-        >
-          <v-btn
-            class="menu-button-text"
-            v-for="item in $store.state.items"
-            v-bind:key="item.name_eng"
-            x-large
-            dark
-            height="180px"
-            width="50%"
-            v-on:click="onClickMenuButton(item)"
-          >{{ item.name_eng }}<br />{{ item.name_chn }}<br />{{
+    <div
+      class="p-0"
+      max-height="400"
+    >
+      <v-btn
+        class="menu-button-text"
+        v-for="item in $store.state.items"
+        v-bind:key="item.name_eng"
+        x-large
+        dark
+        height="180px"
+        width="50%"
+        v-on:click="onClickMenuButton(item)"
+      >{{ item.name_eng }}<br />{{ item.name_chn }}<br />{{
               item.price
             }}</v-btn>
-        </div>
-      </v-container>
-    </v-container>
+    </div>
   </v-card>
 </template>
 
@@ -35,7 +31,6 @@
   overflow: hidden;
 }
 </style>
-overflow: hidden;
 
 <script>
 import { store } from "../store/store";

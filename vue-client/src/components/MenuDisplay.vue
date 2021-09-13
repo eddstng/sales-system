@@ -94,7 +94,7 @@
     <v-card
       outlined
       tile
-      height="15vh"
+      height="16vh"
     >
       <CustomerSelect />
     </v-card>
@@ -224,6 +224,21 @@ export default {
         );
       }
     },
+    clearOrder: function () {
+      store.commit("setSelectedCustomer", {});
+
+      store.commit("setPriceDetails", {
+        subtotal: 0,
+        gst: 0,
+        total: 0,
+      });
+
+      store.commit("setSelectedItems", {});
+      store.commit("setCurrentOrder", {
+        id: null,
+        type: null,
+      });
+    },
     submitOrder: async function () {
       try {
         console.log({
@@ -244,7 +259,10 @@ export default {
         }
 
         this.addItemsToOrder(res.data.id);
+        this.clearOrder();
+        store.commit("setNotification", 1);
       } catch (err) {
+        store.commit("setNotification", 2);
         console.log(err);
       }
     },

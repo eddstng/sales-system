@@ -23,7 +23,8 @@ export const store = new Vuex.Store({
     currentOrder: {
       id: null,
       type: null,
-    }
+    },
+    notification: 0,
   },
   mutations: {
     setItems(state, items) {
@@ -46,6 +47,9 @@ export const store = new Vuex.Store({
     },
     setCurrentOrder(state, order) {
       state.currentOrder = order;
+    },
+    setNotification(state, notificationCode) {
+      state.notification = notificationCode;
     },
   },
   getters: {
