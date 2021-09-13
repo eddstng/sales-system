@@ -200,25 +200,51 @@ export default {
         this.submitOrderDialog = true;
       }
     },
+    addItemsToOrder: async function (orderIdNum) {
+      const orderItemsCreateManyInputData = [];
+      for (const [key, value] of Object.entries(
+        this.$store.state.selectedItems
+      )) {
+        orderItemsCreateManyInputData.push({
+          order_id: orderIdNum,
+          item_id: parseInt(key),
+          quantity: value.quantity,
+        });
+      }
+
+      console.log(orderItemsCreateManyInputData);
+      const res = await axios.post(
+        "http://localhost:3000/post/ordersitems/create/bulk",
+        orderItemsCreateManyInputData
+      );
+      console.log(res);
+      if (isNaN(res.status !== 200)) {
+        throw new Error(
+          `Failed to submit order during addItemsToOrder. ${res}`
+        );
+      }
+    },
     submitOrder: async function () {
       try {
         console.log({
           total: this.$store.state.priceDetails.total,
           customer_id: this.$store.state.selectedCustomer.id,
-          type: this.orderType,
+          type: this.$store.state.currentOrder.type,
         });
         const res = await axios.post(
           "http://localhost:3000/post/orders/create",
           {
             total: this.$store.state.priceDetails.total,
             customer_id: this.$store.state.selectedCustomer.id,
-            type: this.orderType,
+            type: this.$store.state.currentOrder.type,
           }
         );
-        console.log(res.data.id);
-        console.log("poodd");
+        if (isNaN(res.data.id)) {
+          throw new Error("Failed to submit order. No order id retrieved.");
+        }
+
+        this.addItemsToOrder(res.data.id);
       } catch (err) {
-        console.log("errrrererere");
         console.log(err);
       }
     },
