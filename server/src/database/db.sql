@@ -102,6 +102,21 @@ GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO sales_system_db;
 
 GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO sales_system_db;
 
+CREATE OR REPLACE view orders_items_detail
+AS
+SELECT
+oi.order_id,
+c.phone,
+c.name,
+i.name_eng,
+i.name_chn,
+oi.quantity,
+i.price
+from orders_items oi 
+LEFT JOIN items i ON oi.item_id = i.id
+LEFT JOIN orders o ON oi.order_id = o.id
+LEFT JOIN customers c ON o.customer_id = c.id;
+
 INSERT INTO
     customers (name, phone, address, unit_number, street_number, street_name, city)
 VALUES
