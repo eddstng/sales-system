@@ -91,6 +91,62 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog
+      v-if="removeSelectedItem.node !== undefined"
+      v-model="removeSelectedItemDialog"
+      width="600px"
+    >
+      <v-card>
+        <div>
+          <h3 class="text-center pt-10 pb-5">
+            REMOVE ITEM
+            <br />
+            <br />
+            {{removeSelectedItem.node.name_eng}}
+            <br />
+            {{removeSelectedItem.node.name_chn}}
+          </h3>
+
+          <br />
+        </div>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            x-large
+            width="32%"
+            v-on:click="
+              removeSelectedItemDialog=false
+              removeSelectedItem={}
+            "
+          >
+            <div>CANCEL<br /></div>
+          </v-btn>
+          <v-btn
+            x-large
+            width="32%"
+            v-on:click="
+              removeSelectedItemDialog=false;
+              removeSelectedItemOne(removeSelectedItem);
+              removeSelectedItem={};
+            "
+          >
+            <div>REMOVE 1<br /></div>
+          </v-btn>
+          <v-btn
+            x-large
+            width="32%"
+            v-on:click="
+              removeSelectedItemDialog=false;
+              removeSelectedItemAll(removeSelectedItem);
+              removeSelectedItem={};
+            "
+          >
+            <div>REMOVE ALL<br /></div>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-card
       outlined
       tile
@@ -109,22 +165,26 @@
         <v-card
           class="mx-auto pt-2"
           outlined
-          v-for="value in $store.state.selectedItems"
-          v-bind:key="value.id"
+          v-for="item in $store.state.selectedItems"
+          v-bind:key="item.id"
           height="7em"
           width="100vw"
+          v-on:click="      
+            removeSelectedItemDialog = true;
+            removeSelectedItem = item;
+          "
         >
           <v-list-item three-line>
             <v-list-item-content>
-              <div class="menu-display-item-text">{{ value.node.name_eng }}</div>
-              <div class="menu-display-item-text">{{ value.node.name_chn }}</div>
+              <div class="menu-display-item-text">{{ item.node.name_eng }}</div>
+              <div class="menu-display-item-text">{{ item.node.name_chn }}</div>
             </v-list-item-content>
             <v-list-item-content>
               <div class="menu-display-item-text text-right">
-                x {{ value.quantity }}
+                x {{ item.quantity }}
               </div>
               <div class="menu-display-item-text text-right">
-                {{ value.node.price * value.quantity }}
+                {{ item.node.price * item.quantity }}
               </div>
             </v-list-item-content>
           </v-list-item>
@@ -184,7 +244,8 @@ import CustomerSelect from "@/components/CustomerSelect";
 export default {
   data() {
     return {
-      selectTableFormDialogue: false,
+      removeSelectedItemDialog: false,
+      removeSelectedItem: {},
       submitOrderDialog: false,
       createCustomerError: null,
       suggestedCustomers: [],
@@ -192,6 +253,21 @@ export default {
     };
   },
   methods: {
+    removeSelectedItemOne: function (selectedItem) {
+      const selectedItems = Object.assign({}, this.$store.state.selectedItems);
+      if (selectedItems[selectedItem.node.id].quantity === 1) {
+        delete selectedItems[selectedItem.node.id];
+      } else {
+        selectedItems[selectedItem.node.id].quantity =
+          selectedItems[selectedItem.node.id].quantity - 1;
+      }
+      store.commit("setSelectedItems", selectedItems);
+    },
+    removeSelectedItemAll: function (selectedItem) {
+      const selectedItems = Object.assign({}, this.$store.state.selectedItems);
+      delete selectedItems[selectedItem.node.id];
+      store.commit("setSelectedItems", selectedItems);
+    },
     submitOrderDialogConditional: function () {
       if (
         this.$store.state.selectedCustomer.phone !== undefined &&
