@@ -253,6 +253,9 @@ export default {
     };
   },
   methods: {
+    calculatePriceDetails: function () {
+      this.$root.$refs.MenuButtons.calculatePriceDetails();
+    },
     removeSelectedItemOne: function (selectedItem) {
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
       if (selectedItems[selectedItem.node.id].quantity === 1) {
@@ -262,11 +265,13 @@ export default {
           selectedItems[selectedItem.node.id].quantity - 1;
       }
       store.commit("setSelectedItems", selectedItems);
+      this.calculatePriceDetails();
     },
     removeSelectedItemAll: function (selectedItem) {
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
       delete selectedItems[selectedItem.node.id];
       store.commit("setSelectedItems", selectedItems);
+      this.calculatePriceDetails();
     },
     submitOrderDialogConditional: function () {
       if (

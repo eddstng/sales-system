@@ -41,6 +41,9 @@ export default {
   mounted() {
     this.scrollToElement();
   },
+  created() {
+    this.$root.$refs.MenuButtons = this;
+  },
   methods: {
     scrollToElement() {
       const el = this.$refs.scrollToMe;
