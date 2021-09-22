@@ -48,3 +48,13 @@ model orders_items {
   items    items?  @relation(fields: [item_id], references: [id])
   orders   orders? @relation(fields: [order_id], references: [id])
 }
+
+model orders_history {
+  order_id        Int         @id @default(autoincrement())
+  order_timestamp DateTime?   @default(now()) @db.Timestamp(6)
+  order_type      Int?        @db.SmallInt
+  order_total     Float?
+  customer_id     Int         @default(autoincrement())
+  customer_name   String?     @db.VarChar(100)
+  customer_phone  String?     @unique @db.VarChar(15)
+}

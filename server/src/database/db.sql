@@ -117,6 +117,19 @@ LEFT JOIN items i ON oi.item_id = i.id
 LEFT JOIN orders o ON oi.order_id = o.id
 LEFT JOIN customers c ON o.customer_id = c.id;
 
+CREATE OR REPLACE view order_history
+AS
+SELECT
+o.id as order_id,
+o.timestamp as order_timestamp,
+o.type as order_type,
+o.total as order_total,
+c.id as customer_id,
+c.name as customer_name,
+c.phone as customer_phone
+from orders o
+LEFT JOIN customers c ON o.customer_id = c.id;
+
 INSERT INTO
     customers (name, phone, address, unit_number, street_number, street_name, city)
 VALUES

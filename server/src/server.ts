@@ -8,6 +8,7 @@ import { Prisma } from '@prisma/client';
 import { getAllCustomers, getOneCustomer, createCustomer, updateCustomer, deleteOneCustomer } from './repositories/customers/customers';
 import { createOrder, deleteOneOrder, getAllOrders, getOneOrder, updateOrder } from './repositories/orders/orders';
 import { getAllOrdersItems, createOrdersItems, updateOrdersItems, deleteOneOrdersItems, getOneOrdersItems, createOrdersItemsBulk } from './repositories/ordersItems/ordersItems';
+import { getAllOrdersHistory } from './repositories/ordersHistory/ordersHistory';
 
 export default function startServer(): void {
     const port = 3000
@@ -169,6 +170,15 @@ export default function startServer(): void {
     app.delete('/delete/ordersitems/delete/id/:id', async (req, res) => {
         try {
             res.status(200).json(await deleteOneOrdersItems(parseInt(req.params.id)))
+        } catch (err: unknown) {
+            res.status(500).send(`${err as string}`);
+        }
+    })
+
+    // OrdersItem
+    app.get('/get/ordershistory/all', async (_req, res) => {
+        try {
+            res.status(200).json(await getAllOrdersHistory())
         } catch (err: unknown) {
             res.status(500).send(`${err as string}`);
         }
