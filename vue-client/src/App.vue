@@ -31,7 +31,7 @@
         </v-col>
       </v-row>
     </div>
-    <template>
+    <template v-if="$store.state.component === 'ORDER'">
       <v-row no-gutters>
         <v-col lg="2">
           <Sidebar />
@@ -61,6 +61,36 @@
         </v-col>
       </v-row>
     </template>
+    <template v-if="$store.state.component === 'HISTORY'">
+      <v-row no-gutters>
+        <v-col lg="2">
+          <Sidebar />
+        </v-col>
+        <v-col lg="4">
+          <v-card
+            outlined
+            tile
+          >
+            <v-container class="grey lighten-5">
+              <HistoryDisplay />
+            </v-container>
+          </v-card>
+        </v-col>
+        <v-col
+          lg="6"
+          height="100vh"
+        >
+          <v-card
+            class="fill-height"
+            tile
+          >
+            <v-container class="grey lighten-5">
+              <HistoryButtons />
+            </v-container>
+          </v-card>
+        </v-col>
+      </v-row>
+    </template>
   </v-app>
 </template>
 
@@ -68,6 +98,8 @@
 import Sidebar from "@/components/Sidebar";
 import MenuButtons from "@/components/MenuButtons";
 import MenuDisplay from "@/components/MenuDisplay";
+import HistoryButtons from "@/components/HistoryButtons";
+import HistoryDisplay from "@/components/HistoryDisplay";
 const date = new Date();
 export default {
   name: "App",
@@ -75,6 +107,8 @@ export default {
     Sidebar,
     MenuButtons,
     MenuDisplay,
+    HistoryButtons,
+    HistoryDisplay,
   },
 
   data() {

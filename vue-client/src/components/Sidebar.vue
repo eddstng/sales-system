@@ -34,7 +34,8 @@
                     dark
                     height="160px"
                     width="100%"
-                  >SETTINGS</v-btn>
+                    v-on:click="this.setComponentToHistory"
+                  >HISTORY</v-btn>
                   <v-btn
                     class="my-2"
                     x-large
@@ -52,3 +53,19 @@
     </v-container>
   </v-card>
 </template>
+
+<script>
+import { store } from "../store/store";
+import axios from "axios";
+export default {
+  methods: {
+    async setComponentToHistory() {
+      store.commit(
+        "setOrderHistory",
+        (await axios.get("http://localhost:3000/get/ordershistory/all")).data
+      );
+      store.commit("setComponent", "HISTORY");
+    },
+  },
+};
+</script>

@@ -25,8 +25,16 @@ export const store = new Vuex.Store({
       type: null,
     },
     notification: 0,
+    component: "HISTORY",
+    orderHistory: []
   },
   mutations: {
+    setOrderHistory(state, orderHistory) {
+      state.orderHistory = orderHistory;
+    },
+    setComponent(state, component) {
+      state.component = component;
+    },
     setItems(state, items) {
       state.items = items;
     },
