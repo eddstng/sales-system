@@ -26,6 +26,7 @@
                     dark
                     height="160px"
                     width="100%"
+                    v-on:click="this.setComponentToOrder"
                   >ORDER</v-btn>
                   <v-btn
                     class="my-2"
@@ -65,6 +66,9 @@ export default {
         (await axios.get("http://localhost:3000/get/ordershistory/all")).data
       );
       store.commit("setComponent", "HISTORY");
+    },
+    async setComponentToOrder() {
+      store.commit("setComponent", "ORDER");
     },
   },
 };
