@@ -105,13 +105,17 @@ GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO sales_system_db;
 CREATE OR REPLACE view orders_items_detail
 AS
 SELECT
-oi.order_id,
-c.phone,
-c.name,
-i.name_eng,
-i.name_chn,
-oi.quantity,
-i.price
+o.id as order_id,
+o.timestamp as order_timestamp,
+o.type as order_type,
+c.id as customer_id,
+c.name as customer_name,
+c.phone as customer_phone,
+i.id as item_id,
+i.name_eng as item_name_eng,
+i.name_chn as item_name_chn,
+i.price as item_price,
+oi.quantity as orders_items_quantity
 from orders_items oi 
 LEFT JOIN items i ON oi.item_id = i.id
 LEFT JOIN orders o ON oi.order_id = o.id

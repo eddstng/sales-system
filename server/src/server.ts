@@ -9,6 +9,7 @@ import { getAllCustomers, getOneCustomer, createCustomer, updateCustomer, delete
 import { createOrder, deleteOneOrder, getAllOrders, getOneOrder, updateOrder } from './repositories/orders/orders';
 import { getAllOrdersItems, createOrdersItems, updateOrdersItems, deleteOneOrdersItems, getOneOrdersItems, createOrdersItemsBulk } from './repositories/ordersItems/ordersItems';
 import { getAllOrdersHistory } from './repositories/ordersHistory/ordersHistory';
+import { getOrdersItemsDetail } from './repositories/ordersItemsDetail/ordersItemsDetail';
 
 export default function startServer(): void {
     const port = 3000
@@ -179,6 +180,15 @@ export default function startServer(): void {
     app.get('/get/ordershistory/all', async (_req, res) => {
         try {
             res.status(200).json(await getAllOrdersHistory())
+        } catch (err: unknown) {
+            res.status(500).send(`${err as string}`);
+        }
+    })
+
+    // OrdersItemsDetail
+    app.get('/get/ordersitemsdetail/all', async (_req, res) => {
+        try {
+            res.status(200).json(await getOrdersItemsDetail())
         } catch (err: unknown) {
             res.status(500).send(`${err as string}`);
         }
