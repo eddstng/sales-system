@@ -1,14 +1,6 @@
 <template>
-  <v-card
-    outlined
-    tile
-    class="overflow-y-auto"
-    height="92.4vh"
-  >
-    <div
-      class="p-0"
-      max-height="400"
-    >
+  <v-card outlined tile class="overflow-y-auto" height="92.4vh">
+    <div class="p-0" max-height="400">
       <v-btn
         class="menu-button-text"
         v-for="item in $store.state.items"
@@ -18,9 +10,10 @@
         height="180px"
         width="50%"
         v-on:click="onClickMenuButton(item)"
-      >{{ item.name_eng }}<br />{{ item.name_chn }}<br />{{
-              item.price
-            }}</v-btn>
+        >{{ item.name_eng }}<br />{{ item.name_chn }}<br />{{
+          item.price
+        }}</v-btn
+      >
     </div>
   </v-card>
 </template>
@@ -41,10 +34,10 @@ export default {
   mounted() {
     this.scrollToElement();
   },
-  created() {
-    this.$root.$refs.MenuButtons = this;
-  },
   methods: {
+    calculatePriceDetails: function () {
+      this.$root.$refs.App.calculatePriceDetails();
+    },
     scrollToElement() {
       const el = this.$refs.scrollToMe;
       if (el) {
@@ -65,24 +58,6 @@ export default {
         selectedItems[item.id].quantity = 1;
       }
       store.commit("setSelectedItems", selectedItems);
-    },
-    calculatePriceDetails() {
-      let priceDetails = store.state.priceDetails;
-      priceDetails.subtotal = 0;
-      priceDetails.gst = 0;
-      priceDetails.total = 0;
-      const selectedItems = store.state.selectedItems;
-      Object.keys(selectedItems).forEach((key) => {
-        priceDetails.subtotal =
-          parseFloat(selectedItems[key].node.price) *
-            selectedItems[key].quantity +
-          priceDetails.subtotal;
-        priceDetails.gst = parseFloat(
-          (priceDetails.subtotal * 0.05).toFixed(2)
-        );
-        priceDetails.total = priceDetails.subtotal + priceDetails.gst;
-      });
-      store.commit("priceDetails", priceDetails);
     },
   },
 };

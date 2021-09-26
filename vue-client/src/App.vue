@@ -126,6 +126,24 @@ export default {
     clearAlert() {
       this.$store.state.notification = 0;
     },
+    calculatePriceDetails() {
+      let priceDetails = store.state.priceDetails;
+      priceDetails.subtotal = 0;
+      priceDetails.gst = 0;
+      priceDetails.total = 0;
+      const selectedItems = store.state.selectedItems;
+      Object.keys(selectedItems).forEach((key) => {
+        priceDetails.subtotal =
+          parseFloat(selectedItems[key].node.price) *
+            selectedItems[key].quantity +
+          priceDetails.subtotal;
+        priceDetails.gst = parseFloat(
+          (priceDetails.subtotal * 0.05).toFixed(2)
+        );
+        priceDetails.total = priceDetails.subtotal + priceDetails.gst;
+      });
+      store.commit("priceDetails", priceDetails);
+    },
     updateClock() {
       const date = new Date(); // create a new reference here
       this.hours = date.getHours();

@@ -50,6 +50,9 @@ export default {
     this.$root.$refs.MenuButtons = this;
   },
   methods: {
+    calculatePriceDetails: function () {
+      this.$root.$refs.App.calculatePriceDetails();
+    },
     reloadComponent: function (componentStr) {
       this.$root.$refs.App.reloadComponent(componentStr);
     },
@@ -87,7 +90,8 @@ export default {
       ordersItemsDetailWithOrderIdArray.forEach((v) => {
         this.addHistoryItemsToSelectedItems(v);
       });
-      this.reloadComponent("HISTORY")
+      this.calculatePriceDetails();
+      this.reloadComponent("HISTORY");
     },
   },
 };

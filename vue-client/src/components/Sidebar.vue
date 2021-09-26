@@ -1,9 +1,5 @@
 <template>
-  <v-card
-    class="fill-height"
-    outlined
-    tile
-  >
+  <v-card class="fill-height" outlined tile>
     <v-container class="grey lighten-5 fill-height">
       <template>
         <v-container>
@@ -18,7 +14,8 @@
                     dark
                     height="160px"
                     width="100%"
-                  >HOME</v-btn>
+                    >HOME</v-btn
+                  >
                   <v-btn
                     class="my-2"
                     x-large
@@ -27,7 +24,8 @@
                     height="160px"
                     width="100%"
                     v-on:click="this.setComponentToOrder"
-                  >ORDER</v-btn>
+                    >ORDER</v-btn
+                  >
                   <v-btn
                     class="my-2"
                     x-large
@@ -36,7 +34,8 @@
                     height="160px"
                     width="100%"
                     v-on:click="this.setComponentToHistory"
-                  >HISTORY</v-btn>
+                    >HISTORY</v-btn
+                  >
                   <v-btn
                     class="my-2"
                     x-large
@@ -44,7 +43,8 @@
                     dark
                     height="160px"
                     width="100%"
-                  >OPTIONS</v-btn>
+                    >OPTIONS</v-btn
+                  >
                 </div>
               </div>
             </v-col>
@@ -67,10 +67,20 @@ export default {
       );
       store.commit("setComponent", "HISTORY");
       store.commit("setSelectedItems", {});
+      store.commit("setPriceDetails", {
+        subtotal: 0,
+        gst: 0,
+        total: 0,
+      });
     },
     async setComponentToOrder() {
       store.commit("setComponent", "ORDER");
       store.commit("setSelectedItems", {});
+      store.commit("setPriceDetails", {
+        subtotal: 0,
+        gst: 0,
+        total: 0,
+      });
     },
   },
 };

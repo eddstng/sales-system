@@ -254,7 +254,7 @@ export default {
   },
   methods: {
     calculatePriceDetails: function () {
-      this.$root.$refs.MenuButtons.calculatePriceDetails();
+      this.$root.$refs.App.calculatePriceDetails();
     },
     removeSelectedItemOne: function (selectedItem) {
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
