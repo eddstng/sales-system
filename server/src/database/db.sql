@@ -112,6 +112,8 @@ c.id as customer_id,
 c.name as customer_name,
 c.phone as customer_phone,
 i.id as item_id,
+i.menu_id as item_menu_id,
+i.category as item_category,
 i.name_eng as item_name_eng,
 i.name_chn as item_name_chn,
 i.price as item_price,
@@ -121,7 +123,7 @@ LEFT JOIN items i ON oi.item_id = i.id
 LEFT JOIN orders o ON oi.order_id = o.id
 LEFT JOIN customers c ON o.customer_id = c.id;
 
-CREATE OR REPLACE view order_history
+CREATE OR REPLACE view orders_history
 AS
 SELECT
 o.id as order_id,
