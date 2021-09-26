@@ -240,7 +240,7 @@
 <script>
 import axios from "axios";
 import { store } from "../store/store";
-import CustomerSelect from "@/components/CustomerSelect";
+import CustomerSelect from "./CustomerSelect";
 export default {
   data() {
     return {

@@ -1,28 +1,20 @@
 <template>
-  <v-card
-    outlined
-    tile
-    class="overflow-y-auto"
-    height="92.4vh"
-  >
-    <div
-      class="p-0"
-      max-height="400"
-    >
+  <v-card outlined tile class="overflow-y-auto" height="92.4vh">
+    <div class="p-0" max-height="400">
       <v-btn
-        class="menu-button-text"
+        class="history-button-text"
         v-for="order in $store.state.orderHistory"
         v-bind:key="order.order_id"
         x-large
         dark
         height="100px"
         width="100%"
-        v-on:click="onClickMenuButton(item)"
+        v-on:click="onClickHistoryButton(order.order_id)"
       >
         <v-row>
-          <v-col> {{order.order_id}} </v-col>
-          <v-col> {{order.customer_phone}} </v-col>
-          <v-col> {{order.order_total}} </v-col>
+          <v-col> {{ order.order_id }} </v-col>
+          <v-col> {{ order.customer_phone }} </v-col>
+          <v-col> {{ order.order_total }} </v-col>
           <!-- <v-col> {{order.customer_id}} </v-col> -->
           <!-- <v-col> {{order.customer_name}} </v-col> -->
           <!-- <v-col> {{order.order_timestamp}} </v-col> -->
@@ -38,13 +30,14 @@
 </template>
 
 <style>
-.menu-button-text {
+.history-button-text {
   font-size: 1.2em;
   overflow: hidden;
 }
 </style>
 
 <script>
+import axios from "axios";
 import { store } from "../store/store";
 export default {
   data() {
@@ -57,44 +50,44 @@ export default {
     this.$root.$refs.MenuButtons = this;
   },
   methods: {
+    reloadComponent: function (componentStr) {
+      this.$root.$refs.App.reloadComponent(componentStr);
+    },
     scrollToElement() {
       const el = this.$refs.scrollToMe;
       if (el) {
         el.scrollIntoView({ behavior: "smooth" });
       }
     },
-    onClickMenuButton(item) {
-      this.addItemToSelectedItems(item);
-      this.calculatePriceDetails();
-    },
-    addItemToSelectedItems(item) {
+    addHistoryItemsToSelectedItems(ordersItemsDetailWithOrderId) {
       let selectedItems = store.state.selectedItems;
-      if (item.id in selectedItems) {
-        selectedItems[item.id].quantity++;
+      if (ordersItemsDetailWithOrderId.item_id in selectedItems) {
+        selectedItems[ordersItemsDetailWithOrderId.item_id].quantity++;
       } else {
-        selectedItems[item.id] = {};
-        selectedItems[item.id].node = item;
-        selectedItems[item.id].quantity = 1;
+        selectedItems[ordersItemsDetailWithOrderId.item_id] = {};
+        selectedItems[ordersItemsDetailWithOrderId.item_id].node = {
+          category: ordersItemsDetailWithOrderId.item_category,
+          id: ordersItemsDetailWithOrderId.item_id,
+          menu_id: ordersItemsDetailWithOrderId.item_menu_id,
+          name_chn: ordersItemsDetailWithOrderId.item_name_chn,
+          name_eng: ordersItemsDetailWithOrderId.item_name_eng,
+          price: ordersItemsDetailWithOrderId.item_price,
+        };
+        selectedItems[ordersItemsDetailWithOrderId.item_id].quantity =
+          ordersItemsDetailWithOrderId.orders_items_quantity;
       }
       store.commit("setSelectedItems", selectedItems);
     },
-    calculatePriceDetails() {
-      let priceDetails = store.state.priceDetails;
-      priceDetails.subtotal = 0;
-      priceDetails.gst = 0;
-      priceDetails.total = 0;
-      const selectedItems = store.state.selectedItems;
-      Object.keys(selectedItems).forEach((key) => {
-        priceDetails.subtotal =
-          parseFloat(selectedItems[key].node.price) *
-            selectedItems[key].quantity +
-          priceDetails.subtotal;
-        priceDetails.gst = parseFloat(
-          (priceDetails.subtotal * 0.05).toFixed(2)
-        );
-        priceDetails.total = priceDetails.subtotal + priceDetails.gst;
+    async onClickHistoryButton(order_id) {
+      const ordersItemsDetailWithOrderIdArray = (
+        await axios.get(
+          `http://localhost:3000/get/ordersitemsdetail/id/${order_id}`
+        )
+      ).data;
+      ordersItemsDetailWithOrderIdArray.forEach((v) => {
+        this.addHistoryItemsToSelectedItems(v);
       });
-      store.commit("priceDetails", priceDetails);
+      this.reloadComponent("HISTORY")
     },
   },
 };

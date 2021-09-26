@@ -1,28 +1,29 @@
 
 <template>
   <v-app>
-    <div>
+    <div v-if="render">
       <v-row no-gutters>
         <v-col>
-          <v-alert class=" menu-notification text-center">
-            {{currentDate()}} - {{hours}}:{{minutes}}:{{seconds}} {{amPm}}
+          <v-alert class="menu-notification text-center">
+            {{ currentDate() }} - {{ hours }}:{{ minutes }}:{{ seconds }}
+            {{ amPm }}
           </v-alert>
         </v-col>
         <v-col :cols="10">
           <v-alert
-            class=" menu-notification"
+            class="menu-notification"
             v-if="$store.state.notification === 0"
           >
           </v-alert>
           <v-alert
-            class=" menu-notification"
+            class="menu-notification"
             type="success"
             v-if="$store.state.notification === 1"
           >
             Order successfully added.
           </v-alert>
           <v-alert
-            class=" menu-notification"
+            class="menu-notification"
             type="error"
             v-if="$store.state.notification === 2"
           >
@@ -37,23 +38,14 @@
           <Sidebar />
         </v-col>
         <v-col lg="4">
-          <v-card
-            outlined
-            tile
-          >
+          <v-card outlined tile>
             <v-container class="grey lighten-5">
               <MenuDisplay />
             </v-container>
           </v-card>
         </v-col>
-        <v-col
-          lg="6"
-          height="100vh"
-        >
-          <v-card
-            class="fill-height"
-            tile
-          >
+        <v-col lg="6" height="100vh">
+          <v-card class="fill-height" tile>
             <v-container class="grey lighten-5">
               <MenuButtons />
             </v-container>
@@ -67,23 +59,14 @@
           <Sidebar />
         </v-col>
         <v-col lg="4">
-          <v-card
-            outlined
-            tile
-          >
+          <v-card outlined tile>
             <v-container class="grey lighten-5">
               <HistoryDisplay />
             </v-container>
           </v-card>
         </v-col>
-        <v-col
-          lg="6"
-          height="100vh"
-        >
-          <v-card
-            class="fill-height"
-            tile
-          >
+        <v-col lg="6" height="100vh">
+          <v-card class="fill-height" tile>
             <v-container class="grey lighten-5">
               <HistoryButtons />
             </v-container>
@@ -95,11 +78,13 @@
 </template>
 
 <script>
-import Sidebar from "@/components/Sidebar";
-import MenuButtons from "@/components/MenuButtons";
-import MenuDisplay from "@/components/MenuDisplay";
-import HistoryButtons from "@/components/HistoryButtons";
-import HistoryDisplay from "@/components/HistoryDisplay";
+import { store } from "./store/store";
+
+import Sidebar from "./components/Sidebar";
+import MenuButtons from "./components/MenuButtons";
+import MenuDisplay from "./components/MenuDisplay";
+import HistoryButtons from "./components/HistoryButtons";
+import HistoryDisplay from "./components/HistoryDisplay";
 const date = new Date();
 export default {
   name: "App",
@@ -119,7 +104,11 @@ export default {
       amPm: "AM",
       interval: 0,
       notification: 0,
+      render: true,
     };
+  },
+  created() {
+    this.$root.$refs.App = this;
   },
   mounted() {
     this.interval = setInterval(this.updateClock, 1000);
@@ -129,6 +118,11 @@ export default {
     clearInterval(this.interval);
   },
   methods: {
+    async reloadComponent(componentStr) {
+      store.commit("setComponent", "");
+      await this.$nextTick();
+      store.commit("setComponent", componentStr);
+    },
     clearAlert() {
       this.$store.state.notification = 0;
     },

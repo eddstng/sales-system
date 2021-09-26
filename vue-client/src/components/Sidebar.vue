@@ -66,9 +66,11 @@ export default {
         (await axios.get("http://localhost:3000/get/ordershistory/all")).data
       );
       store.commit("setComponent", "HISTORY");
+      store.commit("setSelectedItems", {});
     },
     async setComponentToOrder() {
       store.commit("setComponent", "ORDER");
+      store.commit("setSelectedItems", {});
     },
   },
 };
