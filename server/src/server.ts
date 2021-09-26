@@ -9,7 +9,7 @@ import { getAllCustomers, getOneCustomer, createCustomer, updateCustomer, delete
 import { createOrder, deleteOneOrder, getAllOrders, getOneOrder, updateOrder } from './repositories/orders/orders';
 import { getAllOrdersItems, createOrdersItems, updateOrdersItems, deleteOneOrdersItems, getOneOrdersItems, createOrdersItemsBulk } from './repositories/ordersItems/ordersItems';
 import { getAllOrdersHistory } from './repositories/ordersHistory/ordersHistory';
-import { getOrdersItemsDetail } from './repositories/ordersItemsDetail/ordersItemsDetail';
+import { getAllOrdersItemsDetail, getAllOrdersItemsDetailWithOrderId} from './repositories/ordersItemsDetail/ordersItemsDetail';
 
 export default function startServer(): void {
     const port = 3000
@@ -188,7 +188,15 @@ export default function startServer(): void {
     // OrdersItemsDetail
     app.get('/get/ordersitemsdetail/all', async (_req, res) => {
         try {
-            res.status(200).json(await getOrdersItemsDetail())
+            res.status(200).json(await getAllOrdersItemsDetail())
+        } catch (err: unknown) {
+            res.status(500).send(`${err as string}`);
+        }
+    })
+
+    app.get('/get/ordersitemsdetail/id/:id', async (req, res) => {
+        try {
+            res.status(200).json(await getAllOrdersItemsDetailWithOrderId(parseInt(req.params.id)))
         } catch (err: unknown) {
             res.status(500).send(`${err as string}`);
         }
