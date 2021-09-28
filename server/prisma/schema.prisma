@@ -35,8 +35,9 @@ model orders {
   total        Float?
   timestamp    DateTime?      @default(now()) @db.Timestamp(6)
   type         Int?           @db.SmallInt
+  void         Boolean        @default(false)
   customer_id  Int?
-  customers    customers?     @relation(fields: [customer_id], references: [id])
+  customers    customers?     @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_customers")
   orders_items orders_items[]
 }
 
@@ -45,8 +46,8 @@ model orders_items {
   quantity Int?
   item_id  Int?
   order_id Int?
-  items    items?  @relation(fields: [item_id], references: [id])
-  orders   orders? @relation(fields: [order_id], references: [id])
+  items    items?  @relation(fields: [item_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_items")
+  orders   orders? @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_orders")
 }
 
 model orders_history {
@@ -54,6 +55,7 @@ model orders_history {
   order_timestamp DateTime?   @default(now()) @db.Timestamp(6)
   order_type      Int?        @db.SmallInt
   order_total     Float?
+  order_void      Boolean     @default(false)
   customer_id     Int         @default(autoincrement())
   customer_name   String?     @db.VarChar(100)
   customer_phone  String?     @unique @db.VarChar(15)
@@ -63,6 +65,7 @@ model orders_items_detail {
   order_id                Int           @id @default(autoincrement())
   order_timestamp         DateTime?     @default(now()) @db.Timestamp(6)
   order_type              Int?          @db.SmallInt
+  order_void              Boolean       @default(false)
   customer_id             Int           @default(autoincrement())
   customer_name           String?       @db.VarChar(100)
   customer_phone          String?       @unique @db.VarChar(15)

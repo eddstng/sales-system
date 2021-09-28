@@ -54,7 +54,8 @@ CREATE TABLE orders (
     id SERIAL NOT NULL PRIMARY KEY,
     total FLOAT,
     timestamp TIMESTAMP WITHOUT TIME ZONE DEFAULT (NOW()),
-    type SMALLINT
+    type SMALLINT,
+    void BOOLEAN NOT NULL DEFAULT FALSE
     --  customer_id INT FOREIGN KEY REFERENCES customers (id)
 );
 
@@ -108,6 +109,7 @@ SELECT
 o.id as order_id,
 o.timestamp as order_timestamp,
 o.type as order_type,
+o.void as order_void,
 c.id as customer_id,
 c.name as customer_name,
 c.phone as customer_phone,
@@ -130,6 +132,7 @@ o.id as order_id,
 o.timestamp as order_timestamp,
 o.type as order_type,
 o.total as order_total,
+o.void as order_void,
 c.id as customer_id,
 c.name as customer_name,
 c.phone as customer_phone
