@@ -18,7 +18,6 @@ export class Order {
     @IsNotEmpty()
     type!: number;
 
-    @IsNotEmpty()
     void!: boolean;
 }
 
