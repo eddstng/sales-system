@@ -436,6 +436,7 @@ export default {
         "setSelectedCustomer",
         selectedCustomerWithStringEmptyValues
       );
+      this.selectCustomerFormDialogue = false;
       this.selectDineInFormDialogue = false;
       this.selectedCustomer = {
         phone: "",
