@@ -67,6 +67,7 @@ export default {
       );
       store.commit("setComponent", "HISTORY");
       store.commit("setSelectedItems", {});
+      store.commit("setSelectedCustomer", {});
       store.commit("setPriceDetails", {
         subtotal: 0,
         gst: 0,
@@ -76,6 +77,7 @@ export default {
     async setComponentToOrder() {
       store.commit("setComponent", "ORDER");
       store.commit("setSelectedItems", {});
+      store.commit("setSelectedCustomer", {});
       store.commit("setPriceDetails", {
         subtotal: 0,
         gst: 0,

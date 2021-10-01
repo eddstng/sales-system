@@ -142,7 +142,7 @@ export default {
         );
         priceDetails.total = priceDetails.subtotal + priceDetails.gst;
       });
-      store.commit("priceDetails", priceDetails);
+      store.commit("setPriceDetails", priceDetails);
     },
     updateClock() {
       const date = new Date(); // create a new reference here

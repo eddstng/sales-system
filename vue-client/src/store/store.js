@@ -23,6 +23,8 @@ export const store = new Vuex.Store({
     currentOrder: {
       id: null,
       type: null,
+      total: 0,
+      customer_id: null,
     },
     notification: 0,
     component: "HISTORY",

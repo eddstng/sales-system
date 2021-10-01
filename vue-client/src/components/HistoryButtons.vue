@@ -82,6 +82,14 @@ export default {
       store.commit("setSelectedItems", selectedItems);
     },
     async onClickHistoryButton(order_id) {
+      store.commit("setComponent", "HISTORY");
+      store.commit("setSelectedItems", {});
+      store.commit("setSelectedCustomer", {});
+      store.commit("setPriceDetails", {
+        subtotal: 0,
+        gst: 0,
+        total: 0,
+      });
       const ordersItemsDetailWithOrderIdArray = (
         await axios.get(
           `http://localhost:3000/get/ordersitemsdetail/id/${order_id}`
@@ -89,6 +97,23 @@ export default {
       ).data;
       ordersItemsDetailWithOrderIdArray.forEach((v) => {
         this.addHistoryItemsToSelectedItems(v);
+      });
+      store.commit("setCurrentOrder", {
+        id: ordersItemsDetailWithOrderIdArray[0].order_id,
+        type: ordersItemsDetailWithOrderIdArray[0].order_type,
+        total: ordersItemsDetailWithOrderIdArray[0].order_total,
+        customer_id: ordersItemsDetailWithOrderIdArray[0].customer_id,
+      });
+      store.commit("setSelectedCustomer", {
+        address: ordersItemsDetailWithOrderIdArray[0].customer_address,
+        city: ordersItemsDetailWithOrderIdArray[0].customer_city,
+        id: ordersItemsDetailWithOrderIdArray[0].customer_id,
+        name: ordersItemsDetailWithOrderIdArray[0].customer_name,
+        note: ordersItemsDetailWithOrderIdArray[0].customer_note,
+        phone: ordersItemsDetailWithOrderIdArray[0].customer_phone,
+        street_name: ordersItemsDetailWithOrderIdArray[0].customer_street_name,
+        street_number: ordersItemsDetailWithOrderIdArray[0].customer_street_number,
+        unit_number: ordersItemsDetailWithOrderIdArray[0].customer_unit_number,
       });
       this.calculatePriceDetails();
       this.reloadComponent("HISTORY");
