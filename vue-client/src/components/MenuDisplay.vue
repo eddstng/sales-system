@@ -1,18 +1,12 @@
 <template>
   <v-container>
-    <v-dialog
-      v-model="submitOrderDialog"
-      width="900"
-    >
-      <!-- Select Customer  -->
-      <!-- Select Customer Button / Customer Display  -->
-      <!-- Select Customer Phone Number Search Form Dialogue -->
+    <v-dialog v-model="submitOrderDialog" width="900">
       <v-card>
         <div>
           <br />
           <v-row class="submitOrderDialogText mt-10">
             <div>
-              <v-col :cols=15>
+              <v-col :cols="15">
                 {{ $store.state.selectedCustomer.phone }} <br />
                 {{ $store.state.selectedCustomer.address }} <br />
                 {{ $store.state.selectedCustomer.name }}
@@ -27,38 +21,27 @@
             v-bind:key="value.id"
           >
             <v-row class="submitOrderDialogText mt-5 mb-5">
-              <v-col :cols=5>
-                {{value.node.name_eng}}
+              <v-col :cols="5">
+                {{ value.node.name_eng }}
               </v-col>
-              <v-col :cols=3>
-                {{value.node.name_chn}}
+              <v-col :cols="3">
+                {{ value.node.name_chn }}
               </v-col>
-              <v-col
-                :cols=2
-                class="text-center"
-              >
-                {{value.node.price}}
+              <v-col :cols="2" class="text-center">
+                {{ value.node.price }}
               </v-col>
-              <v-col class="text-end">
-                x{{value.quantity}}
-              </v-col>
+              <v-col class="text-end"> x{{ value.quantity }} </v-col>
             </v-row>
           </div>
 
           <v-row class="submitOrderDialogText mt-5 mb-5">
-            <v-col :cols=4>
+            <v-col :cols="4">
               Subtotal: {{ $store.state.priceDetails.subtotal }}
             </v-col>
-            <v-col
-              :cols=4
-              class="text-end"
-            >
+            <v-col :cols="4" class="text-end">
               GST: {{ $store.state.priceDetails.gst }}
             </v-col>
-            <v-col
-              :cols=4
-              class="text-end"
-            >
+            <v-col :cols="4" class="text-end">
               Total: ${{ $store.state.priceDetails.total }}
             </v-col>
           </v-row>
@@ -66,24 +49,17 @@
           <br />
         </div>
         <v-divider></v-divider>
-        <!-- Select Customer Phone Number Search Form Buttons-->
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            x-large
-            width="50%"
-            v-on:click="
-                submitOrderDialog = false;
-            "
-          >
+          <v-btn x-large width="50%" v-on:click="submitOrderDialog = false">
             <div>CANCEL<br /></div>
           </v-btn>
           <v-btn
             x-large
             width="50%"
             v-on:click="
-                submitOrderDialog = false;
-                submitOrder();
+              submitOrderDialog = false;
+              submitOrder();
             "
           >
             <div>SUBMIT<br /></div>
@@ -102,9 +78,9 @@
             REMOVE ITEM
             <br />
             <br />
-            {{removeSelectedItem.node.name_eng}}
+            {{ removeSelectedItem.node.name_eng }}
             <br />
-            {{removeSelectedItem.node.name_chn}}
+            {{ removeSelectedItem.node.name_chn }}
           </h3>
 
           <br />
@@ -116,8 +92,8 @@
             x-large
             width="32%"
             v-on:click="
-              removeSelectedItemDialog=false
-              removeSelectedItem={}
+              removeSelectedItemDialog = false;
+              removeSelectedItem = {};
             "
           >
             <div>CANCEL<br /></div>
@@ -126,9 +102,9 @@
             x-large
             width="32%"
             v-on:click="
-              removeSelectedItemDialog=false;
+              removeSelectedItemDialog = false;
               removeSelectedItemOne(removeSelectedItem);
-              removeSelectedItem={};
+              removeSelectedItem = {};
             "
           >
             <div>REMOVE 1<br /></div>
@@ -137,9 +113,9 @@
             x-large
             width="32%"
             v-on:click="
-              removeSelectedItemDialog=false;
+              removeSelectedItemDialog = false;
               removeSelectedItemAll(removeSelectedItem);
-              removeSelectedItem={};
+              removeSelectedItem = {};
             "
           >
             <div>REMOVE ALL<br /></div>
@@ -147,11 +123,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-card
-      outlined
-      tile
-      height="16vh"
-    >
+    <v-card outlined tile height="16vh">
       <CustomerSelect />
     </v-card>
     <v-card
@@ -169,7 +141,7 @@
           v-bind:key="item.id"
           height="7em"
           width="100vw"
-          v-on:click="      
+          v-on:click="
             removeSelectedItemDialog = true;
             removeSelectedItem = item;
           "
@@ -191,10 +163,12 @@
         </v-card>
       </template>
     </v-card>
-    <v-card v-on:click="
-                phone = '';
-                submitOrderDialogConditional()
-            ">
+    <v-card
+      v-on:click="
+        phone = '';
+        submitOrderDialogConditional();
+      "
+    >
       <v-list-item three-line>
         <v-list-item-content>
           <div class="menu-display-item-text">Subtotal:</div>
@@ -222,15 +196,6 @@
   font-size: 1.2em;
 }
 
-.menu-display-customer-text {
-  font-size: 1.2em;
-  margin-left: 0.9em;
-}
-
-.text-right {
-  position: right;
-}
-
 .submitOrderDialogText {
   margin-left: 15%;
   width: 600px;
@@ -247,8 +212,6 @@ export default {
       removeSelectedItemDialog: false,
       removeSelectedItem: {},
       submitOrderDialog: false,
-      createCustomerError: null,
-      suggestedCustomers: [],
       suggestedStreetName: [],
     };
   },
@@ -256,6 +219,10 @@ export default {
     calculatePriceDetails: function () {
       this.$root.$refs.App.calculatePriceDetails();
     },
+    clearOrderRelatedStore: function () {
+      this.$root.$refs.App.clearOrderRelatedStore();
+    },
+
     removeSelectedItemOne: function (selectedItem) {
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
       if (selectedItems[selectedItem.node.id].quantity === 1) {
@@ -273,6 +240,7 @@ export default {
       store.commit("setSelectedItems", selectedItems);
       this.calculatePriceDetails();
     },
+
     submitOrderDialogConditional: function () {
       if (
         this.$store.state.selectedCustomer.phone !== undefined &&
@@ -281,52 +249,8 @@ export default {
         this.submitOrderDialog = true;
       }
     },
-    addItemsToOrder: async function (orderIdNum) {
-      const orderItemsCreateManyInputData = [];
-      for (const [key, value] of Object.entries(
-        this.$store.state.selectedItems
-      )) {
-        orderItemsCreateManyInputData.push({
-          order_id: orderIdNum,
-          item_id: parseInt(key),
-          quantity: value.quantity,
-        });
-      }
-
-      console.log(orderItemsCreateManyInputData);
-      const res = await axios.post(
-        "http://localhost:3000/post/ordersitems/create/bulk",
-        orderItemsCreateManyInputData
-      );
-      console.log(res);
-      if (isNaN(res.status !== 200)) {
-        throw new Error(
-          `Failed to submit order during addItemsToOrder. ${res}`
-        );
-      }
-    },
-    clearOrder: function () {
-      store.commit("setSelectedCustomer", {});
-
-      store.commit("setPriceDetails", {
-        subtotal: 0,
-        gst: 0,
-        total: 0,
-      });
-
-      store.commit("setSelectedItems", {});
-      store.commit("setCurrentOrder", {
-        id: null,
-        type: null,
-      });
-    },
     submitOrder: async function () {
       try {
-        console.log({
-          total: this.$store.state.priceDetails.total,
-          customer_id: this.$store.state.selectedCustomer.id,
-          type: this.$store.state.currentOrder.type,
-        });
         const res = await axios.post(
           "http://localhost:3000/post/orders/create",
           {
@@ -338,13 +262,34 @@ export default {
         if (isNaN(res.data.id)) {
           throw new Error("Failed to submit order. No order id retrieved.");
         }
-
         this.addItemsToOrder(res.data.id);
-        this.clearOrder();
+        this.clearOrderRelatedStore();
         store.commit("setNotification", 1);
       } catch (err) {
         store.commit("setNotification", 2);
         console.log(err);
+      }
+    },
+
+    addItemsToOrder: async function (orderIdNum) {
+      const orderItemsCreateManyInputData = [];
+      for (const [key, value] of Object.entries(
+        this.$store.state.selectedItems
+      )) {
+        orderItemsCreateManyInputData.push({
+          order_id: orderIdNum,
+          item_id: parseInt(key),
+          quantity: value.quantity,
+        });
+      }
+      const res = await axios.post(
+        "http://localhost:3000/post/ordersitems/create/bulk",
+        orderItemsCreateManyInputData
+      );
+      if (res.status !== 200) {
+        throw new Error(
+          `Failed to submit order during addItemsToOrder. ${res}`
+        );
       }
     },
   },

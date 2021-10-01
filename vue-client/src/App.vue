@@ -118,19 +118,12 @@ export default {
     clearInterval(this.interval);
   },
   methods: {
-    async reloadComponent(componentStr) {
-      store.commit("setComponent", "");
-      await this.$nextTick();
-      store.commit("setComponent", componentStr);
-    },
     clearAlert() {
       this.$store.state.notification = 0;
     },
     calculatePriceDetails() {
+      this.clearPriceDetails();
       let priceDetails = store.state.priceDetails;
-      priceDetails.subtotal = 0;
-      priceDetails.gst = 0;
-      priceDetails.total = 0;
       const selectedItems = store.state.selectedItems;
       Object.keys(selectedItems).forEach((key) => {
         priceDetails.subtotal =
@@ -145,7 +138,7 @@ export default {
       store.commit("setPriceDetails", priceDetails);
     },
     updateClock() {
-      const date = new Date(); // create a new reference here
+      const date = new Date();
       this.hours = date.getHours();
       this.minutes = date.getMinutes();
       this.seconds = date.getSeconds();
@@ -161,6 +154,31 @@ export default {
       }/${current.getDate()}`;
       return date;
     },
+    clearPriceDetails() {
+      store.commit("setPriceDetails", {
+        subtotal: 0,
+        gst: 0,
+        total: 0,
+      });
+    },
+
+    // Exported
+    clearOrderRelatedStore() {
+      store.commit("setSelectedItems", {});
+      store.commit("setSelectedCustomer", {});
+      store.commit("setCurrentOrder", {
+        id: null,
+        type: null,
+        total: 0,
+        customer_id: null,
+      });
+      this.clearPriceDetails();
+    },
+    // async reloadComponent(componentStr) {
+    //   store.commit("setComponent", "");
+    //   await this.$nextTick();
+    //   store.commit("setComponent", componentStr);
+    // },
   },
 };
 </script>

@@ -22,10 +22,9 @@ new Vue({
       );
       const tables = [];
       store.state.customers.forEach(customer => {
-        if (customer.name.includes('Table #')) {
+        if (customer.name && customer.name.includes('Table #')) {
           tables.push(customer)
         }
-        console.log(tables)
       })
       store.commit("setTables", tables)
     },

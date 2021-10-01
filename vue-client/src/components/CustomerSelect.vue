@@ -1,27 +1,19 @@
 <template>
-  <div
-    class="p-0"
-    max-height="400"
-  >
+  <div class="p-0" max-height="400">
     <div v-if="Object.keys($store.state.selectedCustomer).length === 0">
-      <v-row
-        align="center"
-        justify="space-around"
-      >
+      <v-row align="center" justify="space-around">
         <v-btn
           class="menu-button-text mt-8"
           min-height="100%"
           width="25%"
           ff
-          style="height: 10vh;"
+          style="height: 10vh"
           v-on:click="
             selectDineInFormDialogue = true;
             setStoreOrderType(0);
           "
         >
-          <div>
-            DINE IN
-          </div>
+          <div>DINE IN</div>
         </v-btn>
         <v-btn
           class="menu-button-text mt-8"
@@ -32,11 +24,9 @@
             selectCustomerFormDialogue = true;
             setStoreOrderType(1);
           "
-          style="height: 10vh;"
+          style="height: 10vh"
         >
-          <div>
-            TAKE OUT
-          </div>
+          <div>TAKE OUT</div>
         </v-btn>
         <v-btn
           class="menu-button-text mt-8"
@@ -47,11 +37,9 @@
             selectCustomerFormDialogue = true;
             setStoreOrderType(2);
           "
-          style="height: 10vh;"
+          style="height: 10vh"
         >
-          <div>
-            DELIVERY
-          </div>
+          <div>DELIVERY</div>
         </v-btn>
       </v-row>
     </div>
@@ -61,8 +49,8 @@
       x-large
       width="97%"
       min-height="100%"
-      v-on:click="selectCustomerFormDialogue = true;"
-      style="height: 10vh;"
+      v-on:click="selectCustomerFormDialogue = true"
+      style="height: 10vh"
     >
       <div>
         {{ this.orderTypeString[$store.state.currentOrder.type] }} <br />
@@ -72,21 +60,12 @@
         {{ $store.state.selectedCustomer.note }}
       </div>
     </v-btn>
-    <v-dialog
-      v-model="selectCustomerFormDialogue"
-      width="500"
-    >
-      <!-- Select Customer  -->
-      <!-- Select Customer Button / Customer Display  -->
-      <!-- Select Customer Phone Number Search Form Dialogue -->
+    <v-dialog v-model="selectCustomerFormDialogue" width="500">
       <v-card>
         <div>
           <br />
           <v-col>
-            <v-form
-              ref="form"
-              lazy-validation
-            >
+            <v-form ref="form" lazy-validation>
               <v-text-field
                 v-model="selectedCustomer.phone"
                 :counter="16"
@@ -98,7 +77,6 @@
             </v-form>
           </v-col>
           <div v-if="this.suggestedCustomers.length > 0">
-            <p class="text-center"> Suggested Customers </p>
             <v-btn
               v-for="customer in this.suggestedCustomers"
               :key="customer.id"
@@ -106,20 +84,20 @@
               dark
               width="100%"
               v-on:click="setSelectedCustomer(customer)"
-            >{{ customer.phone }} - {{ customer.name }}</v-btn>
+              >{{ customer.phone }} - {{ customer.name }}</v-btn
+            >
           </div>
           <br />
         </div>
         <v-divider></v-divider>
-        <!-- Select Customer Phone Number Search Form Buttons-->
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
             x-large
             width="50%"
             v-on:click="
-                phone = '';
-                selectCustomerFormDialogue = false;
+              phone = '';
+              selectCustomerFormDialogue = false;
             "
           >
             <div>CANCEL<br /></div>
@@ -128,8 +106,8 @@
             x-large
             width="50%"
             v-on:click="
-                selectCustomerFormDialogue = false;
-                createCustomerFormDialogue = true;
+              selectCustomerFormDialogue = false;
+              createCustomerFormDialogue = true;
             "
           >
             <div>CREATE<br /></div>
@@ -137,19 +115,12 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-dialog
-      v-model="selectDineInFormDialogue"
-      width="500"
-    >
-      <!-- Select Dine In Table Number  -->
+    <v-dialog v-model="selectDineInFormDialogue" width="500">
       <v-card>
         <div>
           <br />
           <v-col>
-            <div
-              class="p-0"
-              max-height="400"
-            >
+            <div class="p-0" max-height="400">
               <v-btn
                 class="menu-button-text mt-2 ml-1 mr-1"
                 v-for="table in $store.state.tables"
@@ -159,9 +130,8 @@
                 height="100px"
                 width="31.6%"
                 v-on:click="setSelectedCustomer(table)"
-              >{{ table.name }}<br />{{ table.name_chn }}<br />{{
-              table.price
-            }}</v-btn>
+                >{{ table.name }}{{ table.price }}</v-btn
+              >
             </div>
           </v-col>
           <br />
@@ -171,40 +141,20 @@
           <v-spacer></v-spacer>
           <v-btn
             x-large
-            width="50%"
-            v-on:click="
-                selectedCustomer.name = '';
-                selectDineInFormDialogue = false;
-            "
+            width="100%"
+            v-on:click="selectDineInFormDialogue = false"
           >
             <div>CANCEL<br /></div>
-          </v-btn>
-          <v-btn
-            x-large
-            width="50%"
-            v-on:click="
-                selectDineInFormDialogue = false;
-                setDineInTable(selectedCustomer.name)
-            "
-          >
-            <div>SELECT<br /></div>
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <!-- Create Customer Form Dialogue-->
-    <v-dialog
-      v-model="createCustomerFormDialogue"
-      width="500"
-    >
+    <v-dialog v-model="createCustomerFormDialogue" width="500">
       <v-card>
         <div>
           <br />
           <v-col>
-            <v-form
-              ref="form"
-              lazy-validation
-            >
+            <v-form ref="form" lazy-validation>
               <v-text-field
                 v-model="selectedCustomer.phone"
                 label="Phone Number"
@@ -214,20 +164,14 @@
                 autofocus
               ></v-text-field>
               <v-row>
-                <v-col
-                  cols="12"
-                  md="6"
-                >
+                <v-col cols="12" md="6">
                   <v-text-field
                     v-model="selectedCustomer.unit_number"
                     label="Unit Number"
                     autocomplete="off"
                   ></v-text-field>
                 </v-col>
-                <v-col
-                  cols="12"
-                  md="6"
-                >
+                <v-col cols="12" md="6">
                   <v-text-field
                     v-model="selectedCustomer.street_number"
                     label="Street Number"
@@ -261,8 +205,12 @@
               ></v-text-field>
             </v-form>
           </v-col>
-          <div v-if="this.suggestedCustomers.length > 0 && this.selectedCustomer.phone.length < 10">
-            <p class="text-center"> Suggested Customers </p>
+          <div
+            v-if="
+              this.suggestedCustomers.length > 0 &&
+              this.selectedCustomer.phone.length < 10
+            "
+          >
             <v-btn
               v-for="customer in this.suggestedCustomers"
               :key="customer.id"
@@ -270,18 +218,24 @@
               dark
               width="100%"
               v-on:click="setSelectedCustomer(customer)"
-            >{{ customer.phone }} - {{ customer.name }}</v-btn>
+              >{{ customer.phone }} - {{ customer.name }}</v-btn
+            >
           </div>
-          <div v-if="this.selectedCustomer.street_name && this.selectedCustomer.street_name.length >=  1">
-            <p class="text-center"> Suggested Hello </p>
+          <div
+            v-if="
+              this.selectedCustomer.street_name &&
+              this.selectedCustomer.street_name.length >= 1
+            "
+          >
             <v-btn
               v-for="streetName in this.suggestedStreetName"
               :key="streetName"
               x-large
               dark
               width="100%"
-              v-on:click="setCustomerSelectedCustomerStreetName(streetName)"
-            >{{ streetName }}</v-btn>
+              v-on:click="selectedCustomer.street_name = streetName"
+              >{{ streetName }}</v-btn
+            >
           </div>
           <br />
         </div>
@@ -292,7 +246,7 @@
           type="error"
           outlined
         >
-          Error: {{this.createCustomerError}}
+          Error: {{ this.createCustomerError }}
         </v-alert>
         <v-divider></v-divider>
         <v-card-actions>
@@ -301,20 +255,13 @@
             x-large
             width="50%"
             v-on:click="
-              phone = ''
-              selectCustomerFormDialogue = false
+              phone = '';
               createCustomerFormDialogue = false;
             "
           >
             <div>CANCEL<br /></div>
           </v-btn>
-          <v-btn
-            x-large
-            width="50%"
-            v-on:click="
-                createCustomerSubmit();
-            "
-          >
+          <v-btn x-large width="50%" v-on:click="createCustomerSubmit()">
             <div>CREATE<br /></div>
           </v-btn>
         </v-card-actions>
@@ -323,15 +270,11 @@
   </div>
 </template>
 
-<style scoped>
-</style>
-
 <script>
 import axios from "axios";
 import { store } from "../store/store";
 import { streetNameArr } from "../data/streets";
 import { cityNameArr } from "../data/cities";
-
 export default {
   data() {
     return {
@@ -378,32 +321,8 @@ export default {
   methods: {
     setStoreOrderType: function (orderTypeNum) {
       store.commit("setCurrentOrder", { type: orderTypeNum });
-      console.log(this.$store.state.currentOrder);
     },
-    setDineInTable: function (selectedTable) {
-      const selectedCustomerObj = { name: `Table #${selectedTable}` };
-      this.setSelectedCustomer(selectedCustomerObj);
-    },
-    setSelectedCustomer: function (selectedCustomer) {
-      const selectedCustomerWithStringEmptyValues =
-        this.selectedCustomerValueNullToEmptyString(selectedCustomer);
-      store.commit(
-        "setSelectedCustomer",
-        selectedCustomerWithStringEmptyValues
-      );
-      this.selectCustomerFormDialogue = false;
-      this.selectDineInFormDialogue = false;
-      this.selectedCustomer = {
-        phone: "",
-        unit_number: "",
-        street_number: "",
-        street_name: "",
-        address: "",
-        city: "",
-        name: "",
-        note: "",
-      };
-    },
+
     suggestCustomerFromPhoneInput: function () {
       this.suggestedCustomers = [];
       if (this.$store.state.customers.length <= 0) {
@@ -421,9 +340,6 @@ export default {
       }
       return;
     },
-    setCustomerSelectedCustomerStreetName: function (streetName) {
-      this.selectedCustomer.street_name = streetName;
-    },
     suggestStreetNameFromStreetNameInput: function () {
       this.suggestedStreetName = [];
       if (this.selectedCustomer.street_name === "") {
@@ -440,12 +356,12 @@ export default {
       }
       return;
     },
+
     validCreateCustomerForm: function () {
       // Validate Phone
       const regex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
       const selectedCustomer = this.selectedCustomer;
 
-      // const selectedCustomer = this.selectedCustomerValueNullToEmptyString(this.selectedCustomer);
       if (
         !regex.test(selectedCustomer.phone) ||
         selectedCustomer.phone === "" ||
@@ -496,6 +412,7 @@ export default {
       this.createCustomerError = null;
       return true;
     },
+
     selectedCustomerValueEmptyStringToNull: function (selectedCustomer) {
       for (const key in selectedCustomer) {
         if (selectedCustomer[key] === "") {
@@ -511,6 +428,25 @@ export default {
         }
       }
       return selectedCustomer;
+    },
+    setSelectedCustomer: function (selectedCustomer) {
+      const selectedCustomerWithStringEmptyValues =
+        this.selectedCustomerValueNullToEmptyString(selectedCustomer);
+      store.commit(
+        "setSelectedCustomer",
+        selectedCustomerWithStringEmptyValues
+      );
+      this.selectDineInFormDialogue = false;
+      this.selectedCustomer = {
+        phone: "",
+        unit_number: "",
+        street_number: "",
+        street_name: "",
+        address: "",
+        city: "",
+        name: "",
+        note: "",
+      };
     },
     createCustomerSubmit: async function () {
       if (this.validCreateCustomerForm()) {

@@ -53,16 +53,17 @@ export default {
     calculatePriceDetails: function () {
       this.$root.$refs.App.calculatePriceDetails();
     },
-    reloadComponent: function (componentStr) {
-      this.$root.$refs.App.reloadComponent(componentStr);
+    clearOrderRelatedStore: function () {
+      this.$root.$refs.App.clearOrderRelatedStore();
     },
+
     scrollToElement() {
       const el = this.$refs.scrollToMe;
       if (el) {
         el.scrollIntoView({ behavior: "smooth" });
       }
     },
-    addHistoryItemsToSelectedItems(ordersItemsDetailWithOrderId) {
+    addHistoryItemToSelectedItems(ordersItemsDetailWithOrderId) {
       let selectedItems = store.state.selectedItems;
       if (ordersItemsDetailWithOrderId.item_id in selectedItems) {
         selectedItems[ordersItemsDetailWithOrderId.item_id].quantity++;
@@ -82,21 +83,14 @@ export default {
       store.commit("setSelectedItems", selectedItems);
     },
     async onClickHistoryButton(order_id) {
-      store.commit("setComponent", "HISTORY");
-      store.commit("setSelectedItems", {});
-      store.commit("setSelectedCustomer", {});
-      store.commit("setPriceDetails", {
-        subtotal: 0,
-        gst: 0,
-        total: 0,
-      });
+      this.clearOrderRelatedStore();
       const ordersItemsDetailWithOrderIdArray = (
         await axios.get(
           `http://localhost:3000/get/ordersitemsdetail/id/${order_id}`
         )
       ).data;
       ordersItemsDetailWithOrderIdArray.forEach((v) => {
-        this.addHistoryItemsToSelectedItems(v);
+        this.addHistoryItemToSelectedItems(v);
       });
       store.commit("setCurrentOrder", {
         id: ordersItemsDetailWithOrderIdArray[0].order_id,
@@ -116,7 +110,6 @@ export default {
         unit_number: ordersItemsDetailWithOrderIdArray[0].customer_unit_number,
       });
       this.calculatePriceDetails();
-      this.reloadComponent("HISTORY");
     },
   },
 };

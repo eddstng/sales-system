@@ -1,47 +1,5 @@
 <template>
   <div class="p-0" max-height="400">
-    <!-- <div v-if="Object.keys($store.state.selectedCustomer).length === 0">
-      <v-row align="center" justify="space-around">
-        <v-btn
-          class="menu-button-text mt-8"
-          min-height="100%"
-          width="25%"
-          style="height: 10vh"
-          v-on:click="
-            selectDineInFormDialogue = true;
-            setStoreOrderType(0);
-          "
-        >
-          <div>UPDATE</div>
-        </v-btn>
-        <v-btn
-          class="menu-button-text mt-8"
-          x-large
-          min-height="100%"
-          width="25%"
-          v-on:click="
-            selectCustomerFormDialogue = true;
-            setStoreOrderType(1);
-          "
-          style="height: 10vh"
-        >
-          <div>REORDER</div>
-        </v-btn>
-        <v-btn
-          class="menu-button-text mt-8"
-          x-large
-          min-height="100%"
-          width="25%"
-          v-on:click="
-            selectCustomerFormDialogue = true;
-            updateOrderWithVoidTrue();
-          "
-          style="height: 10vh"
-        >
-          <div>VOID</div>
-        </v-btn>
-      </v-row>
-    </div> -->
     <v-btn
       class="menu-button-text mt-5"
       x-large
@@ -51,7 +9,7 @@
       style="height: 10vh"
     >
       <div>
-        <!-- {{ this.orderTypeString[$store.state.currentOrder.type] }} <br /> -->
+        {{ this.orderTypeString[$store.state.currentOrder.type] }} <br />
         {{ $store.state.selectedCustomer.phone }} <br />
         {{ $store.state.selectedCustomer.address }} <br />
         {{ $store.state.selectedCustomer.name }} <br />
@@ -61,20 +19,21 @@
   </div>
 </template>
 
-<style scoped>
-</style>
-
 <script>
 import axios from "axios";
 import { store } from "../store/store";
-
 export default {
+  data() {
+    return {
+      orderTypeString: ["DINE IN", "PICK UP", "DELIVERY"],
+    };
+  },
   methods: {
     setStoreOrderType: function (orderTypeNum) {
       store.commit("setCurrentOrder", { type: orderTypeNum });
-      console.log(this.$store.state.currentOrder);
     },
     updateOrderWithVoidTrue: async function () {
+      // WIP
       try {
         const res = await axios.post(
           "http://localhost:3000/put/orders/update/id/:id",
@@ -92,6 +51,7 @@ export default {
       }
     },
     updateOrder: async function () {
+      // WIP
       if (this.validCreateCustomerForm()) {
         try {
           const selectedCustomerWithNullEmptyValues =

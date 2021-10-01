@@ -60,29 +60,20 @@ import { store } from "../store/store";
 import axios from "axios";
 export default {
   methods: {
+    clearOrderRelatedStore: function () {
+      this.$root.$refs.App.clearOrderRelatedStore();
+    },
     async setComponentToHistory() {
       store.commit(
         "setOrderHistory",
         (await axios.get("http://localhost:3000/get/ordershistory/all")).data
       );
       store.commit("setComponent", "HISTORY");
-      store.commit("setSelectedItems", {});
-      store.commit("setSelectedCustomer", {});
-      store.commit("setPriceDetails", {
-        subtotal: 0,
-        gst: 0,
-        total: 0,
-      });
+      this.clearOrderRelatedStore();
     },
     async setComponentToOrder() {
       store.commit("setComponent", "ORDER");
-      store.commit("setSelectedItems", {});
-      store.commit("setSelectedCustomer", {});
-      store.commit("setPriceDetails", {
-        subtotal: 0,
-        gst: 0,
-        total: 0,
-      });
+      this.clearOrderRelatedStore();
     },
   },
 };
