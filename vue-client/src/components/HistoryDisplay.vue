@@ -21,8 +21,12 @@
         >
           <v-list-item three-line>
             <v-list-item-content>
-              <div class="history-display-item-text">{{ item.node.name_eng }}</div>
-              <div class="history-display-item-text">{{ item.node.name_chn }}</div>
+              <div class="history-display-item-text">
+                {{ item.node.name_eng }}
+              </div>
+              <div class="history-display-item-text">
+                {{ item.node.name_chn }}
+              </div>
             </v-list-item-content>
             <v-list-item-content>
               <div class="history-display-item-text text-right">
@@ -36,8 +40,11 @@
         </v-card>
       </template>
     </v-card>
-    <v-card>
-      <!-- // Add history button dialogue in onclick of this card.  -->
+    <v-card
+      v-on:click="
+        openHistoryOptionsDialogue = true;
+      "
+    >
       <v-list-item three-line>
         <v-list-item-content>
           <div class="history-display-item-text">Subtotal:</div>
@@ -57,6 +64,100 @@
         </v-list-item-content>
       </v-list-item>
     </v-card>
+    <v-dialog v-model="openHistoryOptionsDialogue" width="900">
+      <v-card>
+        <div>
+          <br />
+          <v-row class="submitOrderDialogText mt-10">
+            <div>
+              <v-col :cols="15">
+                {{ $store.state.selectedCustomer.phone }} <br />
+                {{ $store.state.selectedCustomer.address }} <br />
+                {{ $store.state.selectedCustomer.name }}
+              </v-col>
+              <v-col v-if="$store.state.selectedCustomer.note">
+                * {{ $store.state.selectedCustomer.note }} <br />
+              </v-col>
+            </div>
+          </v-row>
+          <div
+            v-for="value in $store.state.selectedItems"
+            v-bind:key="value.id"
+          >
+            <v-row class="submitOrderDialogText mt-5 mb-5">
+              <v-col :cols="5">
+                {{ value.node.name_eng }}
+              </v-col>
+              <v-col :cols="3">
+                {{ value.node.name_chn }}
+              </v-col>
+              <v-col :cols="2" class="text-center">
+                {{ value.node.price }}
+              </v-col>
+              <v-col class="text-end"> x{{ value.quantity }} </v-col>
+            </v-row>
+          </div>
+          <v-row class="submitOrderDialogText mt-5 mb-5">
+            <v-col :cols="4">
+              Subtotal: {{ $store.state.priceDetails.subtotal }}
+            </v-col>
+            <v-col :cols="4" class="text-end">
+              GST: {{ $store.state.priceDetails.gst }}
+            </v-col>
+            <v-col :cols="4" class="text-end">
+              Total: ${{ $store.state.priceDetails.total }}
+            </v-col>
+          </v-row>
+          <br />
+        </div>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn x-large width="33%" v-on:click="submitOrderDialog = false">
+            <div>EDIT<br /></div>
+          </v-btn>
+          <v-btn x-large width="33%" v-on:click="submitOrderDialog = false">
+            <div>REORDER<br /></div>
+          </v-btn>
+          <v-btn
+            x-large
+            width="33%"
+            v-on:click="
+              performHistoryOption('VOID');
+              openHistoryOptionsDialogue=false;
+              openHistoryOptionsConfirmationDialogue = true;
+              confirmingAction = 'VOID';
+            "
+          >
+            <div>VOID<br /></div>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- <v-dialog v-model="openHistoryOptionsConfirmationDialogue" width="900">
+      <v-card>
+        <h2 class="text-center pt-16 pb-12">
+          {{ confirmingAction }} ORDER #{{ $store.state.currentOrder.id }}
+        </h2>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn x-large width="50%" v-on:click="submitOrderDialog = false">
+            <div>NO<br /></div>
+          </v-btn>
+          <v-btn x-large width="50%" v-on:click="submitOrderDialog = false">
+            <div
+              v-on:click="
+                performHistoryOption(confirmingAction);
+                openHistoryOptionsConfirmationDialogue = false;
+              "
+            >
+              YES<br />
+            </div>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog> -->
   </v-container>
 </template>
 
@@ -67,8 +168,32 @@
 </style>
 
 <script>
+import axios from "axios";
 import HistorySelect from "./HistorySelect";
 export default {
+  data() {
+    return {
+      confirmingAction: "",
+      openHistoryOptionsConfirmationDialogue: false,
+      openHistoryOptionsDialogue: false,
+    };
+  },
+  methods: {
+    performHistoryOption: function (actionStr) {
+      console.log(actionStr);
+      if (actionStr === "VOID") {
+        this.voidOrder();
+      }
+    },
+    async voidOrder() {
+      const res = await axios.put(
+        `http://localhost:3000/put/orders/update/id/${this.$store.state.currentOrder.id}`,
+        { ...this.$store.state.currentOrder, void: true }
+      );
+
+      console.log(res);
+    },
+  },
   components: {
     HistorySelect,
   },
