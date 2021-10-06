@@ -40,11 +40,7 @@
         </v-card>
       </template>
     </v-card>
-    <v-card
-      v-on:click="
-        openHistoryOptionsDialogue = true;
-      "
-    >
+    <v-card v-on:click="openHistoryOptionsDialogue = true">
       <v-list-item three-line>
         <v-list-item-content>
           <div class="history-display-item-text">Subtotal:</div>
@@ -123,10 +119,8 @@
             x-large
             width="33%"
             v-on:click="
-              performHistoryOption('VOID');
-              openHistoryOptionsDialogue=false;
+              openHistoryOptionsDialogue = false;
               openHistoryOptionsConfirmationDialogue = true;
-              confirmingAction = 'VOID';
             "
           >
             <div>VOID<br /></div>
@@ -134,7 +128,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <!-- <v-dialog v-model="openHistoryOptionsConfirmationDialogue" width="900">
+    <v-dialog v-model="openHistoryOptionsConfirmationDialogue" width="900">
       <v-card>
         <h2 class="text-center pt-16 pb-12">
           {{ confirmingAction }} ORDER #{{ $store.state.currentOrder.id }}
@@ -145,19 +139,20 @@
           <v-btn x-large width="50%" v-on:click="submitOrderDialog = false">
             <div>NO<br /></div>
           </v-btn>
-          <v-btn x-large width="50%" v-on:click="submitOrderDialog = false">
-            <div
-              v-on:click="
-                performHistoryOption(confirmingAction);
-                openHistoryOptionsConfirmationDialogue = false;
-              "
-            >
-              YES<br />
-            </div>
+          <v-btn
+            x-large
+            width="50%"
+            v-on:click="
+              performHistoryOption('VOID');
+              openHistoryOptionsDialogue = false;
+              openHistoryOptionsConfirmationDialogue = false;
+            "
+          >
+            <div>YES<br /></div>
           </v-btn>
         </v-card-actions>
       </v-card>
-    </v-dialog> -->
+    </v-dialog>
   </v-container>
 </template>
 

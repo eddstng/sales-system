@@ -13,6 +13,8 @@
       >
         <v-row>
           <v-col> {{ order.order_id }} </v-col>
+          <v-col v-if="order.order_void === true"> VOID </v-col>
+          <v-col v-else> </v-col>
           <v-col> {{ order.customer_phone }} </v-col>
           <v-col> {{ order.order_total }} </v-col>
           <!-- <v-col> {{order.customer_id}} </v-col> -->
@@ -97,6 +99,7 @@ export default {
         type: ordersItemsDetailWithOrderIdArray[0].order_type,
         total: ordersItemsDetailWithOrderIdArray[0].order_total,
         customer_id: ordersItemsDetailWithOrderIdArray[0].customer_id,
+        void: ordersItemsDetailWithOrderIdArray[0].order_void,
       });
       store.commit("setSelectedCustomer", {
         address: ordersItemsDetailWithOrderIdArray[0].customer_address,
@@ -106,7 +109,8 @@ export default {
         note: ordersItemsDetailWithOrderIdArray[0].customer_note,
         phone: ordersItemsDetailWithOrderIdArray[0].customer_phone,
         street_name: ordersItemsDetailWithOrderIdArray[0].customer_street_name,
-        street_number: ordersItemsDetailWithOrderIdArray[0].customer_street_number,
+        street_number:
+          ordersItemsDetailWithOrderIdArray[0].customer_street_number,
         unit_number: ordersItemsDetailWithOrderIdArray[0].customer_unit_number,
       });
       this.calculatePriceDetails();
