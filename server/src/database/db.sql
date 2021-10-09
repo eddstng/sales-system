@@ -55,7 +55,8 @@ CREATE TABLE orders (
     total FLOAT,
     timestamp TIMESTAMP WITHOUT TIME ZONE DEFAULT (NOW()),
     type SMALLINT,
-    void BOOLEAN NOT NULL DEFAULT FALSE
+    void BOOLEAN NOT NULL DEFAULT FALSE,
+    paid BOOLEAN NOT NULL DEFAULT FALSE
     --  customer_id INT FOREIGN KEY REFERENCES customers (id)
 );
 
@@ -111,6 +112,7 @@ o.timestamp as order_timestamp,
 o.type as order_type,
 o.total as order_total,
 o.void as order_void,
+o.paid as order_paid,
 c.id as customer_id,
 c.name as customer_name,
 c.phone as customer_phone,
@@ -136,6 +138,7 @@ o.timestamp as order_timestamp,
 o.type as order_type,
 o.total as order_total,
 o.void as order_void,
+o.paid as order_paid,
 c.id as customer_id,
 c.name as customer_name,
 c.phone as customer_phone
