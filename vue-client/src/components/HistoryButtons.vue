@@ -100,6 +100,7 @@ export default {
         total: ordersItemsDetailWithOrderIdArray[0].order_total,
         customer_id: ordersItemsDetailWithOrderIdArray[0].customer_id,
         void: ordersItemsDetailWithOrderIdArray[0].order_void,
+        paid: ordersItemsDetailWithOrderIdArray[0].order_paid,
       });
       store.commit("setSelectedCustomer", {
         address: ordersItemsDetailWithOrderIdArray[0].customer_address,
