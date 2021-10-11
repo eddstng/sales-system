@@ -92,7 +92,8 @@ export async function updateOrder(id: number, order: Prisma.ordersUncheckedUpdat
                 customer_id: order.customer_id,
                 timestamp: order.timestamp,
                 type: order.type,
-                void: order.void
+                void: order.void,
+                paid: order.paid,
             },
         })
         logInfo(updateOrder.name, `[✓] Order Updated: {id: ${res.id}, total: ${res.total}, customer_id: ${res.customer_id}, timestamp: ${res.timestamp}}, type: ${res.type}}`)
