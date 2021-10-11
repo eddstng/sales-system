@@ -14,6 +14,7 @@
         <v-row>
           <v-col> {{ order.order_id }} </v-col>
           <v-col v-if="order.order_void === true"> VOID </v-col>
+          <v-col v-else-if="order.order_paid === true"> PAID </v-col>
           <v-col v-else> </v-col>
           <v-col> {{ order.customer_phone }} </v-col>
           <v-col> {{ order.order_total }} </v-col>

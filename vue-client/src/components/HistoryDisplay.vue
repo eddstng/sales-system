@@ -112,18 +112,27 @@
           <v-btn x-large width="33%" v-on:click="submitOrderDialog = false">
             <div>EDIT<br /></div>
           </v-btn>
-          <v-btn x-large width="33%" v-on:click="submitOrderDialog = false">
-            <div>REORDER<br /></div>
+          <v-btn
+            x-large
+            width="33%"
+            v-on:click="
+              openHistoryOptionsDialogue = false;
+              confirmingAction = 'VOID';
+              openHistoryOptionsConfirmationDialogue = true;
+            "
+          >
+            <div>VOID<br /></div>
           </v-btn>
           <v-btn
             x-large
             width="33%"
             v-on:click="
               openHistoryOptionsDialogue = false;
+              confirmingAction = 'PAID';
               openHistoryOptionsConfirmationDialogue = true;
             "
           >
-            <div>VOID<br /></div>
+            <div>PAID<br /></div>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -143,7 +152,7 @@
             x-large
             width="50%"
             v-on:click="
-              performHistoryOption('VOID');
+              performHistoryOption(confirmingAction);
               openHistoryOptionsDialogue = false;
               openHistoryOptionsConfirmationDialogue = false;
             "
@@ -175,10 +184,21 @@ export default {
   },
   methods: {
     performHistoryOption: function (actionStr) {
-      console.log(actionStr);
       if (actionStr === "VOID") {
         this.voidOrder();
       }
+      if (actionStr === "PAID") {
+        this.paidOrder();
+      }
+      this.confirmingAction = "";
+    },
+    async paidOrder() {
+      const res = await axios.put(
+        `http://localhost:3000/put/orders/update/id/${this.$store.state.currentOrder.id}`,
+        { ...this.$store.state.currentOrder, paid: true }
+      );
+
+      console.log(res);
     },
     async voidOrder() {
       const res = await axios.put(
