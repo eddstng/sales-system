@@ -251,18 +251,9 @@ export default {
     },
     submitOrder: async function () {
       try {
-        const res = await axios.post(
-          "http://localhost:3000/post/orders/create",
-          {
-            total: this.$store.state.priceDetails.total,
-            customer_id: this.$store.state.selectedCustomer.id,
-            type: this.$store.state.currentOrder.type,
-          }
-        );
-        if (isNaN(res.data.id)) {
-          throw new Error("Failed to submit order. No order id retrieved.");
-        }
-        this.addItemsToOrder(res.data.id);
+       const newOrder = await this.createOrder();
+        this.addItemsToOrder(newOrder.data.id);
+        this.updateOrderWithTotalPrice(newOrder)
         this.clearOrderRelatedStore();
         store.commit("setNotification", 1);
       } catch (err) {
@@ -270,7 +261,27 @@ export default {
         console.log(err);
       }
     },
-
+    updateOrderWithTotalPrice: async function (orderDetails) {
+      const res = await axios.put(`http://localhost:3000/put/orders/update/id/${orderDetails.data.id}`, {
+        ...this.orderDetails,
+        total: this.$store.state.priceDetails.total,
+      });
+      if (isNaN(res.status !== 200)) {
+        throw new Error(`Failed to submit order. Received status code of ${res.status}.`);
+      }
+      return res;
+    },
+    createOrder: async function () {
+      const res = await axios.post("http://localhost:3000/post/orders/create", {
+        total: 0,
+        customer_id: this.$store.state.selectedCustomer.id,
+        type: this.$store.state.currentOrder.type,
+      });
+      if (isNaN(res.data.id)) {
+        throw new Error("Failed to submit order. No order id retrieved.");
+      }
+      return res;
+    },
     addItemsToOrder: async function (orderIdNum) {
       const orderItemsCreateManyInputData = [];
       for (const [key, value] of Object.entries(
