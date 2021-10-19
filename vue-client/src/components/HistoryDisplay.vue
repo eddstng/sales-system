@@ -145,7 +145,14 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn x-large width="50%" v-on:click="submitOrderDialog = false">
+          <v-btn
+            x-large
+            width="50%"
+            v-on:click="
+              openHistoryOptionsDialogue = false;
+              openHistoryOptionsConfirmationDialogue = false;
+            "
+          >
             <div>NO<br /></div>
           </v-btn>
           <v-btn
@@ -172,6 +179,8 @@
 </style>
 
 <script>
+import { store } from "../store/store";
+
 import axios from "axios";
 import HistorySelect from "./HistorySelect";
 export default {
@@ -182,6 +191,7 @@ export default {
       openHistoryOptionsDialogue: false,
     };
   },
+
   methods: {
     performHistoryOption: function (actionStr) {
       if (actionStr === "VOID") {
@@ -191,22 +201,32 @@ export default {
         this.paidOrder();
       }
       this.confirmingAction = "";
+      const orderHistory = this.$store.state.orderHistory;
+      // orderHistory[this.$store.state.currentOrder.id][
+      //   `${actionStr.toLowerCase()}`
+      // ];
+      orderHistory[this.$store.state.currentOrder.id.toString()][
+        `order_${actionStr.toLowerCase()}`
+      ] = true;
+      store.commit("setOrderHistory", orderHistory);
     },
     async paidOrder() {
       const res = await axios.put(
         `http://localhost:3000/put/orders/update/id/${this.$store.state.currentOrder.id}`,
         { ...this.$store.state.currentOrder, paid: true }
       );
-
-      console.log(res);
+      if (!res) {
+        console.log("");
+      }
     },
     async voidOrder() {
       const res = await axios.put(
         `http://localhost:3000/put/orders/update/id/${this.$store.state.currentOrder.id}`,
         { ...this.$store.state.currentOrder, void: true }
       );
-
-      console.log(res);
+      if (!res) {
+        console.log("");
+      }
     },
   },
   components: {

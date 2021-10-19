@@ -64,10 +64,16 @@ export default {
       this.$root.$refs.App.clearOrderRelatedStore();
     },
     async setComponentToHistory() {
-      store.commit(
-        "setOrderHistory",
-        (await axios.get("http://localhost:3000/get/ordershistory/all")).data
-      );
+      const orderHistoryArray = (
+        await axios.get("http://localhost:3000/get/ordershistory/all")
+      ).data;
+      // Here we turn the array into an object with the order id as the key and the order object as the value.
+      // The reason for this is so we can update the HistoryButtons with the order status.
+      const orderHistoryObj = orderHistoryArray.reduce((obj, order) => {
+        obj[order.order_id] = order;
+        return obj;
+      }, {});
+      store.commit("setOrderHistory", orderHistoryObj);
       store.commit("setComponent", "HISTORY");
       this.clearOrderRelatedStore();
     },
