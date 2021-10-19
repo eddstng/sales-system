@@ -109,12 +109,23 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn x-large width="33%" v-on:click="submitOrderDialog = false">
-            <div>EDIT<br /></div>
+          <v-btn x-large width="24.5%" v-on:click="submitOrderDialog = false">
+            <div>REORDER<br /></div>
           </v-btn>
           <v-btn
             x-large
-            width="33%"
+            width="24.5%"
+            v-on:click="
+              openHistoryOptionsDialogue = false;
+              confirmingAction = 'CLEAR';
+              openHistoryOptionsConfirmationDialogue = true;
+            "
+          >
+            <div>CLEAR<br /></div>
+          </v-btn>
+          <v-btn
+            x-large
+            width="24.5%"
             v-on:click="
               openHistoryOptionsDialogue = false;
               confirmingAction = 'VOID';
@@ -125,7 +136,7 @@
           </v-btn>
           <v-btn
             x-large
-            width="33%"
+            width="24.5%"
             v-on:click="
               openHistoryOptionsDialogue = false;
               confirmingAction = 'PAID';
@@ -194,21 +205,37 @@ export default {
 
   methods: {
     performHistoryOption: function (actionStr) {
+      const orderHistory = this.$store.state.orderHistory;
       if (actionStr === "VOID") {
         this.voidOrder();
       }
       if (actionStr === "PAID") {
         this.paidOrder();
       }
-      this.confirmingAction = "";
-      const orderHistory = this.$store.state.orderHistory;
-      // orderHistory[this.$store.state.currentOrder.id][
-      //   `${actionStr.toLowerCase()}`
-      // ];
+      // Maybe give this a better name than clear?
+      if (actionStr === "CLEAR") {
+        this.clearOrderStatus();
+        orderHistory[this.$store.state.currentOrder.id.toString()][
+          `order_paid`
+        ] = false;
+        orderHistory[this.$store.state.currentOrder.id.toString()][
+          `order_void`
+        ] = false;
+      }
       orderHistory[this.$store.state.currentOrder.id.toString()][
         `order_${actionStr.toLowerCase()}`
       ] = true;
+      this.confirmingAction = "";
       store.commit("setOrderHistory", orderHistory);
+    },
+    async clearOrderStatus() {
+      const res = await axios.put(
+        `http://localhost:3000/put/orders/update/id/${this.$store.state.currentOrder.id}`,
+        { ...this.$store.state.currentOrder, paid: false, void: false }
+      );
+      if (!res) {
+        console.log("");
+      }
     },
     async paidOrder() {
       const res = await axios.put(

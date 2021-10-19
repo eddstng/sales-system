@@ -67,7 +67,6 @@ export async function createOrdersItems(body: JSON) {
 }
 
 export async function createOrdersItemsBulk(items: JSON[]) {
-    console.log(items)
     try {
         items.forEach(async item => {
             await validateClassFields(OrdersItems, item)

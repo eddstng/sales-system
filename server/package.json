@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon src/app.ts --exec ts-node",
     "db:create": "cd ./src/database && psql -f db.sql -h 0.0.0.0 -p 5432 -U postgres postgres",
-    "db:insert:items": "cd ./../sales_system_db_menu && psql -f menu_complete_v1.json.sql -h 0.0.0.0 -p 5432 -U postgres sales_system_db"
+    "db:insert:items": "cd ./../sales_system_db_menu && psql -f menu_complete_v2.json.sql -h 0.0.0.0 -p 5432 -U postgres sales_system_db"
   },
   "author": "edstngdv",
   "license": "ISC",
