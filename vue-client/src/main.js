@@ -12,9 +12,18 @@ new Vue({
   methods: {
     async init() {
       // Set Items
+      const allItemsArray = (await axios.get("http://localhost:3000/get/items/all")).data
+      const allItemsCategorized = allItemsArray.reduce((obj, item) => {
+        if (obj[item.category] === undefined) {
+          obj[item.category] = [item]
+        } else {
+          obj[item.category].push(item);
+        }
+        return obj;
+      }, {});
       store.commit(
         "setItems",
-        (await axios.get("http://localhost:3000/get/items/all")).data
+        allItemsCategorized
       );
       store.commit(
         "setCustomers",
