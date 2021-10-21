@@ -49,7 +49,7 @@
       x-large
       width="97%"
       min-height="100%"
-      v-on:click="selectCustomerFormDialogue = true"
+      v-on:click="openClearSelectedCustomerConfirmationDialogue = true"
       style="height: 10vh"
     >
       <div>
@@ -267,6 +267,35 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog
+      v-model="openClearSelectedCustomerConfirmationDialogue"
+      width="900"
+    >
+      <v-card>
+        <h2 class="text-center pt-16 pb-12">CLEAR CUSTOMER?</h2>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            x-large
+            width="50%"
+            v-on:click="openClearSelectedCustomerConfirmationDialogue = false"
+          >
+            <div>NO<br /></div>
+          </v-btn>
+          <v-btn
+            x-large
+            width="50%"
+            v-on:click="
+              openClearSelectedCustomerConfirmationDialogue = false;
+              clearSelectedCustomer();
+            "
+          >
+            <div>YES<br /></div>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -281,6 +310,7 @@ export default {
       selectDineInFormDialogue: false,
       selectCustomerFormDialogue: false,
       createCustomerFormDialogue: false,
+      openClearSelectedCustomerConfirmationDialogue: false,
       createCustomerError: null,
       selectedCustomer: {
         phone: "",
@@ -322,7 +352,9 @@ export default {
     setStoreOrderType: function (orderTypeNum) {
       store.commit("setCurrentOrder", { type: orderTypeNum });
     },
-
+    clearSelectedCustomer: function () {
+      store.commit("setSelectedCustomer", {});
+    },
     suggestCustomerFromPhoneInput: function () {
       this.suggestedCustomers = [];
       if (this.$store.state.customers.length <= 0) {
