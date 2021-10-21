@@ -109,7 +109,15 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn x-large width="24.5%" v-on:click="submitOrderDialog = false">
+          <v-btn
+            x-large
+            width="24.5%"
+            v-on:click="
+              openHistoryOptionsDialogue = false;
+              confirmingAction = 'REORDER';
+              openHistoryOptionsConfirmationDialogue = true;
+            "
+          >
             <div>REORDER<br /></div>
           </v-btn>
           <v-btn
@@ -208,9 +216,15 @@ export default {
       const orderHistory = this.$store.state.orderHistory;
       if (actionStr === "VOID") {
         this.voidOrder();
+        orderHistory[this.$store.state.currentOrder.id.toString()][
+          `order_${actionStr.toLowerCase()}`
+        ] = true;
       }
       if (actionStr === "PAID") {
         this.paidOrder();
+        orderHistory[this.$store.state.currentOrder.id.toString()][
+          `order_${actionStr.toLowerCase()}`
+        ] = true;
       }
       // Maybe give this a better name than clear?
       if (actionStr === "CLEAR") {
@@ -222,11 +236,20 @@ export default {
           `order_void`
         ] = false;
       }
-      orderHistory[this.$store.state.currentOrder.id.toString()][
-        `order_${actionStr.toLowerCase()}`
-      ] = true;
+      if (actionStr === "REORDER") {
+        store.commit("setComponent", "ORDER");
+      }
       this.confirmingAction = "";
       store.commit("setOrderHistory", orderHistory);
+    },
+    async reorder() {
+      const res = await axios.put(
+        `http://localhost:3000/put/orders/update/id/${this.$store.state.currentOrder.id}`,
+        { ...this.$store.state.currentOrder, paid: false, void: false }
+      );
+      if (!res) {
+        console.log("");
+      }
     },
     async clearOrderStatus() {
       const res = await axios.put(
