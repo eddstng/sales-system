@@ -2,29 +2,46 @@
   <v-card outlined tile class="overflow-y-auto" height="92.4vh">
     <div class="p-0" v-if="displayMenuButtons" max-height="400">
       <v-btn
+        x-large
+        dark
+        height="200px"
+        width="49.5%"
+        class="mt-1 mr-1"
+        v-on:click="
+          displayCategoriesButtons = true;
+          displayMenuButtons = false;
+          selectedCategory = null;
+        "
+        ><div>
+          <p class="menu-button-text-eng">BACK</p>
+        </div>
+      </v-btn>
+      <v-btn
         v-for="item in $store.state.items[selectedCategory]"
         v-bind:key="item.name_eng"
         x-large
         dark
         height="200px"
-        width="50%"
+        width="49.5%"
+        class="mt-1 mr-1"
         v-on:click="
           onClickMenuButton(item);
           displayCategoriesButtons = true;
           displayMenuButtons = false;
         "
         ><div>
-          <p class="menu-button-text-eng">{{ item.menu_id }}</p>
+          <p class="menu-button-text-eng">#{{ item.menu_id }}</p>
           <p class="menu-button-text-eng">{{ item.name_eng }}</p>
           <p class="menu-button-text-chn">{{ item.name_chn }}</p>
-          <p class="menu-button-text-price">{{ item.price }}</p>
+          <p class="menu-button-text-price">{{ item.price.toFixed(2) }}</p>
         </div>
       </v-btn>
       <v-btn
         x-large
         dark
         height="200px"
-        width="50%"
+        width="49.5%"
+        class="mt-1 mr-1"
         v-on:click="
           displayCategoriesButtons = true;
           displayMenuButtons = false;
@@ -42,7 +59,8 @@
         x-large
         dark
         height="200px"
-        width="25%"
+        width="24.5%"
+        class="mt-1 mr-1"
         v-on:click="
           selectedCategory = item.id;
           displayCategoriesButtons = false;
