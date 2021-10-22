@@ -70,7 +70,7 @@
     <v-dialog
       v-if="removeSelectedItem.node !== undefined"
       v-model="removeSelectedItemDialog"
-      width="600px"
+      width="1000px"
     >
       <v-card>
         <div>
@@ -90,7 +90,7 @@
           <v-spacer></v-spacer>
           <v-btn
             x-large
-            width="32%"
+            width="24.5%"
             v-on:click="
               removeSelectedItemDialog = false;
               removeSelectedItem = {};
@@ -100,7 +100,25 @@
           </v-btn>
           <v-btn
             x-large
-            width="32%"
+            width="24.5%"
+            v-on:click="openCustomizeItemDialogue = true"
+          >
+            <div>CUSTOMIZE<br /></div>
+          </v-btn>
+          <v-btn
+            x-large
+            width="24.5%"
+            v-on:click="
+              removeSelectedItemDialog = false;
+              removeSelectedItemAll(removeSelectedItem);
+              removeSelectedItem = {};
+            "
+          >
+            <div>REMOVE ALL<br /></div>
+          </v-btn>
+          <v-btn
+            x-large
+            width="24.5%"
             v-on:click="
               removeSelectedItemDialog = false;
               removeSelectedItemOne(removeSelectedItem);
@@ -111,14 +129,81 @@
           </v-btn>
           <v-btn
             x-large
-            width="32%"
+            width="24.5%"
             v-on:click="
               removeSelectedItemDialog = false;
-              removeSelectedItemAll(removeSelectedItem);
+              removeSelectedItemOne(removeSelectedItem);
               removeSelectedItem = {};
             "
           >
-            <div>REMOVE ALL<br /></div>
+            <div>ADD 1<br /></div>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+      v-if="openCustomizeItemDialogue"
+      v-model="removeSelectedItemDialog"
+      width="1000px"
+    >
+      <v-card>
+        <div>
+          <h3 class="text-center pt-10 pb-5">
+            CUSTOMIZE ITEM
+            <br />
+            <br />
+            {{ removeSelectedItem.node.name_eng }}
+            <br />
+            {{ removeSelectedItem.node.name_chn }}
+          </h3>
+
+          <br />
+          <v-btn
+            v-for="customization in custiomizations"
+            v-bind:key="customization"
+            class="pt-5"
+            x-large
+            width="24.5%"
+            height="80px"
+            v-on:click="
+              openCustomizeItemDialogue = false;
+              addCustomizationToItem(removeSelectedItem, customization);
+            "
+          >
+            <p>
+              {{ customization.name_eng }}<br />{{ customization.name_chn }}
+            </p>
+          </v-btn>
+          <v-btn
+            v-for="customization in custiomizations"
+            v-bind:key="customization"
+            class="pt-5"
+            x-large
+            width="24.5%"
+            height="80px"
+            v-on:click="openCustomizeItemDialogue = false"
+          >
+            <p>
+              {{ customization.name_eng }}<br />{{ customization.name_chn }}
+            </p>
+          </v-btn>
+        </div>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            x-large
+            width="24.5%"
+            v-on:click="openCustomizeItemDialogue = false"
+          >
+            <div>CANCEL<br /></div>
+          </v-btn>
+          <v-btn
+            x-large
+            width="24.5%"
+            v-on:click="openCustomizeItemDialogue = false"
+          >
+            <div>OK<br /></div>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -209,6 +294,25 @@ import CustomerSelect from "./CustomerSelect";
 export default {
   data() {
     return {
+      custiomizations: [
+        {
+          name_eng: "MSG",
+          name_chn: "123456",
+        },
+        {
+          name_eng: "SESAME",
+          name_chn: "123456",
+        },
+        {
+          name_eng: "SALT",
+          name_chn: "123456",
+        },
+        {
+          name_eng: "OIL",
+          name_chn: "123456",
+        },
+      ],
+      openCustomizeItemDialogue: false,
       removeSelectedItemDialog: false,
       removeSelectedItem: {},
       submitOrderDialog: false,
@@ -222,14 +326,28 @@ export default {
     clearOrderRelatedStore: function () {
       this.$root.$refs.App.clearOrderRelatedStore();
     },
-
+    addCustomizationToItem: function (removeSelectedItem, customizationObj) {
+      if (removeSelectedItem.customizations === undefined) {
+        removeSelectedItem.customizations = [customizationObj];
+      } else {
+        removeSelectedItem.customizations.push(customizationObj); // update to check if it is array
+      }
+      const selectedItems = Object.assign({}, this.$store.state.selectedItems);
+      console.log(selectedItems[removeSelectedItem.node.id])
+      console.log(selectedItems[removeSelectedItem.node.id])
+      console.log(selectedItems[removeSelectedItem.node.id])
+      selectedItems[removeSelectedItem.node.id].node.customizations = customizationObj;
+      store.commit("setSelectedItems", {
+        ...this.$store.state.selectedItem,
+        selectedItems,
+      });
+    },
     removeSelectedItemOne: function (selectedItem) {
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
       if (selectedItems[selectedItem.node.id].quantity === 1) {
         delete selectedItems[selectedItem.node.id];
       } else {
-        selectedItems[selectedItem.node.id].quantity =
-          selectedItems[selectedItem.node.id].quantity - 1;
+        selectedItems[selectedItem.node.id].quantity - 1;
       }
       store.commit("setSelectedItems", selectedItems);
       this.calculatePriceDetails();
@@ -251,9 +369,9 @@ export default {
     },
     submitOrder: async function () {
       try {
-       const newOrder = await this.createOrder();
+        const newOrder = await this.createOrder();
         this.addItemsToOrder(newOrder.data.id);
-        this.updateOrderWithTotalPrice(newOrder)
+        this.updateOrderWithTotalPrice(newOrder);
         this.clearOrderRelatedStore();
         store.commit("setNotification", 1);
       } catch (err) {
@@ -262,12 +380,17 @@ export default {
       }
     },
     updateOrderWithTotalPrice: async function (orderDetails) {
-      const res = await axios.put(`http://localhost:3000/put/orders/update/id/${orderDetails.data.id}`, {
-        ...this.orderDetails,
-        total: this.$store.state.priceDetails.total,
-      });
+      const res = await axios.put(
+        `http://localhost:3000/put/orders/update/id/${orderDetails.data.id}`,
+        {
+          ...this.orderDetails,
+          total: this.$store.state.priceDetails.total,
+        }
+      );
       if (isNaN(res.status !== 200)) {
-        throw new Error(`Failed to submit order. Received status code of ${res.status}.`);
+        throw new Error(
+          `Failed to submit order. Received status code of ${res.status}.`
+        );
       }
       return res;
     },
@@ -291,6 +414,7 @@ export default {
           order_id: orderIdNum,
           item_id: parseInt(key),
           quantity: value.quantity,
+          customizations: value.customizations ?? null,
         });
       }
       const res = await axios.post(

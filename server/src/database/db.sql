@@ -45,7 +45,8 @@ CREATE TABLE customers (
 
 CREATE TABLE orders_items (
     id SERIAL NOT NULL PRIMARY KEY,
-    quantity INTEGER
+    quantity INTEGER,
+    customizations jsonb
     --  item_id INT FOREIGN KEY REFERENCES items (id)
     --  order_id INT FOREIGN KEY REFERENCES orders (id)
 );

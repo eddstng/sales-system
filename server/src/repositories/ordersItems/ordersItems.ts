@@ -15,6 +15,8 @@ export class OrdersItems {
 
     @IsNotEmpty()
     quantity!: number;
+
+    customizations?: {name_eng: string, name_chn: string}[];
 }
 
 export async function getAllOrdersItems(): Promise<Record<string, unknown>[]> {
@@ -59,7 +61,7 @@ export async function createOrdersItems(body: JSON) {
     try {
         await validateClassFields(OrdersItems, body)
         const res = await prisma.orders_items.create({ data: <Prisma.orders_itemsCreateInput>body })
-        logInfo(createOrdersItems.name, `[✓] OrdersItems Created: {id: ${res.id}, order_id: ${res.order_id}, item_id: ${res.item_id}`)
+        logInfo(createOrdersItems.name, `[✓] OrdersItems Created: {id: ${res.id}, order_id: ${res.order_id}, item_id: ${res.item_id}, customizations: ${res.customizations}`)
     } catch (err) {
         logError(createOrdersItems.name, err, `[✗]`);
         throw new Error(`${err} `)
@@ -101,7 +103,7 @@ export async function updateOrdersItems(id: number, order: Prisma.orders_itemsUn
                 item_id: order.item_id
             },
         })
-        logInfo(updateOrdersItems.name, `[✓] OrdersItems Updated: {id: ${res.id}, total: ${res.order_id}, customer_id: ${res.item_id}`)
+        logInfo(updateOrdersItems.name, `[✓] OrdersItems Updated: {id: ${res.id}, total: ${res.order_id}, item_id: ${res.item_id}, customizations: ${res.customizations}`)
     } catch (err) {
         logError(updateOrdersItems.name, err, `[✗]`);
         throw new Error(`${err} `)
