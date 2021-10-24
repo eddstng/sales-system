@@ -16,7 +16,6 @@
           outlined
           v-for="item in $store.state.selectedItems"
           v-bind:key="item.id"
-          height="7em"
           width="100vw"
         >
           <v-list-item three-line>
@@ -33,10 +32,18 @@
                 x {{ item.quantity }}
               </div>
               <div class="history-display-item-text text-right">
-                {{ item.node.price * item.quantity }}
+                {{ (item.node.price * item.quantity).toFixed(2) }}
               </div>
             </v-list-item-content>
           </v-list-item>
+          <v-list-item-content
+            v-for="customization in item.customizations"
+            v-bind:key="customization.id"
+          >
+            <div class="menu-display-item-text pl-5">
+              - {{ customization.name_eng }} / {{ customization.name_chn }}
+            </div>
+          </v-list-item-content>
         </v-card>
       </template>
     </v-card>
@@ -48,14 +55,14 @@
           <div class="history-display-item-text mt-5">Total:</div>
         </v-list-item-content>
         <v-list-item-content>
-          <div class="history-display-item-text text-right">
-            {{ $store.state.priceDetails.subtotal }}
+          <div class="menu-display-item-text text-right">
+            {{ ($store.state.priceDetails.subtotal).toFixed(2) }}
           </div>
-          <div class="history-display-item-text text-right">
-            {{ $store.state.priceDetails.gst }}
+          <div class="menu-display-item-text text-right">
+            {{ ($store.state.priceDetails.gst).toFixed(2) }}
           </div>
-          <div class="history-display-item-text text-right mt-5 mb-0">
-            ${{ $store.state.priceDetails.total }}
+          <div class="menu-display-item-text text-right mt-5 mb-0">
+            ${{ ($store.state.priceDetails.total).toFixed(2) }}
           </div>
         </v-list-item-content>
       </v-list-item>

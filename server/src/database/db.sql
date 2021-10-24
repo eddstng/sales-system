@@ -125,7 +125,8 @@ i.category as item_category,
 i.name_eng as item_name_eng,
 i.name_chn as item_name_chn,
 i.price as item_price,
-oi.quantity as orders_items_quantity
+oi.quantity as orders_items_quantity,
+oi.customizations as orders_items_customizations
 from orders_items oi 
 LEFT JOIN items i ON oi.item_id = i.id
 LEFT JOIN orders o ON oi.order_id = o.id

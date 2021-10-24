@@ -67,6 +67,7 @@ export default {
       }
     },
     addHistoryItemToSelectedItems(ordersItemsDetailWithOrderId) {
+      //does this cause an issue if we don't clear the state.selctedItems?
       let selectedItems = store.state.selectedItems;
       if (ordersItemsDetailWithOrderId.item_id in selectedItems) {
         selectedItems[ordersItemsDetailWithOrderId.item_id].quantity++;
@@ -80,6 +81,7 @@ export default {
           name_eng: ordersItemsDetailWithOrderId.item_name_eng,
           price: ordersItemsDetailWithOrderId.item_price,
         };
+        selectedItems[ordersItemsDetailWithOrderId.item_id].customizations = ordersItemsDetailWithOrderId.orders_items_customizations;
         selectedItems[ordersItemsDetailWithOrderId.item_id].quantity =
           ordersItemsDetailWithOrderId.orders_items_quantity;
       }
@@ -92,6 +94,7 @@ export default {
           `http://localhost:3000/get/ordersitemsdetail/id/${order_id}`
         )
       ).data;
+
       ordersItemsDetailWithOrderIdArray.forEach((v) => {
         this.addHistoryItemToSelectedItems(v);
       });

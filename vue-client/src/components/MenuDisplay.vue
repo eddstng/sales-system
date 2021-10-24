@@ -31,7 +31,7 @@
                 {{ value.node.name_chn }}
               </v-col>
               <v-col :cols="2" class="text-center">
-                {{ value.node.price }}
+                {{ value.node.price.toFixed(2) }}
               </v-col>
               <v-col class="text-end"> x{{ value.quantity }} </v-col>
             </v-row>
@@ -39,13 +39,13 @@
 
           <v-row class="submitOrderDialogText mt-5 mb-5">
             <v-col :cols="4">
-              Subtotal: {{ $store.state.priceDetails.subtotal }}
+              Subtotal: {{ $store.state.priceDetails.subtotal.toFixed(2) }}
             </v-col>
             <v-col :cols="4" class="text-end">
-              GST: {{ $store.state.priceDetails.gst }}
+              GST: {{ $store.state.priceDetails.gst.toFixed(2) }}
             </v-col>
             <v-col :cols="4" class="text-end">
-              Total: ${{ $store.state.priceDetails.total }}
+              Total: ${{ $store.state.priceDetails.total.toFixed(2) }}
             </v-col>
           </v-row>
 
@@ -164,17 +164,43 @@
           <v-btn
             v-for="customization in customizations"
             v-bind:key="customization.name_eng"
-            class="pt-5"
+            class="mt-1 mr-1"
             x-large
             width="24.5%"
             height="80px"
             v-on:click="
               openCustomizeItemDialogue = false;
-              addCustomizationToItem(removeSelectedItem, customization);
+              removeSelectedItemDialog = false;
+              addCustomizationToItem(removeSelectedItem, {
+                name_eng: `NO ${customization.name_eng}`,
+                name_chn: `NO ${customization.name_chn}`,
+              });
             "
           >
             <p>
-              {{ customization.name_eng }}<br />{{ customization.name_chn }}
+              NO {{ customization.name_eng }}<br />NO
+              {{ customization.name_chn }}
+            </p>
+          </v-btn>
+          <v-btn
+            v-for="customization in customizations"
+            v-bind:key="customization.name_eng"
+            class="mt-1 mr-1"
+            x-large
+            width="24.5%"
+            height="80px"
+            v-on:click="
+              openCustomizeItemDialogue = false;
+              removeSelectedItemDialog = false;
+              addCustomizationToItem(removeSelectedItem, {
+                name_eng: `LESS ${customization.name_eng}`,
+                name_chn: `LESS ${customization.name_chn}`,
+              });
+            "
+          >
+            <p>
+              LESS {{ customization.name_eng }}<br />LESS
+              {{ customization.name_chn }}
             </p>
           </v-btn>
         </div>
@@ -230,7 +256,7 @@
                 x {{ item.quantity }}
               </div>
               <div class="menu-display-item-text text-right">
-                {{ item.node.price * item.quantity }}
+                {{ (item.node.price * item.quantity).toFixed(2) }}
               </div>
               <br />
             </v-list-item-content>
@@ -239,7 +265,9 @@
             v-for="customization in item.customizations"
             v-bind:key="customization.id"
           >
-            <div class="menu-display-item-text pl-5"> - {{ customization.name_eng }} / {{customization.name_chn}}</div>
+            <div class="menu-display-item-text pl-5">
+              - {{ customization.name_eng }} / {{ customization.name_chn }}
+            </div>
           </v-list-item-content>
         </v-card>
       </template>
@@ -258,13 +286,13 @@
         </v-list-item-content>
         <v-list-item-content>
           <div class="menu-display-item-text text-right">
-            {{ $store.state.priceDetails.subtotal }}
+            {{ $store.state.priceDetails.subtotal.toFixed(2) }}
           </div>
           <div class="menu-display-item-text text-right">
-            {{ $store.state.priceDetails.gst }}
+            {{ $store.state.priceDetails.gst.toFixed(2) }}
           </div>
           <div class="menu-display-item-text text-right mt-5 mb-0">
-            ${{ $store.state.priceDetails.total }}
+            ${{ $store.state.priceDetails.total.toFixed(2) }}
           </div>
         </v-list-item-content>
       </v-list-item>
@@ -328,7 +356,6 @@ export default {
         selectedItems[removeSelectedItem.node.id.toString()].customizations ===
         undefined
       ) {
-        console.log(customizationObj);
         selectedItems[removeSelectedItem.node.id.toString()].customizations = [
           customizationObj,
         ];
@@ -411,8 +438,7 @@ export default {
           order_id: orderIdNum,
           item_id: parseInt(key),
           quantity: value.quantity,
-          customizations:
-            value.customizations !== undefined ? value.customizations : null,
+          customizations: value.customizations,
         });
       }
       const res = await axios.post(
