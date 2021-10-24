@@ -55,7 +55,7 @@
     <div class="p-0" v-if="displayCategoriesButtons" max-height="400">
       <v-btn
         v-for="item in categories"
-        v-bind:key="item"
+        v-bind:key="item.id"
         x-large
         dark
         height="200px"

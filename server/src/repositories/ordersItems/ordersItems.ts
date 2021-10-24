@@ -16,7 +16,7 @@ export class OrdersItems {
     @IsNotEmpty()
     quantity!: number;
 
-    customizations?: {name_eng: string, name_chn: string}[];
+    customizations?: {name_eng: string, name_chn: string}[] | undefined;
 }
 
 export async function getAllOrdersItems(): Promise<Record<string, unknown>[]> {

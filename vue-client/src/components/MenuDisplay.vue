@@ -20,7 +20,10 @@
             v-for="value in $store.state.selectedItems"
             v-bind:key="value.id"
           >
-            <v-row class="submitOrderDialogText mt-5 mb-5">
+            <v-row
+              v-if="value.node !== undefined"
+              class="submitOrderDialogText mt-5 mb-5"
+            >
               <v-col :cols="5">
                 {{ value.node.name_eng }}
               </v-col>
@@ -159,8 +162,8 @@
 
           <br />
           <v-btn
-            v-for="customization in custiomizations"
-            v-bind:key="customization"
+            v-for="customization in customizations"
+            v-bind:key="customization.name_eng"
             class="pt-5"
             x-large
             width="24.5%"
@@ -169,19 +172,6 @@
               openCustomizeItemDialogue = false;
               addCustomizationToItem(removeSelectedItem, customization);
             "
-          >
-            <p>
-              {{ customization.name_eng }}<br />{{ customization.name_chn }}
-            </p>
-          </v-btn>
-          <v-btn
-            v-for="customization in custiomizations"
-            v-bind:key="customization"
-            class="pt-5"
-            x-large
-            width="24.5%"
-            height="80px"
-            v-on:click="openCustomizeItemDialogue = false"
           >
             <p>
               {{ customization.name_eng }}<br />{{ customization.name_chn }}
@@ -224,14 +214,13 @@
           outlined
           v-for="item in $store.state.selectedItems"
           v-bind:key="item.id"
-          height="7em"
           width="100vw"
           v-on:click="
             removeSelectedItemDialog = true;
             removeSelectedItem = item;
           "
         >
-          <v-list-item three-line>
+          <v-list-item three-line v-if="item.node !== undefined">
             <v-list-item-content>
               <div class="menu-display-item-text">{{ item.node.name_eng }}</div>
               <div class="menu-display-item-text">{{ item.node.name_chn }}</div>
@@ -243,8 +232,15 @@
               <div class="menu-display-item-text text-right">
                 {{ item.node.price * item.quantity }}
               </div>
+              <br />
             </v-list-item-content>
           </v-list-item>
+          <v-list-item-content
+            v-for="customization in item.customizations"
+            v-bind:key="customization.id"
+          >
+            <div class="menu-display-item-text pl-5"> - {{ customization.name_eng }} / {{customization.name_chn}}</div>
+          </v-list-item-content>
         </v-card>
       </template>
     </v-card>
@@ -294,7 +290,7 @@ import CustomerSelect from "./CustomerSelect";
 export default {
   data() {
     return {
-      custiomizations: [
+      customizations: [
         {
           name_eng: "MSG",
           name_chn: "123456",
@@ -327,20 +323,21 @@ export default {
       this.$root.$refs.App.clearOrderRelatedStore();
     },
     addCustomizationToItem: function (removeSelectedItem, customizationObj) {
-      if (removeSelectedItem.customizations === undefined) {
-        removeSelectedItem.customizations = [customizationObj];
-      } else {
-        removeSelectedItem.customizations.push(customizationObj); // update to check if it is array
-      }
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
-      console.log(selectedItems[removeSelectedItem.node.id])
-      console.log(selectedItems[removeSelectedItem.node.id])
-      console.log(selectedItems[removeSelectedItem.node.id])
-      selectedItems[removeSelectedItem.node.id].node.customizations = customizationObj;
-      store.commit("setSelectedItems", {
-        ...this.$store.state.selectedItem,
-        selectedItems,
-      });
+      if (
+        selectedItems[removeSelectedItem.node.id.toString()].customizations ===
+        undefined
+      ) {
+        console.log(customizationObj);
+        selectedItems[removeSelectedItem.node.id.toString()].customizations = [
+          customizationObj,
+        ];
+      } else {
+        selectedItems[
+          removeSelectedItem.node.id.toString()
+        ].customizations.push(customizationObj); // update to check if it is array
+      }
+      store.commit("setSelectedItems", selectedItems);
     },
     removeSelectedItemOne: function (selectedItem) {
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
@@ -414,7 +411,8 @@ export default {
           order_id: orderIdNum,
           item_id: parseInt(key),
           quantity: value.quantity,
-          customizations: value.customizations ?? null,
+          customizations:
+            value.customizations !== undefined ? value.customizations : null,
         });
       }
       const res = await axios.post(
