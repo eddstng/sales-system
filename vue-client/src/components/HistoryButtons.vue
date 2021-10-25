@@ -12,15 +12,15 @@
         v-on:click="onClickHistoryButton(order.order_id)"
       >
         <v-row>
+          <v-col> {{ new Date(order.order_timestamp).toLocaleDateString()}} {{getFormattedTimeStamp(new Date(order.order_timestamp)) }} </v-col>
           <v-col> {{ order.order_id }} </v-col>
           <v-col v-if="order.order_void === true"> VOID </v-col>
           <v-col v-else-if="order.order_paid === true"> PAID </v-col>
           <v-col v-else> </v-col>
           <v-col> {{ order.customer_phone }} </v-col>
-          <v-col> {{ order.order_total }} </v-col>
+          <v-col> {{ order.order_total.toFixed(2) }} </v-col>
           <!-- <v-col> {{order.customer_id}} </v-col> -->
           <!-- <v-col> {{order.customer_name}} </v-col> -->
-          <!-- <v-col> {{order.order_timestamp}} </v-col> -->
           <!-- <v-col> {{order.order_type}} </v-col> -->
           <!-- <v-col>{{item.timestamp}} </v-col> -->
           <!-- <v-col>{{item.id}}</v-col> -->
@@ -53,6 +53,16 @@ export default {
     this.$root.$refs.MenuButtons = this;
   },
   methods: {
+    getFormattedTimeStamp: function (orderTimestamp) {
+      var hours = orderTimestamp.getHours();
+      var minutes = orderTimestamp.getMinutes();
+      var ampm = hours >= 12 ? "pm" : "am";
+      hours = hours % 12;
+      hours = hours ? hours : 12; // the hour '0' should be '12'
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      var strTime = hours + ":" + minutes + " " + ampm; 
+      return strTime
+    },
     calculatePriceDetails: function () {
       this.$root.$refs.App.calculatePriceDetails();
     },
@@ -81,7 +91,8 @@ export default {
           name_eng: ordersItemsDetailWithOrderId.item_name_eng,
           price: ordersItemsDetailWithOrderId.item_price,
         };
-        selectedItems[ordersItemsDetailWithOrderId.item_id].customizations = ordersItemsDetailWithOrderId.orders_items_customizations;
+        selectedItems[ordersItemsDetailWithOrderId.item_id].customizations =
+          ordersItemsDetailWithOrderId.orders_items_customizations;
         selectedItems[ordersItemsDetailWithOrderId.item_id].quantity =
           ordersItemsDetailWithOrderId.orders_items_quantity;
       }
