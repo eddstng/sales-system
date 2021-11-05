@@ -31,7 +31,7 @@
                 {{ value.node.name_chn }}
               </v-col>
               <v-col :cols="2" class="text-center">
-                {{ value.node.price.toFixed(2) }}
+                {{ value.node.price }}
               </v-col>
               <v-col class="text-end"> x{{ value.quantity }} </v-col>
             </v-row>
@@ -93,7 +93,7 @@
           <v-spacer></v-spacer>
           <v-btn
             x-large
-            width="24.5%"
+            width="19.6%"
             v-on:click="
               removeSelectedItemDialog = false;
               removeSelectedItem = {};
@@ -103,14 +103,14 @@
           </v-btn>
           <v-btn
             x-large
-            width="24.5%"
+            width="19.6%"
             v-on:click="openCustomizeItemDialogue = true"
           >
             <div>CUSTOMIZE<br /></div>
           </v-btn>
           <v-btn
             x-large
-            width="24.5%"
+            width="19.6%"
             v-on:click="
               removeSelectedItemDialog = false;
               removeSelectedItemAll(removeSelectedItem);
@@ -121,7 +121,7 @@
           </v-btn>
           <v-btn
             x-large
-            width="24.5%"
+            width="19.6%"
             v-on:click="
               removeSelectedItemDialog = false;
               removeSelectedItemOne(removeSelectedItem);
@@ -132,10 +132,10 @@
           </v-btn>
           <v-btn
             x-large
-            width="24.5%"
+            width="19.6%"
             v-on:click="
               removeSelectedItemDialog = false;
-              removeSelectedItemOne(removeSelectedItem);
+              addSelectedItemOne(removeSelectedItem);
               removeSelectedItem = {};
             "
           >
@@ -166,7 +166,7 @@
             v-bind:key="customization.name_eng"
             class="mt-1 mr-1"
             x-large
-            width="24.5%"
+            width="19.6%"
             height="80px"
             v-on:click="
               openCustomizeItemDialogue = false;
@@ -187,7 +187,7 @@
             v-bind:key="customization.name_eng"
             class="mt-1 mr-1"
             x-large
-            width="24.5%"
+            width="19.6%"
             height="80px"
             v-on:click="
               openCustomizeItemDialogue = false;
@@ -203,23 +203,53 @@
               {{ customization.name_chn }}
             </p>
           </v-btn>
+          <v-btn
+            v-for="customization in customizations"
+            v-bind:key="customization.name_eng"
+            class="mt-1 mr-1"
+            x-large
+            width="19.6%"
+            height="80px"
+            v-on:click="
+              openCustomizeItemDialogue = false;
+              removeSelectedItemDialog = false;
+              addCustomizationToItem(removeSelectedItem, {
+                name_eng: `ADD ${customization.name_eng}`,
+                name_chn: `ADD ${customization.name_chn}`,
+              });
+            "
+          >
+            <p>
+              ADD {{ customization.name_eng }}<br />ADD
+              {{ customization.name_chn }}
+            </p>
+          </v-btn>
+          <v-btn
+            class="mt-3 mb-3"
+            x-large
+            width="20%"
+            height="80px"
+            v-on:click="
+              openCustomizeItemDialogue = false;
+              removeSelectedItemDialog = false;
+              addCustomizationToItem(removeSelectedItem, {
+                name_eng: `CUSTOM: `,
+                name_chn: `CUSTOM: `,
+              });
+            "
+          >
+            <p>CUSTOM</p>
+          </v-btn>
         </div>
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
             x-large
-            width="24.5%"
+            width="100%"
             v-on:click="openCustomizeItemDialogue = false"
           >
             <div>CANCEL<br /></div>
-          </v-btn>
-          <v-btn
-            x-large
-            width="24.5%"
-            v-on:click="openCustomizeItemDialogue = false"
-          >
-            <div>OK<br /></div>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -335,6 +365,10 @@ export default {
           name_eng: "OIL",
           name_chn: "123456",
         },
+        {
+          name_eng: "SPICY",
+          name_chn: "123456",
+        },
       ],
       openCustomizeItemDialogue: false,
       removeSelectedItemDialog: false,
@@ -350,29 +384,79 @@ export default {
     clearOrderRelatedStore: function () {
       this.$root.$refs.App.clearOrderRelatedStore();
     },
-    addCustomizationToItem: function (removeSelectedItem, customizationObj) {
+    addCustomizationToItem: function (selectedItem, customizationObj) {
+        console.log(JSON.stringify(selectedItem));
+
+const vueStoreKeyToDelete = selectedItem.custom_id ?? selectedItem.node.id;
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
       if (
-        selectedItems[removeSelectedItem.node.id.toString()].customizations ===
-        undefined
+        selectedItems[selectedItem.custom_id ?? selectedItem.node.id.toString()]
+          .customizations === undefined
       ) {
-        selectedItems[removeSelectedItem.node.id.toString()].customizations = [
-          customizationObj,
-        ];
+        selectedItems[
+          selectedItem.custom_id ?? selectedItem.node.id.toString()
+        ].customizations = [customizationObj];
       } else {
         selectedItems[
-          removeSelectedItem.node.id.toString()
+          selectedItem.custom_id ?? selectedItem.node.id.toString()
         ].customizations.push(customizationObj); // update to check if it is array
       }
+
+      if (!selectedItem.customizations.length !== 0) {
+        let customizedItemKeyName = `${selectedItem.node.id.toString()}C-`;
+        let customizedItemKeyNumber = 0;
+        while (
+          selectedItems[
+            `${customizedItemKeyName}${customizedItemKeyNumber}`
+          ] !== undefined
+        ) {
+          customizedItemKeyNumber++;
+        }
+        selectedItems[`${customizedItemKeyName}${customizedItemKeyNumber}`] =
+          {};
+        selectedItems[`${customizedItemKeyName}${customizedItemKeyNumber}`] =
+          selectedItem;
+        selectedItems[
+          `${customizedItemKeyName}${customizedItemKeyNumber}`
+        ].custom_id = `${customizedItemKeyName}${customizedItemKeyNumber}`;
+        selectedItems[
+          `${customizedItemKeyName}${customizedItemKeyNumber}`
+        ].quantity = 1;
+
+        store.commit("setSelectedItems", selectedItems);
+        console.log(JSON.stringify(selectedItem));
+        this.removeSelectedItemOneByVueStoreKey(vueStoreKeyToDelete);
+      }
+    },
+    removeSelectedItemOneByVueStoreKey: function (vueStoreKeyToDelete) {
+      const selectedItems = Object.assign({}, this.$store.state.selectedItems);
+      if (
+        selectedItems[vueStoreKeyToDelete]
+          .quantity === 1
+      ) {
+        delete selectedItems[vueStoreKeyToDelete];
+      } else {
+        selectedItems[vueStoreKeyToDelete].quantity - 1;
+      }
       store.commit("setSelectedItems", selectedItems);
+      this.calculatePriceDetails();
     },
     removeSelectedItemOne: function (selectedItem) {
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
-      if (selectedItems[selectedItem.node.id].quantity === 1) {
-        delete selectedItems[selectedItem.node.id];
+      if (
+        selectedItems[selectedItem.custom_id ?? selectedItem.node.id]
+          .quantity === 1
+      ) {
+        delete selectedItems[selectedItem.custom_id ?? selectedItem.node.id];
       } else {
         selectedItems[selectedItem.node.id].quantity - 1;
       }
+      store.commit("setSelectedItems", selectedItems);
+      this.calculatePriceDetails();
+    },
+    addSelectedItemOne: function (selectedItem) {
+      const selectedItems = Object.assign({}, this.$store.state.selectedItems);
+      selectedItems[selectedItem.node.id].quantity++;
       store.commit("setSelectedItems", selectedItems);
       this.calculatePriceDetails();
     },

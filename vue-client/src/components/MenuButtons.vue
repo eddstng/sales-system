@@ -1,79 +1,175 @@
 <template>
-  <v-card outlined tile class="overflow-y-auto" height="92.4vh">
-    <div class="p-0" v-if="displayMenuButtons" max-height="400">
-      <v-btn
-        x-large
-        dark
-        height="200px"
-        width="49.5%"
-        class="mt-1 mr-1"
-        v-on:click="
-          displayCategoriesButtons = true;
-          displayMenuButtons = false;
-          selectedCategory = null;
-        "
-        ><div>
-          <p class="menu-button-text-eng">BACK</p>
+  <div>
+    <v-dialog v-model="addCustomItemDialogue" width="500">
+      <v-card>
+        <div>
+          <br />
+          <v-col>
+            <v-form ref="form" lazy-validation>
+              <v-text-field
+                v-model="customItem.name"
+                label="Custom Item Name"
+                required
+                autocomplete="off"
+                autofocus
+              ></v-text-field>
+              <v-text-field
+                label="Price"
+                v-model="customItem.price"
+                required
+                prefix="$"
+              ></v-text-field>
+            </v-form>
+            <p>Quick Suggestions</p>
+            <v-divider></v-divider>
+            <v-btn
+              v-for="suggestion in customItemSuggestions"
+              v-bind:key="suggestion"
+              x-large
+              width="50%"
+              v-on:click="
+                phone = '';
+                createCustomerFormDialogue = false;
+              "
+            >
+              <div>{{ suggestion }}<br /></div>
+            </v-btn>
+          </v-col>
+          <br />
         </div>
-      </v-btn>
-      <v-btn
-        v-for="item in $store.state.items[selectedCategory]"
-        v-bind:key="item.name_eng"
-        x-large
-        dark
-        height="200px"
-        width="49.5%"
-        class="mt-1 mr-1"
-        v-on:click="
-          onClickMenuButton(item);
-          displayCategoriesButtons = true;
-          displayMenuButtons = false;
-        "
-        ><div>
-          <p class="menu-button-text-eng">#{{ item.menu_id }}</p>
-          <p class="menu-button-text-eng">{{ item.name_eng }}</p>
-          <p class="menu-button-text-chn">{{ item.name_chn }}</p>
-          <p class="menu-button-text-price">{{ item.price.toFixed(2) }}</p>
-        </div>
-      </v-btn>
-      <v-btn
-        x-large
-        dark
-        height="200px"
-        width="49.5%"
-        class="mt-1 mr-1"
-        v-on:click="
-          displayCategoriesButtons = true;
-          displayMenuButtons = false;
-          selectedCategory = null;
-        "
-        ><div>
-          <p class="menu-button-text-eng">BACK</p>
-        </div>
-      </v-btn>
-    </div>
-    <div class="p-0" v-if="displayCategoriesButtons" max-height="400">
-      <v-btn
-        v-for="item in categories"
-        v-bind:key="item.id"
-        x-large
-        dark
-        height="200px"
-        width="24.5%"
-        class="mt-1 mr-1"
-        v-on:click="
-          selectedCategory = item.id;
-          displayCategoriesButtons = false;
-          displayMenuButtons = true;
-        "
-        ><div>
-          <p class="menu-button-text-eng">{{ item.name_eng }}</p>
-          <!-- <p class="menu-button-text-eng" >{{ item.name_chn }}</p> -->
-          <p class="menu-button-text-eng">{{ item.num_range }}</p>
-        </div>
-      </v-btn>
-    </div>
-  </v-card>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            x-large
+            width="50%"
+            v-on:click="
+              phone = '';
+              createCustomerFormDialogue = false;
+            "
+          >
+            <div>CANCEL<br /></div>
+          </v-btn>
+          <v-btn
+            x-large
+            width="50%"
+            v-on:click="
+              onClickMenuButton({
+                id: customItem.name,
+                name_eng: customItem.name,
+                name_chn: '-',
+                price: parseFloat(customItem.price),
+              })
+              customItem = {
+                name:'',
+                price:0.00,
+                id: '',
+              }
+            "
+          >
+            <div>ADD<br /></div>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-card outlined tile class="overflow-y-auto" height="92.4vh">
+      <div class="p-0" v-if="displayMenuButtons" max-height="400">
+        <v-btn
+          x-large
+          dark
+          height="200px"
+          width="49.5%"
+          class="mt-1 mr-1"
+          v-on:click="
+            displayCategoriesButtons = true;
+            displayMenuButtons = false;
+            selectedCategory = null;
+          "
+          ><div>
+            <p class="menu-button-text-eng">BACK</p>
+          </div>
+        </v-btn>
+        <v-btn
+          x-large
+          dark
+          height="200px"
+          width="49.5%"
+          class="mt-1 mr-1"
+          v-on:click="addCustomItemDialogue = true"
+          ><div>
+            <p class="menu-button-text-eng">CUSTOM</p>
+          </div>
+        </v-btn>
+        <v-btn
+          v-for="item in $store.state.items[selectedCategory]"
+          v-bind:key="item.name_eng"
+          x-large
+          dark
+          height="200px"
+          width="49.5%"
+          class="mt-1 mr-1"
+          v-on:click="
+            onClickMenuButton(item);
+            displayCategoriesButtons = true;
+            displayMenuButtons = false;
+          "
+          ><div>
+            <p class="menu-button-text-eng">#{{ item.menu_id }}</p>
+            <p class="menu-button-text-eng">{{ item.name_eng }}</p>
+            <p class="menu-button-text-chn">{{ item.name_chn }}</p>
+            <p class="menu-button-text-price">{{ item.price.toFixed(2) }}</p>
+          </div>
+        </v-btn>
+        <v-btn
+          x-large
+          dark
+          height="200px"
+          width="49.5%"
+          class="mt-1 mr-1"
+          v-on:click="addCustomItemDialogue = true"
+          ><div>
+            <p class="menu-button-text-eng">CUSTOM</p>
+          </div>
+        </v-btn>
+        <v-btn
+          x-large
+          dark
+          height="200px"
+          width="49.5%"
+          class="mt-1 mr-1"
+          v-on:click="
+            displayCategoriesButtons = true;
+            displayMenuButtons = false;
+            selectedCategory = null;
+          "
+          ><div>
+            <p class="menu-button-text-eng">BACK</p>
+          </div>
+        </v-btn>
+      </div>
+      <div class="p-0" v-if="displayCategoriesButtons" max-height="400">
+        <v-btn
+          v-for="item in categories"
+          v-bind:key="item.id"
+          x-large
+          dark
+          height="200px"
+          width="24.5%"
+          class="mt-1 mr-1"
+          v-on:click="
+            selectedCategory = item.id;
+            displayCategoriesButtons = false;
+            displayMenuButtons = true;
+          "
+          ><div>
+            <p class="menu-button-text-eng">{{ item.name_eng }}</p>
+            <!-- <p class="menu-button-text-eng" >{{ item.name_chn }}</p> -->
+            <p class="menu-button-text-eng">{{ item.num_range }}</p>
+          </div>
+        </v-btn>
+      </div>
+    </v-card>
+  </div>
 </template>
 
 <style>
@@ -94,6 +190,20 @@ export default {
   data() {
     return {
       selectedCategory: null,
+      customItem: {
+        id:'',
+        name: '',
+        price: 0.00,
+      },
+      customItemSuggestions: [
+        "Vegetable",
+        "Meat",
+        "Seafood",
+        "Rice",
+        "Chow Mein",
+        "Chow Hoh",
+      ],
+      addCustomItemDialogue: false,
       categories: [
         {
           name_eng: "Appetizers",
