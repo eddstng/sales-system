@@ -41,9 +41,6 @@ export default {
   data() {
     return {};
   },
-  mounted() {
-    this.scrollToElement();
-  },
   created() {
     this.$root.$refs.MenuButtons = this;
   },
@@ -57,12 +54,6 @@ export default {
       minutes = minutes < 10 ? "0" + minutes : minutes;
       var strTime = hours + ":" + minutes + " " + ampm; 
       return strTime
-    },
-    scrollToElement() {
-      const el = this.$refs.scrollToMe;
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth" });
-      }
     },
     addHistoryItemToSelectedItems(ordersItemsDetailWithOrderId) {
       //does this cause an issue if we don't clear the state.selctedItems?

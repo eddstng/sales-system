@@ -309,16 +309,8 @@ export default {
       displayMenuButtons: false,
     };
   },
-  mounted() {
-    this.scrollToElement();
-  },
+  
   methods: {
-    scrollToElement() {
-      const el = this.$refs.scrollToMe;
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth" });
-      }
-    },
     onClickMenuButton(item) {
       this.addItemToSelectedItems(item);
       this.storeMixinUpdateStorePriceDetails();
