@@ -46,7 +46,9 @@ CREATE TABLE customers (
 CREATE TABLE orders_items (
     id SERIAL NOT NULL PRIMARY KEY,
     quantity INTEGER,
-    customizations jsonb
+    customizations jsonb,
+    custom_price FLOAT,
+    custom_name VARCHAR(30)
     --  item_id INT FOREIGN KEY REFERENCES items (id)
     --  order_id INT FOREIGN KEY REFERENCES orders (id)
 );
@@ -122,9 +124,15 @@ c.note as customer_note,
 i.id as item_id,
 i.menu_id as item_menu_id,
 i.category as item_category,
-i.name_eng as item_name_eng,
+case
+	when oi.custom_name IS NULL then i.name_eng
+	when oi.custom_name IS NOT NULL then oi.custom_name
+end as item_name_eng,
 i.name_chn as item_name_chn,
-i.price as item_price,
+case
+	when oi.custom_price IS NULL then i.price
+	when oi.custom_price IS NOT NULL then oi.custom_price
+end as item_price,
 oi.quantity as orders_items_quantity,
 oi.customizations as orders_items_customizations
 from orders_items oi 

@@ -46,6 +46,8 @@ model orders_items {
   id             Int     @id @default(autoincrement())
   quantity       Int?
   customizations Json?
+  custom_price   Float?
+  custom_name    String? @db.VarChar(30)
   item_id        Int?
   order_id       Int?
   items          items?  @relation(fields: [item_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_items")

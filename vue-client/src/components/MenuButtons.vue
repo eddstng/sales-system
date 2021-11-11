@@ -50,14 +50,15 @@
           >
             <div>CANCEL<br /></div>
           </v-btn>
+          <!-- TO DO: We want to make the id an environment variable instead. -->
           <v-btn
             x-large
             width="50%"
             v-on:click="
               onClickMenuButton({
-                id: customItem.name,
+                id: 198,
                 name_eng: customItem.name,
-                name_chn: '-',
+                name_chn: '',
                 price: parseFloat(customItem.price),
               })
               customItem = {

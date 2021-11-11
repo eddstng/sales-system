@@ -523,6 +523,9 @@ const vueStoreKeyToDelete = selectedItem.custom_id ?? selectedItem.node.id;
           item_id: parseInt(key),
           quantity: value.quantity,
           customizations: value.customizations,
+          // <!-- TO DO: We want to make the id an environment variable instead. -->
+          custom_price: key === "198" ? value.node.price : null,
+          custom_name: key === "198" ? value.node.name_eng : null
         });
       }
       const res = await axios.post(
