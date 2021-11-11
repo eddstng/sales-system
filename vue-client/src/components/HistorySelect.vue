@@ -21,7 +21,6 @@
 
 <script>
 import axios from "axios";
-import { store } from "../store/store";
 export default {
   data() {
     return {
@@ -29,9 +28,6 @@ export default {
     };
   },
   methods: {
-    setStoreOrderType: function (orderTypeNum) {
-      store.commit("setCurrentOrder", { type: orderTypeNum });
-    },
     updateOrderWithVoidTrue: async function () {
       // WIP
       try {

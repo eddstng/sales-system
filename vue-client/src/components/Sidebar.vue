@@ -60,7 +60,7 @@ import storeMixin from '../mixins/storeMixin'
 import { store } from "../store/store";
 import axios from "axios";
 export default {
-    mixins: [storeMixin],
+  mixins: [storeMixin],
   methods: {
     async setComponentToHistory() {
       const orderHistoryArray = (
