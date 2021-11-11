@@ -342,10 +342,12 @@
 </style>
 
 <script>
+import storeMixin from '../mixins/storeMixin'
 import axios from "axios";
 import { store } from "../store/store";
 import CustomerSelect from "./CustomerSelect";
 export default {
+  mixins: [storeMixin],
   data() {
     return {
       customizations: [
@@ -378,12 +380,6 @@ export default {
     };
   },
   methods: {
-    calculatePriceDetails: function () {
-      this.$root.$refs.App.calculatePriceDetails();
-    },
-    clearOrderRelatedStore: function () {
-      this.$root.$refs.App.clearOrderRelatedStore();
-    },
     addCustomizationToItem: function (selectedItem, customizationObj) {
         console.log(JSON.stringify(selectedItem));
 
@@ -439,7 +435,7 @@ const vueStoreKeyToDelete = selectedItem.custom_id ?? selectedItem.node.id;
         selectedItems[vueStoreKeyToDelete].quantity - 1;
       }
       store.commit("setSelectedItems", selectedItems);
-      this.calculatePriceDetails();
+      this.storeMixinUpdateStorePriceDetails();
     },
     removeSelectedItemOne: function (selectedItem) {
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
@@ -452,19 +448,19 @@ const vueStoreKeyToDelete = selectedItem.custom_id ?? selectedItem.node.id;
         selectedItems[selectedItem.node.id].quantity - 1;
       }
       store.commit("setSelectedItems", selectedItems);
-      this.calculatePriceDetails();
+      this.storeMixinUpdateStorePriceDetails();
     },
     addSelectedItemOne: function (selectedItem) {
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
       selectedItems[selectedItem.node.id].quantity++;
       store.commit("setSelectedItems", selectedItems);
-      this.calculatePriceDetails();
+      this.storeMixinUpdateStorePriceDetails();
     },
     removeSelectedItemAll: function (selectedItem) {
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
       delete selectedItems[selectedItem.node.id];
       store.commit("setSelectedItems", selectedItems);
-      this.calculatePriceDetails();
+      this.storeMixinUpdateStorePriceDetails();
     },
 
     submitOrderDialogConditional: function () {
@@ -480,7 +476,7 @@ const vueStoreKeyToDelete = selectedItem.custom_id ?? selectedItem.node.id;
         const newOrder = await this.createOrder();
         this.addItemsToOrder(newOrder.data.id);
         this.updateOrderWithTotalPrice(newOrder);
-        this.clearOrderRelatedStore();
+        this.storeMixinClearOrderRelatedDetails();
         store.commit("setNotification", 1);
       } catch (err) {
         store.commit("setNotification", 2);

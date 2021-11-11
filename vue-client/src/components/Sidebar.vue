@@ -56,13 +56,12 @@
 </template>
 
 <script>
+import storeMixin from '../mixins/storeMixin'
 import { store } from "../store/store";
 import axios from "axios";
 export default {
+    mixins: [storeMixin],
   methods: {
-    clearOrderRelatedStore: function () {
-      this.$root.$refs.App.clearOrderRelatedStore();
-    },
     async setComponentToHistory() {
       const orderHistoryArray = (
         await axios.get("http://localhost:3000/get/ordershistory/all")
@@ -75,11 +74,11 @@ export default {
       }, {});
       store.commit("setOrderHistory", orderHistoryObj);
       store.commit("setComponent", "HISTORY");
-      this.clearOrderRelatedStore();
+      this.storeMixinClearOrderRelatedDetails();
     },
     async setComponentToOrder() {
       store.commit("setComponent", "ORDER");
-      this.clearOrderRelatedStore();
+      this.storeMixinClearOrderRelatedDetails();
     },
   },
 };

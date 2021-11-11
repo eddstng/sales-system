@@ -186,8 +186,10 @@
 </style>
 
 <script>
+import storeMixin from '../mixins/storeMixin'
 import { store } from "../store/store";
 export default {
+  mixins: [storeMixin],
   data() {
     return {
       selectedCategory: null,
@@ -311,9 +313,6 @@ export default {
     this.scrollToElement();
   },
   methods: {
-    calculatePriceDetails: function () {
-      this.$root.$refs.App.calculatePriceDetails();
-    },
     scrollToElement() {
       const el = this.$refs.scrollToMe;
       if (el) {
@@ -322,7 +321,7 @@ export default {
     },
     onClickMenuButton(item) {
       this.addItemToSelectedItems(item);
-      this.calculatePriceDetails();
+      this.storeMixinUpdateStorePriceDetails();
     },
     addItemToSelectedItems(item) {
       let selectedItems = store.state.selectedItems;

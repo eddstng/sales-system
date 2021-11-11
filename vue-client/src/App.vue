@@ -78,8 +78,7 @@
 </template>
 
 <script>
-import { store } from "./store/store";
-
+import storeMixin from './mixins/storeMixin'
 import Sidebar from "./components/Sidebar";
 import MenuButtons from "./components/MenuButtons";
 import MenuDisplay from "./components/MenuDisplay";
@@ -87,6 +86,7 @@ import HistoryButtons from "./components/HistoryButtons";
 import HistoryDisplay from "./components/HistoryDisplay";
 const date = new Date();
 export default {
+  mixins: [storeMixin],
   name: "App",
   components: {
     Sidebar,
@@ -121,22 +121,6 @@ export default {
     clearAlert() {
       this.$store.state.notification = 0;
     },
-    calculatePriceDetails() {
-      this.clearPriceDetails();
-      let priceDetails = store.state.priceDetails;
-      const selectedItems = store.state.selectedItems;
-      Object.keys(selectedItems).forEach((key) => {
-        priceDetails.subtotal =
-          parseFloat(selectedItems[key].node.price) *
-            selectedItems[key].quantity +
-          priceDetails.subtotal;
-        priceDetails.gst = parseFloat(
-          (priceDetails.subtotal * 0.05).toFixed(2)
-        );
-        priceDetails.total = priceDetails.subtotal + priceDetails.gst;
-      });
-      store.commit("setPriceDetails", priceDetails);
-    },
     updateClock() {
       const date = new Date();
       this.hours = date.getHours();
@@ -154,31 +138,6 @@ export default {
       }/${current.getDate()}`;
       return date;
     },
-    clearPriceDetails() {
-      store.commit("setPriceDetails", {
-        subtotal: 0,
-        gst: 0,
-        total: 0,
-      });
-    },
-
-    // Exported
-    clearOrderRelatedStore() {
-      store.commit("setSelectedItems", {});
-      store.commit("setSelectedCustomer", {});
-      store.commit("setCurrentOrder", {
-        id: null,
-        type: null,
-        total: 0,
-        customer_id: null,
-      });
-      this.clearPriceDetails();
-    },
-    // async reloadComponent(componentStr) {
-    //   store.commit("setComponent", "");
-    //   await this.$nextTick();
-    //   store.commit("setComponent", componentStr);
-    // },
   },
 };
 </script>

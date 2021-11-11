@@ -19,13 +19,6 @@
           <v-col v-else> </v-col>
           <v-col> {{ order.customer_phone }} </v-col>
           <v-col> {{ order.order_total.toFixed(2) }} </v-col>
-          <!-- <v-col> {{order.customer_id}} </v-col> -->
-          <!-- <v-col> {{order.customer_name}} </v-col> -->
-          <!-- <v-col> {{order.order_type}} </v-col> -->
-          <!-- <v-col>{{item.timestamp}} </v-col> -->
-          <!-- <v-col>{{item.id}}</v-col> -->
-          <!-- <v-col> {{item.customer_id}} </v-col> -->
-          <!-- <v-col> ${{item.total}} </v-col> -->
         </v-row>
       </v-btn>
     </div>
@@ -40,9 +33,11 @@
 </style>
 
 <script>
+import storeMixin from '../mixins/storeMixin'
 import axios from "axios";
 import { store } from "../store/store";
 export default {
+  mixins: [storeMixin],
   data() {
     return {};
   },
@@ -63,13 +58,6 @@ export default {
       var strTime = hours + ":" + minutes + " " + ampm; 
       return strTime
     },
-    calculatePriceDetails: function () {
-      this.$root.$refs.App.calculatePriceDetails();
-    },
-    clearOrderRelatedStore: function () {
-      this.$root.$refs.App.clearOrderRelatedStore();
-    },
-
     scrollToElement() {
       const el = this.$refs.scrollToMe;
       if (el) {
@@ -99,13 +87,12 @@ export default {
       store.commit("setSelectedItems", selectedItems);
     },
     async onClickHistoryButton(order_id) {
-      this.clearOrderRelatedStore();
+      this.storeMixinClearOrderRelatedDetails();
       const ordersItemsDetailWithOrderIdArray = (
         await axios.get(
           `http://localhost:3000/get/ordersitemsdetail/id/${order_id}`
         )
       ).data;
-
       ordersItemsDetailWithOrderIdArray.forEach((v) => {
         this.addHistoryItemToSelectedItems(v);
       });
@@ -129,7 +116,7 @@ export default {
           ordersItemsDetailWithOrderIdArray[0].customer_street_number,
         unit_number: ordersItemsDetailWithOrderIdArray[0].customer_unit_number,
       });
-      this.calculatePriceDetails();
+      this.storeMixinUpdateStorePriceDetails();
     },
   },
 };
