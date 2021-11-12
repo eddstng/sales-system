@@ -24,7 +24,8 @@
           height="80px"
           v-on:click="
             openCustomizeItemDialogue = false;
-            removeMenuDisplayItemDetails.removeSelectedItemDialog = false;
+            toggleRemoveSelectedItemDialogCustomizeItemDialog(false)
+            toggleRemoveSelectedItemDialogOff()
             addCustomizationToItem(
               removeMenuDisplayItemDetails.removeSelectedItem,
               {
@@ -48,7 +49,8 @@
           height="80px"
           v-on:click="
             openCustomizeItemDialogue = false;
-            removeMenuDisplayItemDetails.removeSelectedItemDialog = false;
+            toggleRemoveSelectedItemDialogCustomizeItemDialog(false)
+            toggleRemoveSelectedItemDialogOff()
             addCustomizationToItem(
               removeMenuDisplayItemDetails.removeSelectedItem,
               {
@@ -72,7 +74,8 @@
           height="80px"
           v-on:click="
             openCustomizeItewTDialogue = false;
-            removeMenuDisplayItemDetails.removeSelectedItemDialog = false;
+            toggleRemoveSelectedItemDialogCustomizeItemDialog(false)
+            toggleRemoveSelectedItemDialogOff()
             addCustomizationToItem(
               removeMenuDisplayItemDetails.removeSelectedItem,
               {
@@ -113,7 +116,7 @@
         <v-btn
           x-large
           width="100%"
-          v-on:click="openCustomizeItemDialogue = false"
+          v-on:click="toggleRemoveSelectedItemDialogCustomizeItemDialog(false)"
         >
           <div>CANCEL<br /></div>
         </v-btn>
@@ -155,6 +158,13 @@ export default {
     };
   },
   methods: {
+    //repeated
+    toggleRemoveSelectedItemDialogCustomizeItemDialog(bool) {
+      this.$emit("setRemoveSelectedItemDialogCustomizeItemDialogToBool", bool);
+    },
+    toggleRemoveSelectedItemDialogOff() {
+      this.$emit("setRemoveSelectedItemDialogToBool", false);
+    },
     addCustomizationToItem: function (selectedItem, customizationObj) {
       console.log(JSON.stringify(selectedItem));
 

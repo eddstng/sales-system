@@ -109,12 +109,12 @@ export default {
       )) {
         ordersItemsCreateManyInputData.push({
           order_id: orderIdNum,
-          item_id: parseInt(key),
+          item_id: value.node.id,
           quantity: value.quantity,
           customizations: value.customizations,
           //TODO: Make the 198 (custom item id) environmental variables.
-          custom_price: key === "198" ? value.node.price : null,
-          custom_name: key === "198" ? value.node.name_eng : null,
+          custom_price: value.node.id === 198 ? value.node.price : null,
+          custom_name: value.node.id === 198 ? value.node.name_eng : null,
         });
       }
       const res = await axios.post(

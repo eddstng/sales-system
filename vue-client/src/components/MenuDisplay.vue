@@ -6,10 +6,16 @@
     />
     <MenuDisplayRemoveSelectedItemDialog
       v-bind:removeMenuDisplayItemDetails="removeMenuDisplayItemDetails"
-      @setRemoveSelectedItemDialogCustomizeItemDialogToBool="setRemoveSelectedItemDialogCustomizeItemDialogToBool"
+      @setRemoveSelectedItemDialogCustomizeItemDialogToBool="
+        setRemoveSelectedItemDialogCustomizeItemDialogToBool
+      "
     />
     <MenuDisplayCustomizeSelectedItemDialog
       v-bind:removeMenuDisplayItemDetails="removeMenuDisplayItemDetails"
+      @setRemoveSelectedItemDialogCustomizeItemDialogToBool="
+        setRemoveSelectedItemDialogCustomizeItemDialogToBool
+      "
+      @setRemoveSelectedItemDialogToBool="setRemoveSelectedItemDialogToBool"
     />
 
     <v-card outlined tile height="16vh">
@@ -127,11 +133,10 @@ export default {
     setRemoveSelectedItemDialogToBool: function (bool) {
       this.removeMenuDisplayItemDetails.removeSelectedItemDialog = bool;
     },
-    setRemoveSelectedItemDialogCustomizeItemDialogToBool: function () {
-      console.log('h23')
-      this.removeMenuDisplayItemDetails.openCustomizeItemDialogue = true;
+    setRemoveSelectedItemDialogCustomizeItemDialogToBool: function (bool) {
+      this.removeMenuDisplayItemDetails.openCustomizeItemDialogue = bool;
 
-// this.removeMenuDisplayItemDetails.openCustomizeItemDialogue = !this.removeMenuDisplayItemDetails.openCustomizeItemDialogue;
+      // this.removeMenuDisplayItemDetails.openCustomizeItemDialogue = !this.removeMenuDisplayItemDetails.openCustomizeItemDialogue;
     },
     removeSelectedItemOneByVueStoreKey: function (vueStoreKeyToDelete) {
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);

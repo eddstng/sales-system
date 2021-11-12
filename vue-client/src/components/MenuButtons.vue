@@ -38,7 +38,7 @@
           <br />
         </div>
         <v-divider></v-divider>
-        <v-card-actions>
+        <v-card-actions>1
           <v-spacer></v-spacer>
           <v-btn
             x-large
@@ -57,15 +57,19 @@
             v-on:click="
               onClickMenuButton({
                 id: 198,
+                custom_id: 198 + customItem.name,
                 name_eng: customItem.name,
-                name_chn: '',
+                custom_name: customItem.name,
+                name_chn: '-',
                 price: parseFloat(customItem.price),
+                custom_price: parseFloat(customItem.price),
               })
               customItem = {
                 name:'',
                 price:0.00,
                 id: '',
-              }
+              },
+              addCustomItemDialogue = false;
             "
           >
             <div>ADD<br /></div>
@@ -316,13 +320,14 @@ export default {
       this.storeMixinUpdateStorePriceDetails();
     },
     addItemToSelectedItems(item) {
+      let idWeCareAbout = item.custom_id ?? item.id;
       let selectedItems = store.state.selectedItems;
-      if (item.id in selectedItems) {
-        selectedItems[item.id].quantity++;
+      if (idWeCareAbout in selectedItems) {
+        selectedItems[idWeCareAbout].quantity++;
       } else {
-        selectedItems[item.id] = {};
-        selectedItems[item.id].node = item;
-        selectedItems[item.id].quantity = 1;
+        selectedItems[idWeCareAbout] = {};
+        selectedItems[idWeCareAbout].node = item;
+        selectedItems[idWeCareAbout].quantity = 1;
       }
       store.commit("setSelectedItems", selectedItems);
     },

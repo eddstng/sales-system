@@ -57,22 +57,23 @@ export default {
     },
     addHistoryItemToSelectedItems(ordersItemsDetailWithOrderId) {
       //does this cause an issue if we don't clear the state.selctedItems?
+      const itemIdOfInterest = ordersItemsDetailWithOrderId.item_id === 198 ? `${ordersItemsDetailWithOrderId.item_id}${ordersItemsDetailWithOrderId.item_name_eng}` : ordersItemsDetailWithOrderId.item_id
       let selectedItems = store.state.selectedItems;
-      if (ordersItemsDetailWithOrderId.item_id in selectedItems) {
-        selectedItems[ordersItemsDetailWithOrderId.item_id].quantity++;
+      if (itemIdOfInterest in selectedItems) {
+        selectedItems[itemIdOfInterest].quantity++;
       } else {
-        selectedItems[ordersItemsDetailWithOrderId.item_id] = {};
-        selectedItems[ordersItemsDetailWithOrderId.item_id].node = {
+        selectedItems[itemIdOfInterest] = {};
+        selectedItems[itemIdOfInterest].node = {
           category: ordersItemsDetailWithOrderId.item_category,
-          id: ordersItemsDetailWithOrderId.item_id,
+          id: itemIdOfInterest,
           menu_id: ordersItemsDetailWithOrderId.item_menu_id,
           name_chn: ordersItemsDetailWithOrderId.item_name_chn,
           name_eng: ordersItemsDetailWithOrderId.item_name_eng,
           price: ordersItemsDetailWithOrderId.item_price,
         };
-        selectedItems[ordersItemsDetailWithOrderId.item_id].customizations =
+        selectedItems[itemIdOfInterest].customizations =
           ordersItemsDetailWithOrderId.orders_items_customizations;
-        selectedItems[ordersItemsDetailWithOrderId.item_id].quantity =
+        selectedItems[itemIdOfInterest].quantity =
           ordersItemsDetailWithOrderId.orders_items_quantity;
       }
       store.commit("setSelectedItems", selectedItems);

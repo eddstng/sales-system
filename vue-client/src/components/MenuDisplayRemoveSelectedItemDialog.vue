@@ -33,7 +33,7 @@
         <v-btn
           x-large
           width="19.6%"
-          v-on:click="toggleRemoveSelectedItemDialogCustomizeItemDialog()"
+          v-on:click="toggleRemoveSelectedItemDialogCustomizeItemDialog(true)"
         >
           <div>CUSTOMIZE<br /></div>
         </v-btn>
@@ -90,8 +90,8 @@ export default {
     toggleRemoveSelectedItemDialogOff() {
       this.$emit("setRemoveSelectedItemDialogToBool", false);
     },
-    toggleRemoveSelectedItemDialogCustomizeItemDialog() {
-      this.$emit("setRemoveSelectedItemDialogCustomizeItemDialogToBool", true);
+    toggleRemoveSelectedItemDialogCustomizeItemDialog(bool) {
+      this.$emit("setRemoveSelectedItemDialogCustomizeItemDialogToBool", bool);
     },
     removeSelectedItemOne: function (selectedItem) {
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
