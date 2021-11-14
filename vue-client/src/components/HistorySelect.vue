@@ -39,7 +39,7 @@ export default {
             type: 2,
           }
         );
-        this.setSelectedCustomer(res.data);
+        this.customerSelectMixinSetSelectedCustomer(res.data);
         this.createCustomerFormDialogue = false;
         return;
       } catch (err) {
@@ -59,7 +59,7 @@ export default {
               street_number: parseInt(this.selectedCustomer.street_number),
             }
           );
-          this.setSelectedCustomer(res.data);
+          this.customerSelectMixinSetSelectedCustomer(res.data);
           this.createCustomerFormDialogue = false;
           return;
         } catch (err) {

@@ -17,7 +17,6 @@
       "
       @setRemoveSelectedItemDialogToBool="setRemoveSelectedItemDialogToBool"
     />
-
     <v-card outlined tile height="16vh">
       <CustomerSelect />
     </v-card>

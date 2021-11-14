@@ -21,7 +21,7 @@
           min-height="100%"
           width="25%"
           v-on:click="
-            selectCustomerFormDialogue = true;
+            selectedCustomerDetails.customerPhoneInputDialog = true;
             setStoreOrderType(1);
           "
           style="height: 10vh"
@@ -34,7 +34,7 @@
           min-height="100%"
           width="25%"
           v-on:click="
-            selectCustomerFormDialogue = true;
+            selectedCustomerDetails.customerPhoneInputDialog = true;
             setStoreOrderType(2);
           "
           style="height: 10vh"
@@ -60,61 +60,10 @@
         {{ $store.state.selectedCustomer.note }}
       </div>
     </v-btn>
-    <v-dialog v-model="selectCustomerFormDialogue" width="500">
-      <v-card>
-        <div>
-          <br />
-          <v-col>
-            <v-form ref="form" lazy-validation>
-              <v-text-field
-                v-model="selectedCustomer.phone"
-                :counter="16"
-                label="Phone Number"
-                required
-                autocomplete="off"
-                autofocus
-              ></v-text-field>
-            </v-form>
-          </v-col>
-          <div v-if="this.suggestedCustomers.length > 0">
-            <v-btn
-              v-for="customer in this.suggestedCustomers"
-              :key="customer.id"
-              x-large
-              dark
-              width="100%"
-              v-on:click="setSelectedCustomer(customer)"
-              >{{ customer.phone }} - {{ customer.name }}</v-btn
-            >
-          </div>
-          <br />
-        </div>
-        <v-divider></v-divider>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            x-large
-            width="50%"
-            v-on:click="
-              phone = '';
-              selectCustomerFormDialogue = false;
-            "
-          >
-            <div>CANCEL<br /></div>
-          </v-btn>
-          <v-btn
-            x-large
-            width="50%"
-            v-on:click="
-              selectCustomerFormDialogue = false;
-              createCustomerFormDialogue = true;
-            "
-          >
-            <div>CREATE<br /></div>
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <CustomerSelectCustomerPhoneInputDialog
+      v-bind:selectedCustomerDetails="selectedCustomerDetails"
+      @setCreateCustomerFormDialogToBool="setCreateCustomerFormDialogToBool"
+    />
     <v-dialog v-model="selectDineInFormDialogue" width="500">
       <v-card>
         <div>
@@ -129,7 +78,7 @@
                 dark
                 height="100px"
                 width="31.6%"
-                v-on:click="setSelectedCustomer(table)"
+                v-on:click="customerSelectMixinSetSelectedCustomer(table)"
                 >{{ table.name }}{{ table.price }}</v-btn
               >
             </div>
@@ -149,14 +98,17 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="createCustomerFormDialogue" width="500">
+    <v-dialog
+      v-model="selectedCustomerDetails.createCustomerFormDialog"
+      width="500"
+    >
       <v-card>
         <div>
           <br />
           <v-col>
             <v-form ref="form" lazy-validation>
               <v-text-field
-                v-model="selectedCustomer.phone"
+                v-model="selectedCustomerDetails.selectedCustomer.phone"
                 label="Phone Number"
                 required
                 :rules="rules"
@@ -166,39 +118,39 @@
               <v-row>
                 <v-col cols="12" md="6">
                   <v-text-field
-                    v-model="selectedCustomer.unit_number"
+                    v-model="selectedCustomerDetails.selectedCustomer.unit_number"
                     label="Unit Number"
                     autocomplete="off"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" md="6">
                   <v-text-field
-                    v-model="selectedCustomer.street_number"
+                    v-model="selectedCustomerDetails.selectedCustomer.street_number"
                     label="Street Number"
                     autocomplete="off"
                   ></v-text-field>
                 </v-col>
               </v-row>
               <v-text-field
-                v-model="selectedCustomer.street_name"
+                v-model="selectedCustomerDetails.selectedCustomer.street_name"
                 :counter="50"
                 label="Street Name"
                 autocomplete="off"
               ></v-text-field>
               <br />
               <v-select
-                v-model="selectedCustomer.city"
+                v-model="selectedCustomerDetails.selectedCustomer.city"
                 :items="cityNameArr"
                 label="City"
                 dense
               ></v-select>
               <v-text-field
-                v-model="selectedCustomer.name"
+                v-model="selectedCustomerDetails.selectedCustomer.name"
                 label="Name"
                 autocomplete="off"
               ></v-text-field>
               <v-text-field
-                v-model="selectedCustomer.note"
+                v-model="selectedCustomerDetails.selectedCustomer.note"
                 :counter="100"
                 label="Note"
                 autocomplete="off"
@@ -207,12 +159,13 @@
           </v-col>
           <div
             v-if="
-              this.suggestedCustomers.length > 0 &&
-              this.selectedCustomer.phone.length < 10
+              this.selectedCustomerDetails.suggestedCustomers.length > 0 &&
+              this.selectedCustomerDetails.selectedCustomer.phone.length < 10
             "
           >
             <v-btn
-              v-for="customer in this.suggestedCustomers"
+              v-for="customer in this.selectedCustomerDetails
+                .suggestedCustomers"
               :key="customer.id"
               x-large
               dark
@@ -223,8 +176,9 @@
           </div>
           <div
             v-if="
-              this.selectedCustomer.street_name &&
-              this.selectedCustomer.street_name.length >= 1
+              this.selectedCustomerDetails.selectedCustomer.street_name &&
+              this.selectedCustomerDetails.selectedCustomer.street_name
+                .length >= 1
             "
           >
             <v-btn
@@ -233,7 +187,7 @@
               x-large
               dark
               width="100%"
-              v-on:click="selectedCustomer.street_name = streetName"
+              v-on:click="selectedCustomerDetails.selectedCustomer.street_name = streetName"
               >{{ streetName }}</v-btn
             >
           </div>
@@ -256,7 +210,7 @@
             width="50%"
             v-on:click="
               phone = '';
-              createCustomerFormDialogue = false;
+              selectedCustomerDetails.createCustomerFormDialog = false;
             "
           >
             <div>CANCEL<br /></div>
@@ -267,6 +221,8 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <!-- <CustomerSelectCreateCustomerFormDialog /> -->
+
     <v-dialog
       v-model="openClearSelectedCustomerConfirmationDialogue"
       width="900"
@@ -304,14 +260,30 @@ import axios from "axios";
 import { store } from "../store/store";
 import { streetNameArr } from "../data/streets";
 import { cityNameArr } from "../data/cities";
+import CustomerSelectCustomerPhoneInputDialog from "./CustomerSelectCustomerPhoneInputDialog";
+import customerSelectMixin from "../mixins/customerSelectMixin";
 export default {
+  mixins: [customerSelectMixin],
   data() {
     return {
       selectDineInFormDialogue: false,
-      selectCustomerFormDialogue: false,
-      createCustomerFormDialogue: false,
       openClearSelectedCustomerConfirmationDialogue: false,
       createCustomerError: null,
+      selectedCustomerDetails: {
+        selectedCustomer: {
+          phone: "",
+          unit_number: "",
+          street_number: "",
+          street_name: "",
+          address: "",
+          city: "",
+          name: "",
+          note: "",
+        },
+        suggestedCustomers: [],
+        customerPhoneInputDialog: false,
+        createCustomerFormDialog: false,
+      },
       selectedCustomer: {
         phone: "",
         unit_number: "",
@@ -323,17 +295,19 @@ export default {
         note: "",
       },
       cityNameArr,
-      suggestedCustomers: [],
       suggestedStreetName: [],
       orderType: null,
       orderTypeString: ["DINE IN", "PICK UP", "DELIVERY"],
     };
   },
+  components: {
+    CustomerSelectCustomerPhoneInputDialog,
+  },
   watch: {
-    "selectedCustomer.phone": function () {
+    "selectedCustomerDetails.selectedCustomer.phone": function () {
       this.suggestCustomerFromPhoneInput();
     },
-    "selectedCustomer.street_name": function () {
+    "selectedCustomerDetails.selectedCustomer.street_name": function () {
       this.suggestStreetNameFromStreetNameInput();
     },
     deep: true,
@@ -342,13 +316,16 @@ export default {
     rules() {
       const rules = [];
       const regex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-      if (!regex.test(this.selectedCustomer.phone)) {
+      if (!regex.test(this.selectedCustomerDetails.selectedCustomer.phone)) {
         rules.push("Invalid Phone Number");
       }
       return rules;
     },
   },
   methods: {
+    setCreateCustomerFormDialogToBool: function (bool) {
+      this.selectedCustomerDetails.createCustomerFormDialog = bool;
+    },
     setStoreOrderType: function (orderTypeNum) {
       store.commit("setCurrentOrder", { type: orderTypeNum });
     },
@@ -356,17 +333,21 @@ export default {
       store.commit("setSelectedCustomer", {});
     },
     suggestCustomerFromPhoneInput: function () {
-      this.suggestedCustomers = [];
+      this.selectedCustomerDetails.suggestedCustomers = [];
       if (this.$store.state.customers.length <= 0) {
         console.log("error in suggestCustomerFromPhoneInput");
       }
       const customerArr = this.$store.state.customers;
-      if (this.selectedCustomer.phone.length < 3) {
-        this.suggestedCustomers = [];
+      if (this.selectedCustomerDetails.selectedCustomer.phone.length < 3) {
+        this.selectedCustomerDetails.suggestedCustomers = [];
       } else {
         customerArr.forEach((v) => {
-          if (v.phone.includes(this.selectedCustomer.phone)) {
-            this.suggestedCustomers.push(v);
+          if (
+            v.phone.includes(
+              this.selectedCustomerDetails.selectedCustomer.phone
+            )
+          ) {
+            this.selectedCustomerDetails.suggestedCustomers.push(v);
           }
         });
       }
@@ -374,14 +355,20 @@ export default {
     },
     suggestStreetNameFromStreetNameInput: function () {
       this.suggestedStreetName = [];
-      if (this.selectedCustomer.street_name === "") {
+      if (this.selectedCustomerDetails.selectedCustomer.street_name === "") {
         this.suggestedStreetName = [];
       } else {
         streetNameArr.forEach((v) => {
           if (this.suggestedStreetName.length >= 5) {
             return;
           }
-          if (v.toLowerCase().startsWith(this.selectedCustomer.street_name)) {
+          if (
+            v
+              .toLowerCase()
+              .startsWith(
+                this.selectedCustomerDetails.selectedCustomer.street_name
+              )
+          ) {
             this.suggestedStreetName.push(v);
           }
         });
@@ -392,7 +379,10 @@ export default {
     validCreateCustomerForm: function () {
       // Validate Phone
       const regex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-      const selectedCustomer = this.selectedCustomer;
+      const selectedCustomer = Object.assign(
+        {},
+        this.selectedCustomerDetails.selectedCustomer
+      );
 
       if (
         !regex.test(selectedCustomer.phone) ||
@@ -430,7 +420,7 @@ export default {
           selectedCustomer.unit_number !== ""
             ? `${selectedCustomer.unit_number} - `
             : "";
-        this.suggestedCustomers.address = `${unitNumber}${selectedCustomer.street_number} ${selectedCustomer.street_name}`;
+        this.selectedCustomerDetails.suggestedCustomers.address = `${unitNumber}${selectedCustomer.street_number} ${selectedCustomer.street_name}`;
       }
 
       // Ensure street_number is a number.
@@ -453,48 +443,25 @@ export default {
       }
       return selectedCustomer;
     },
-    selectedCustomerValueNullToEmptyString: function (selectedCustomer) {
-      for (const key in selectedCustomer) {
-        if (selectedCustomer[key] === null) {
-          selectedCustomer[key] = "";
-        }
-      }
-      return selectedCustomer;
-    },
-    setSelectedCustomer: function (selectedCustomer) {
-      const selectedCustomerWithStringEmptyValues =
-        this.selectedCustomerValueNullToEmptyString(selectedCustomer);
-      store.commit(
-        "setSelectedCustomer",
-        selectedCustomerWithStringEmptyValues
-      );
-      this.selectCustomerFormDialogue = false;
-      this.selectDineInFormDialogue = false;
-      this.selectedCustomer = {
-        phone: "",
-        unit_number: "",
-        street_number: "",
-        street_name: "",
-        address: "",
-        city: "",
-        name: "",
-        note: "",
-      };
-    },
+
     createCustomerSubmit: async function () {
       if (this.validCreateCustomerForm()) {
         try {
           const selectedCustomerWithNullEmptyValues =
-            this.selectedCustomerValueEmptyStringToNull(this.selectedCustomer);
+            this.selectedCustomerValueEmptyStringToNull(
+              this.selectedCustomerDetails.selectedCustomer
+            );
           const res = await axios.post(
             "http://localhost:3000/post/customers/create",
             {
               ...selectedCustomerWithNullEmptyValues,
-              street_number: parseInt(this.selectedCustomer.street_number),
+              street_number: parseInt(
+                this.selectedCustomerDetails.selectedCustomer.street_number
+              ),
             }
           );
-          this.setSelectedCustomer(res.data);
-          this.createCustomerFormDialogue = false;
+          this.customerSelectMixinSetSelectedCustomer(res.data);
+          this.selectedCustomerDetails.createCustomerFormDialog = false;
           return;
         } catch (err) {
           this.createCustomerError = err.response.data;

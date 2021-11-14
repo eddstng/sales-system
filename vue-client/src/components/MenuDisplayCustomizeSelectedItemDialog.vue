@@ -126,10 +126,8 @@
 </template>
 
 <script>
-import storeMixin from "../mixins/storeMixin";
 import { store } from "../store/store";
 export default {
-  mixins: [storeMixin],
   props: ["removeMenuDisplayItemDetails"],
   data() {
     return {
