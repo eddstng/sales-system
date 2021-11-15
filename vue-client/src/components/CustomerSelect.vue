@@ -137,7 +137,6 @@
 
 <script>
 import { store } from "../store/store";
-import { streetNameArr } from "../data/streets";
 import CustomerSelectCustomerPhoneInputDialog from "./CustomerSelectCustomerPhoneInputDialog";
 import CustomerSelectCreateCustomerFormDialog from "./CustomerSelectCreateCustomerFormDialog";
 
@@ -187,9 +186,6 @@ export default {
     "selectedCustomerDetails.selectedCustomer.phone": function () {
       this.suggestCustomerFromPhoneInput();
     },
-    "selectedCustomerDetails.selectedCustomer.street_name": function () {
-      this.suggestStreetNameFromStreetNameInput();
-    },
     deep: true,
   },
   methods: {
@@ -218,28 +214,6 @@ export default {
             )
           ) {
             this.selectedCustomerDetails.suggestedCustomers.push(v);
-          }
-        });
-      }
-      return;
-    },
-    suggestStreetNameFromStreetNameInput: function () {
-      this.suggestedStreetName = [];
-      if (this.selectedCustomerDetails.selectedCustomer.street_name === "") {
-        this.suggestedStreetName = [];
-      } else {
-        streetNameArr.forEach((v) => {
-          if (this.suggestedStreetName.length >= 5) {
-            return;
-          }
-          if (
-            v
-              .toLowerCase()
-              .startsWith(
-                this.selectedCustomerDetails.selectedCustomer.street_name
-              )
-          ) {
-            this.suggestedStreetName.push(v);
           }
         });
       }

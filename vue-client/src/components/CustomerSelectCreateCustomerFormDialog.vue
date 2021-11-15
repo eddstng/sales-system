@@ -129,6 +129,7 @@
 
 <script>
 import axios from "axios";
+import { streetNameArr } from "../data/streets";
 import customerSelectMixin from "../mixins/customerSelectMixin";
 import { cityNameArr } from "../data/cities";
 export default {
@@ -137,7 +138,15 @@ export default {
     return {
       createCustomerError: null,
       cityNameArr,
+      suggestedStreetName: [],
+
     };
+  },
+    watch: {
+    "selectedCustomerDetails.selectedCustomer.street_name": function () {
+      this.suggestStreetNameFromStreetNameInput();
+    },
+    deep: true,
   },
   props: ["selectedCustomerDetails"],
   computed: {
@@ -213,7 +222,7 @@ export default {
       this.createCustomerError = null;
       return true;
     },
-     selectedCustomerValueEmptyStringToNull: function (selectedCustomer) {
+    selectedCustomerValueEmptyStringToNull: function (selectedCustomer) {
       for (const key in selectedCustomer) {
         if (selectedCustomer[key] === "") {
           selectedCustomer[key] = null;
@@ -222,10 +231,7 @@ export default {
       return selectedCustomer;
     },
     createCustomerSubmit: async function () {
-
       if (this.validCreateCustomerForm()) {
-
-        
         try {
           const selectedCustomerWithNullEmptyValues =
             this.selectedCustomerValueEmptyStringToNull(
@@ -241,7 +247,6 @@ export default {
             }
           );
 
-
           this.customerSelectMixinSetSelectedCustomer(res.data);
           this.selectedCustomerDetails.createCustomerFormDialog = false;
           return;
@@ -249,6 +254,28 @@ export default {
           this.createCustomerError = err.response.data;
         }
       }
+    },
+     suggestStreetNameFromStreetNameInput: function () {
+      this.suggestedStreetName = [];
+      if (this.selectedCustomerDetails.selectedCustomer.street_name === "") {
+        this.suggestedStreetName = [];
+      } else {
+        streetNameArr.forEach((v) => {
+          if (this.suggestedStreetName.length >= 5) {
+            return;
+          }
+          if (
+            v
+              .toLowerCase()
+              .startsWith(
+                this.selectedCustomerDetails.selectedCustomer.street_name
+              )
+          ) {
+            this.suggestedStreetName.push(v);
+          }
+        });
+      }
+      return;
     },
   },
 };
