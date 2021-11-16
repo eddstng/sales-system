@@ -9,7 +9,7 @@
           ff
           style="height: 10vh"
           v-on:click="
-            selectDineInFormDialogue = true;
+            selectedCustomerDetails.selectDineInFormDialogue = true;
             setStoreOrderType(0);
           "
         >
@@ -64,40 +64,9 @@
       v-bind:selectedCustomerDetails="selectedCustomerDetails"
       @setCreateCustomerFormDialogToBool="setCreateCustomerFormDialogToBool"
     />
-    <v-dialog v-model="selectDineInFormDialogue" width="500">
-      <v-card>
-        <div>
-          <br />
-          <v-col>
-            <div class="p-0" max-height="400">
-              <v-btn
-                class="menu-button-text mt-2 ml-1 mr-1"
-                v-for="table in $store.state.tables"
-                v-bind:key="table.name_eng"
-                x-large
-                dark
-                height="100px"
-                width="31.6%"
-                v-on:click="customerSelectMixinSetSelectedCustomer(table)"
-                >{{ table.name }}{{ table.price }}</v-btn
-              >
-            </div>
-          </v-col>
-          <br />
-        </div>
-        <v-divider></v-divider>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            x-large
-            width="100%"
-            v-on:click="selectDineInFormDialogue = false"
-          >
-            <div>CANCEL<br /></div>
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <CustomerSelectCustomerDineInTablesDialog
+      v-bind:selectedCustomerDetails="selectedCustomerDetails"
+     />
 
     <CustomerSelectCreateCustomerFormDialog
       v-bind:selectedCustomerDetails="selectedCustomerDetails"
@@ -139,13 +108,13 @@
 import { store } from "../store/store";
 import CustomerSelectCustomerPhoneInputDialog from "./CustomerSelectCustomerPhoneInputDialog";
 import CustomerSelectCreateCustomerFormDialog from "./CustomerSelectCreateCustomerFormDialog";
+import CustomerSelectCustomerDineInTablesDialog from "./CustomerSelectCustomerDineInTablesDialog";
 
 import customerSelectMixin from "../mixins/customerSelectMixin";
 export default {
   mixins: [customerSelectMixin],
   data() {
     return {
-      selectDineInFormDialogue: false,
       openClearSelectedCustomerConfirmationDialogue: false,
       createCustomerError: null,
       selectedCustomerDetails: {
@@ -160,6 +129,7 @@ export default {
           note: "",
         },
         suggestedCustomers: [],
+        selectDineInFormDialogue: false,
         customerPhoneInputDialog: false,
         createCustomerFormDialog: false,
       },
@@ -180,7 +150,8 @@ export default {
   },
   components: {
     CustomerSelectCustomerPhoneInputDialog,
-    CustomerSelectCreateCustomerFormDialog
+    CustomerSelectCreateCustomerFormDialog,
+    CustomerSelectCustomerDineInTablesDialog
   },
   watch: {
     "selectedCustomerDetails.selectedCustomer.phone": function () {

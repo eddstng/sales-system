@@ -139,10 +139,9 @@ export default {
       createCustomerError: null,
       cityNameArr,
       suggestedStreetName: [],
-
     };
   },
-    watch: {
+  watch: {
     "selectedCustomerDetails.selectedCustomer.street_name": function () {
       this.suggestStreetNameFromStreetNameInput();
     },
@@ -255,7 +254,7 @@ export default {
         }
       }
     },
-     suggestStreetNameFromStreetNameInput: function () {
+    suggestStreetNameFromStreetNameInput: function () {
       this.suggestedStreetName = [];
       if (this.selectedCustomerDetails.selectedCustomer.street_name === "") {
         this.suggestedStreetName = [];

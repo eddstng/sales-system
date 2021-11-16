@@ -10,6 +10,7 @@
       height="62.5vh"
       v-chat-scroll
     >
+    <!-- TODO: Update the v-for to use store.state.selectedItemsOrderedByEntry -->
       <template>
         <v-card
           class="mx-auto pt-2"

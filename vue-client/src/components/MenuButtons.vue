@@ -328,6 +328,7 @@ export default {
         selectedItems[idWeCareAbout] = {};
         selectedItems[idWeCareAbout].node = item;
         selectedItems[idWeCareAbout].quantity = 1;
+        selectedItems[idWeCareAbout].timestamp = Date.now();
       }
       store.commit("setSelectedItems", selectedItems);
     },

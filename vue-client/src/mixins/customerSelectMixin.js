@@ -9,7 +9,7 @@ export default {
                 selectedCustomerWithStringEmptyValues
             );
             this.selectedCustomerDetails.customerPhoneInputDialog = false;
-            this.selectDineInFormDialogue = false;
+            this.selectedCustomerDetails.selectDineInFormDialogue = false;
             this.selectedCustomerDetails.selectedCustomer = {
                 phone: "",
                 unit_number: "",

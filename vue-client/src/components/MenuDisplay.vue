@@ -31,7 +31,7 @@
         <v-card
           class="mx-auto pt-2"
           outlined
-          v-for="item in $store.state.selectedItems"
+          v-for="item in $store.state.selectedItemsOrderedByEntry"
           v-bind:key="item.id"
           width="100vw"
           v-on:click="

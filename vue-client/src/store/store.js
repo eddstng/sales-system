@@ -31,6 +31,7 @@ export const store = new Vuex.Store({
     notification: 0,
     component: "HISTORY",
     orderHistory: [],
+    selectedItemsOrderedByEntry: {}
   },
   mutations: {
     setOrderHistory(state, orderHistory) {
@@ -50,6 +51,19 @@ export const store = new Vuex.Store({
     },
     setSelectedItems(state, selectedItems) {
       state.selectedItems = selectedItems;
+      // This conversion is necessary because:
+      // 1. We need to insert the items with the id/custom_id as the key. If we used timestamp as we do in the display, it will create a new entry instead of increasing the quantity.
+      // 2. We need to display the items with the timestamp as the key. This allows the menu display to display it in the order of entry.
+      const selectedItemsTimestampCustomIdArray = [];
+      for (const [key, value] of Object.entries(state.selectedItems)) {
+        selectedItemsTimestampCustomIdArray.push([value.timestamp, key])
+      }
+      const sortedArray = selectedItemsTimestampCustomIdArray.sort(function(a, b) {
+        return a[0] - b[0];
+      });
+      sortedArray.forEach(([timestamp, id]) => {
+        state.selectedItemsOrderedByEntry[timestamp] = state.selectedItems[id]
+      })
     },
     setSelectedCustomer(state, selectedCustomer) {
       state.selectedCustomer = selectedCustomer;
