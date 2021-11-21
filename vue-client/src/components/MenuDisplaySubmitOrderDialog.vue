@@ -104,17 +104,19 @@ export default {
     },
     insertSelectedItemsIntoOrdersAndOrdersItems: async function (orderIdNum) {
       const ordersItemsCreateManyInputData = [];
-      for (const [key, value] of Object.entries(
+      for (const value of Object.entries(
         this.$store.state.selectedItems
       )) {
+        const item = value[1]
         ordersItemsCreateManyInputData.push({
           order_id: orderIdNum,
-          item_id: value.node.id,
-          quantity: value.quantity,
-          customizations: value.customizations,
+          item_id: item.node.id,
+          quantity: item.quantity,
+          customizations: item.customizations,
+          timestamp: new Date(item.timestamp).toISOString(),
           //TODO: Make the 198 (custom item id) environmental variables.
-          custom_price: value.node.id === 198 ? value.node.price : null,
-          custom_name: value.node.id === 198 ? value.node.name_eng : null,
+          custom_price: item.node.id === 198 ? item.node.price : null,
+          custom_name: item.node.id === 198 ? item.node.name_eng : null,
         });
       }
       const res = await axios.post(

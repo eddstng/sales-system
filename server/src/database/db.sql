@@ -48,7 +48,8 @@ CREATE TABLE orders_items (
     quantity INTEGER,
     customizations jsonb,
     custom_price FLOAT,
-    custom_name VARCHAR(30)
+    custom_name VARCHAR(30),
+    timestamp TIMESTAMP WITHOUT TIME ZONE
     --  item_id INT FOREIGN KEY REFERENCES items (id)
     --  order_id INT FOREIGN KEY REFERENCES orders (id)
 );
@@ -134,7 +135,8 @@ case
 	when oi.custom_price IS NOT NULL then oi.custom_price
 end as item_price,
 oi.quantity as orders_items_quantity,
-oi.customizations as orders_items_customizations
+oi.customizations as orders_items_customizations,
+oi.timestamp as orders_items_timestamp
 from orders_items oi 
 LEFT JOIN items i ON oi.item_id = i.id
 LEFT JOIN orders o ON oi.order_id = o.id

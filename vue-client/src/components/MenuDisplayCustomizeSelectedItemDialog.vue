@@ -73,7 +73,7 @@
           width="19.6%"
           height="80px"
           v-on:click="
-            openCustomizeItewTDialogue = false;
+            openCustomizeItemDialogue = false;
             toggleRemoveSelectedItemDialogCustomizeItemDialog(false)
             toggleRemoveSelectedItemDialogOff()
             addCustomizationToItem(
