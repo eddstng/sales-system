@@ -101,7 +101,8 @@ export default {
       ) {
         delete selectedItems[selectedItem.custom_id ?? selectedItem.node.id];
       } else {
-        selectedItems[selectedItem.node.id].quantity - 1;
+        selectedItems[selectedItem.custom_id ?? selectedItem.node.id]
+          .quantity--;
       }
       store.commit("setSelectedItems", selectedItems);
       this.storeMixinUpdateStorePriceDetails();

@@ -10,12 +10,12 @@
       height="62.5vh"
       v-chat-scroll
     >
-      <!-- TODO: Update the v-for to use store.state.selectedItemsOrderedByEntry -->
+      <!-- BUG: For some reason, even though selectedItemsOrderedByEntry is sorted by keys (timestamp), the display order is not the same. Why?--> 
       <template>
         <v-card
           class="mx-auto pt-2"
           outlined
-          v-for="item in $store.state.selectedItems"
+          v-for="item in $store.state.selectedItemsOrderedByEntry"
           v-bind:key="item.id"
           width="100vw"
         >

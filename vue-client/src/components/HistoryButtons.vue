@@ -12,7 +12,10 @@
         v-on:click="onClickHistoryButton(order.order_id)"
       >
         <v-row>
-          <v-col> {{ new Date(order.order_timestamp).toLocaleDateString()}} {{getFormattedTimeStamp(new Date(order.order_timestamp)) }} </v-col>
+          <v-col>
+            {{ new Date(order.order_timestamp).toLocaleDateString() }}
+            {{ getFormattedTimeStamp(new Date(order.order_timestamp)) }}
+          </v-col>
           <v-col> {{ order.order_id }} </v-col>
           <v-col v-if="order.order_void === true"> VOID </v-col>
           <v-col v-else-if="order.order_paid === true"> PAID </v-col>
@@ -33,7 +36,7 @@
 </style>
 
 <script>
-import storeMixin from '../mixins/storeMixin'
+import storeMixin from "../mixins/storeMixin";
 import axios from "axios";
 import { store } from "../store/store";
 export default {
@@ -52,12 +55,15 @@ export default {
       hours = hours % 12;
       hours = hours ? hours : 12; // the hour '0' should be '12'
       minutes = minutes < 10 ? "0" + minutes : minutes;
-      var strTime = hours + ":" + minutes + " " + ampm; 
-      return strTime
+      var strTime = hours + ":" + minutes + " " + ampm;
+      return strTime;
     },
     addHistoryItemToSelectedItems(ordersItemsDetailWithOrderId) {
       //does this cause an issue if we don't clear the state.selctedItems?
-      const itemIdOfInterest = ordersItemsDetailWithOrderId.item_id === 198 ? `${ordersItemsDetailWithOrderId.item_id}${ordersItemsDetailWithOrderId.item_name_eng}` : ordersItemsDetailWithOrderId.item_id
+      const itemIdOfInterest =
+        ordersItemsDetailWithOrderId.item_id === 198
+          ? `${ordersItemsDetailWithOrderId.item_id}${ordersItemsDetailWithOrderId.item_name_eng}`
+          : ordersItemsDetailWithOrderId.item_id;
       let selectedItems = store.state.selectedItems;
       if (itemIdOfInterest in selectedItems) {
         selectedItems[itemIdOfInterest].quantity++;
@@ -75,6 +81,8 @@ export default {
           ordersItemsDetailWithOrderId.orders_items_customizations;
         selectedItems[itemIdOfInterest].quantity =
           ordersItemsDetailWithOrderId.orders_items_quantity;
+        selectedItems[itemIdOfInterest].timestamp =
+          new Date(ordersItemsDetailWithOrderId.orders_items_timestamp).getTime();
       }
       store.commit("setSelectedItems", selectedItems);
     },
