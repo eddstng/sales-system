@@ -113,6 +113,12 @@ export default {
       store.commit("setSelectedItems", selectedItems);
       this.storeMixinUpdateStorePriceDetails();
     },
+    addSelectedItemOne: function (selectedItem) {
+      const selectedItems = Object.assign({}, this.$store.state.selectedItems);
+      selectedItems[selectedItem.custom_id ?? selectedItem.node.id].quantity++;
+      store.commit("setSelectedItems", selectedItems);
+      this.storeMixinUpdateStorePriceDetails();
+    },
   },
 };
 </script>

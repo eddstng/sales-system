@@ -134,26 +134,7 @@ export default {
     },
     setRemoveSelectedItemDialogCustomizeItemDialogToBool: function (bool) {
       this.removeMenuDisplayItemDetails.openCustomizeItemDialogue = bool;
-
-      // this.removeMenuDisplayItemDetails.openCustomizeItemDialogue = !this.removeMenuDisplayItemDetails.openCustomizeItemDialogue;
     },
-    removeSelectedItemOneByVueStoreKey: function (vueStoreKeyToDelete) {
-      const selectedItems = Object.assign({}, this.$store.state.selectedItems);
-      if (selectedItems[vueStoreKeyToDelete].quantity === 1) {
-        delete selectedItems[vueStoreKeyToDelete];
-      } else {
-        selectedItems[vueStoreKeyToDelete].quantity - 1;
-      }
-      store.commit("setSelectedItems", selectedItems);
-      this.storeMixinUpdateStorePriceDetails();
-    },
-    addSelectedItemOne: function (selectedItem) {
-      const selectedItems = Object.assign({}, this.$store.state.selectedItems);
-      selectedItems[selectedItem.node.id].quantity++;
-      store.commit("setSelectedItems", selectedItems);
-      this.storeMixinUpdateStorePriceDetails();
-    },
-
     submitOrderDialogConditional: function () {
       if (
         this.$store.state.selectedCustomer.phone !== undefined &&
