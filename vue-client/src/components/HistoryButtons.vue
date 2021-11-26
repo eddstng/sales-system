@@ -1,5 +1,7 @@
 <template>
-  <v-card outlined tile class="overflow-y-auto" height="92.4vh">
+  <v-card outlined tile class="overflow-y-auto" height="92.4vh" 
+      v-chat-scroll
+  >
     <div class="p-0" max-height="400">
       <v-btn
         class="history-button-text"

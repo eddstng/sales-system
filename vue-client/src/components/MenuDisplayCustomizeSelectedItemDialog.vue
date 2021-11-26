@@ -20,7 +20,7 @@
           v-bind:key="customization.name_eng"
           class="mt-1 mr-1"
           x-large
-          width="19.6%"
+          width="16.26%"
           height="80px"
           v-on:click="
             openCustomizeItemDialogue = false;
@@ -45,7 +45,7 @@
           v-bind:key="customization.name_eng"
           class="mt-1 mr-1"
           x-large
-          width="19.6%"
+          width="16.26%"
           height="80px"
           v-on:click="
             openCustomizeItemDialogue = false;
@@ -65,50 +65,37 @@
             {{ customization.name_chn }}
           </p>
         </v-btn>
-        <v-btn
-          v-for="customization in customizations"
-          v-bind:key="customization.name_eng"
-          class="mt-1 mr-1"
-          x-large
-          width="19.6%"
-          height="80px"
-          v-on:click="
-            openCustomizeItemDialogue = false;
-            toggleRemoveSelectedItemDialogCustomizeItemDialog(false);
-            toggleRemoveSelectedItemDialogOff();
-            addCustomizationToItem(
-              removeMenuDisplayItemDetails.removeSelectedItem,
-              {
-                name_eng: `ADD ${customization.name_eng}`,
-                name_chn: `ADD ${customization.name_chn}`,
-              }
-            );
-          "
-        >
-          <p>
-            ADD {{ customization.name_eng }}<br />ADD
-            {{ customization.name_chn }}
-          </p>
-        </v-btn>
-        <v-btn
-          class="mt-3 mb-3"
-          x-large
-          width="20%"
-          height="80px"
-          v-on:click="
-            openCustomizeItemDialogue = false;
-            removeMenuDisplayItemDetails.removeSelectedItemDialog = false;
-            addCustomizationToItem(
-              removeMenuDisplayItemDetails.removeSelectedItem,
-              {
-                name_eng: `CUSTOM: `,
-                name_chn: `CUSTOM: `,
-              }
-            );
-          "
-        >
-          <p>CUSTOM</p>
-        </v-btn>
+        <v-row class="justify-center mt-10 mb-10">
+          <v-col cols="12" md="6">
+            <v-text-field
+              v-model="email"
+              :error-messages="errors"
+              label="Custom"
+              required
+              width="10%"
+            ></v-text-field>
+          </v-col>
+          <v-btn
+            class="mt-3 mb-3"
+            x-large
+            width="20%"
+            height="80px"
+            v-on:click="
+              openCustomizeItemDialogue = false;
+              removeMenuDisplayItemDetails.removeSelectedItemDialog = false;
+              addCustomizationToItem(
+                removeMenuDisplayItemDetails.removeSelectedItem,
+                {
+                  name_eng: `CUSTOM: `,
+                  name_chn: `CUSTOM: `,
+                }
+              );
+            "
+          >
+            <!-- lets make this a input bar where we can input our custom order for name_eng -->
+            <p>CUSTOM</p>
+          </v-btn>
+        </v-row>
       </div>
       <v-divider></v-divider>
       <v-card-actions>
@@ -126,8 +113,10 @@
 </template>
 
 <script>
+import storeMixin from "../mixins/storeMixin";
 import { store } from "../store/store";
 export default {
+  mixins: [storeMixin],
   props: ["removeMenuDisplayItemDetails"],
   data() {
     return {
@@ -150,6 +139,10 @@ export default {
         },
         {
           name_eng: "SPICY",
+          name_chn: "123456",
+        },
+        {
+          name_eng: "ONIONS",
           name_chn: "123456",
         },
       ],
