@@ -120,7 +120,6 @@ export default {
         store.commit("setComponent", "ORDER");
       }
       this.historyOptionsDetails.confirmingAction = "";
-      store.commit("setOrderHistory", orderHistory);
     },
   },
 };

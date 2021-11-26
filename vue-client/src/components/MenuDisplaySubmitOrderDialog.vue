@@ -112,11 +112,11 @@ export default {
           order_id: orderIdNum,
           item_id: item.node.id,
           quantity: item.quantity,
-          customizations: item.customizations,
+          customizations: item.customizations ? item.customizations : undefined,
           timestamp: new Date(item.timestamp).toISOString(),
           //TODO: Make the 198 (custom item id) environmental variables.
-          custom_price: item.node.id === 198 ? item.node.price : null,
-          custom_name: item.node.id === 198 ? item.node.name_eng : null,
+          custom_price: item.node.id === 198 ? item.node.price : undefined,
+          custom_name: item.node.id === 198 ? item.node.name_eng : undefined,
         });
       }
       const res = await axios.post(
