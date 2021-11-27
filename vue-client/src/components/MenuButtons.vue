@@ -82,8 +82,8 @@
         <v-btn
           x-large
           dark
-          height="200px"
-          width="49.5%"
+          height="250px"
+          width="32.8%"
           class="mt-1 mr-1"
           v-on:click="
             displayCategoriesButtons = true;
@@ -97,8 +97,8 @@
         <v-btn
           x-large
           dark
-          height="200px"
-          width="49.5%"
+          height="250px"
+          width="32.8%"
           class="mt-1 mr-1"
           v-on:click="addCustomItemDialogue = true"
           ><div>
@@ -110,8 +110,8 @@
           v-bind:key="item.name_eng"
           x-large
           dark
-          height="200px"
-          width="49.5%"
+          height="250px"
+          width="32.8%"
           class="mt-1 mr-1"
           v-on:click="
             onClickMenuButton(item);
@@ -120,7 +120,8 @@
           "
           ><div>
             <p class="menu-button-text-eng">#{{ item.menu_id }}</p>
-            <p class="menu-button-text-eng">{{ item.name_eng }}</p>
+            <p class="mb-0 menu-button-text-eng">{{ item.name_eng.match(/.{1,25}(\s|$)/g)[0]}}</p>
+            <p class="mb-0 menu-button-text-eng">{{ item.name_eng.toString().length > 25 ? item.name_eng.match(/.{1,25}(\s|$)/g)[1] : '⠀' }}</p>
             <p class="menu-button-text-chn">{{ item.name_chn }}</p>
             <p class="menu-button-text-price">{{ item.price.toFixed(2) }}</p>
           </div>
@@ -128,8 +129,9 @@
         <v-btn
           x-large
           dark
-          height="200px"
-          width="49.5%"
+          height="250px"
+          width="32.8%"
+
           class="mt-1 mr-1"
           v-on:click="addCustomItemDialogue = true"
           ><div>
@@ -139,8 +141,9 @@
         <v-btn
           x-large
           dark
-          height="200px"
-          width="49.5%"
+          height="250px"
+          width="32.8%"
+
           class="mt-1 mr-1"
           v-on:click="
             displayCategoriesButtons = true;
@@ -158,7 +161,7 @@
           v-bind:key="item.id"
           x-large
           dark
-          height="200px"
+          height="250px"
           width="24.5%"
           class="mt-1 mr-1"
           v-on:click="
@@ -179,7 +182,7 @@
 
 <style>
 .menu-button-text-eng {
-  font-size: 1.2em;
+  font-size: 0.9em;
 }
 .menu-button-text-chn {
   font-size: 1.7em;
