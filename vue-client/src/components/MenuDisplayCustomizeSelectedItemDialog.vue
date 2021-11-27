@@ -49,6 +49,7 @@
               label="Customization"
               required
               width="10%"
+              autofocus
             ></v-text-field>
           </v-col>
           <v-btn
@@ -66,6 +67,7 @@
                   name_chn: ``,
                 }
               );
+              customCustomizationInput = '';
             "
           >
             <!-- lets make this a input bar where we can input our custom order for name_eng -->
