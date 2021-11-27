@@ -109,7 +109,7 @@ export default {
     },
     removeSelectedItemAll: function (selectedItem) {
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
-      delete selectedItems[selectedItem.node.id];
+      delete selectedItems[selectedItem.custom_id ?? selectedItem.node.id];
       store.commit("setSelectedItems", selectedItems);
       this.storeMixinUpdateStorePriceDetails();
     },
