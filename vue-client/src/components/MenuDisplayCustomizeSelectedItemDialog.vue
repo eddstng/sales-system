@@ -30,47 +30,23 @@
               removeMenuDisplayItemDetails.removeSelectedItem,
               {
                 name_eng: `NO ${customization.name_eng}`,
-                name_chn: `NO ${customization.name_chn}`,
+                name_chn: `${customization.name_chn}`,
               }
             );
           "
         >
           <p>
-            NO {{ customization.name_eng }}<br />NO
-            {{ customization.name_chn }}
-          </p>
-        </v-btn>
-        <v-btn
-          v-for="customization in customizations"
-          v-bind:key="customization.name_eng"
-          class="mt-1 mr-1"
-          x-large
-          width="16.26%"
-          height="80px"
-          v-on:click="
-            openCustomizeItemDialogue = false;
-            toggleRemoveSelectedItemDialogCustomizeItemDialog(false);
-            toggleRemoveSelectedItemDialogOff();
-            addCustomizationToItem(
-              removeMenuDisplayItemDetails.removeSelectedItem,
-              {
-                name_eng: `LESS ${customization.name_eng}`,
-                name_chn: `LESS ${customization.name_chn}`,
-              }
-            );
-          "
-        >
-          <p>
-            LESS {{ customization.name_eng }}<br />LESS
-            {{ customization.name_chn }}
+            NO {{ customization.name_eng }}
+            <!-- <br /> -->
+            <!-- {{ customization.name_chn }} -->
           </p>
         </v-btn>
         <v-row class="justify-center mt-10 mb-10">
           <v-col cols="12" md="6">
             <v-text-field
-              v-model="email"
+              v-model="customCustomizationInput"
               :error-messages="errors"
-              label="Custom"
+              label="Customization"
               required
               width="10%"
             ></v-text-field>
@@ -86,8 +62,8 @@
               addCustomizationToItem(
                 removeMenuDisplayItemDetails.removeSelectedItem,
                 {
-                  name_eng: `CUSTOM: `,
-                  name_chn: `CUSTOM: `,
+                  name_eng: customCustomizationInput.toUpperCase(),
+                  name_chn: ``,
                 }
               );
             "
@@ -120,30 +96,31 @@ export default {
   props: ["removeMenuDisplayItemDetails"],
   data() {
     return {
+      customCustomizationInput: "",
       customizations: [
         {
           name_eng: "MSG",
-          name_chn: "123456",
+          name_chn: "",
         },
         {
           name_eng: "SESAME",
-          name_chn: "123456",
+          name_chn: "",
         },
         {
           name_eng: "SALT",
-          name_chn: "123456",
+          name_chn: "",
         },
         {
           name_eng: "OIL",
-          name_chn: "123456",
+          name_chn: "",
         },
         {
           name_eng: "SPICY",
-          name_chn: "123456",
+          name_chn: "",
         },
         {
           name_eng: "ONIONS",
-          name_chn: "123456",
+          name_chn: "",
         },
       ],
     };

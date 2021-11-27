@@ -59,7 +59,7 @@
             v-bind:key="customization.id"
           >
             <div class="menu-display-item-text pl-5">
-              - {{ customization.name_eng }} / {{ customization.name_chn }}
+              - {{ customization.name_eng }}  {{ customization.name_chn }}
             </div>
           </v-list-item-content>
         </v-card>
