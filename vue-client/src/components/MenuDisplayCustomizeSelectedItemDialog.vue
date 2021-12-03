@@ -136,49 +136,86 @@ export default {
       this.$emit("setRemoveSelectedItemDialogToBool", false);
     },
     addCustomizationToItem: function (selectedItem, customizationObj) {
-      console.log(JSON.stringify(selectedItem));
+      // First thing we want to to is get the selectedItem, make sure to have a copy of the original selected item with the original quantity.
+      // const selectedItemShadowClone = { ...selectedItem };
 
-      const vueStoreKeyToDelete =
-        selectedItem.custom_id ?? selectedItem.node.id;
+      const selectedItemIdToUseString =
+        selectedItem.custom_id ?? selectedItem.node.id.toString();
+
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
+
       if (
-        selectedItems[selectedItem.custom_id ?? selectedItem.node.id.toString()]
-          .customizations === undefined
+        selectedItemIdToUseString in selectedItems &&
+        selectedItems[selectedItemIdToUseString].customizations !== undefined
       ) {
-        selectedItems[
-          selectedItem.custom_id ?? selectedItem.node.id.toString()
-        ].customizations = [customizationObj];
+        // then we check if customizations is undefined
+        console.log("1");
+        selectedItems[selectedItemIdToUseString].customizations.push(
+          customizationObj
+        );
       } else {
-        selectedItems[
-          selectedItem.custom_id ?? selectedItem.node.id.toString()
-        ].customizations.push(customizationObj); // update to check if it is array
+        console.log("2");
+
+        // set it and set customzations
+        const selectedItemWithCustomizations = {
+          ...selectedItem,
+          customizations: [customizationObj],
+        };
+        selectedItems[selectedItemIdToUseString] =
+          selectedItemWithCustomizations;
+
+                  selectedItems[selectedItemIdToUseString] =
+          selectedItemWithCustomizations;
+        
       }
 
-      if (!selectedItem.customizations.length !== 0) {
-        let customizedItemKeyName = `${selectedItem.node.id.toString()}C-`;
-        let customizedItemKeyNumber = 0;
-        while (
-          selectedItems[
-            `${customizedItemKeyName}${customizedItemKeyNumber}`
-          ] !== undefined
-        ) {
-          customizedItemKeyNumber++;
-        }
-        selectedItems[`${customizedItemKeyName}${customizedItemKeyNumber}`] =
-          {};
-        selectedItems[`${customizedItemKeyName}${customizedItemKeyNumber}`] =
-          selectedItem;
-        selectedItems[
-          `${customizedItemKeyName}${customizedItemKeyNumber}`
-        ].custom_id = `${customizedItemKeyName}${customizedItemKeyNumber}`;
-        selectedItems[
-          `${customizedItemKeyName}${customizedItemKeyNumber}`
-        ].quantity = 1;
+      store.commit("setSelectedItems", selectedItems);
 
-        store.commit("setSelectedItems", selectedItems);
-        console.log(JSON.stringify(selectedItem));
-        this.removeSelectedItemOneByVueStoreKey(vueStoreKeyToDelete);
-      }
+      // const selectedItem
+      // const selectedItemWithCustomizations
+
+      // Check if the item is already customized, if so then we just push to the array.
+      // Do the quantity control. If quantity did not === 1 then we have to split them not just delete.
+
+      // If the item is a customized item, it would have a custom_id already.
+
+      // If the item already has customizations, we push to it, otherwise create array.
+      // if (selectedItems[idToUseString].customizations === undefined) {
+      //   selectedItems[idToUseString].customizations = [customizationObj];
+      // } else {
+      //   selectedItems[idToUseString].customizations.push(customizationObj);
+      // }
+
+      // -- If the item has customizations, we will give it a custom id.
+
+      // let customizedItemKeyName = `${selectedItem.node.id.toString()}C-`;
+      // let customizedItemKeyNumber = 0;
+      // while (
+      //   selectedItestomizedItemKeyName}${customizedItemKeyNumber}`] =
+      //   {};
+      // selectedItems[`${customizedItemKeyName}${customizedItemKeyNumber}`] =
+      //   selectedItem;
+
+      // selectedItems[
+      //   `${customizedItemKeyName}${customizedItemKeyNumber}`
+      // ].custom_id = `${customizedItemKeyName}${customizedItemKeyNumber}`;
+
+      // selectedItems[
+      //   `${customizedItemKeyName}${customizedItemKeyNumber}`
+      // ].timestamp = Date.now();
+
+      // // this.removeSelectedItemOneByVueStoreKey(vueStoreKeyToDelete);ms[
+      //     `${customizedItemKeyName}${customizedItemKeyNumber}`
+      //   ] !== undefined
+      // ) {
+      //   customizedItemKeyNumber++;
+      // }
+
+      // selectedItems[`${cu
+
+      // selectedItems[
+      //   `${customizedItemKeyName}${customizedItemKeyNumber}`
+      // ].quantity = 1;
     },
     removeSelectedItemOneByVueStoreKey: function (vueStoreKeyToDelete) {
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);

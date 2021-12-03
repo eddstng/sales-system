@@ -7,13 +7,13 @@ export const store = new Vuex.Store({
   state: {
     // all of the items from the items table
     // Items[]
-    items: [], 
+    items: [],
     customers: [],
     tables: [],
     selectedCustomer: {},
     // the items that are displayed on the menu display
     // Record<string, Record<string, unknown>
-    selectedItems: {}, 
+    selectedItems: {},
     //the price details that are displayed on the menu display
     priceDetails: {
       subtotal: 0,
@@ -53,8 +53,8 @@ export const store = new Vuex.Store({
       state.selectedItems = selectedItems;
       if (Object.keys(selectedItems).length === 0) {
         state.selectedItemsOrderedByEntry = {}
-        return 
-      } 
+        return
+      }
       // This conversion is necessary because:
       // 1. We need to insert the items with the id/custom_id as the key. If we used timestamp as we do in the display, it will create a new entry instead of increasing the quantity.
       // 2. We need to display the items with the timestamp as the key. This allows the menu display to display it in the order of entry.
@@ -62,11 +62,16 @@ export const store = new Vuex.Store({
       for (const [key, value] of Object.entries(state.selectedItems)) {
         selectedItemsTimestampCustomIdArray.push([value.timestamp, key])
       }
-      const sortedArray = selectedItemsTimestampCustomIdArray.sort(function(a, b) {
+      const sortedArray = selectedItemsTimestampCustomIdArray.sort(function (a, b) {
         return a[0] - b[0];
       });
       sortedArray.forEach(([timestamp, id]) => {
-        state.selectedItemsOrderedByEntry[timestamp] = state.selectedItems[id]
+
+        let selectedItemsOrderedByEntry = Object.assign({}, state.selectedItemsOrderedByEntry);
+
+        selectedItemsOrderedByEntry[timestamp] = state.selectedItems[id];
+
+        state.selectedItemsOrderedByEntry = selectedItemsOrderedByEntry;
       })
     },
     setSelectedCustomer(state, selectedCustomer) {
