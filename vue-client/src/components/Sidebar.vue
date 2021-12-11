@@ -58,7 +58,11 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn x-large width="50%" v-on:click="changeComponentDetails.warning = false;">
+          <v-btn
+            x-large
+            width="50%"
+            v-on:click="changeComponentDetails.warning = false"
+          >
             <div>NO<br /></div>
           </v-btn>
           <v-btn x-large width="50%" v-on:click="setComponent()">
@@ -86,17 +90,18 @@ export default {
   },
   methods: {
     setOrderWarning() {
+      console.log(this.$store.state.component);
       if (
-        JSON.stringify(this.$store.state.selectedItems) !== "{}" ||
-        JSON.stringify(this.$store.state.selectedCustomer) !== "{}" ||
-        JSON.stringify(this.$store.state.currentOrder) !==
-          '{"id":null,"type":null,"total":0,"customer_id":null,"void":null,"paid":null}'
+        (JSON.stringify(this.$store.state.selectedItems) !== "{}" ||
+          JSON.stringify(this.$store.state.selectedCustomer) !== "{}" ||
+          JSON.stringify(this.$store.state.currentOrder) !==
+            '{"id":null,"type":null,"total":0,"customer_id":null,"void":null,"paid":null}') &&
+        this.$store.state.component !== "HISTORY"
       ) {
         return true;
       }
       return false;
     },
-
     async changeComponent(componentStr) {
       this.changeComponentDetails.component = componentStr;
       if (this.setOrderWarning()) {
