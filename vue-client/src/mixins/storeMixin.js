@@ -8,7 +8,7 @@ export default {
         total: 0,
       });
     },
-    storeMixinCalculatePriceDetails(priceDetails, itemPrice, itemQuantity){
+    storeMixinCalculatePriceDetails(priceDetails, itemPrice, itemQuantity) {
       let priceDetailsReturn = Object.assign({}, priceDetails);
       priceDetailsReturn.subtotal = this.storeMixinCalculatePriceDetailsSubtotal(priceDetailsReturn.subtotal, itemPrice, itemQuantity)
       priceDetailsReturn.gst = this.storeMixinCalculatePriceDetailsGst(priceDetailsReturn.subtotal);
@@ -42,6 +42,8 @@ export default {
         type: null,
         total: 0,
         customer_id: null,
+        void: null,
+        paid: null
       });
       this.storeMixinClearStorePriceDetails();
     },

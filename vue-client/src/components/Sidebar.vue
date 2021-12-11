@@ -23,7 +23,7 @@
                     dark
                     height="160px"
                     width="100%"
-                    v-on:click="this.setComponentToOrder"
+                    v-on:click="changeComponent('ORDER')"
                     >ORDER</v-btn
                   >
                   <v-btn
@@ -33,7 +33,7 @@
                     dark
                     height="160px"
                     width="100%"
-                    v-on:click="this.setComponentToHistory"
+                    v-on:click="changeComponent('HISTORY')"
                     >HISTORY</v-btn
                   >
                   <v-btn
@@ -52,16 +52,70 @@
         </v-container>
       </template>
     </v-container>
+    <v-dialog v-model="changeComponentDetails.warning" width="900">
+      <v-card>
+        <h2 class="text-center pt-16 pb-12">Data will be lost. Continue?</h2>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn x-large width="50%" v-on:click="changeComponentDetails.warning = false;">
+            <div>NO<br /></div>
+          </v-btn>
+          <v-btn x-large width="50%" v-on:click="setComponent()">
+            <div>YES<br /></div>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
 <script>
-import storeMixin from '../mixins/storeMixin'
+import storeMixin from "../mixins/storeMixin";
 import { store } from "../store/store";
 import axios from "axios";
 export default {
   mixins: [storeMixin],
+  data() {
+    return {
+      changeComponentDetails: {
+        warning: false,
+        component: "",
+      },
+    };
+  },
   methods: {
+    setOrderWarning() {
+      if (
+        JSON.stringify(this.$store.state.selectedItems) !== "{}" ||
+        JSON.stringify(this.$store.state.selectedCustomer) !== "{}" ||
+        JSON.stringify(this.$store.state.currentOrder) !==
+          '{"id":null,"type":null,"total":0,"customer_id":null,"void":null,"paid":null}'
+      ) {
+        return true;
+      }
+      return false;
+    },
+
+    async changeComponent(componentStr) {
+      this.changeComponentDetails.component = componentStr;
+      if (this.setOrderWarning()) {
+        this.changeComponentDetails.warning = true;
+      } else {
+        this.setComponent();
+      }
+    },
+    async setComponent() {
+      switch (this.changeComponentDetails.component) {
+        case "HISTORY":
+          this.setComponentToHistory();
+          break;
+        case "ORDER":
+          this.setComponentToOrder();
+          break;
+      }
+      this.changeComponentDetails.warning = false;
+    },
     async setComponentToHistory() {
       const orderHistoryArray = (
         await axios.get("http://localhost:3000/get/ordershistory/all")
