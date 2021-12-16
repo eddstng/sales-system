@@ -66,7 +66,7 @@
     />
     <CustomerSelectCustomerDineInTablesDialog
       v-bind:selectedCustomerDetails="selectedCustomerDetails"
-     />
+    />
 
     <CustomerSelectCreateCustomerFormDialog
       v-bind:selectedCustomerDetails="selectedCustomerDetails"
@@ -106,13 +106,14 @@
 
 <script>
 import { store } from "../store/store";
+import storeMixin from "../mixins/storeMixin";
+import customerSelectMixin from "../mixins/customerSelectMixin";
 import CustomerSelectCustomerPhoneInputDialog from "./CustomerSelectCustomerPhoneInputDialog";
 import CustomerSelectCreateCustomerFormDialog from "./CustomerSelectCreateCustomerFormDialog";
 import CustomerSelectCustomerDineInTablesDialog from "./CustomerSelectCustomerDineInTablesDialog";
 
-import customerSelectMixin from "../mixins/customerSelectMixin";
 export default {
-  mixins: [customerSelectMixin],
+  mixins: [customerSelectMixin, storeMixin],
   data() {
     return {
       openClearSelectedCustomerConfirmationDialogue: false,
@@ -151,7 +152,7 @@ export default {
   components: {
     CustomerSelectCustomerPhoneInputDialog,
     CustomerSelectCreateCustomerFormDialog,
-    CustomerSelectCustomerDineInTablesDialog
+    CustomerSelectCustomerDineInTablesDialog,
   },
   watch: {
     "selectedCustomerDetails.selectedCustomer.phone": function () {
@@ -165,6 +166,7 @@ export default {
     },
     setStoreOrderType: function (orderTypeNum) {
       store.commit("setCurrentOrder", { type: orderTypeNum });
+      this.storeMixinUpdateStorePriceDetails();
     },
     clearSelectedCustomer: function () {
       store.commit("setSelectedCustomer", {});

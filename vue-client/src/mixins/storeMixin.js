@@ -12,7 +12,7 @@ export default {
     storeMixinCalculatePriceDetails(priceDetails, itemPrice, itemQuantity, specialItemNegatingDiscount) {
       let priceDetailsReturn = Object.assign({}, priceDetails);
       priceDetailsReturn.subtotal = this.storeMixinCalculatePriceDetailsSubtotal(priceDetailsReturn.subtotal, itemPrice, itemQuantity)
-      if (priceDetailsReturn.subtotal >= 35 && specialItemNegatingDiscount !== true) {
+      if (priceDetailsReturn.subtotal >= 35 && specialItemNegatingDiscount !== true && this.$store.state.currentOrder.type === 1) {
         const tenPercentDiscount = priceDetailsReturn.subtotal * 0.10;
         priceDetailsReturn.discount = -Math.abs(tenPercentDiscount);
       } else {
