@@ -93,6 +93,10 @@ export default {
     toggleRemoveSelectedItemDialogCustomizeItemDialog(bool) {
       this.$emit("setRemoveSelectedItemDialogCustomizeItemDialogToBool", bool);
     },
+    setStoreSelectedItems(selectedItems) {
+      store.commit("setSelectedItems", {});
+      store.commit("setSelectedItems", selectedItems);
+    },
     removeSelectedItemOne: function (selectedItem) {
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
       if (
@@ -104,19 +108,19 @@ export default {
         selectedItems[selectedItem.custom_id ?? selectedItem.node.id]
           .quantity--;
       }
-      store.commit("setSelectedItems", selectedItems);
+      this.setStoreSelectedItems(selectedItems);
       this.storeMixinUpdateStorePriceDetails();
     },
     removeSelectedItemAll: function (selectedItem) {
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
       delete selectedItems[selectedItem.custom_id ?? selectedItem.node.id];
-      store.commit("setSelectedItems", selectedItems);
+      this.setStoreSelectedItems(selectedItems);
       this.storeMixinUpdateStorePriceDetails();
     },
     addSelectedItemOne: function (selectedItem) {
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
       selectedItems[selectedItem.custom_id ?? selectedItem.node.id].quantity++;
-      store.commit("setSelectedItems", selectedItems);
+      this.setStoreSelectedItems(selectedItems);
       this.storeMixinUpdateStorePriceDetails();
     },
   },
