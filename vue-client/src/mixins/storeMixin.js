@@ -6,13 +6,21 @@ export default {
         subtotal: 0,
         gst: 0,
         total: 0,
+        discount: 0, 
       });
     },
-    storeMixinCalculatePriceDetails(priceDetails, itemPrice, itemQuantity) {
+    storeMixinCalculatePriceDetails(priceDetails, itemPrice, itemQuantity, specialItemNegatingDiscount) {
       let priceDetailsReturn = Object.assign({}, priceDetails);
       priceDetailsReturn.subtotal = this.storeMixinCalculatePriceDetailsSubtotal(priceDetailsReturn.subtotal, itemPrice, itemQuantity)
-      priceDetailsReturn.gst = this.storeMixinCalculatePriceDetailsGst(priceDetailsReturn.subtotal);
-      priceDetailsReturn.total = priceDetailsReturn.subtotal + priceDetailsReturn.gst;
+      if (priceDetailsReturn.subtotal >= 35 && specialItemNegatingDiscount !== true) {
+        const tenPercentDiscount = priceDetailsReturn.subtotal * 0.10;
+        priceDetailsReturn.discount = -Math.abs(tenPercentDiscount);
+      } else {
+        priceDetailsReturn.discount = 0;
+      }
+      const discountedSubtotal = priceDetailsReturn.subtotal + priceDetailsReturn.discount;
+      priceDetailsReturn.gst = this.storeMixinCalculatePriceDetailsGst(discountedSubtotal);
+      priceDetailsReturn.total = (discountedSubtotal) + priceDetailsReturn.gst;
       return priceDetailsReturn
     },
     storeMixinCalculatePriceDetailsSubtotal(currentSubtotal, itemPrice, itemQuantity) {
@@ -24,13 +32,17 @@ export default {
       );
     },
     storeMixinUpdateStorePriceDetails() {
+      let specialItemNegatingDiscount = false;
       this.storeMixinClearStorePriceDetails();
       let priceDetails = Object.assign({}, this.$store.state.priceDetails);
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
       Object.keys(selectedItems).forEach((key) => {
         const itemPrice = parseFloat(selectedItems[key].node.price);
         const itemQuantity = selectedItems[key].quantity;
-        priceDetails = this.storeMixinCalculatePriceDetails(priceDetails, itemPrice, itemQuantity);
+        if (selectedItems[key].node.name_eng.includes("Combo") || selectedItems[key].node.name_eng.includes("Dinner Special")) {
+          specialItemNegatingDiscount = true;
+        }
+        priceDetails = this.storeMixinCalculatePriceDetails(priceDetails, itemPrice, itemQuantity, specialItemNegatingDiscount);
       });
       store.commit("setPriceDetails", priceDetails);
     },
