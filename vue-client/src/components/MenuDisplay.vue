@@ -140,6 +140,7 @@ export default {
       this.removeMenuDisplayItemDetails.openCustomizeItemDialogue = bool;
     },
     submitOrderDialogConditional: function () {
+       this.submitOrderDialog = false;
       if (
         this.$store.state.selectedCustomer.phone !== undefined &&
         Object.keys(store.state.selectedItems).length !== 0
