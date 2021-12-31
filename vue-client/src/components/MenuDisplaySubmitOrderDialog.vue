@@ -31,20 +31,34 @@
             </v-col>
             <v-col class="text-end"> x{{ value.quantity }} </v-col>
           </v-row>
+          <v-list-item-content
+            v-for="customization in value.customizations"
+            v-bind:key="customization.id"
+          >
+            <div class="submitOrderDialogText pl-10 mb-5">
+              ➡ {{ customization.name_eng }}
+              {{
+                customization.name_chn === ""
+                  ? ""
+                  : "/" + customization.name_chn
+              }}
+            </div>
+          </v-list-item-content>
         </div>
-
         <v-row class="submitOrderDialogText mt-5 mb-5">
-          <v-col :cols="4">
+          <v-col :cols="3">
             Subtotal: {{ $store.state.priceDetails.subtotal.toFixed(2) }}
           </v-col>
-          <v-col :cols="4" class="text-end">
+          <v-col :cols="3" class="text-end">
+            Discount: {{ $store.state.priceDetails.discount.toFixed(2) }}
+          </v-col>
+          <v-col :cols="3" class="text-end">
             GST: {{ $store.state.priceDetails.gst.toFixed(2) }}
           </v-col>
-          <v-col :cols="4" class="text-end">
+          <v-col :cols="3" class="text-end">
             Total: ${{ $store.state.priceDetails.total.toFixed(2) }}
           </v-col>
         </v-row>
-
         <br />
       </div>
       <v-divider></v-divider>
@@ -104,10 +118,8 @@ export default {
     },
     insertSelectedItemsIntoOrdersAndOrdersItems: async function (orderIdNum) {
       const ordersItemsCreateManyInputData = [];
-      for (const value of Object.entries(
-        this.$store.state.selectedItems
-      )) {
-        const item = value[1]
+      for (const value of Object.entries(this.$store.state.selectedItems)) {
+        const item = value[1];
         ordersItemsCreateManyInputData.push({
           order_id: orderIdNum,
           item_id: item.node.id,

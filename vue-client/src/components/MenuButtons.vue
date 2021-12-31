@@ -60,7 +60,7 @@
                 custom_id: 198 + customItem.name,
                 name_eng: customItem.name,
                 custom_name: customItem.name,
-                name_chn: '-',
+                name_chn: 'Custom Item',
                 price: parseFloat(customItem.price),
                 custom_price: parseFloat(customItem.price),
               })
