@@ -53,13 +53,17 @@
     >
       <v-list-item three-line>
         <v-list-item-content>
-          <div class="history-display-item-text">Subtotal:</div>
-          <div class="history-display-item-text">GST:</div>
-          <div class="history-display-item-text mt-5">Total:</div>
+          <div class="menu-display-item-text">Subtotal:</div>
+          <div class="menu-display-item-text">Discount:</div>
+          <div class="menu-display-item-text">GST:</div>
+          <div class="menu-display-item-text mt-5">Total:</div>
         </v-list-item-content>
         <v-list-item-content>
           <div class="menu-display-item-text text-right">
             {{ $store.state.priceDetails.subtotal.toFixed(2) }}
+          </div>
+          <div class="menu-display-item-text text-right">
+            {{ $store.state.priceDetails.discount.toFixed(2) }}
           </div>
           <div class="menu-display-item-text text-right">
             {{ $store.state.priceDetails.gst.toFixed(2) }}
