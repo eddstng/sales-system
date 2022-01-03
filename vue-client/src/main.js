@@ -4,11 +4,14 @@ import vuetify from "./plugins/vuetify";
 import { store } from "./store/store";
 import axios from "axios";
 import VueChatScroll from 'vue-chat-scroll';
+import storeMixin from "./mixins/storeMixin"
+
 
 Vue.use(VueChatScroll);
 Vue.config.productionTip = false;
 
 new Vue({
+  mixins: [storeMixin],
   methods: {
     async init() {
       // Set Items
@@ -25,17 +28,7 @@ new Vue({
         "setItems",
         allItemsCategorized
       );
-      store.commit(
-        "setCustomers",
-        (await axios.get("http://localhost:3000/get/customers/all")).data
-      );
-      const tables = [];
-      store.state.customers.forEach(customer => {
-        if (customer.name && customer.name.includes('Table #')) {
-          tables.push(customer)
-        }
-      })
-      store.commit("setTables", tables)
+      this.storeMixinUpdateStoreCustomerArray();
     },
   },
   mounted() {

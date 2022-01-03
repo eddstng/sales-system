@@ -1,4 +1,6 @@
 import { store } from "../store/store";
+import axios from "axios";
+
 export default {
   methods: {
     storeMixinClearStorePriceDetails() {
@@ -6,7 +8,7 @@ export default {
         subtotal: 0,
         gst: 0,
         total: 0,
-        discount: 0, 
+        discount: 0,
       });
     },
     storeMixinCalculatePriceDetails(priceDetails, itemPrice, itemQuantity, specialItemNegatingDiscount) {
@@ -58,6 +60,26 @@ export default {
         paid: null
       });
       this.storeMixinClearStorePriceDetails();
+    },
+    async storeMixinUpdateStoreCustomerArray() {
+      console.log('here123')
+      console.log((await axios.get("http://localhost:3000/get/customers/all")).data
+      )
+      console.log('here000')
+
+      store.commit(
+        "setCustomers",
+        (await axios.get("http://localhost:3000/get/customers/all")).data
+      );
+      console.log(store.state.customers);
+      const tables = [];
+      store.state.customers.forEach(customer => {
+        if (customer.name && customer.name.includes('Table #')) {
+          tables.push(customer)
+        }
+      })
+      store.commit("setTables", tables)
+      return
     },
   }
 };

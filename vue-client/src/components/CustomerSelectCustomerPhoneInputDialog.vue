@@ -22,7 +22,7 @@
             x-large
             dark
             width="100%"
-            v-on:click="customerSelectMixinSetSelectedCustomer(customer)"
+            v-on:click="customerSelectMixinSetSelectedCustomer(customer);"
             >{{ customer.phone }} - {{ customer.name }}</v-btn
           >
         </div>

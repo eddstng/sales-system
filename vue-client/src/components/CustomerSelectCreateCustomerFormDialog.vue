@@ -131,9 +131,11 @@
 import axios from "axios";
 import { streetNameArr } from "../data/streets";
 import customerSelectMixin from "../mixins/customerSelectMixin";
+import storeMixin from "../mixins/storeMixin";
+
 import { cityNameArr } from "../data/cities";
 export default {
-  mixins: [customerSelectMixin],
+  mixins: [customerSelectMixin, storeMixin],
   data() {
     return {
       createCustomerError: null,
@@ -248,6 +250,8 @@ export default {
 
           this.customerSelectMixinSetSelectedCustomer(res.data);
           this.selectedCustomerDetails.createCustomerFormDialog = false;
+          // update reload customers
+          this.storeMixinUpdateStoreCustomerArray();
           return;
         } catch (err) {
           this.createCustomerError = err.response.data;

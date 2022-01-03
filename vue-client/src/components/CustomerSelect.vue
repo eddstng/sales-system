@@ -173,9 +173,6 @@ export default {
     },
     suggestCustomerFromPhoneInput: function () {
       this.selectedCustomerDetails.suggestedCustomers = [];
-      if (this.$store.state.customers.length <= 0) {
-        console.log("error in suggestCustomerFromPhoneInput");
-      }
       const customerArr = this.$store.state.customers;
       if (this.selectedCustomerDetails.selectedCustomer.phone.length < 3) {
         this.selectedCustomerDetails.suggestedCustomers = [];
