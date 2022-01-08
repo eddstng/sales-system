@@ -46,6 +46,7 @@
               removeMenuDisplayItemDetails.removeSelectedItem
             );
             removeMenuDisplayItemDetails.removeSelectedItem = {};
+            storeMixinSumSelectedItemsQuantity();
           "
         >
           <div>REMOVE ALL<br /></div>
@@ -59,6 +60,7 @@
               removeMenuDisplayItemDetails.removeSelectedItem
             );
             removeMenuDisplayItemDetails.removeSelectedItem = {};
+            storeMixinSumSelectedItemsQuantity();
           "
         >
           <div>REMOVE 1<br /></div>
@@ -70,6 +72,7 @@
             toggleRemoveSelectedItemDialogOff();
             addSelectedItemOne(removeMenuDisplayItemDetails.removeSelectedItem);
             removeMenuDisplayItemDetails.removeSelectedItem = {};
+            storeMixinSumSelectedItemsQuantity();
           "
         >
           <div>ADD 1<br /></div>

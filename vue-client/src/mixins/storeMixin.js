@@ -61,6 +61,15 @@ export default {
       });
       this.storeMixinClearStorePriceDetails();
     },
+    storeMixinSumSelectedItemsQuantity() {
+      let selectedItemsQuantitySum = 0;
+      for (const value of Object.entries(this.$store.state.selectedItems)) {
+        selectedItemsQuantitySum = selectedItemsQuantitySum + value[1].quantity;
+      }
+      let currentOrder = JSON.parse(JSON.stringify(this.$store.state.currentOrder))
+      currentOrder.itemQuantity = selectedItemsQuantitySum;
+      store.commit("setCurrentOrder", currentOrder);
+    },
     async storeMixinUpdateStoreCustomerArray() {
       const allCustomers = (await axios.get("http://localhost:3000/get/customers/all")).data
 
@@ -74,7 +83,7 @@ export default {
         allCustomersObject
       );
       const tables = [];
-      
+
       for (const [customerId, customerData] of Object.entries(store.state.customers)) {
         if (customerData.name && customerData.name.includes('Table #')) {
           console.log(customerId)

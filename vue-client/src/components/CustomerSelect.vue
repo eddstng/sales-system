@@ -154,7 +154,11 @@ export default {
       this.selectedCustomerDetails.createCustomerFormDialog = bool;
     },
     setStoreOrderType: function (orderTypeNum) {
-      store.commit("setCurrentOrder", { type: orderTypeNum });
+      let currentOrder = JSON.parse(
+        JSON.stringify(this.$store.state.currentOrder)
+      );
+      currentOrder.type = orderTypeNum;
+      store.commit("setCurrentOrder", currentOrder);
       (this.selectedCustomerDetails.selectedCustomer = {
         phone: "",
         unit_number: "",
@@ -168,11 +172,18 @@ export default {
         this.storeMixinUpdateStorePriceDetails();
     },
     clearSelectedCustomer: function () {
+      let currentOrder = JSON.parse(
+        JSON.stringify(this.$store.state.currentOrder)
+      );
+      currentOrder.type = null;
+      store.commit("setCurrentOrder", currentOrder);
       store.commit("setSelectedCustomer", {});
     },
     suggestCustomerFromPhoneInput: function () {
       this.selectedCustomerDetails.suggestedCustomers = [];
-      var customerArr = JSON.parse(JSON.stringify(Object.values(this.$store.state.customers)));
+      var customerArr = JSON.parse(
+        JSON.stringify(Object.values(this.$store.state.customers))
+      );
       if (this.selectedCustomerDetails.selectedCustomer.phone.length < 3) {
         this.selectedCustomerDetails.suggestedCustomers = [];
       } else {

@@ -27,6 +27,7 @@ export const store = new Vuex.Store({
       customer_id: null,
       void: null,
       paid: null,
+      itemQuantity: 0,
     },
     notification: 0,
     component: "HISTORY",

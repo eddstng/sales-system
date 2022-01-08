@@ -16,10 +16,16 @@
             <v-col v-if="$store.state.selectedCustomer.note">
               * {{ $store.state.selectedCustomer.note }} <br />
             </v-col>
+            <v-col>
+              Number of Items:
+              {{ $store.state.currentOrder.itemQuantity }}</v-col
+            >
+            <br />
           </div>
         </v-row>
         <div v-for="value in $store.state.selectedItems" v-bind:key="value.id">
           <v-row class="submitOrderDialogText mt-5 mb-5">
+            <v-col> x{{ value.quantity }} </v-col>
             <v-col :cols="5">
               {{ value.node.name_eng }}
             </v-col>
@@ -27,15 +33,14 @@
               {{ value.node.name_chn }}
             </v-col>
             <v-col :cols="2" class="text-center">
-              {{ value.node.price }}
+              ${{ value.node.price.toFixed(2) }}
             </v-col>
-            <v-col class="text-end"> x{{ value.quantity }} </v-col>
           </v-row>
           <v-list-item-content
             v-for="customization in value.customizations"
             v-bind:key="customization.id"
           >
-            <div class="submitOrderDialogText pl-10 mb-5">
+            <div class="submitOrderDialogText pl-25 mb-5">
               ➡ {{ customization.name_eng }}
               {{
                 customization.name_chn === ""

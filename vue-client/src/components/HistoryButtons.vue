@@ -118,6 +118,7 @@ export default {
           ordersItemsDetailWithOrderIdArray[0].customer_street_number,
         unit_number: ordersItemsDetailWithOrderIdArray[0].customer_unit_number,
       });
+      this.storeMixinSumSelectedItemsQuantity();
       this.storeMixinUpdateStorePriceDetails();
     },
   },

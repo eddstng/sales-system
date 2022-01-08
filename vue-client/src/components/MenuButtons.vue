@@ -38,7 +38,7 @@
           <br />
         </div>
         <v-divider></v-divider>
-        <v-card-actions>1
+        <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
             x-large
@@ -63,13 +63,13 @@
                 name_chn: 'Custom Item',
                 price: parseFloat(customItem.price),
                 custom_price: parseFloat(customItem.price),
-              })
-              customItem = {
-                name:'',
-                price:0.00,
+              });
+              (customItem = {
+                name: '',
+                price: 0.0,
                 id: '',
-              },
-              addCustomItemDialogue = false;
+              }),
+                (addCustomItemDialogue = false);
             "
           >
             <div>ADD<br /></div>
@@ -120,8 +120,16 @@
           "
           ><div>
             <p class="menu-button-text-eng">#{{ item.menu_id }}</p>
-            <p class="mb-0 menu-button-text-eng">{{ item.name_eng.match(/.{1,20}(\s|$)/g)[0]}}</p>
-            <p class="mb-0 menu-button-text-eng">{{ item.name_eng.toString().length > 20 ? item.name_eng.match(/.{1,20}(\s|$)/g)[1] : '⠀' }}</p>
+            <p class="mb-0 menu-button-text-eng">
+              {{ item.name_eng.match(/.{1,20}(\s|$)/g)[0] }}
+            </p>
+            <p class="mb-0 menu-button-text-eng">
+              {{
+                item.name_eng.toString().length > 20
+                  ? item.name_eng.match(/.{1,20}(\s|$)/g)[1]
+                  : "⠀"
+              }}
+            </p>
             <p class="menu-button-text-chn">{{ item.name_chn }}</p>
             <p class="menu-button-text-price">{{ item.price.toFixed(2) }}</p>
           </div>
@@ -191,7 +199,7 @@
 </style>
 
 <script>
-import storeMixin from '../mixins/storeMixin'
+import storeMixin from "../mixins/storeMixin";
 import { store } from "../store/store";
 export default {
   mixins: [storeMixin],
@@ -199,9 +207,9 @@ export default {
     return {
       selectedCategory: null,
       customItem: {
-        id:'',
-        name: '',
-        price: 0.00,
+        id: "",
+        name: "",
+        price: 0.0,
       },
       customItemSuggestions: [
         "Vegetable",
@@ -314,7 +322,7 @@ export default {
       displayMenuButtons: false,
     };
   },
-  
+
   methods: {
     onClickMenuButton(item) {
       this.addItemToSelectedItems(item);
@@ -332,6 +340,7 @@ export default {
         selectedItems[idWeCareAbout].timestamp = Date.now();
       }
       store.commit("setSelectedItems", selectedItems);
+      this.storeMixinSumSelectedItemsQuantity();
     },
   },
 };
