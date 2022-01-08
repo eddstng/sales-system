@@ -19,6 +19,7 @@
             {{ getFormattedTimeStamp(new Date(order.order_timestamp)) }}
           </v-col>
           <v-col> {{ order.order_id }} </v-col>
+          <v-col> {{ orderTypeString[order.order_type] }} </v-col>
           <v-col v-if="order.order_void === true"> VOID </v-col>
           <v-col v-else-if="order.order_paid === true"> PAID </v-col>
           <v-col v-else> </v-col>
@@ -44,7 +45,7 @@ import { store } from "../store/store";
 export default {
   mixins: [storeMixin],
   data() {
-    return {};
+    return {orderTypeString: ["DINE IN", "PICK UP", "DELIVERY"],};
   },
   created() {
     this.$root.$refs.MenuButtons = this;
