@@ -79,7 +79,10 @@
               dark
               width="100%"
               v-on:click="setSelectedCustomer(customer)"
-              >{{ customer.phone }} - {{ customer.name }}</v-btn
+              >{{
+                customer.phone.replace(/(\d{3})(\d{3})(\d{3})/, "$1-$2-$3")
+              }}
+              - {{ customer.name }}</v-btn
             >
           </div>
           <div
@@ -219,7 +222,10 @@
               dark
               width="100%"
               v-on:click="setSelectedCustomer(customer)"
-              >{{ customer.phone }} - {{ customer.name }}</v-btn
+              >{{
+                customer.phone.replace(/(\d{3})(\d{3})(\d{3})/, "$1-$2-$3")
+              }}
+              - {{ customer.name }}</v-btn
             >
           </div>
           <div
@@ -314,6 +320,9 @@ export default {
     "selectedCustomerDetails.selectedCustomer.street_name": function () {
       this.suggestStreetNameFromStreetNameInput();
     },
+    "selectedCustomerDetails.selectedCustomer.phone": function () {
+      this.selectedCustomerDetails.selectedCustomer.phone = this.selectedCustomerDetails.selectedCustomer.phone.replace(/(\d{3})(\d{3})(\d{3})/, "$1-$2-$3")
+    },
     deep: true,
   },
   props: ["selectedCustomerDetails"],
@@ -343,7 +352,7 @@ export default {
       if (
         !regex.test(selectedCustomer.phone) ||
         selectedCustomer.phone === "" ||
-        selectedCustomer.phone.length > 10
+        selectedCustomer.phone.length < 12
       ) {
         this.createCustomerError = "INVALID PHONE NUMBER";
         return false;

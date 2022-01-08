@@ -23,7 +23,7 @@
           <v-col v-if="order.order_void === true"> VOID </v-col>
           <v-col v-else-if="order.order_paid === true"> PAID </v-col>
           <v-col v-else> </v-col>
-          <v-col> {{ order.customer_phone }} </v-col>
+          <v-col> {{ order.customer_phone.replace(/(\d{3})(\d{3})(\d{3})/, "$1-$2-$3") }} </v-col>
           <v-col> {{ order.order_total.toFixed(2) }} </v-col>
         </v-row>
       </v-btn>

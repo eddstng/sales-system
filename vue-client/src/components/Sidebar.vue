@@ -12,16 +12,7 @@
                     x-large
                     color="success"
                     dark
-                    height="160px"
-                    width="100%"
-                    >HOME</v-btn
-                  >
-                  <v-btn
-                    class="my-2"
-                    x-large
-                    color="success"
-                    dark
-                    height="160px"
+                    height="180px"
                     width="100%"
                     v-on:click="changeComponent('ORDER')"
                     >ORDER</v-btn
@@ -31,7 +22,7 @@
                     x-large
                     color="success"
                     dark
-                    height="160px"
+                    height="180px"
                     width="100%"
                     v-on:click="changeComponent('HISTORY')"
                     >HISTORY</v-btn
@@ -41,7 +32,7 @@
                     x-large
                     color="orange"
                     dark
-                    height="160px"
+                    height="180px"
                     width="100%"
                     >OPTIONS</v-btn
                   >

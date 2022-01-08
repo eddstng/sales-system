@@ -31,7 +31,7 @@
               toggleCreateCustomerFormDialogOn();
               customerSelectMixinSetSelectedCustomer(customer);
             "
-            >{{ customer.phone }} - {{ customer.name }}</v-btn
+            >{{ customer.phone.replace(/(\d{3})(\d{3})(\d{3})/, "$1-$2-$3") }} - {{ customer.name }}</v-btn
           >
         </div>
         <br />

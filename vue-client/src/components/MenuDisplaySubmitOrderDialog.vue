@@ -6,7 +6,7 @@
         <v-row class="submitOrderDialogText mt-10">
           <div>
             <v-col :cols="15">
-              {{ $store.state.selectedCustomer.phone }} <br />
+              {{ $store.state.selectedCustomer.phone.replace(/(\d{3})(\d{3})(\d{3})/, "$1-$2-$3") }} <br />
               {{ $store.state.selectedCustomer.address }} <br />
               {{ $store.state.selectedCustomer.name }}
             </v-col>
