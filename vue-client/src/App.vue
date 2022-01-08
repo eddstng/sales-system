@@ -34,7 +34,7 @@
     </div>
     <template v-if="$store.state.component === 'ORDER'">
       <v-row no-gutters>
-        <v-col lg="2">
+        <v-col lg="1">
           <Sidebar />
         </v-col>
         <v-col lg="4">
@@ -44,7 +44,7 @@
             </v-container>
           </v-card>
         </v-col>
-        <v-col lg="6" height="100vh">
+        <v-col lg="7" height="100vh">
           <v-card class="fill-height" tile>
             <v-container class="grey lighten-5">
               <MenuButtons />
@@ -55,7 +55,7 @@
     </template>
     <template v-if="$store.state.component === 'HISTORY'">
       <v-row no-gutters>
-        <v-col lg="2">
+        <v-col lg="1">
           <Sidebar />
         </v-col>
         <v-col lg="4">
@@ -65,7 +65,7 @@
             </v-container>
           </v-card>
         </v-col>
-        <v-col lg="6" height="100vh">
+        <v-col lg="7" height="100vh">
           <v-card class="fill-height" tile>
             <v-container class="grey lighten-5">
               <HistoryButtons />

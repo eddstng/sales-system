@@ -62,22 +62,26 @@ export default {
       this.storeMixinClearStorePriceDetails();
     },
     async storeMixinUpdateStoreCustomerArray() {
-      console.log('here123')
-      console.log((await axios.get("http://localhost:3000/get/customers/all")).data
-      )
-      console.log('here000')
+      const allCustomers = (await axios.get("http://localhost:3000/get/customers/all")).data
+
+      const allCustomersObject = allCustomers.reduce((obj, order) => {
+        obj[order.id] = order;
+        return obj;
+      }, {});
 
       store.commit(
         "setCustomers",
-        (await axios.get("http://localhost:3000/get/customers/all")).data
+        allCustomersObject
       );
-      console.log(store.state.customers);
       const tables = [];
-      store.state.customers.forEach(customer => {
-        if (customer.name && customer.name.includes('Table #')) {
-          tables.push(customer)
+      
+      for (const [customerId, customerData] of Object.entries(store.state.customers)) {
+        if (customerData.name && customerData.name.includes('Table #')) {
+          console.log(customerId)
+          tables.push(customerData)
         }
-      })
+      }
+
       store.commit("setTables", tables)
       return
     },

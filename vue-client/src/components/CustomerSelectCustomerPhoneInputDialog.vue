@@ -1,5 +1,8 @@
 <template>
-  <v-dialog v-model="selectedCustomerDetails.customerPhoneInputDialog" width="500">
+  <v-dialog
+    v-model="selectedCustomerDetails.customerPhoneInputDialog"
+    width="500"
+  >
     <v-card>
       <div>
         <br />
@@ -22,7 +25,12 @@
             x-large
             dark
             width="100%"
-            v-on:click="customerSelectMixinSetSelectedCustomer(customer);"
+            v-on:click="
+              selectedCustomerDetails.customerPhoneInputDialog = false;
+              selectedCustomerDetails.selectedCustomer = JSON.parse(JSON.stringify(customer));;
+              toggleCreateCustomerFormDialogOn();
+              customerSelectMixinSetSelectedCustomer(customer);
+            "
             >{{ customer.phone }} - {{ customer.name }}</v-btn
           >
         </div>
@@ -46,7 +54,7 @@
           width="50%"
           v-on:click="
             selectedCustomerDetails.customerPhoneInputDialog = false;
-toggleCreateCustomerFormDialogOn();
+            toggleCreateCustomerFormDialogOn();
           "
         >
           <div>CREATE<br /></div>
@@ -64,7 +72,7 @@ export default {
   methods: {
     toggleCreateCustomerFormDialogOn() {
       this.$emit("setCreateCustomerFormDialogToBool", true);
-    }
-  }
-}
+    },
+  },
+};
 </script>

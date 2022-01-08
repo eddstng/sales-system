@@ -31,7 +31,7 @@ export default {
     updateOrderWithVoidTrue: async function () {
       // WIP
       try {
-        const res = await axios.post(
+        const res = await axios.put(
           "http://localhost:3000/put/orders/update/id/:id",
           {
             total: 10.0,

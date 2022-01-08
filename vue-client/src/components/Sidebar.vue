@@ -90,7 +90,6 @@ export default {
   },
   methods: {
     setOrderWarning() {
-      console.log(this.$store.state.component);
       if (
         (JSON.stringify(this.$store.state.selectedItems) !== "{}" ||
           JSON.stringify(this.$store.state.selectedCustomer) !== "{}" ||

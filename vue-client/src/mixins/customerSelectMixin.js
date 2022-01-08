@@ -3,23 +3,13 @@ export default {
     methods: {
         customerSelectMixinSetSelectedCustomer: function (selectedCustomer) {
             const selectedCustomerWithStringEmptyValues =
-                this.customerSelectMixinselectedCustomerValueNullToEmptyString(selectedCustomer);
+            this.customerSelectMixinselectedCustomerValueNullToEmptyString(selectedCustomer);
             store.commit(
                 "setSelectedCustomer",
                 selectedCustomerWithStringEmptyValues
             );
             this.selectedCustomerDetails.customerPhoneInputDialog = false;
             this.selectedCustomerDetails.selectDineInFormDialogue = false;
-            this.selectedCustomerDetails.selectedCustomer = {
-                phone: "",
-                unit_number: "",
-                street_number: "",
-                street_name: "",
-                address: "",
-                city: "",
-                name: "",
-                note: "",
-            };
         },
         customerSelectMixinselectedCustomerValueNullToEmptyString: function (selectedCustomer) {
             for (const key in selectedCustomer) {

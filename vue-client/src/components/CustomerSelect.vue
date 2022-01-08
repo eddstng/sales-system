@@ -67,7 +67,6 @@
     <CustomerSelectCustomerDineInTablesDialog
       v-bind:selectedCustomerDetails="selectedCustomerDetails"
     />
-
     <CustomerSelectCreateCustomerFormDialog
       v-bind:selectedCustomerDetails="selectedCustomerDetails"
     />
@@ -134,16 +133,6 @@ export default {
         customerPhoneInputDialog: false,
         createCustomerFormDialog: false,
       },
-      selectedCustomer: {
-        phone: "",
-        unit_number: "",
-        street_number: "",
-        street_name: "",
-        address: "",
-        city: "",
-        name: "",
-        note: "",
-      },
       suggestedStreetName: [],
       orderType: null,
       orderTypeString: ["DINE IN", "PICK UP", "DELIVERY"],
@@ -166,14 +155,24 @@ export default {
     },
     setStoreOrderType: function (orderTypeNum) {
       store.commit("setCurrentOrder", { type: orderTypeNum });
-      this.storeMixinUpdateStorePriceDetails();
+      (this.selectedCustomerDetails.selectedCustomer = {
+        phone: "",
+        unit_number: "",
+        street_number: "",
+        street_name: "",
+        address: "",
+        city: "",
+        name: "",
+        note: "",
+      }),
+        this.storeMixinUpdateStorePriceDetails();
     },
     clearSelectedCustomer: function () {
       store.commit("setSelectedCustomer", {});
     },
     suggestCustomerFromPhoneInput: function () {
       this.selectedCustomerDetails.suggestedCustomers = [];
-      const customerArr = this.$store.state.customers;
+      var customerArr = JSON.parse(JSON.stringify(Object.values(this.$store.state.customers)));
       if (this.selectedCustomerDetails.selectedCustomer.phone.length < 3) {
         this.selectedCustomerDetails.suggestedCustomers = [];
       } else {

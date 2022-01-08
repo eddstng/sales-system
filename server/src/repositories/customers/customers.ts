@@ -109,13 +109,17 @@ export async function deleteOneCustomer(id: number): Promise<void> {
 
 export async function updateCustomer(id: number, customer: Prisma.customersUpdateInput): Promise<void> {
     try {
+        const streetNumber = isNaN(parseInt(customer.street_number as string)) ? null : parseInt(customer.street_number as string)
         const res = await prisma.customers.update({
             where: { id: id },
             data: {
-                name: customer.name,
+                name: customer.name === "" ? null : customer.name,
                 phone: customer.phone,
-                address: customer.address,
-                note: customer.note,
+                unit_number: customer.unit_number === "" ? null : customer.unit_number,
+                street_number: streetNumber,
+                street_name: customer.street_name === "" ? null : customer.street_name,
+                address: buildCustomerAddress(customer as unknown as Customer),
+                note: customer.note === "" ? null : customer.note,
             },
         })
         logInfo(updateCustomer.name, `[✓] Customer Updated: {id: ${res.id}, name: ${res.name}, phone: ${res.phone}, address: ${res.address}, note: ${res.note}}`)
