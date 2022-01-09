@@ -70,6 +70,18 @@ export default {
       currentOrder.itemQuantity = selectedItemsQuantitySum;
       store.commit("setCurrentOrder", currentOrder);
     },
+    async storeMixinUpdateOrderHistoryArray() {
+      const orderHistoryArray = (
+        await axios.get("http://localhost:3000/get/ordershistory/all")
+      ).data;
+      // Here we turn the array into an object with the order id as the key and the order object as the value.
+      // The reason for this is so we can update the HistoryButtons with the order status.
+      const orderHistoryObj = orderHistoryArray.reduce((obj, order) => {
+        obj[order.order_id] = order;
+        return obj;
+      }, {});
+      store.commit("setOrderHistory", orderHistoryObj);
+    },
     async storeMixinUpdateStoreCustomerArray() {
       const allCustomers = (await axios.get("http://localhost:3000/get/customers/all")).data
 

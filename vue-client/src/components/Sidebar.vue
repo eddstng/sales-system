@@ -68,7 +68,7 @@
 <script>
 import storeMixin from "../mixins/storeMixin";
 import { store } from "../store/store";
-import axios from "axios";
+
 export default {
   mixins: [storeMixin],
   data() {
@@ -103,6 +103,7 @@ export default {
     async setComponent() {
       switch (this.changeComponentDetails.component) {
         case "HISTORY":
+          this.setComponentToOrder(); // needed to fix a bug where you cannot scroll up and click on an older history record
           this.setComponentToHistory();
           break;
         case "ORDER":
@@ -112,16 +113,7 @@ export default {
       this.changeComponentDetails.warning = false;
     },
     async setComponentToHistory() {
-      const orderHistoryArray = (
-        await axios.get("http://localhost:3000/get/ordershistory/all")
-      ).data;
-      // Here we turn the array into an object with the order id as the key and the order object as the value.
-      // The reason for this is so we can update the HistoryButtons with the order status.
-      const orderHistoryObj = orderHistoryArray.reduce((obj, order) => {
-        obj[order.order_id] = order;
-        return obj;
-      }, {});
-      store.commit("setOrderHistory", orderHistoryObj);
+await this.storeMixinUpdateOrderHistoryArray();
       store.commit("setComponent", "HISTORY");
       this.storeMixinClearOrderRelatedDetails();
     },

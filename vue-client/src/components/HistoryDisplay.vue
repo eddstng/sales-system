@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-card outlined tile height="16vh">
+    <v-card outlined tile height="12vh">
       <HistorySelect />
     </v-card>
     <v-card

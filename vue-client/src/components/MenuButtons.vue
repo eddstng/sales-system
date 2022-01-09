@@ -167,7 +167,7 @@
           v-bind:key="item.id"
           x-large
           dark
-          height="250px"
+          height="200px"
           width="24.5%"
           class="mt-1 mr-1"
           v-on:click="
