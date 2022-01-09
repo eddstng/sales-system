@@ -103,12 +103,12 @@ export default {
     removeSelectedItemOne: function (selectedItem) {
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
       if (
-        selectedItems[selectedItem.custom_id ?? selectedItem.node.id]
+        selectedItems[selectedItem.node.custom_id ?? selectedItem.node.id]
           .quantity === 1
       ) {
-        delete selectedItems[selectedItem.custom_id ?? selectedItem.node.id];
+        delete selectedItems[selectedItem.node.custom_id ?? selectedItem.node.id];
       } else {
-        selectedItems[selectedItem.custom_id ?? selectedItem.node.id]
+        selectedItems[selectedItem.node.custom_id ?? selectedItem.node.id]
           .quantity--;
       }
       this.setStoreSelectedItems(selectedItems);
@@ -116,13 +116,13 @@ export default {
     },
     removeSelectedItemAll: function (selectedItem) {
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
-      delete selectedItems[selectedItem.custom_id ?? selectedItem.node.id];
+      delete selectedItems[selectedItem.node.custom_id ?? selectedItem.node.id];
       this.setStoreSelectedItems(selectedItems);
       this.storeMixinUpdateStorePriceDetails();
     },
     addSelectedItemOne: function (selectedItem) {
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
-      selectedItems[selectedItem.custom_id ?? selectedItem.node.id].quantity++;
+      selectedItems[selectedItem.node.custom_id ?? selectedItem.node.id].quantity++;
       this.setStoreSelectedItems(selectedItems);
       this.storeMixinUpdateStorePriceDetails();
     },
