@@ -45,7 +45,6 @@
           <v-col cols="12" md="6">
             <v-text-field
               v-model="customCustomizationInput"
-              :error-messages="errors"
               label="Customization"
               required
               width="10%"
@@ -140,7 +139,7 @@ export default {
       // const selectedItemShadowClone = { ...selectedItem };
 
       const selectedItemIdToUseString =
-        selectedItem.custom_id ?? selectedItem.node.id.toString();
+        selectedItem.node.custom_id ?? selectedItem.node.id.toString();
 
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
 
@@ -149,13 +148,11 @@ export default {
         selectedItems[selectedItemIdToUseString].customizations !== undefined
       ) {
         // then we check if customizations is undefined
-        console.log("1");
         selectedItems[selectedItemIdToUseString].customizations.push(
           customizationObj
         );
       } else {
-        console.log("2");
-
+        
         // set it and set customzations
         const selectedItemWithCustomizations = {
           ...selectedItem,
