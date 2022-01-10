@@ -134,6 +134,7 @@ case
 	when oi.custom_price IS NULL then i.price
 	when oi.custom_price IS NOT NULL then oi.custom_price
 end as item_price,
+oi.custom_name as item_custom_name,
 oi.quantity as orders_items_quantity,
 oi.customizations as orders_items_customizations,
 oi.timestamp as orders_items_timestamp

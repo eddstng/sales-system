@@ -59,7 +59,8 @@
                 id: 198,
                 custom_id: 198 + customItem.name,
                 name_eng: customItem.name,
-                custom_name: customItem.name,
+                custom_name: customItem.name, //we have custom name to use for custom id, if we see that the itme has custom name then we will set it as a different row record, 
+                // we can give custom names like 198+Custom0, 198+Custom13
                 name_chn: 'Custom Item',
                 price: parseFloat(customItem.price),
                 custom_price: parseFloat(customItem.price),

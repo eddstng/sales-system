@@ -138,8 +138,10 @@ export default {
           customizations: item.customizations ? item.customizations : undefined,
           timestamp: new Date(item.timestamp).toISOString(),
           //TODO: Make the 198 (custom item id) environmental variables.
-          custom_price: item.node.id === 198 ? item.node.price : undefined,
-          custom_name: item.node.id === 198 ? item.node.name_eng : undefined,
+          // custom_price: item.node.id === 198 ? item.node.price : undefined,  // these were originally meant to only handle custom orders which would be 198 but now we have custom ids for other situations as well. leaving here for note.
+          // custom_name: item.node.id === 198 ? item.node.custom_name : undefined,
+          custom_price: item.node.price,
+          custom_name: item.node.custom_name,
         });
       }
       const res = await axios.post(

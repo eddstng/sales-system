@@ -62,11 +62,8 @@ export default {
       return strTime;
     },
     addHistoryItemToSelectedItems(ordersItemsDetailWithOrderId) {
-      //does this cause an issue if we don't clear the state.selctedItems?
       const itemIdOfInterest =
-        ordersItemsDetailWithOrderId.item_id === 198
-          ? `${ordersItemsDetailWithOrderId.item_id}${ordersItemsDetailWithOrderId.item_name_eng}`
-          : ordersItemsDetailWithOrderId.item_id;
+        ordersItemsDetailWithOrderId.item_custom_name ?? ordersItemsDetailWithOrderId.item_id;
       let selectedItems = store.state.selectedItems;
       if (itemIdOfInterest in selectedItems) {
         selectedItems[itemIdOfInterest].quantity++;
@@ -79,6 +76,7 @@ export default {
           name_chn: ordersItemsDetailWithOrderId.item_name_chn,
           name_eng: ordersItemsDetailWithOrderId.item_name_eng,
           price: ordersItemsDetailWithOrderId.item_price,
+          custom_name: ordersItemsDetailWithOrderId.item_custom_name,
         };
         selectedItems[itemIdOfInterest].customizations =
           ordersItemsDetailWithOrderId.orders_items_customizations;
