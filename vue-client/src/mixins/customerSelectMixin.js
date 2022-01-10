@@ -3,7 +3,7 @@ export default {
     methods: {
         customerSelectMixinSetSelectedCustomer: function (selectedCustomer) {
             const selectedCustomerWithStringEmptyValues =
-            this.customerSelectMixinselectedCustomerValueNullToEmptyString(selectedCustomer);
+                this.customerSelectMixinSelectedCustomerValueNullToEmptyString(selectedCustomer);
             store.commit(
                 "setSelectedCustomer",
                 selectedCustomerWithStringEmptyValues
@@ -11,7 +11,7 @@ export default {
             this.selectedCustomerDetails.customerPhoneInputDialog = false;
             this.selectedCustomerDetails.selectDineInFormDialogue = false;
         },
-        customerSelectMixinselectedCustomerValueNullToEmptyString: function (selectedCustomer) {
+        customerSelectMixinSelectedCustomerValueNullToEmptyString: function (selectedCustomer) {
             for (const key in selectedCustomer) {
                 if (selectedCustomer[key] === null) {
                     selectedCustomer[key] = "";
@@ -19,5 +19,13 @@ export default {
             }
             return selectedCustomer;
         },
+        customerSelectMixinBuildCustomerAddress: function (body) {
+            if (body.street_number && body.street_name) {
+                const unitNumber = body.unit_number ? `${body.unit_number} - ` : '';
+                return `${body.unit_number ? unitNumber : ''}${body.street_number} ${body.street_name}`
+            }
+            return null
+        }
+
     },
 };

@@ -408,7 +408,6 @@ export default {
       return selectedCustomer;
     },
     confirmCustomerSubmit: async function () {
-      // we want to check if the customer record exists, if it exists we want to see if the form has differences, if it is different then we want to run update.
       if (this.$store.state.selectedCustomer.id !== undefined) {
         if (
           JSON.stringify(this.selectedCustomerDetails.selectedCustomer) ===
@@ -421,9 +420,6 @@ export default {
           this.selectedCustomerDetails.createCustomerFormDialog = false;
           return;
         } else {
-          // this condition would mean that there were changes in the createCustomerDialogue(should change this name soon to customerForm or something)
-          // pop up a confirmation dialogue
-          // update customer
           this.confirmCustomerUpdateDialog = true;
         }
       }
@@ -445,7 +441,6 @@ export default {
 
           this.customerSelectMixinSetSelectedCustomer(res.data);
           this.selectedCustomerDetails.createCustomerFormDialog = false;
-          // update reload customers
           this.storeMixinUpdateStoreCustomerArray();
           return;
         } catch (err) {
@@ -460,6 +455,7 @@ export default {
           selectedCustomer
         );
         console.log(res);
+        selectedCustomer.address = this.customerSelectMixinBuildCustomerAddress(selectedCustomer);
         this.customerSelectMixinSetSelectedCustomer(
           JSON.parse(JSON.stringify(selectedCustomer))
         );

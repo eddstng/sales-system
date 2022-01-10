@@ -20,12 +20,12 @@
             <br />
           </div>
         </v-row>
-        <div v-for="value in $store.state.selectedItems" v-bind:key="value.id">
+        <div v-for="value in $store.state.selectedItemsOrderedByEntry" v-bind:key="value.id">
           <v-row
             v-if="value.node !== undefined"
             class="submitOrderDialogText mt-5 mb-5"
           >
-            <v-col class="text-end"> x{{ value.quantity }} </v-col>
+            <v-col> x{{ value.quantity }} </v-col>
             <v-col :cols="5">
               {{ value.node.name_eng }}
             </v-col>
@@ -50,6 +50,7 @@
             </div>
           </v-list-item-content>
         </div>
+        <br/>
         <v-row class="submitOrderDialogText mt-5 mb-5">
           <v-col :cols="3">
             Subtotal: {{ $store.state.priceDetails.subtotal.toFixed(2) }}
@@ -137,9 +138,6 @@ export default {
           quantity: item.quantity,
           customizations: item.customizations ? item.customizations : undefined,
           timestamp: new Date(item.timestamp).toISOString(),
-          //TODO: Make the 198 (custom item id) environmental variables.
-          // custom_price: item.node.id === 198 ? item.node.price : undefined,  // these were originally meant to only handle custom orders which would be 198 but now we have custom ids for other situations as well. leaving here for note.
-          // custom_name: item.node.id === 198 ? item.node.custom_name : undefined,
           custom_price: item.node.price,
           custom_name: item.node.custom_name,
         });

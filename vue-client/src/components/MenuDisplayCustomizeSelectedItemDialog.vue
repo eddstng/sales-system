@@ -135,9 +135,6 @@ export default {
       this.$emit("setRemoveSelectedItemDialogToBool", false);
     },
     addCustomizationToItem: function (selectedItem, customizationObj) {
-      // First thing we want to to is get the selectedItem, make sure to have a copy of the original selected item with the original quantity.
-      // const selectedItemShadowClone = { ...selectedItem };
-
       const selectedItemIdToUseString =
         selectedItem.node.custom_id ?? selectedItem.node.id.toString();
 
@@ -147,12 +144,10 @@ export default {
         selectedItemIdToUseString in selectedItems &&
         selectedItems[selectedItemIdToUseString].customizations !== undefined
       ) {
-        // then we check if customizations is undefined
         selectedItems[selectedItemIdToUseString].customizations.push(
           customizationObj
         );
       } else {
-        // set it and set customzations
         const selectedItemWithCustomizations = {
           ...selectedItem,
           customizations: [customizationObj],

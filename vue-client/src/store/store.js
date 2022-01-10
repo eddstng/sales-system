@@ -5,16 +5,11 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   state: {
-    // all of the items from the items table
-    // Items[]
     items: [],
     customers: [],
     tables: [],
     selectedCustomer: {},
-    // the items that are displayed on the menu display
-    // Record<string, Record<string, unknown>
     selectedItems: {},
-    //the price details that are displayed on the menu display
     priceDetails: {
       subtotal: 0,
       gst: 0,
@@ -51,6 +46,7 @@ export const store = new Vuex.Store({
       state.tables = tables;
     },
     setSelectedItems(state, selectedItems) {
+      state.selectedItemsOrderedByEntry = {};
       state.selectedItems = selectedItems;
       if (Object.keys(selectedItems).length === 0) {
         state.selectedItemsOrderedByEntry = {}
@@ -62,19 +58,18 @@ export const store = new Vuex.Store({
       // 2. We need to display the items with the timestamp as the key. This allows the menu display to display it in the order of entry.
       const selectedItemsTimestampCustomIdArray = [];
       for (const [key, selectedItem] of Object.entries(state.selectedItems)) {
-        selectedItemsTimestampCustomIdArray.push([key, selectedItem])
+        console.log(key);
+        selectedItemsTimestampCustomIdArray.push([key, selectedItem.timestamp, selectedItem])
       }
+      
+      const sortedArray = selectedItemsTimestampCustomIdArray.sort(function(a, b) {
+        return a[1] - b[1];
+      });
 
-      console.log("thing of interest =====")
-      console.log((selectedItemsTimestampCustomIdArray))
-      console.log("thing of interest ====3=")
-      selectedItemsTimestampCustomIdArray.forEach(([key, selectedItem]) => {
+      sortedArray.forEach(([key, selectedItemTimestamp, selectedItem]) => {
         let selectedItemsOrderedByEntry = state.selectedItemsOrderedByEntry;
         console.log(JSON.stringify(selectedItem))
-        // const keyToUse = selectedItem.node.custom_name ? selectedItem.node.custom_name : selectedItem.timestamp;
-        selectedItemsOrderedByEntry[key] = state.selectedItems[key];
-
-
+        selectedItemsOrderedByEntry[selectedItemTimestamp] = state.selectedItems[key];
         state.selectedItemsOrderedByEntry = selectedItemsOrderedByEntry;
 
       })

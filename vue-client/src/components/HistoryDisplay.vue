@@ -51,7 +51,6 @@
     <v-card
       v-on:click="historyOptionsDetails.openHistoryOptionsDialogue = true"
     >
-    // history display is now merging them custom orders and suming the quantity when we want it to be displayed seperately
       <v-list-item three-line>
         <v-list-item-content>
           <div class="menu-display-item-text">Subtotal:</div>
