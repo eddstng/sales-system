@@ -29,6 +29,7 @@
               width="50%"
               v-on:click="
                 phone = '';
+                customItem.name += `${suggestion} `;
                 createCustomerFormDialogue = false;
               "
             >
@@ -212,12 +213,14 @@ export default {
         price: 0.0,
       },
       customItemSuggestions: [
-        "Vegetable",
-        "Meat",
-        "Seafood",
+        "Beef",
         "Rice",
-        "Chow Mein",
-        "Chow Hoh",
+        "Chicken",
+        "Chow Mein (Crispy)",
+        "BBQ Pork",
+        "Chow Mein (Soft)",
+        "Broccoli",
+        "Black Bean Sauce"
       ],
       addCustomItemDialogue: false,
       categories: [
