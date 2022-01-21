@@ -1,4 +1,7 @@
 version: '3'
+networks:
+    sales-network:
+      driver: bridge
 services:
   psql:
     image: postgres:13
@@ -9,3 +12,26 @@ services:
       - POSTGRES_DB=postgres
     ports:
       - "5432:5432"
+    expose:
+      - 5432
+    networks:
+      - sales-network
+  sss:
+    image: 104c06d8d575
+    container_name: server
+    ports:
+      - "3000:3000"
+    networks:
+      - sales-network
+    depends_on:
+      - psql
+  ssv:
+    image: 2296e3dde664
+    container_name: client
+    ports:
+      - "8080:8080"
+    networks:
+      - sales-network
+    depends_on:
+      - psql
+      - sss
