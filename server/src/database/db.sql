@@ -327,7 +327,7 @@ INSERT INTO
 VALUES
     (
         'Austin Wallace',
-        '6041230987',
+        '604-123-0987',
         '5340 Charleston Crt',
         NULL,
         5340,
@@ -340,7 +340,7 @@ INSERT INTO
 VALUES
     (
         'Beatrix Harley',
-        '6044211341',
+        '604-421-1341',
         '910-1022 Bearton St',
         '910',
         1022,
@@ -353,7 +353,7 @@ INSERT INTO
 VALUES
     (
         'Catherine Trix',
-        '6041222114',
+        '604-122-2114',
         '1391 Horton Ave',
         NULL,
         1391,

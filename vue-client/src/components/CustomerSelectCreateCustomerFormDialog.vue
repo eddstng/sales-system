@@ -16,6 +16,7 @@
                 label="Phone Number"
                 required
                 :rules="rules"
+                @keydown.enter.prevent="confirmCustomerSubmit()"
                 autocomplete="off"
                 autofocus
               ></v-text-field>
@@ -321,7 +322,11 @@ export default {
       this.suggestStreetNameFromStreetNameInput();
     },
     "selectedCustomerDetails.selectedCustomer.phone": function () {
-      this.selectedCustomerDetails.selectedCustomer.phone = this.selectedCustomerDetails.selectedCustomer.phone.replace(/(\d{3})(\d{3})(\d{3})/, "$1-$2-$3")
+      this.selectedCustomerDetails.selectedCustomer.phone =
+        this.selectedCustomerDetails.selectedCustomer.phone.replace(
+          /(\d{3})(\d{3})(\d{3})/,
+          "$1-$2-$3"
+        );
     },
     deep: true,
   },
@@ -413,7 +418,7 @@ export default {
           JSON.stringify(this.selectedCustomerDetails.selectedCustomer) ===
           JSON.stringify(
             this.$store.state.customers[
-              this.selectedCustomerDetails.selectedCustomer.id
+              this.selectedCustomerDetails.selectedCustomer.phone
             ]
           )
         ) {
@@ -455,7 +460,8 @@ export default {
           selectedCustomer
         );
         console.log(res);
-        selectedCustomer.address = this.customerSelectMixinBuildCustomerAddress(selectedCustomer);
+        selectedCustomer.address =
+          this.customerSelectMixinBuildCustomerAddress(selectedCustomer);
         this.customerSelectMixinSetSelectedCustomer(
           JSON.parse(JSON.stringify(selectedCustomer))
         );

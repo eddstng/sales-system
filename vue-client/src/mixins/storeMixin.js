@@ -88,8 +88,8 @@ export default {
     async storeMixinUpdateStoreCustomerArray() {
       const allCustomers = (await axios.get("http://localhost:3000/get/customers/all")).data
 
-      const allCustomersObject = allCustomers.reduce((obj, order) => {
-        obj[order.id] = order;
+      const allCustomersObject = allCustomers.reduce((obj, customer) => {
+        obj[customer.phone] = customer;
         return obj;
       }, {});
 

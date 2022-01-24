@@ -15,6 +15,7 @@
               @keydown.enter.prevent="
                 selectedCustomerDetails.customerPhoneInputDialog = false;
                 toggleCreateCustomerFormDialogOn();
+                setSelectedCustomerIfCustomerExists();
               "
               required
               autocomplete="off"
@@ -80,6 +81,23 @@ export default {
   methods: {
     toggleCreateCustomerFormDialogOn() {
       this.$emit("setCreateCustomerFormDialogToBool", true);
+    },
+    setSelectedCustomerIfCustomerExists() {
+      if (
+        this.$store.state.customers[
+          this.selectedCustomerDetails.selectedCustomer.phone
+        ] !== undefined
+      ) {
+        this.selectedCustomerDetails.selectedCustomer =
+          JSON.parse(JSON.stringify(this.$store.state.customers[
+            this.selectedCustomerDetails.selectedCustomer.phone
+          ]))
+        this.customerSelectMixinSetSelectedCustomer(
+          JSON.parse(JSON.stringify(this.$store.state.customers[
+            this.selectedCustomerDetails.selectedCustomer.phone
+          ]))
+        );
+      }
     },
   },
 };
