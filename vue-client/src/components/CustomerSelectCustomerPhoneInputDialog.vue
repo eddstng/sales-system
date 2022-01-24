@@ -12,10 +12,15 @@
               v-model="selectedCustomerDetails.selectedCustomer.phone"
               :counter="16"
               label="Phone Number"
+              @keydown.enter.prevent="
+                selectedCustomerDetails.customerPhoneInputDialog = false;
+                toggleCreateCustomerFormDialogOn();
+              "
               required
               autocomplete="off"
               autofocus
             ></v-text-field>
+            <v-text-field></v-text-field>
           </v-form>
         </v-col>
         <div v-if="this.selectedCustomerDetails.suggestedCustomers.length > 0">
@@ -27,11 +32,14 @@
             width="100%"
             v-on:click="
               selectedCustomerDetails.customerPhoneInputDialog = false;
-              selectedCustomerDetails.selectedCustomer = JSON.parse(JSON.stringify(customer));;
+              selectedCustomerDetails.selectedCustomer = JSON.parse(
+                JSON.stringify(customer)
+              );
               toggleCreateCustomerFormDialogOn();
               customerSelectMixinSetSelectedCustomer(customer);
             "
-            >{{ customer.phone.replace(/(\d{3})(\d{3})(\d{3})/, "$1-$2-$3") }} - {{ customer.name }}</v-btn
+            >{{ customer.phone.replace(/(\d{3})(\d{3})(\d{3})/, "$1-$2-$3") }} -
+            {{ customer.name }}</v-btn
           >
         </div>
         <br />
