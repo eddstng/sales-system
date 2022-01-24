@@ -21,7 +21,6 @@
               autocomplete="off"
               autofocus
             ></v-text-field>
-            <v-text-field></v-text-field>
           </v-form>
         </v-col>
         <div v-if="this.selectedCustomerDetails.suggestedCustomers.length > 0">

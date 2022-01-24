@@ -16,9 +16,9 @@
                 label="Phone Number"
                 required
                 :rules="rules"
-                @keydown.enter.prevent="confirmCustomerSubmit()"
                 autocomplete="off"
                 autofocus
+                @keydown.enter.prevent="confirmCustomerSubmit()"
               ></v-text-field>
               <v-row>
                 <v-col cols="12" md="6">
@@ -28,6 +28,7 @@
                     "
                     label="Unit Number"
                     autocomplete="off"
+                    @keydown.enter.prevent="confirmCustomerSubmit()"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" md="6">
@@ -37,6 +38,7 @@
                     "
                     label="Street Number"
                     autocomplete="off"
+                    @keydown.enter.prevent="confirmCustomerSubmit()"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -45,6 +47,7 @@
                 :counter="50"
                 label="Street Name"
                 autocomplete="off"
+                @keydown.enter.prevent="confirmCustomerSubmit()"
               ></v-text-field>
               <br />
               <v-select
@@ -57,12 +60,14 @@
                 v-model="selectedCustomerDetails.selectedCustomer.name"
                 label="Name"
                 autocomplete="off"
+                @keydown.enter.prevent="confirmCustomerSubmit()"
               ></v-text-field>
               <v-text-field
                 v-model="selectedCustomerDetails.selectedCustomer.note"
                 :counter="100"
                 label="Note"
                 autocomplete="off"
+                @keydown.enter.prevent="confirmCustomerSubmit()"
               ></v-text-field>
             </v-form>
           </v-col>
@@ -428,7 +433,10 @@ export default {
           this.confirmCustomerUpdateDialog = true;
         }
       }
-      if (this.validCreateCustomerForm()) {
+      if (
+        this.validCreateCustomerForm() &&
+        this.confirmCustomerUpdateDialog === false
+      ) {
         try {
           const selectedCustomerWithNullEmptyValues =
             this.selectedCustomerValueEmptyStringToNull(
