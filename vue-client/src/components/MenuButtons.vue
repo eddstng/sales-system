@@ -30,7 +30,6 @@
               v-on:click="
                 phone = '';
                 customItem.name += `${suggestion} `;
-                createCustomerFormDialogue = false;
               "
             >
               <div>{{ suggestion }}<br /></div>
@@ -46,7 +45,8 @@
             width="50%"
             v-on:click="
               phone = '';
-              createCustomerFormDialogue = false;
+              addCustomItemDialogue = false;
+              customItem.name = '';
             "
           >
             <div>CANCEL<br /></div>
@@ -220,7 +220,7 @@ export default {
         "BBQ Pork",
         "Chow Mein (Soft)",
         "Broccoli",
-        "Black Bean Sauce"
+        "Black Bean Sauce",
       ],
       addCustomItemDialogue: false,
       categories: [
