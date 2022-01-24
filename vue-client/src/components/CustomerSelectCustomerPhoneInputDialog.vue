@@ -13,7 +13,6 @@
               :counter="16"
               label="Phone Number"
               @keydown.enter.prevent="
-                selectedCustomerDetails.customerPhoneInputDialog = false;
                 toggleCreateCustomerFormDialogOn();
                 setSelectedCustomerIfCustomerExists();
               "
@@ -21,6 +20,15 @@
               autocomplete="off"
               autofocus
             ></v-text-field>
+            <v-alert
+              v-if="this.phoneError"
+              class="ml-2 mr-2"
+              dense
+              type="error"
+              outlined
+            >
+              Error: {{ this.phoneError }}
+            </v-alert>
           </v-form>
         </v-col>
         <div v-if="this.selectedCustomerDetails.suggestedCustomers.length > 0">
@@ -51,6 +59,7 @@
           x-large
           width="50%"
           v-on:click="
+            phoneError = null;
             phone = '';
             selectedCustomerDetails.customerPhoneInputDialog = false;
           "
@@ -77,9 +86,20 @@ import customerSelectMixin from "../mixins/customerSelectMixin";
 export default {
   mixins: [customerSelectMixin],
   props: ["selectedCustomerDetails"],
+  data() {
+    return {
+      phoneError: null,
+    };
+  },
   methods: {
     toggleCreateCustomerFormDialogOn() {
-      this.$emit("setCreateCustomerFormDialogToBool", true);
+      if (this.selectedCustomerDetails.selectedCustomer.phone.length < 12) {
+        this.phoneError =
+          "Invalid phone number. Phone number needs to be at least 10 numbers long.";
+      } else {
+        this.selectedCustomerDetails.customerPhoneInputDialog = false;
+        this.$emit("setCreateCustomerFormDialogToBool", true);
+      }
     },
     setSelectedCustomerIfCustomerExists() {
       if (
@@ -87,14 +107,21 @@ export default {
           this.selectedCustomerDetails.selectedCustomer.phone
         ] !== undefined
       ) {
-        this.selectedCustomerDetails.selectedCustomer =
-          JSON.parse(JSON.stringify(this.$store.state.customers[
-            this.selectedCustomerDetails.selectedCustomer.phone
-          ]))
+        this.selectedCustomerDetails.selectedCustomer = JSON.parse(
+          JSON.stringify(
+            this.$store.state.customers[
+              this.selectedCustomerDetails.selectedCustomer.phone
+            ]
+          )
+        );
         this.customerSelectMixinSetSelectedCustomer(
-          JSON.parse(JSON.stringify(this.$store.state.customers[
-            this.selectedCustomerDetails.selectedCustomer.phone
-          ]))
+          JSON.parse(
+            JSON.stringify(
+              this.$store.state.customers[
+                this.selectedCustomerDetails.selectedCustomer.phone
+              ]
+            )
+          )
         );
       }
     },
