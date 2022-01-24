@@ -416,8 +416,10 @@ export default {
     },
     // confirmCustomerSubmit currently will either update customer if applicable (or nothing), or create customer.
     confirmCustomerSubmit: async function () {
-      // If there is a selectedCustomer (set in CustomerSelectCustomerPhoneInputDialog if the customer exists), 
-      // then check if the customer details have been updated in the form, 
+      this.createCustomerError = null;
+      this.checkIfIsDeliveryAndHasValidAddress();
+      // If there is a selectedCustomer (set in CustomerSelectCustomerPhoneInputDialog if the customer exists),
+      // then check if the customer details have been updated in the form,
       // if updated, then open customerUpdateDialog.
       if (this.$store.state.selectedCustomer.id !== undefined) {
         if (
@@ -428,7 +430,7 @@ export default {
             ]
           )
         ) {
-          // If customer details have not been updated in the form then do nothing and close dialogue. 
+          // If customer details have not been updated in the form then do nothing and close dialogue.
           this.selectedCustomerDetails.createCustomerFormDialog = false;
           return;
         } else {
@@ -436,9 +438,10 @@ export default {
           this.confirmCustomerUpdateDialog = true;
         }
       }
-      // If there is no selectedCustomer (meaning that the customer does not exist), 
+      // If there is no selectedCustomer (meaning that the customer does not exist),
       // then validate customer form and create a new customer entry.
       if (
+        this.createCustomerError === null &&
         this.validCreateCustomerForm() &&
         this.confirmCustomerUpdateDialog === false
       ) {
@@ -488,8 +491,15 @@ export default {
         this.createCustomerError = err.response.data;
       }
     },
-    ifDeliveryAndHasCustomerAddress() {
-      
+    checkIfIsDeliveryAndHasValidAddress: function () {
+      if (
+        this.$store.state.currentOrder.type === 2 &&
+        (this.selectedCustomerDetails.selectedCustomer.street_number == "" ||
+          this.selectedCustomerDetails.selectedCustomer.street_name == "")
+      ) {
+        this.createCustomerError = "DELIVERY REQUIRES A VALID ADDRESS";
+      }
+      return;
     },
     suggestStreetNameFromStreetNameInput: function () {
       this.suggestedStreetName = [];
