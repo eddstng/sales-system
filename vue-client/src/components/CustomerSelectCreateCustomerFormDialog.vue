@@ -387,10 +387,6 @@ export default {
 
       // Build Address
       if (selectedCustomer.street_name !== "") {
-        if (selectedCustomer.city === "") {
-          this.createCustomerError = "INVALID CITY";
-          return false;
-        }
         const unitNumber =
           selectedCustomer.unit_number !== ""
             ? `${selectedCustomer.unit_number} - `
@@ -399,12 +395,13 @@ export default {
       }
 
       // Ensure street_number is a number.
-      if (selectedCustomer.street_number !== "") {
-        if (isNaN(selectedCustomer.street_number)) {
-          this.createCustomerError = "INVALID STREET NUMBER";
-          return false;
-        }
-      }
+      // Commented out a requirement for street_number to be an integer.
+      // if (selectedCustomer.street_number !== "") {
+      //   if (isNaN(selectedCustomer.street_number)) {
+      //     this.createCustomerError = "INVALID STREET NUMBER";
+      //     return false;
+      //   }
+      // }
 
       this.createCustomerError = null;
       return true;
@@ -417,7 +414,11 @@ export default {
       }
       return selectedCustomer;
     },
+    // confirmCustomerSubmit currently will either update customer if applicable (or nothing), or create customer.
     confirmCustomerSubmit: async function () {
+      // If there is a selectedCustomer (set in CustomerSelectCustomerPhoneInputDialog if the customer exists), 
+      // then check if the customer details have been updated in the form, 
+      // if updated, then open customerUpdateDialog.
       if (this.$store.state.selectedCustomer.id !== undefined) {
         if (
           JSON.stringify(this.selectedCustomerDetails.selectedCustomer) ===
@@ -427,12 +428,16 @@ export default {
             ]
           )
         ) {
+          // If customer details have not been updated in the form then do nothing and close dialogue. 
           this.selectedCustomerDetails.createCustomerFormDialog = false;
           return;
         } else {
+          // If customer details have been updated in the form then open customerUpdateDialog.
           this.confirmCustomerUpdateDialog = true;
         }
       }
+      // If there is no selectedCustomer (meaning that the customer does not exist), 
+      // then validate customer form and create a new customer entry.
       if (
         this.validCreateCustomerForm() &&
         this.confirmCustomerUpdateDialog === false
@@ -451,9 +456,8 @@ export default {
               ),
             }
           );
-
-          this.customerSelectMixinSetSelectedCustomer(res.data);
           this.selectedCustomerDetails.createCustomerFormDialog = false;
+          this.customerSelectMixinSetSelectedCustomer(res.data);
           this.storeMixinUpdateStoreCustomerArray();
           return;
         } catch (err) {
@@ -483,6 +487,9 @@ export default {
       } catch (err) {
         this.createCustomerError = err.response.data;
       }
+    },
+    ifDeliveryAndHasCustomerAddress() {
+      
     },
     suggestStreetNameFromStreetNameInput: function () {
       this.suggestedStreetName = [];
