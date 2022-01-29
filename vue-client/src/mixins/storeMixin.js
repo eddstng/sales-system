@@ -33,6 +33,10 @@ export default {
         (currentSubtotal * 0.05).toFixed(2)
       );
     },
+    storeMixinSetStoreSelectedItems(selectedItems) {
+      store.commit("setSelectedItems", {});
+      store.commit("setSelectedItems", selectedItems);
+    },
     storeMixinUpdateStorePriceDetails() {
       let specialItemNegatingDiscount = false;
       this.storeMixinClearStorePriceDetails();

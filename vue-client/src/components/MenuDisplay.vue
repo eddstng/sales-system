@@ -4,13 +4,13 @@
       v-bind:submitOrderDialog="submitOrderDialog"
       @setSubmitOrderDialogToBool="setSubmitOrderDialogToBool"
     />
-    <MenuDisplayRemoveSelectedItemDialog
+    <MenuDisplaySelectedItemDetailsDialog
       v-bind:removeMenuDisplayItemDetails="removeMenuDisplayItemDetails"
       @setRemoveSelectedItemDialogCustomizeItemDialogToBool="
         setRemoveSelectedItemDialogCustomizeItemDialogToBool
       "
     />
-    <MenuDisplayCustomizeSelectedItemDialog
+    <MenuDisplaySelectedItemDetailsCustomizeDialog
       v-bind:removeMenuDisplayItemDetails="removeMenuDisplayItemDetails"
       @setRemoveSelectedItemDialogCustomizeItemDialogToBool="
         setRemoveSelectedItemDialogCustomizeItemDialogToBool
@@ -113,8 +113,8 @@ import storeMixin from "../mixins/storeMixin";
 import { store } from "../store/store";
 import CustomerSelect from "./CustomerSelect";
 import MenuDisplaySubmitOrderDialog from "./MenuDisplaySubmitOrderDialog";
-import MenuDisplayRemoveSelectedItemDialog from "./MenuDisplayRemoveSelectedItemDialog";
-import MenuDisplayCustomizeSelectedItemDialog from "./MenuDisplayCustomizeSelectedItemDialog";
+import MenuDisplaySelectedItemDetailsDialog from "./MenuDisplaySelectedItemDetailsDialog";
+import MenuDisplaySelectedItemDetailsCustomizeDialog from "./MenuDisplaySelectedItemDetailsCustomizeDialog";
 
 export default {
   mixins: [storeMixin],
@@ -153,8 +153,8 @@ export default {
     CustomerSelect,
     MenuDisplaySubmitOrderDialog,
     // TODO: This component needs to be renamed. It is no longer the remove dialog but it is a edit item dialog.
-    MenuDisplayRemoveSelectedItemDialog,
-    MenuDisplayCustomizeSelectedItemDialog,
+    MenuDisplaySelectedItemDetailsDialog,
+    MenuDisplaySelectedItemDetailsCustomizeDialog,
   },
 };
 </script>
