@@ -44,7 +44,7 @@
                 JSON.stringify(customer)
               );
               toggleCreateCustomerFormDialogOn();
-              customerSelectMixinSetSelectedCustomer(customer);
+              setSelectedCustomerIfCustomerExists(customer);
             "
             >{{ customer.phone.replace(/(\d{3})(\d{3})(\d{3})/, "$1-$2-$3") }} -
             {{ customer.name }}</v-btn

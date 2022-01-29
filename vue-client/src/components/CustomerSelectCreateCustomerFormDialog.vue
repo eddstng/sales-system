@@ -418,6 +418,9 @@ export default {
     confirmCustomerSubmit: async function () {
       this.createCustomerError = null;
       this.checkIfIsDeliveryAndHasValidAddress();
+      if (this.createCustomerError !== null) {
+        return
+      }
       // If there is a selectedCustomer (set in CustomerSelectCustomerPhoneInputDialog if the customer exists),
       // then check if the customer details have been updated in the form,
       // if updated, then open customerUpdateDialog.
@@ -495,7 +498,8 @@ export default {
       if (
         this.$store.state.currentOrder.type === 2 &&
         (this.selectedCustomerDetails.selectedCustomer.street_number == "" ||
-          this.selectedCustomerDetails.selectedCustomer.street_name == "")
+          this.selectedCustomerDetails.selectedCustomer.street_name == "" || this.selectedCustomerDetails.selectedCustomer.street_number == null ||
+          this.selectedCustomerDetails.selectedCustomer.street_name == null)
       ) {
         this.createCustomerError = "DELIVERY REQUIRES A VALID ADDRESS";
       }
