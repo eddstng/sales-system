@@ -49,7 +49,7 @@
       x-large
       width="97%"
       min-height="100%"
-      v-on:click="openClearSelectedCustomerConfirmationDialogue = true"
+      v-on:click="selectedCustomerDetails.openClearSelectedCustomerConfirmationDialogue = true"
       style="height: 10vh"
     >
       <div>
@@ -72,28 +72,36 @@
     />
 
     <v-dialog
-      v-model="openClearSelectedCustomerConfirmationDialogue"
+      v-model="selectedCustomerDetails.openClearSelectedCustomerConfirmationDialogue"
       width="900"
     >
       <v-card>
-        <h2 class="text-center pt-16 pb-12">CLEAR CUSTOMER?</h2>
+        <h2 class="text-center pt-16 pb-12">MODIFY CUSTOMER?</h2>
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
             x-large
-            width="50%"
-            v-on:click="openClearSelectedCustomerConfirmationDialogue = false"
+            width="33%"
+            v-on:click="selectedCustomerDetails.openClearSelectedCustomerConfirmationDialogue = false"
           >
             <div>NO<br /></div>
           </v-btn>
           <v-btn
             x-large
-            width="50%"
+            width="33%"
             v-on:click="
-              openClearSelectedCustomerConfirmationDialogue = false;
+              selectedCustomerDetails.openClearSelectedCustomerConfirmationDialogue = false;
               clearSelectedCustomer();
             "
+          >
+            <div>CLEAR<br /></div>
+          </v-btn>
+                    <v-btn
+            x-large
+            width="33%"
+            v-on:click="selectedCustomerDetails.openClearSelectedCustomerConfirmationDialogue = false
+            selectedCustomerDetails.createCustomerFormDialog = true"
           >
             <div>YES<br /></div>
           </v-btn>
@@ -115,7 +123,6 @@ export default {
   mixins: [customerSelectMixin, storeMixin],
   data() {
     return {
-      openClearSelectedCustomerConfirmationDialogue: false,
       createCustomerError: null,
       selectedCustomerDetails: {
         selectedCustomer: {
@@ -132,6 +139,7 @@ export default {
         selectDineInFormDialogue: false,
         customerPhoneInputDialog: false,
         createCustomerFormDialog: false,
+      openClearSelectedCustomerConfirmationDialogue: false,
       },
       suggestedStreetName: [],
       orderType: null,
