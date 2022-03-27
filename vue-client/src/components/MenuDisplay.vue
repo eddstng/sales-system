@@ -6,16 +6,16 @@
     />
     <MenuDisplaySelectedItemDetailsDialog
       v-bind:removeMenuDisplayItemDetails="removeMenuDisplayItemDetails"
-      @setRemoveSelectedItemDialogCustomizeItemDialogToBool="
-        setRemoveSelectedItemDialogCustomizeItemDialogToBool
+      @setSelectedItemDialogCustomizeItemDialogToBool="
+        setSelectedItemDialogCustomizeItemDialogToBool
       "
     />
     <MenuDisplaySelectedItemDetailsCustomizeDialog
       v-bind:removeMenuDisplayItemDetails="removeMenuDisplayItemDetails"
-      @setRemoveSelectedItemDialogCustomizeItemDialogToBool="
-        setRemoveSelectedItemDialogCustomizeItemDialogToBool
+      @setSelectedItemDialogCustomizeItemDialogToBool="
+        setSelectedItemDialogCustomizeItemDialogToBool
       "
-      @setRemoveSelectedItemDialogToBool="setRemoveSelectedItemDialogToBool"
+      @setSelectedItemDialogToBool="setSelectedItemDialogToBool"
     />
     <v-card outlined tile height="16vh">
       <CustomerSelect />
@@ -35,7 +35,8 @@
           v-bind:key="item.timestamp"
           width="100vw"
           v-on:click="
-            removeMenuDisplayItemDetails.removeSelectedItemDialog = true;
+            removeMenuDisplayItemDetails.selectedItemDialog = true;
+            removeMenuDisplayItemDetails.openCustomizeItemDialogue = false;
             removeMenuDisplayItemDetails.removeSelectedItem = item;
           "
         >
@@ -122,7 +123,7 @@ export default {
     return {
       removeMenuDisplayItemDetails: {
         openCustomizeItemDialogue: false,
-        removeSelectedItemDialog: false,
+        selectedItemDialog: false,
         removeSelectedItem: {},
       },
       submitOrderDialog: false,
@@ -133,10 +134,10 @@ export default {
     setSubmitOrderDialogToBool: function (bool) {
       this.submitOrderDialog = bool;
     },
-    setRemoveSelectedItemDialogToBool: function (bool) {
-      this.removeMenuDisplayItemDetails.removeSelectedItemDialog = bool;
+    setSelectedItemDialogToBool: function (bool) {
+      this.removeMenuDisplayItemDetails.selectedItemDialog = bool;
     },
-    setRemoveSelectedItemDialogCustomizeItemDialogToBool: function (bool) {
+    setSelectedItemDialogCustomizeItemDialogToBool: function (bool) {
       this.removeMenuDisplayItemDetails.openCustomizeItemDialogue = bool;
     },
     submitOrderDialogConditional: function () {

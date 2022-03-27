@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     v-if="removeMenuDisplayItemDetails.openCustomizeItemDialogue"
-    v-model="removeMenuDisplayItemDetails.removeSelectedItemDialog"
+    v-model="removeMenuDisplayItemDetails.selectedItemDialog"
     width="1000px"
   >
     <v-card>
@@ -24,8 +24,8 @@
           height="80px"
           v-on:click="
             openCustomizeItemDialogue = false;
-            toggleRemoveSelectedItemDialogCustomizeItemDialog(false);
-            toggleRemoveSelectedItemDialogOff();
+            toggleSelectedItemDialogCustomizeItemDialog(false);
+            toggleSelectedItemDialogOff();
             addCustomizationToItem(
               removeMenuDisplayItemDetails.removeSelectedItem,
               {
@@ -58,7 +58,7 @@
             height="80px"
             v-on:click="
               openCustomizeItemDialogue = false;
-              removeMenuDisplayItemDetails.removeSelectedItemDialog = false;
+              removeMenuDisplayItemDetails.selectedItemDialog = false;
               addCustomizationToItem(
                 removeMenuDisplayItemDetails.removeSelectedItem,
                 {
@@ -80,7 +80,7 @@
         <v-btn
           x-large
           width="100%"
-          v-on:click="toggleRemoveSelectedItemDialogCustomizeItemDialog(false)"
+          v-on:click="toggleSelectedItemDialogCustomizeItemDialog(false)"
         >
           <div>CANCEL<br /></div>
         </v-btn>
@@ -128,11 +128,11 @@ export default {
   },
   methods: {
     //repeated
-    toggleRemoveSelectedItemDialogCustomizeItemDialog(bool) {
-      this.$emit("setRemoveSelectedItemDialogCustomizeItemDialogToBool", bool);
+    toggleSelectedItemDialogCustomizeItemDialog(bool) {
+      this.$emit("setSelectedItemDialogCustomizeItemDialogToBool", bool);
     },
-    toggleRemoveSelectedItemDialogOff() {
-      this.$emit("setRemoveSelectedItemDialogToBool", false);
+    toggleSelectedItemDialogOff() {
+      this.$emit("setSelectedItemDialogToBool", false);
     },
     addCustomizationToItem: function (selectedItem, customizationObj) {
       const selectedItemIdToUseString =

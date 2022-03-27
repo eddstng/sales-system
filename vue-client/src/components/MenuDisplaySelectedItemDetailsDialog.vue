@@ -2,7 +2,7 @@
   <div>
     <v-dialog
       v-if="removeMenuDisplayItemDetails.removeSelectedItem.node !== undefined"
-      v-model="removeMenuDisplayItemDetails.removeSelectedItemDialog"
+      v-model="removeMenuDisplayItemDetails.selectedItemDialog"
       width="1000px"
     >
       <v-card>
@@ -30,7 +30,7 @@
             x-large
             width="15%"
             v-on:click="
-              toggleRemoveSelectedItemDialogFalse();
+              toggleSelectedItemDialogFalse();
               removeMenuDisplayItemDetails.removeSelectedItem = {};
             "
           >
@@ -39,7 +39,7 @@
           <v-btn
             x-large
             width="15%"
-            v-on:click="toggleRemoveSelectedItemDialogCustomizeItemDialog(true)"
+            v-on:click="toggleSelectedItemDialogCustomizeItemDialog(true)"
           >
             <div>CUSTOMIZE<br /></div>
           </v-btn>
@@ -47,7 +47,7 @@
             x-large
             width="15%"
             v-on:click="
-              toggleRemoveSelectedItemDialogFalse();
+              toggleSelectedItemDialogFalse();
               removeSelectedItemAll(
                 removeMenuDisplayItemDetails.removeSelectedItem
               );
@@ -61,7 +61,7 @@
             x-large
             width="15%"
             v-on:click="
-              toggleRemoveSelectedItemDialogFalse();
+              toggleSelectedItemDialogFalse();
               removeSelectedItemOne(
                 removeMenuDisplayItemDetails.removeSelectedItem
               );
@@ -75,7 +75,7 @@
             x-large
             width="19.6%"
             v-on:click="
-              toggleRemoveSelectedItemDialogFalse();
+              toggleSelectedItemDialogFalse();
               addSelectedItemOne(
                 removeMenuDisplayItemDetails.removeSelectedItem
               );
@@ -89,7 +89,7 @@
             x-large
             width="15%"
             v-on:click="
-              toggleRemoveSelectedItemDialogFalse();
+              toggleSelectedItemDialogFalse();
               storeMixinSumSelectedItemsQuantity();
               toggleUpdateQuantityDialogTrue('ADD');
             "
@@ -167,7 +167,7 @@
             width="50%"
             v-on:click="
               updateQuantityDialog = false;
-              removeMenuDisplayItemDetails.removeSelectedItemDialog = false;
+              removeMenuDisplayItemDetails.selectedItemDialog = false;
             "
           >
             <div>NO<br /></div>
@@ -178,7 +178,7 @@
             v-on:click="
               updateSelectedItemAmount(updateQuantityDialogItem);
               updateQuantityDialog = false;
-              removeMenuDisplayItemDetails.removeSelectedItemDialog = false;
+              removeMenuDisplayItemDetails.selectedItemDialog = false;
             "
           >
             <div>YES<br /></div>
@@ -219,11 +219,11 @@ export default {
       );
       this.updateQuantityDialog = true;
     },
-    toggleRemoveSelectedItemDialogFalse() {
-      this.$emit("setRemoveSelectedItemDialogToBool", false);
+    toggleSelectedItemDialogFalse() {
+      this.$emit("setSelectedItemDialogToBool", false);
     },
-    toggleRemoveSelectedItemDialogCustomizeItemDialog(bool) {
-      this.$emit("setRemoveSelectedItemDialogCustomizeItemDialogToBool", bool);
+    toggleSelectedItemDialogCustomizeItemDialog(bool) {
+      this.$emit("setSelectedItemDialogCustomizeItemDialogToBool", bool);
     },
     handleKeypad(buttonValue) {
       if (buttonValue === "🠔") {
