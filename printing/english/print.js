@@ -10,8 +10,6 @@ async function printImage() {
 
     try {
         await printer.printImage('./english/english.png');
-        printer.newLine();
-
         printer.cut();
         printer.execute();
     } catch (err) {

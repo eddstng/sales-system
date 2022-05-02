@@ -16,7 +16,7 @@ export default {
       priceDetailsReturn.subtotal = this.storeMixinCalculatePriceDetailsSubtotal(priceDetailsReturn.subtotal, itemPrice, itemQuantity)
       if (priceDetailsReturn.subtotal >= 35 && specialItemNegatingDiscount !== true && this.$store.state.currentOrder.type === 1) {
         const tenPercentDiscount = priceDetailsReturn.subtotal * 0.10;
-        priceDetailsReturn.discount = -Math.abs(tenPercentDiscount);
+        priceDetailsReturn.discount = Math.abs(tenPercentDiscount);
       } else {
         priceDetailsReturn.discount = 0;
       }
@@ -45,7 +45,7 @@ export default {
       Object.keys(selectedItems).forEach((key) => {
         const itemPrice = parseFloat(selectedItems[key].node.price);
         const itemQuantity = selectedItems[key].quantity;
-        if (selectedItems[key].node.name_eng.includes("Combo") || selectedItems[key].node.name_eng.includes("Dinner Special")) {
+        if (selectedItems[key].node.name_eng.includes("Dinner Special")) {
           specialItemNegatingDiscount = true;
         }
         priceDetails = this.storeMixinCalculatePriceDetails(priceDetails, itemPrice, itemQuantity, specialItemNegatingDiscount);

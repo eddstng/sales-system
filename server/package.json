@@ -21,8 +21,11 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-winston": "^4.0.5",
+    "image-data-uri": "^2.0.1",
+    "node-thermal-printer": "^4.1.2",
     "printf": "^0.6.0",
     "reflect-metadata": "^0.1.13",
+    "text-to-image": "^5.2.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {

@@ -33,6 +33,9 @@ model items {
 model orders {
   id           Int            @id @default(autoincrement())
   total        Float?
+  subtotal     Float?
+  gst          Float?
+  discount     Float?
   timestamp    DateTime?      @default(now()) @db.Timestamp(6)
   type         Int?           @db.SmallInt
   void         Boolean        @default(false)
@@ -71,7 +74,10 @@ model orders_items_detail {
   order_id                      Int           @id @default(autoincrement())
   order_timestamp               DateTime?     @default(now()) @db.Timestamp(6)
   order_type                    Int?          @db.SmallInt
-  order_total                   Float?
+  order_total                   Float
+  order_subtotal                Float
+  order_gst                     Float
+  order_discount                Float
   order_void                    Boolean       @default(false)
   order_paid                    Boolean       @default(false)
   customer_id                   Int           @default(autoincrement())

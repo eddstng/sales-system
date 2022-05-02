@@ -56,7 +56,7 @@
             Subtotal: {{ $store.state.priceDetails.subtotal.toFixed(2) }}
           </v-col>
           <v-col :cols="3" class="text-end">
-            Discount: {{ $store.state.priceDetails.discount.toFixed(2) }}
+            Discount: -{{ $store.state.priceDetails.discount.toFixed(2) }}
           </v-col>
           <v-col :cols="3" class="text-end">
             GST: {{ $store.state.priceDetails.gst.toFixed(2) }}

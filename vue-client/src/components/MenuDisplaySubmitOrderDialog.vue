@@ -6,7 +6,13 @@
         <v-row class="submitOrderDialogText mt-10">
           <div>
             <v-col :cols="15">
-              {{ $store.state.selectedCustomer.phone.replace(/(\d{3})(\d{3})(\d{3})/, "$1-$2-$3") }} <br />
+              {{
+                $store.state.selectedCustomer.phone.replace(
+                  /(\d{3})(\d{3})(\d{3})/,
+                  '$1-$2-$3'
+                )
+              }}
+              <br />
               {{ $store.state.selectedCustomer.address }} <br />
               {{ $store.state.selectedCustomer.name }}
             </v-col>
@@ -20,7 +26,10 @@
             <br />
           </div>
         </v-row>
-        <div v-for="value in $store.state.selectedItemsOrderedByEntry" v-bind:key="value.id">
+        <div
+          v-for="value in $store.state.selectedItemsOrderedByEntry"
+          v-bind:key="value.id"
+        >
           <v-row
             v-if="value.node !== undefined"
             class="submitOrderDialogText mt-5 mb-5"
@@ -43,20 +52,20 @@
             <div class="submitOrderDialogText pl-25 mb-5">
               ➡ {{ customization.name_eng }}
               {{
-                customization.name_chn === ""
-                  ? ""
-                  : "/" + customization.name_chn
+                customization.name_chn === ''
+                  ? ''
+                  : '/' + customization.name_chn
               }}
             </div>
           </v-list-item-content>
         </div>
-        <br/>
+        <br />
         <v-row class="submitOrderDialogText mt-5 mb-5">
           <v-col :cols="3">
             Subtotal: {{ $store.state.priceDetails.subtotal.toFixed(2) }}
           </v-col>
           <v-col :cols="3" class="text-end">
-            Discount: {{ $store.state.priceDetails.discount.toFixed(2) }}
+            Discount: -{{ $store.state.priceDetails.discount.toFixed(2) }}
           </v-col>
           <v-col :cols="3" class="text-end">
             GST: {{ $store.state.priceDetails.gst.toFixed(2) }}
@@ -93,42 +102,43 @@
 </style>
 
 <script>
-import storeMixin from "../mixins/storeMixin";
-import { store } from "../store/store";
-import axios from "axios";
+import storeMixin from '../mixins/storeMixin';
+import { store } from '../store/store';
+import axios from 'axios';
 export default {
   mixins: [storeMixin],
-  props: ["submitOrderDialog"],
+  props: ['submitOrderDialog'],
   methods: {
     toggleSubmitOrderDialogOff() {
-      this.$emit("setSubmitOrderDialogToBool", false);
+      this.$emit('setSubmitOrderDialogToBool', false);
     },
-    submitOrder: async function () {
+    submitOrder: async function() {
       try {
         const newOrder = await this.createOrder();
         this.insertSelectedItemsIntoOrdersAndOrdersItems(newOrder.data.id);
         this.updateOrderWithTotalPrice(newOrder);
         this.storeMixinClearOrderRelatedDetails();
+        this.printOrder(newOrder.data.id);
         this.toggleSubmitOrderDialogOff();
-        store.commit("setNotification", 1);
+        store.commit('setNotification', 1);
       } catch (err) {
         this.toggleSubmitOrderDialogOff();
-        store.commit("setNotification", 2);
+        store.commit('setNotification', 2);
         console.log(err);
       }
     },
-    createOrder: async function () {
-      const res = await axios.post("http://localhost:3000/post/orders/create", {
+    createOrder: async function() {
+      const res = await axios.post('http://localhost:3000/post/orders/create', {
         total: 0,
         customer_id: this.$store.state.selectedCustomer.id,
         type: this.$store.state.currentOrder.type,
       });
       if (isNaN(res.data.id)) {
-        throw new Error("Failed to submit order. No order id retrieved.");
+        throw new Error('Failed to submit order. No order id retrieved.');
       }
       return res;
     },
-    insertSelectedItemsIntoOrdersAndOrdersItems: async function (orderIdNum) {
+    insertSelectedItemsIntoOrdersAndOrdersItems: async function(orderIdNum) {
       const ordersItemsCreateManyInputData = [];
       for (const value of Object.entries(this.$store.state.selectedItems)) {
         const item = value[1];
@@ -143,7 +153,7 @@ export default {
         });
       }
       const res = await axios.post(
-        "http://localhost:3000/post/ordersitems/create/bulk",
+        'http://localhost:3000/post/ordersitems/create/bulk',
         ordersItemsCreateManyInputData
       );
       if (res.status !== 200) {
@@ -152,12 +162,23 @@ export default {
         );
       }
     },
-    updateOrderWithTotalPrice: async function (orderDetails) {
+    printOrder: async function(order_id) {
+      const res = await axios.get(
+        `http://localhost:3000/print/id/${order_id}`
+      ).data;
+      if (isNaN(res.status !== 200)) {
+        throw new Error(
+          `Failed to submit order. Received status code of ${res.status}.`
+        );
+      }
+      return res;
+    },
+    updateOrderWithTotalPrice: async function(orderDetails) {
       const res = await axios.put(
         `http://localhost:3000/put/orders/update/id/${orderDetails.data.id}`,
         {
           ...this.orderDetails,
-          total: this.$store.state.priceDetails.total,
+          ... this.$store.state.priceDetails,
         }
       );
       if (isNaN(res.status !== 200)) {

@@ -63,7 +63,7 @@
             {{ $store.state.priceDetails.subtotal.toFixed(2) }}
           </div>
           <div class="menu-display-item-text text-right">
-            {{ $store.state.priceDetails.discount.toFixed(2) }}
+            -{{ $store.state.priceDetails.discount.toFixed(2) }}
           </div>
           <div class="menu-display-item-text text-right">
             {{ $store.state.priceDetails.gst.toFixed(2) }}
