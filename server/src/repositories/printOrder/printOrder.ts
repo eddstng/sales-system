@@ -6,16 +6,16 @@ const exec = util.promisify(require('child_process').exec);
 
 async function getThermalPrinterInterface(): Promise<string> {
     try {
-        const { stdout, stderr } = await exec('ls /dev/usb | grep lp');
+        const { stdout } = await exec('ls /dev/usb | grep lp');
         return `/dev/usb/${stdout.trim()}`
     } catch (err: unknown) {
         console.error(err);
         throw err
     };
 }
+
 export async function printOrder(order_id: number): Promise<void> {
     try {
-
         const ThermalPrinter = require('node-thermal-printer').printer
         const Types = require('node-thermal-printer').types
 
@@ -31,6 +31,7 @@ export async function printOrder(order_id: number): Promise<void> {
                 const kitchenBillPath = kitchenAndClientBills.kitchenBillPath
                 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
                 await delay(5)
+                await printer.printImage('./src/repositories/printOrder/header.png');
                 await printer.printImage(clientBillPath);
                 printer.cut();
                 await printer.printImage(kitchenBillPath);
@@ -75,10 +76,7 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
         ` : ''}` + `${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US")}
         -----------------------`;
 
-        let clientBillString = `RESTAURANT NAME 
-        1234 HASTINGS ST, VANCOUVER, BC
-        604-888-8888
-        
+        let clientBillString = `
         ${res[0].order_id}-${orderTypeString}
         ${res[0].customer_phone}
         ` + `${res[0].order_type === 2 ? `${res[0].customer_address}
@@ -88,10 +86,9 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
         res.forEach((element: any) => {
             if (element.item_custom_name !== null) {
                 kitchenBillString += `
-                \n#${element.item_custom_name}#
+                \n⊵${element.item_custom_name}
 
-                
-                ${element.orders_items_quantity}x`
+                ____________ x${element.orders_items_quantity}`
             } else {
                 kitchenBillString += `
                 ${element.item_name_chn} x${element.orders_items_quantity}
@@ -131,10 +128,11 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
             .then((res: any) => console.log(res))
         imageDataURI.outputFile(clientBillImageURI, clientBillPath)
             .then((res: any) => console.log(res))
-        logInfo(printOrder.name, `[✓]`)
+
+        logInfo(createKitchenAndClientBill.name, `[✓]`)
         return { clientBillPath, kitchenBillPath };
     } catch (err) {
-        logInfo(printOrder.name, `[✗] ${err}`)
+        logInfo(createKitchenAndClientBill.name, `[✗] ${err}`)
         throw err;
     }
 }

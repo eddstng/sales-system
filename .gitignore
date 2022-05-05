@@ -5,3 +5,6 @@ geo*
 vue-client/src/data
 sales_system_db_menu
 sales_system_db_geo
+printing/header/
+server/src/repositories/printOrder/bills/
+server/src/repositories/printOrder/header.png

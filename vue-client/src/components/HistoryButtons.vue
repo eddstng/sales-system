@@ -71,7 +71,7 @@ export default {
         selectedItems[itemIdOfInterest] = {};
         selectedItems[itemIdOfInterest].node = {
           category: ordersItemsDetailWithOrderId.item_category,
-          id: itemIdOfInterest,
+          id: itemIdOfInterest, // there is a bug here, cannot reorder custom order bills
           menu_id: ordersItemsDetailWithOrderId.item_menu_id,
           name_chn: ordersItemsDetailWithOrderId.item_name_chn,
           name_eng: ordersItemsDetailWithOrderId.item_name_eng,
@@ -97,6 +97,7 @@ export default {
       ordersItemsDetailWithOrderIdArray.forEach((v) => {
         this.addHistoryItemToSelectedItems(v);
       });
+      console.log(ordersItemsDetailWithOrderIdArray[0]);
       store.commit("setCurrentOrder", {
         id: ordersItemsDetailWithOrderIdArray[0].order_id,
         type: ordersItemsDetailWithOrderIdArray[0].order_type,
