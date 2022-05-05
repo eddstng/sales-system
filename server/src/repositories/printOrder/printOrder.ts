@@ -26,13 +26,14 @@ export async function printOrder(order_id: number): Promise<void> {
             });
 
             try {
-                const englishBill = await createOrderImageEnglish(order_id)
-                const chineseBill = await createOrderImageChinese(order_id)
+                const kitchenAndClientBills = await createKitchenAndClientBill(order_id)
+                const clientBillPath = kitchenAndClientBills.clientBillPath
+                const kitchenBillPath = kitchenAndClientBills.kitchenBillPath
                 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
                 await delay(5)
-                await printer.printImage(englishBill);
+                await printer.printImage(clientBillPath);
                 printer.cut();
-                await printer.printImage(chineseBill);
+                await printer.printImage(kitchenBillPath);
                 printer.cut();
                 printer.execute();
             } catch (err) {
@@ -48,7 +49,7 @@ export async function printOrder(order_id: number): Promise<void> {
     }
 }
 
-export async function createOrderImageEnglish(order_id: number): Promise<string> {
+export async function createKitchenAndClientBill(order_id: number): Promise<{ clientBillPath: string, kitchenBillPath: string }> {
     try {
         const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
         await delay(100)
@@ -68,7 +69,13 @@ export async function createOrderImageEnglish(order_id: number): Promise<string>
             orderTypeString = 'DELIVERY'
         }
 
-        let englishOrderString = `RESTAURANT NAME 
+        let kitchenBillString = `${res[0].order_id}-${orderTypeString}
+        ${res[0].customer_phone}
+        ` + `${res[0].order_type === 2 ? `${res[0].customer_address}
+        ` : ''}` + `${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US")}
+        -----------------------`;
+
+        let clientBillString = `RESTAURANT NAME 
         1234 HASTINGS ST, VANCOUVER, BC
         604-888-8888
         
@@ -79,13 +86,25 @@ export async function createOrderImageEnglish(order_id: number): Promise<string>
         -----------------------`;
 
         res.forEach((element: any) => {
-            englishOrderString += `
+            if (element.item_custom_name !== null) {
+                kitchenBillString += `
+                \n#${element.item_custom_name}#
+
+                
+                ${element.orders_items_quantity}x`
+            } else {
+                kitchenBillString += `
+                ${element.item_name_chn} x${element.orders_items_quantity}
+                `
+            }
+
+            clientBillString += `
             ${element.item_name_chn}
             ${element.item_name_eng}
             ${element.orders_items_quantity}x ${(element.item_price as number).toFixed(2)}`
         })
 
-        englishOrderString += `
+        clientBillString += `
         -----------------------
         Subtotal: $${(res[0].order_subtotal as number).toFixed(2)}` +
             `${res[0].order_discount !== 0 ? `
@@ -93,76 +112,27 @@ export async function createOrderImageEnglish(order_id: number): Promise<string>
         GST: $${(res[0].order_gst as number).toFixed(2)}
         Total: $${res[0].order_total.toFixed(2)}
         `
-        const textToImage = require('text-to-image');
-
-        const dataUri = textToImage.generateSync(
-            englishOrderString,
-            { fontSize: 40, lineHeight: 55, margin: 30, maxWidth: 550 });
-
-        const imageDataURI = require('image-data-uri');
-        let filePath = `./src/repositories/printOrder/bills/${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")}/${order_id}-e.png`;
-        imageDataURI.outputFile(dataUri, filePath)
-            .then((res: any) => console.log(res))
-        logInfo(printOrder.name, `[✓]`)
-        return filePath;
-    } catch (err) {
-        logInfo(printOrder.name, `[✗] ${err}`)
-        throw err;
-    }
-}
-
-export async function createOrderImageChinese(order_id: number): Promise<string> {
-    try {
-        const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
-        await delay(100)
-        const res = await prisma.orders_items_detail.findMany(
-            {
-                where: {
-                    order_id: order_id,
-                }
-            }
-        )
-
-        let orderTypeString = 'PICK UP'
-        if (res[0].order_type === 0) {
-            orderTypeString = 'DINE IN'
-        }
-        if (res[0].order_type === 2) {
-            orderTypeString = 'DELIVERY'
-        }
-
-        let englishOrderString = `${res[0].order_id}-${orderTypeString}
-        ${res[0].customer_phone}
-        ` + `${res[0].order_type === 2 ? `${res[0].customer_address}
-        ` : ''}` + `${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US")}
-        -----------------------`;
-
-        res.forEach((element: any) => {
-            if (element.item_custom_name !== null) {
-                englishOrderString += `
-                \n#${element.item_custom_name}#
-
-                
-                ${element.orders_items_quantity}x`
-            } else {
-                englishOrderString += `
-                ${element.item_name_chn} x${element.orders_items_quantity}
-                `
-            }
-        })
 
         const textToImage = require('text-to-image');
 
-        const dataUri = textToImage.generateSync(
-            englishOrderString,
+        const kitchenBillImageURI = textToImage.generateSync(
+            kitchenBillString,
             { fontSize: 65, lineHeight: 65, maxWidth: 600 });
 
+        const clientBillImageURI = textToImage.generateSync(
+            clientBillString,
+            { fontSize: 40, lineHeight: 55, margin: 30, maxWidth: 550 });
+            
+        let kitchenBillPath = `./src/repositories/printOrder/bills/${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")}/${order_id}-c.png`;
+        let clientBillPath = `./src/repositories/printOrder/bills/${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")}/${order_id}-e.png`;
+
         const imageDataURI = require('image-data-uri');
-        let filePath = `./src/repositories/printOrder/bills/${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")}/${order_id}-c.png`;
-        imageDataURI.outputFile(dataUri, filePath)
+        imageDataURI.outputFile(kitchenBillImageURI, kitchenBillPath)
+            .then((res: any) => console.log(res))
+        imageDataURI.outputFile(clientBillImageURI, clientBillPath)
             .then((res: any) => console.log(res))
         logInfo(printOrder.name, `[✓]`)
-        return filePath;
+        return { clientBillPath, kitchenBillPath };
     } catch (err) {
         logInfo(printOrder.name, `[✗] ${err}`)
         throw err;
