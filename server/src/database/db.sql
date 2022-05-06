@@ -48,7 +48,7 @@ CREATE TABLE orders_items (
     quantity INTEGER,
     customizations jsonb,
     custom_price FLOAT,
-    custom_name VARCHAR(30),
+    custom_name VARCHAR(50),
     timestamp TIMESTAMP WITHOUT TIME ZONE
     --  item_id INT FOREIGN KEY REFERENCES items (id)
     --  order_id INT FOREIGN KEY REFERENCES orders (id)

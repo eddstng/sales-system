@@ -76,28 +76,43 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
         ` : ''}` + `${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US")}
         -----------------------`;
 
-        let clientBillString = `
-        ${res[0].order_id}-${orderTypeString}
+        let clientBillString = `${res[0].order_id}-${orderTypeString}
         ${res[0].customer_phone}
         ` + `${res[0].order_type === 2 ? `${res[0].customer_address}
         ` : ''}` + `${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US")}
         -----------------------`;
 
         res.forEach((element: any) => {
+            let kitchenCustomizationString: string = ''; 
+            if (element.orders_items_customizations !== null) {
+                element.orders_items_customizations.forEach((element: {name_eng: string}) => {
+                    kitchenCustomizationString += `\n ⤷___________`
+                })
+            }
+
             if (element.item_custom_name !== null) {
                 kitchenBillString += `
                 \n⊵${element.item_custom_name}
 
-                ____________ x${element.orders_items_quantity}`
+                ____________ x${element.orders_items_quantity}${kitchenCustomizationString ? kitchenCustomizationString : ''}
+                `
+            
             } else {
                 kitchenBillString += `
                 ${element.item_name_chn} x${element.orders_items_quantity}
                 `
             }
 
+            let clientCustomizationString: string = ''; 
+            if (element.orders_items_customizations !== null) {
+                element.orders_items_customizations.forEach((element: {name_eng: string}) => {
+                    clientCustomizationString += `\n ⤷${element.name_eng}`
+                })
+            }
+
             clientBillString += `
             ${element.item_name_chn}
-            ${element.item_name_eng}
+            ${element.item_name_eng}${clientCustomizationString ? clientCustomizationString : ''}
             ${element.orders_items_quantity}x ${(element.item_price as number).toFixed(2)}`
         })
 

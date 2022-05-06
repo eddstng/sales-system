@@ -75,9 +75,9 @@ export async function createOrdersItemsBulk(items: JSON[]) {
         })
         const res = await prisma.orders_items.createMany({ data: <Prisma.orders_itemsCreateManyInput>items })
         
-        logInfo(createOrdersItems.name, `[✓] OrdersItemsBulk Created: {id: ${res})`)
+        logInfo(createOrdersItemsBulk.name, `[✓] OrdersItemsBulk Created: {id: ${res})`)
     } catch (err) {
-        logError(createOrdersItems.name, err, `[✗]`);
+        logError(createOrdersItemsBulk.name, err, `[✗]`);
         throw new Error(`${err} `)
     }
 }
