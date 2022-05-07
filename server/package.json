@@ -6,8 +6,11 @@
   "scripts": {
     "start": "nodemon src/app.ts --exec ts-node",
     "db:create": "cd ./src/database && psql -f db.sql -h 0.0.0.0 -p 5432 -U postgres postgres ",
-    "db:insert:items": "cd ./../sales_system_db_menu && psql -f menu_complete_v5.json.sql -h 0.0.0.0 -p 5432 -U postgres sales_system_db",
-    "db:setup": "npm run db:create && npm run db:insert:items"
+    "db:insert:items:dm": "export PGPASSWORD=postgres && cd ./../sales_system_db_menu && psql -f dinner_menu.sql -h 0.0.0.0 -p 5432 -U postgres sales_system_db",
+    "db:insert:items:ms": "export PGPASSWORD=postgres && cd ./../sales_system_db_menu && psql -f mini_special_menu.sql -h 0.0.0.0 -p 5432 -U postgres sales_system_db",
+    "db:insert:items:ls": "export PGPASSWORD=postgres && cd ./../sales_system_db_menu && psql -f lunch_special_menu.sql -h 0.0.0.0 -p 5432 -U postgres sales_system_db",
+    "db:insert:items:all": "npm run db:insert:items:dm && npm run db:insert:items:ms && npm run db:insert:items:ls",
+    "db:setup": "export PGPASSWORD=postgres && npm run db:create && npm run db:insert:items:all"
   },
   "author": "edstngdv",
   "license": "ISC",
