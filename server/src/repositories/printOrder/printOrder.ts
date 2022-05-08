@@ -31,12 +31,15 @@ export async function printOrder(order_id: number): Promise<void> {
                 const kitchenBillPath = kitchenAndClientBills.kitchenBillPath
                 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
                 await delay(5)
+                await printer.printImage(kitchenBillPath);
+                printer.cut();
                 await printer.printImage('./src/repositories/printOrder/header.png');
                 await printer.printImage(clientBillPath);
                 printer.cut();
-                await printer.printImage(kitchenBillPath);
+                await printer.printImage('./src/repositories/printOrder/header.png');
+                await printer.printImage(clientBillPath);
                 printer.cut();
-                printer.execute();
+                // printer.execute();
             } catch (err) {
                 console.log(err)
             }
@@ -70,16 +73,16 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
             orderTypeString = 'DELIVERY'
         }
 
-        let kitchenBillString = `${res[0].order_id}-${orderTypeString}
+        let kitchenBillString = `${orderTypeString}
         ${res[0].customer_phone}
         ` + `${res[0].order_type === 2 ? `${res[0].customer_address}
-        ` : ''}` + `${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US")}
+        ` : ''}` + `${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US", {hour: '2-digit', minute:'2-digit'} )}
         -----------------------`;
 
-        let clientBillString = `${res[0].order_id}-${orderTypeString}
+        let clientBillString = `${orderTypeString}
         ${res[0].customer_phone}
         ` + `${res[0].order_type === 2 ? `${res[0].customer_address}
-        ` : ''}` + `${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US")}
+        ` : ''}` + `${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US", {hour: '2-digit', minute:'2-digit'})}
         -----------------------`;
 
         res.forEach((element: any) => {
@@ -92,16 +95,15 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
 
             if (element.item_custom_name !== null) {
                 kitchenBillString += `
-                \n⊵${element.item_custom_name}
-
-                ____________ x${element.orders_items_quantity}${kitchenCustomizationString ? kitchenCustomizationString : ''}
-                `
+                \n⊵____________ x${element.orders_items_quantity}${kitchenCustomizationString ? kitchenCustomizationString : ''}`
             
             } else {
                 kitchenBillString += `
-                ${element.item_name_chn} x${element.orders_items_quantity}
-                `
+                ${element.item_name_chn} x${element.orders_items_quantity}`
             }
+
+            kitchenBillString += `
+            `
 
             let clientCustomizationString: string = ''; 
             if (element.orders_items_customizations !== null) {
@@ -109,9 +111,12 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
                     clientCustomizationString += `\n ⤷${element.name_eng}`
                 })
             }
+            console.log("==========")
+            console.log(element)
+            console.log("==========")
 
             clientBillString += `
-            ${element.item_name_chn}
+            ${element.item_name_chn === 'Custom Item' ? `⊵${element.item_name_chn}` : element.item_name_chn}
             ${element.item_name_eng}${clientCustomizationString ? clientCustomizationString : ''}
             ${element.orders_items_quantity}x ${(element.item_price as number).toFixed(2)}`
         })
@@ -129,7 +134,7 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
 
         const kitchenBillImageURI = textToImage.generateSync(
             kitchenBillString,
-            { fontSize: 65, lineHeight: 65, maxWidth: 600 });
+            { fontSize: 55, lineHeight: 45, maxWidth: 600 });
 
         const clientBillImageURI = textToImage.generateSync(
             clientBillString,

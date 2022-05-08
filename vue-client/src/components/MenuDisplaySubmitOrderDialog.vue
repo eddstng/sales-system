@@ -152,6 +152,9 @@ export default {
           custom_name: item.node.custom_name,
         });
       }
+      console.log('=================cc')
+      console.log(ordersItemsCreateManyInputData)
+      console.log('=================cc')
       const res = await axios.post(
         'http://localhost:3000/post/ordersitems/create/bulk',
         ordersItemsCreateManyInputData

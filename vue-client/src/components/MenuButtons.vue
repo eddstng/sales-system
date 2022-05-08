@@ -319,6 +319,18 @@ export default {
           name_chn: "Specials/Drinks",
           id: 15,
         },
+            {
+          name_eng: "MINI SPECIAL",
+          name_chn: "MINI SPECIAL",
+          num_range: "1-6",
+          id: 17,
+        },
+        {
+          name_eng: "LUNCH SPECIAL",
+          name_chn: "LUNCH SPECIAL",
+          num_range: "7-17",
+          id: 18,
+        },
       ],
       displayCategoriesButtons: true,
       displayMenuButtons: false,

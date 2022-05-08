@@ -20,7 +20,7 @@ export default {
       } else {
         priceDetailsReturn.discount = 0;
       }
-      const discountedSubtotal = priceDetailsReturn.subtotal + priceDetailsReturn.discount;
+      const discountedSubtotal = priceDetailsReturn.subtotal - priceDetailsReturn.discount;
       priceDetailsReturn.gst = this.storeMixinCalculatePriceDetailsGst(discountedSubtotal);
       priceDetailsReturn.total = (discountedSubtotal) + priceDetailsReturn.gst;
       return priceDetailsReturn

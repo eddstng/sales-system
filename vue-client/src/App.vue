@@ -1,4 +1,3 @@
-
 <template>
   <v-app>
     <div v-if="render">
@@ -78,16 +77,16 @@
 </template>
 
 <script>
-import storeMixin from './mixins/storeMixin'
-import Sidebar from "./components/Sidebar";
-import MenuButtons from "./components/MenuButtons";
-import MenuDisplay from "./components/MenuDisplay";
-import HistoryButtons from "./components/HistoryButtons";
-import HistoryDisplay from "./components/HistoryDisplay";
+import storeMixin from './mixins/storeMixin';
+import Sidebar from './components/Sidebar';
+import MenuButtons from './components/MenuButtons';
+import MenuDisplay from './components/MenuDisplay';
+import HistoryButtons from './components/HistoryButtons';
+import HistoryDisplay from './components/HistoryDisplay';
 const date = new Date();
 export default {
   mixins: [storeMixin],
-  name: "App",
+  name: 'App',
   components: {
     Sidebar,
     MenuButtons,
@@ -101,7 +100,7 @@ export default {
       hours: date.getHours(),
       minutes: date.getMinutes(),
       seconds: date.getSeconds(),
-      amPm: "AM",
+      amPm: 'AM',
       interval: 0,
       notification: 0,
       render: true,
@@ -133,9 +132,8 @@ export default {
     },
     currentDate() {
       const current = new Date();
-      const date = `${current.getFullYear()}/${
-        current.getMonth() + 1
-      }/${current.getDate()}`;
+      const date = `${current.getFullYear()}/${current.getMonth() +
+        1}/${current.getDate()}`;
       return date;
     },
   },
