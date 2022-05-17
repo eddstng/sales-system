@@ -63,7 +63,6 @@ export const store = new Vuex.Store({
       // 2. We need to display the items with the timestamp as the key. This allows the menu display to display it in the order of entry.
       const selectedItemsTimestampCustomIdArray = [];
       for (const [key, selectedItem] of Object.entries(state.selectedItems)) {
-        console.log(key);
         selectedItemsTimestampCustomIdArray.push([key, selectedItem.timestamp, selectedItem])
       }
       
@@ -71,9 +70,8 @@ export const store = new Vuex.Store({
         return a[1] - b[1];
       });
 
-      sortedArray.forEach(([key, selectedItemTimestamp, selectedItem]) => {
+      sortedArray.forEach(([key, selectedItemTimestamp]) => {
         let selectedItemsOrderedByEntry = state.selectedItemsOrderedByEntry;
-        console.log(JSON.stringify(selectedItem))
         selectedItemsOrderedByEntry[selectedItemTimestamp] = state.selectedItems[key];
         state.selectedItemsOrderedByEntry = selectedItemsOrderedByEntry;
 

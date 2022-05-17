@@ -141,8 +141,10 @@ export default {
     insertSelectedItemsIntoOrdersAndOrdersItems: async function(orderIdNum) {
       const ordersItemsCreateManyInputData = [];
       for (const value of Object.entries(this.$store.state.selectedItems)) {
+        console.log(value)
         const item = value[1];
         ordersItemsCreateManyInputData.push({
+          // custom_id: item.node.custom_id,
           order_id: orderIdNum,
           item_id: item.node.id,
           quantity: item.quantity,

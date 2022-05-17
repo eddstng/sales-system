@@ -157,9 +157,9 @@ export default function startServer(): void {
     })
     app.post('/post/ordersitems/create/bulk', async (req, res) => {
         try {
-            console.log('111111111111111111111')
+            console.log('===============/post/ordersitems/create/bulk-req.body-START')
             console.log(req.body)
-            console.log('111111111111111111111')
+            console.log('===============/post/ordersitems/create/bulk-req.body-END')
             res.status(200).json(await createOrdersItemsBulk(req.body))
         } catch (err: unknown) {
             res.status(500).send(`${err as string}`);

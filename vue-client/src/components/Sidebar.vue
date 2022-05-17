@@ -83,7 +83,7 @@ export default {
     setOrderWarning() {
       if (
         (JSON.stringify(this.$store.state.selectedItems) !== "{}" ||
-          JSON.stringify(this.$store.state.selectedCustomer) !== "{}" ||
+          this.$store.state.selectedCustomer.phone !== "" ||
           JSON.stringify(this.$store.state.currentOrder) !==
             '{"id":null,"type":null,"total":0,"customer_id":null,"void":null,"paid":null}') &&
         this.$store.state.component !== "HISTORY"

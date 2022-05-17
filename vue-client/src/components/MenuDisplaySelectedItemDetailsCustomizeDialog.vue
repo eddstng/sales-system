@@ -90,38 +90,38 @@
 </template>
 
 <script>
-import storeMixin from "../mixins/storeMixin";
-import { store } from "../store/store";
+import storeMixin from '../mixins/storeMixin';
+import { store } from '../store/store';
 export default {
   mixins: [storeMixin],
-  props: ["removeMenuDisplayItemDetails"],
+  props: ['removeMenuDisplayItemDetails'],
   data() {
     return {
-      customCustomizationInput: "",
+      customCustomizationInput: '',
       customizations: [
         {
-          name_eng: "MSG",
-          name_chn: "",
+          name_eng: 'MSG',
+          name_chn: '',
         },
         {
-          name_eng: "SESAME",
-          name_chn: "",
+          name_eng: 'SESAME',
+          name_chn: '',
         },
         {
-          name_eng: "SALT",
-          name_chn: "",
+          name_eng: 'SALT',
+          name_chn: '',
         },
         {
-          name_eng: "OIL",
-          name_chn: "",
+          name_eng: 'OIL',
+          name_chn: '',
         },
         {
-          name_eng: "SPICY",
-          name_chn: "",
+          name_eng: 'SPICY',
+          name_chn: '',
         },
         {
-          name_eng: "ONIONS",
-          name_chn: "",
+          name_eng: 'ONIONS',
+          name_chn: '',
         },
       ],
     };
@@ -129,12 +129,12 @@ export default {
   methods: {
     //repeated
     toggleSelectedItemDialogCustomizeItemDialog(bool) {
-      this.$emit("setSelectedItemDialogCustomizeItemDialogToBool", bool);
+      this.$emit('setSelectedItemDialogCustomizeItemDialogToBool', bool);
     },
     toggleSelectedItemDialogOff() {
-      this.$emit("setSelectedItemDialogToBool", false);
+      this.$emit('setSelectedItemDialogToBool', false);
     },
-    addCustomizationToItem: function (selectedItem, customizationObj) {
+    addCustomizationToItem: function(selectedItem, customizationObj) {
       const selectedItemIdToUseString =
         selectedItem.node.custom_id ?? selectedItem.node.id.toString();
 
@@ -162,38 +162,39 @@ export default {
         ) {
           customizedItemKeyNumber++;
         }
-        selectedItems[`${customizedItemKeyName}${customizedItemKeyNumber}`] =
-          JSON.parse(JSON.stringify(selectedItemWithCustomizations));
+        selectedItems[
+          `${customizedItemKeyName}${customizedItemKeyNumber}`
+        ] = JSON.parse(JSON.stringify(selectedItemWithCustomizations));
 
         selectedItems[
           `${customizedItemKeyName}${customizedItemKeyNumber}`
         ].node.custom_id = `${customizedItemKeyName}${customizedItemKeyNumber}`;
-        selectedItems[
-          `${customizedItemKeyName}${customizedItemKeyNumber}`
-        ].node.custom_name = `${
-          selectedItems[`${customizedItemKeyName}${customizedItemKeyNumber}`]
-            .node.name_eng
-        } [C-${customizedItemKeyNumber}]`;
+        // selectedItems[
+        //   `${customizedItemKeyName}${customizedItemKeyNumber}`
+        // ].node.custom_name = `${
+        //   selectedItems[`${customizedItemKeyName}${customizedItemKeyNumber}`]
+        //     .node.name_eng
+        // } [C-${customizedItemKeyNumber}]`;
 
         delete selectedItems[selectedItemIdToUseString];
       }
 
-      store.commit("setSelectedItems", selectedItems);
+      store.commit('setSelectedItems', selectedItems);
     },
-    removeSelectedItemOneByVueStoreKey: function (vueStoreKeyToDelete) {
+    removeSelectedItemOneByVueStoreKey: function(vueStoreKeyToDelete) {
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
       if (selectedItems[vueStoreKeyToDelete].quantity === 1) {
         delete selectedItems[vueStoreKeyToDelete];
       } else {
         selectedItems[vueStoreKeyToDelete].quantity - 1;
       }
-      store.commit("setSelectedItems", selectedItems);
+      store.commit('setSelectedItems', selectedItems);
       this.storeMixinUpdateStorePriceDetails();
     },
-    addSelectedItemOne: function (selectedItem) {
+    addSelectedItemOne: function(selectedItem) {
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
       selectedItems[selectedItem.node.id].quantity++;
-      store.commit("setSelectedItems", selectedItems);
+      store.commit('setSelectedItems', selectedItems);
       this.storeMixinUpdateStorePriceDetails();
     },
   },

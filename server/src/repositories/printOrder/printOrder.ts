@@ -32,19 +32,19 @@ export async function printOrder(order_id: number): Promise<void> {
 
             try {
                 const kitchenAndClientBills = await createKitchenAndClientBill(order_id)
-                // const clientBillPath = kitchenAndClientBills.clientBillPath
-                // const kitchenBillPath = kitchenAndClientBills.kitchenBillPath
-                // const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
-                // await delay(5)
-                // await printer.printImage(kitchenBillPath);
-                // printer.cut();
+                const clientBillPath = kitchenAndClientBills.clientBillPath
+                const kitchenBillPath = kitchenAndClientBills.kitchenBillPath
+                const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+                await delay(5)
+                await printer.printImage(kitchenBillPath);
+                printer.cut();
+                await printer.printImage('./src/repositories/printOrder/header.png');
+                await printer.printImage(clientBillPath);
+                printer.cut();
                 // await printer.printImage('./src/repositories/printOrder/header.png');
                 // await printer.printImage(clientBillPath);
                 // printer.cut();
-                // await printer.printImage('./src/repositories/printOrder/header.png');
-                // await printer.printImage(clientBillPath);
-                // printer.cut();
-                // printer.execute();
+                printer.execute();
             } catch (err) {
                 console.log(err)
             }
@@ -104,7 +104,8 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
             
             } else {
                 kitchenBillString += `
-                ${element.item_name_chn} x${element.orders_items_quantity}`
+                ${element.item_name_chn} x${element.orders_items_quantity}
+                ${kitchenCustomizationString}`
             }
 
             kitchenBillString += `
