@@ -3,6 +3,7 @@ import { logInfo } from '../../logging/utils'
 
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
+let thermalPrinterInterface: string | null = null
 
 async function getThermalPrinterInterface(): Promise<string> {
     try {
@@ -16,29 +17,33 @@ async function getThermalPrinterInterface(): Promise<string> {
 
 export async function printOrder(order_id: number): Promise<void> {
     try {
+        if (thermalPrinterInterface === null) {
+            thermalPrinterInterface = await getThermalPrinterInterface();
+        }
+
         const ThermalPrinter = require('node-thermal-printer').printer
         const Types = require('node-thermal-printer').types
 
         async function printImage() {
             const printer = new ThermalPrinter({
                 type: Types.EPSON,
-                interface: (await getThermalPrinterInterface()),
+                interface: thermalPrinterInterface,
             });
 
             try {
                 const kitchenAndClientBills = await createKitchenAndClientBill(order_id)
-                const clientBillPath = kitchenAndClientBills.clientBillPath
-                const kitchenBillPath = kitchenAndClientBills.kitchenBillPath
-                const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
-                await delay(5)
-                await printer.printImage(kitchenBillPath);
-                printer.cut();
-                await printer.printImage('./src/repositories/printOrder/header.png');
-                await printer.printImage(clientBillPath);
-                printer.cut();
-                await printer.printImage('./src/repositories/printOrder/header.png');
-                await printer.printImage(clientBillPath);
-                printer.cut();
+                // const clientBillPath = kitchenAndClientBills.clientBillPath
+                // const kitchenBillPath = kitchenAndClientBills.kitchenBillPath
+                // const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+                // await delay(5)
+                // await printer.printImage(kitchenBillPath);
+                // printer.cut();
+                // await printer.printImage('./src/repositories/printOrder/header.png');
+                // await printer.printImage(clientBillPath);
+                // printer.cut();
+                // await printer.printImage('./src/repositories/printOrder/header.png');
+                // await printer.printImage(clientBillPath);
+                // printer.cut();
                 // printer.execute();
             } catch (err) {
                 console.log(err)
@@ -95,7 +100,7 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
 
             if (element.item_custom_name !== null) {
                 kitchenBillString += `
-                \n⊵____________ x${element.orders_items_quantity}${kitchenCustomizationString ? kitchenCustomizationString : ''}`
+                ⊵____________ x${element.orders_items_quantity}${kitchenCustomizationString ? kitchenCustomizationString : ''}`
             
             } else {
                 kitchenBillString += `
@@ -104,7 +109,6 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
 
             kitchenBillString += `
             `
-
             let clientCustomizationString: string = ''; 
             if (element.orders_items_customizations !== null) {
                 element.orders_items_customizations.forEach((element: {name_eng: string}) => {
@@ -120,6 +124,9 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
             ${element.item_name_eng}${clientCustomizationString ? clientCustomizationString : ''}
             ${element.orders_items_quantity}x ${(element.item_price as number).toFixed(2)}`
         })
+
+        kitchenBillString += `
+        `
 
         clientBillString += `
         -----------------------

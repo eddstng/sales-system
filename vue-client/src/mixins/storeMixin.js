@@ -54,7 +54,7 @@ export default {
     },
     storeMixinClearOrderRelatedDetails() {
       store.commit("setSelectedItems", {});
-      store.commit("setSelectedCustomer", {});
+      store.commit("setSelectedCustomer", {phone: ''});
       store.commit("setCurrentOrder", {
         id: null,
         type: null,

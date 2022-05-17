@@ -8,12 +8,13 @@ export const store = new Vuex.Store({
     items: [],
     customers: [],
     tables: [],
-    selectedCustomer: {},
+    selectedCustomer: {phone: ''},
     selectedItems: {},
     priceDetails: {
       subtotal: 0,
       gst: 0,
       total: 0,
+      discount: 0,
     },
     currentOrder: {
       id: null,

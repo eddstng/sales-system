@@ -152,9 +152,6 @@ export default {
           custom_name: item.node.custom_name,
         });
       }
-      console.log('=================cc')
-      console.log(ordersItemsCreateManyInputData)
-      console.log('=================cc')
       const res = await axios.post(
         'http://localhost:3000/post/ordersitems/create/bulk',
         ordersItemsCreateManyInputData
@@ -166,9 +163,7 @@ export default {
       }
     },
     printOrder: async function(order_id) {
-      const res = await axios.get(
-        `http://localhost:3000/print/id/${order_id}`
-      ).data;
+      const res = await axios.get(`http://localhost:3000/print/id/${order_id}`);
       if (isNaN(res.status !== 200)) {
         throw new Error(
           `Failed to submit order. Received status code of ${res.status}.`
@@ -181,7 +176,7 @@ export default {
         `http://localhost:3000/put/orders/update/id/${orderDetails.data.id}`,
         {
           ...this.orderDetails,
-          ... this.$store.state.priceDetails,
+          ...this.$store.state.priceDetails,
         }
       );
       if (isNaN(res.status !== 200)) {

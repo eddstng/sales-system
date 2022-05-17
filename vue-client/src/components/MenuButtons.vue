@@ -57,8 +57,8 @@
             width="50%"
             v-on:click="
               onClickMenuButton({
-                id: 198,
-                custom_id: 198 + customItem.name,
+                id: 214, // TODO: TERRIBLE! Bugs!
+                custom_id: 214 + customItem.name,
                 name_eng: customItem.name,
                 custom_name: customItem.name,
                 name_chn: 'Custom Item',

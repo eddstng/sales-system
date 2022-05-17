@@ -1,6 +1,6 @@
 <template>
   <div class="p-0" max-height="400">
-    <div v-if="Object.keys($store.state.selectedCustomer).length === 0">
+    <div v-if="$store.state.selectedCustomer.phone === ''">
       <v-row align="center" justify="space-around">
         <v-btn
           class="menu-button-text mt-8"
