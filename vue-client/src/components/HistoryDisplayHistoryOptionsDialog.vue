@@ -9,7 +9,13 @@
         <v-row class="submitOrderDialogText mt-10">
           <div>
             <v-col :cols="15">
-              {{ $store.state.selectedCustomer.phone.replace(/(\d{3})(\d{3})(\d{3})/, "$1-$2-$3") }} <br />
+              {{
+                $store.state.selectedCustomer.phone.replace(
+                  /(\d{3})(\d{3})(\d{3})/,
+                  '$1-$2-$3'
+                )
+              }}
+              <br />
               {{ $store.state.selectedCustomer.address }} <br />
               {{ $store.state.selectedCustomer.name }}
             </v-col>
@@ -43,14 +49,14 @@
             <div class="submitOrderDialogText pl-25 mb-5">
               ➡ {{ customization.name_eng }}
               {{
-                customization.name_chn === ""
-                  ? ""
-                  : "/" + customization.name_chn
+                customization.name_chn === ''
+                  ? ''
+                  : '/' + customization.name_chn
               }}
             </div>
           </v-list-item-content>
         </div>
-        <br/>
+        <br />
         <v-row class="submitOrderDialogText mt-5 mb-5">
           <v-col :cols="3">
             Subtotal: {{ $store.state.priceDetails.subtotal.toFixed(2) }}
@@ -125,15 +131,19 @@
 
 <script>
 export default {
-  props: ["historyOptionsDetails"],
+  props: ['historyOptionsDetails'],
   data() {
     return {
-      historyOptionsDetailsUpdate: {},
+      historyOptionsDetailsUpdate: {
+        confirmingAction: "",
+        openHistoryOptionsConfirmationDialogue: false,
+        openHistoryOptionsDialogue: false,
+      },
     };
   },
   methods: {
     updateHistoryOptionsDetails() {
-      this.$emit("setHistoryOptionsDetails", this.historyOptionsDetailsUpdate);
+      this.$emit('setHistoryOptionsDetails', this.historyOptionsDetailsUpdate);
     },
   },
 };

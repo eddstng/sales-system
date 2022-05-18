@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-card outlined tile height="12vh">
-      <HistorySelect />
+      <HistoryDisplayCustomer />
     </v-card>
     <v-card
       outlined
@@ -10,7 +10,6 @@
       height="62.5vh"
       v-chat-scroll
     >
-      <!-- BUG: For some reason, even though selectedItemsOrderedByEntry is sorted by keys (timestamp), the display order is not the same. Why?--> 
       <template>
         <v-card
           class="mx-auto pt-2"
@@ -42,7 +41,12 @@
             v-bind:key="customization.id"
           >
             <div class="menu-display-item-text pl-5">
-              ➡ {{ customization.name_eng }} {{ customization.name_chn === "" ? "" : "/" + customization.name_chn }}
+              ➡ {{ customization.name_eng }}
+              {{
+                customization.name_chn === ''
+                  ? ''
+                  : '/' + customization.name_chn
+              }}
             </div>
           </v-list-item-content>
         </v-card>
@@ -92,32 +96,30 @@
 </style>
 
 <script>
-import HistoryDisplayHistoryOptionsDialog from "./HistoryDisplayHistoryOptionsDialog";
-import HistoryDisplayHistoryOptionsConfirmationDialog from "./HistoryDisplayHistoryOptionsConfirmationDialog";
-
-import HistorySelect from "./HistorySelect";
+import HistoryDisplayHistoryOptionsDialog from './HistoryDisplayHistoryOptionsDialog';
+import HistoryDisplayHistoryOptionsConfirmationDialog from './HistoryDisplayHistoryOptionsConfirmationDialog';
+import HistoryDisplayCustomer from './HistoryDisplayCustomer';
 export default {
   data() {
     return {
       historyOptionsDetails: {
-        confirmingAction: "",
+        confirmingAction: '',
         openHistoryOptionsConfirmationDialogue: false,
         openHistoryOptionsDialogue: false,
       },
     };
   },
-
   methods: {
     setHistoryOptionsDetails: function (historyOptionsDetails) {
       this.historyOptionsDetails.confirmingAction = historyOptionsDetails.confirmingAction;
-      this.historyOptionsDetails.openHistoryOptionsConfirmationDialogue = historyOptionsDetails.confirmingAction;
-      this.historyOptionsDetails.openHistoryOptionsDialogue = historyOptionsDetails.confirmingAction;
+      this.historyOptionsDetails.openHistoryOptionsConfirmationDialogue = historyOptionsDetails.openHistoryOptionsConfirmationDialogue;
+      this.historyOptionsDetails.openHistoryOptionsDialogue = historyOptionsDetails.openHistoryOptionsDialogue;
     },
   },
   components: {
-    HistorySelect,
+    HistoryDisplayCustomer,
     HistoryDisplayHistoryOptionsDialog,
     HistoryDisplayHistoryOptionsConfirmationDialog,
   },
 };
-</script> 
+</script>

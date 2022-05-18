@@ -63,19 +63,17 @@ export default {
       var strTime = hours + ':' + minutes + ' ' + ampm;
       return strTime;
     },
-    // ordersItemsDetailWithOrderId is an array
+    // The parameter ordersItemsDetailWithOrderId is an object.
     addHistoryItemToSelectedItems(ordersItemsDetailWithOrderId) {
-      console.log(ordersItemsDetailWithOrderId)
-      console.log(ordersItemsDetailWithOrderId)
-      console.log(ordersItemsDetailWithOrderId)
-      // If the item is a custom item, we provide it with a custom ID. This is necessary to handle the quantity.
+      // If the item has a custom name, we provide it with a custom ID. This is necessary to handle the quantity. Custom items and items with customizations will have a custom name. 
       const displayId = ordersItemsDetailWithOrderId.item_custom_name ? `${ordersItemsDetailWithOrderId.item_id}${ordersItemsDetailWithOrderId.item_custom_name}` : ordersItemsDetailWithOrderId.item_id;
       let selectedItems = store.state.selectedItems;
 
-      // Create a key value pair for the custom item.
+      // Create a key value pair for the custom item. 
+      // The key will be used to distinguish between different items on the display. Custom items and items with customizations will have a customized unique key. Otherwise, the key will be the id of the item. This is also necessary for quantity updates. 
       selectedItems[displayId] = {};
       selectedItems[displayId].node = {
-        id: ordersItemsDetailWithOrderId.item_id, 
+        id: ordersItemsDetailWithOrderId.item_id,
         menu_id: ordersItemsDetailWithOrderId.item_menu_id,
         custom_id: displayId,
         custom_name: ordersItemsDetailWithOrderId.item_custom_name,
@@ -90,19 +88,24 @@ export default {
         ordersItemsDetailWithOrderId.orders_items_quantity;
       selectedItems[displayId].timestamp = new Date(
         ordersItemsDetailWithOrderId.orders_items_timestamp
-      ).getTime();
+      ).getTime(); // TO DO: Do we need this? I don't think so.
+      // Update the $store.state.selectedItems.
       store.commit('setSelectedItems', selectedItems);
     },
     async onClickHistoryButton(order_id) {
+      // Clear $store.state.selectedCustomer, $store.state.selectedItems, and $store.state.currentOrder.
       this.storeMixinClearOrderRelatedDetails();
+      // Get specified order details.
       const ordersItemsDetailWithOrderIdArray = (
         await axios.get(
           `http://localhost:3000/get/ordersitemsdetail/id/${order_id}`
         )
       ).data;
+      // Add each item to our $store.state.selectedItems. 
       ordersItemsDetailWithOrderIdArray.forEach((v) => {
-        this.addHistoryItemToSelectedItems(v); // we need to check if it is a custom item and treat it differently
+        this.addHistoryItemToSelectedItems(v);
       });
+      // Update the $store.state.currentOrder. 
       store.commit('setCurrentOrder', {
         id: ordersItemsDetailWithOrderIdArray[0].order_id,
         type: ordersItemsDetailWithOrderIdArray[0].order_type,
@@ -111,6 +114,7 @@ export default {
         void: ordersItemsDetailWithOrderIdArray[0].order_void,
         paid: ordersItemsDetailWithOrderIdArray[0].order_paid,
       });
+      // Update the $store.state.selectedCustomer.
       store.commit('setSelectedCustomer', {
         address: ordersItemsDetailWithOrderIdArray[0].customer_address,
         city: ordersItemsDetailWithOrderIdArray[0].customer_city,
@@ -123,7 +127,9 @@ export default {
           ordersItemsDetailWithOrderIdArray[0].customer_street_number,
         unit_number: ordersItemsDetailWithOrderIdArray[0].customer_unit_number,
       });
+      // Provide a total item count to the $store.state.currentOrder details. 
       this.storeMixinSumSelectedItemsQuantity();
+      // Provide price details to $store.state.priceDetails.
       this.storeMixinUpdateStorePriceDetails();
     },
   },

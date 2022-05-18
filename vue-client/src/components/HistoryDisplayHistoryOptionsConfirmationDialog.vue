@@ -56,15 +56,6 @@ export default {
     updateHistoryOptionsDetails() {
       this.$emit("setHistoryOptionsDetails", this.historyOptionsDetailsUpdate);
     },
-    async reorder() {
-      const res = await axios.put(
-        `http://localhost:3000/put/orders/update/id/${this.$store.state.currentOrder.id}`,
-        { ...this.$store.state.currentOrder, paid: false, void: false }
-      );
-      if (!res) {
-        console.log("");
-      }
-    },
     async clearOrderStatus() {
       const res = await axios.put(
         `http://localhost:3000/put/orders/update/id/${this.$store.state.currentOrder.id}`,
