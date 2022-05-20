@@ -1,53 +1,32 @@
 import { prisma } from '../../app'
 import { logInfo } from '../../logging/utils'
+import { thermalPrinterInterface } from '../../app';
 
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
-let thermalPrinterInterface: string | null = null
-
-async function getThermalPrinterInterface(): Promise<string> {
-    try {
-        const { stdout } = await exec('ls /dev/usb | grep lp');
-        return `/dev/usb/${stdout.trim()}`
-    } catch (err: unknown) {
-        console.error(err);
-        throw err
-    };
-}
+const ThermalPrinter = require('node-thermal-printer').printer
+const Types = require('node-thermal-printer').types
 
 export async function printOrder(order_id: number): Promise<void> {
     try {
-        if (thermalPrinterInterface === null) {
-            thermalPrinterInterface = await getThermalPrinterInterface();
-        }
-
-        const ThermalPrinter = require('node-thermal-printer').printer
-        const Types = require('node-thermal-printer').types
-
         async function printImage() {
             const printer = new ThermalPrinter({
                 type: Types.EPSON,
                 interface: thermalPrinterInterface,
             });
 
-            try {
-                const kitchenAndClientBills = await createKitchenAndClientBill(order_id)
-                const clientBillPath = kitchenAndClientBills.clientBillPath
-                const kitchenBillPath = kitchenAndClientBills.kitchenBillPath
-                const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
-                await delay(5)
-                await printer.printImage(kitchenBillPath);
-                printer.cut();
-                await printer.printImage('./src/repositories/printOrder/header.png');
-                await printer.printImage(clientBillPath);
-                printer.cut();
-                // await printer.printImage('./src/repositories/printOrder/header.png');
-                // await printer.printImage(clientBillPath);
-                // printer.cut();
-                printer.execute();
-            } catch (err) {
-                console.log(err)
-            }
+            const kitchenAndClientBills = await createKitchenAndClientBill(order_id)
+            const clientBillPath = kitchenAndClientBills.clientBillPath
+            const kitchenBillPath = kitchenAndClientBills.kitchenBillPath
+            const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+            await delay(5)
+            await printer.printImage(kitchenBillPath);
+            printer.cut();
+            await printer.printImage('./src/repositories/printOrder/header.png');
+            await printer.printImage(clientBillPath);
+            printer.cut();
+            // await printer.printImage('./src/repositories/printOrder/header.png');
+            // await printer.printImage(clientBillPath);
+            // printer.cut();
+            printer.execute();
         }
         printImage();
         logInfo(printOrder.name, `[✓]`)
@@ -81,19 +60,19 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
         let kitchenBillString = `${orderTypeString}
         ${res[0].customer_phone}
         ` + `${res[0].order_type === 2 ? `${res[0].customer_address}
-        ` : ''}` + `${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US", {hour: '2-digit', minute:'2-digit'} )}
+        ` : ''}` + `${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}
         -----------------------`;
 
         let clientBillString = `${orderTypeString}
         ${res[0].customer_phone}
         ` + `${res[0].order_type === 2 ? `${res[0].customer_address}
-        ` : ''}` + `${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US", {hour: '2-digit', minute:'2-digit'})}
+        ` : ''}` + `${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}
         -----------------------`;
 
         res.forEach((element: any) => {
-            let kitchenCustomizationString: string = ''; 
+            let kitchenCustomizationString: string = '';
             if (element.orders_items_customizations !== null) {
-                element.orders_items_customizations.forEach((element: {name_eng: string}) => {
+                element.orders_items_customizations.forEach((element: { name_eng: string }) => {
                     kitchenCustomizationString += `\n ⤷___________`
                 })
             }
@@ -101,7 +80,7 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
             if (element.item_custom_name !== null) {
                 kitchenBillString += `
                 ⊵____________ x${element.orders_items_quantity}${kitchenCustomizationString ? kitchenCustomizationString : ''}`
-            
+
             } else {
                 kitchenBillString += `
                 ${element.item_name_chn} x${element.orders_items_quantity}
@@ -110,9 +89,9 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
 
             kitchenBillString += `
             `
-            let clientCustomizationString: string = ''; 
+            let clientCustomizationString: string = '';
             if (element.orders_items_customizations !== null) {
-                element.orders_items_customizations.forEach((element: {name_eng: string}) => {
+                element.orders_items_customizations.forEach((element: { name_eng: string }) => {
                     clientCustomizationString += `\n ⤷${element.name_eng}`
                 })
             }
@@ -147,7 +126,7 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
         const clientBillImageURI = textToImage.generateSync(
             clientBillString,
             { fontSize: 40, lineHeight: 55, margin: 30, maxWidth: 550 });
-            
+
         let kitchenBillPath = `./src/repositories/printOrder/bills/${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")}/${order_id}-c.png`;
         let clientBillPath = `./src/repositories/printOrder/bills/${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")}/${order_id}-e.png`;
 
