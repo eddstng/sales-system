@@ -28,6 +28,13 @@
           >
             Order failed please check the status and try again.
           </v-alert>
+          <v-alert
+            class="menu-notification"
+            type="error"
+            v-if="$store.state.notification === 3"
+          >
+            No connection to the server.
+          </v-alert>
         </v-col>
       </v-row>
     </div>
@@ -83,6 +90,7 @@ import MenuButtons from './components/MenuButtons';
 import MenuDisplay from './components/MenuDisplay';
 import HistoryButtons from './components/HistoryButtons';
 import HistoryDisplay from './components/HistoryDisplay';
+import { serverNotRunning } from '../src/main';
 const date = new Date();
 export default {
   mixins: [storeMixin],
@@ -104,6 +112,7 @@ export default {
       interval: 0,
       notification: 0,
       render: true,
+      serverNotRunning: serverNotRunning,
     };
   },
   created() {
@@ -118,7 +127,9 @@ export default {
   },
   methods: {
     clearAlert() {
-      this.$store.state.notification = 0;
+      if (this.$store.state.notification !== 3) {
+        this.$store.state.notification = 0;
+      }
     },
     updateClock() {
       const date = new Date();

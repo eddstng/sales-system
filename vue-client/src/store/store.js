@@ -86,6 +86,11 @@ export const store = new Vuex.Store({
     setCurrentOrder(state, order) {
       state.currentOrder = order;
     },
+    // setNotification
+    // - 0 = no notification
+    // - 1 = Order successfully added.
+    // - 2 = Order failed please check the status and try again.
+    // - 3 = No connection to the server.
     setNotification(state, notificationCode) {
       state.notification = notificationCode;
     },

@@ -10,11 +10,16 @@ import storeMixin from "./mixins/storeMixin"
 Vue.use(VueChatScroll);
 Vue.config.productionTip = false;
 
+export let serverNotRunning = false;
+
 new Vue({
   mixins: [storeMixin],
   methods: {
     async init() {
       // Set Items
+      axios.get("http://localhost:3000/get/items/all").catch(() => {
+        store.commit('setNotification', 3);
+      });
       const allItemsArray = (await axios.get("http://localhost:3000/get/items/all")).data
       const allItemsCategorized = allItemsArray.reduce((obj, item) => {
         if (obj[item.category] === undefined) {
