@@ -8,3 +8,4 @@ sales_system_db_geo
 printing/header/
 server/src/repositories/printOrder/bills/
 server/src/repositories/printOrder/header.png
+server/init.sql
