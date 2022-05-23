@@ -19,7 +19,7 @@ services:
     networks:
       - sales-network
   sss:
-    image: 1bf51d09a517
+    image: 216995dce5e9
     container_name: server
     ports:
       - "3000:3000"
