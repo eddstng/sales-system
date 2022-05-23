@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import customerSelectMixin from "../mixins/customerSelectMixin";
+import customerSelectMixin from "../../mixins/customerSelectMixin";
 export default {
   mixins: [customerSelectMixin],
   props: ["selectedCustomerDetails"],

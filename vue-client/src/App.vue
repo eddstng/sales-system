@@ -86,10 +86,10 @@
 <script>
 import storeMixin from './mixins/storeMixin';
 import Sidebar from './components/Sidebar';
-import MenuButtons from './components/MenuButtons';
-import MenuDisplay from './components/MenuDisplay';
-import HistoryButtons from './components/HistoryButtons';
-import HistoryDisplay from './components/HistoryDisplay';
+import MenuButtons from './components/Order/MenuButtons';
+import MenuDisplay from './components/Order/MenuDisplay';
+import HistoryButtons from './components/History/HistoryButtons';
+import HistoryDisplay from './components/History/HistoryDisplay';
 import { serverNotRunning } from '../src/main';
 const date = new Date();
 export default {

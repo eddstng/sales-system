@@ -110,9 +110,9 @@
 </style>
 
 <script>
-import storeMixin from "../mixins/storeMixin";
-import { store } from "../store/store";
-import CustomerSelect from "./CustomerSelect";
+import storeMixin from "../../mixins/storeMixin";
+import { store } from "../../store/store";
+import CustomerSelect from "../Customer/CustomerSelect";
 import MenuDisplaySubmitOrderDialog from "./MenuDisplaySubmitOrderDialog";
 import MenuDisplaySelectedItemDetailsDialog from "./MenuDisplaySelectedItemDetailsDialog";
 import MenuDisplaySelectedItemDetailsCustomizeDialog from "./MenuDisplaySelectedItemDetailsCustomizeDialog";

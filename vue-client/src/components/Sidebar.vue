@@ -66,8 +66,8 @@
 </template>
 
 <script>
-import storeMixin from "../mixins/storeMixin";
-import { store } from "../store/store";
+import storeMixin from '../mixins/storeMixin';
+import { store } from '../store/store';
 
 export default {
   mixins: [storeMixin],
@@ -75,18 +75,18 @@ export default {
     return {
       changeComponentDetails: {
         warning: false,
-        component: "",
+        component: '',
       },
     };
   },
   methods: {
     setOrderWarning() {
       if (
-        (JSON.stringify(this.$store.state.selectedItems) !== "{}" ||
-          this.$store.state.selectedCustomer.phone !== "" ||
+        (JSON.stringify(this.$store.state.selectedItems) !== '{}' ||
+          this.$store.state.selectedCustomer.phone !== '' ||
           JSON.stringify(this.$store.state.currentOrder) !==
             '{"id":null,"type":null,"total":0,"customer_id":null,"void":null,"paid":null}') &&
-        this.$store.state.component !== "HISTORY"
+        this.$store.state.component !== 'HISTORY'
       ) {
         return true;
       }
@@ -102,23 +102,23 @@ export default {
     },
     async setComponent() {
       switch (this.changeComponentDetails.component) {
-        case "HISTORY":
-          this.setComponentToOrder(); // needed to fix a bug where you cannot scroll up and click on an older history record
+        case 'HISTORY':
+          this.setComponentToOrder(); // TO DO: needed to fix a bug where you cannot scroll up and click on an older history record
           this.setComponentToHistory();
           break;
-        case "ORDER":
+        case 'ORDER':
           this.setComponentToOrder();
           break;
       }
       this.changeComponentDetails.warning = false;
     },
     async setComponentToHistory() {
-await this.storeMixinUpdateOrderHistoryArray();
-      store.commit("setComponent", "HISTORY");
+      await this.storeMixinUpdateOrderHistoryArray();
+      store.commit('setComponent', 'HISTORY');
       this.storeMixinClearOrderRelatedDetails();
     },
     async setComponentToOrder() {
-      store.commit("setComponent", "ORDER");
+      store.commit('setComponent', 'ORDER');
       this.storeMixinClearOrderRelatedDetails();
     },
   },

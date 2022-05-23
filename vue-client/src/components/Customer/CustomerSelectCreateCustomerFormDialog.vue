@@ -306,11 +306,11 @@
 
 <script>
 import axios from "axios";
-import { streetNameArr } from "../data/streets";
-import customerSelectMixin from "../mixins/customerSelectMixin";
-import storeMixin from "../mixins/storeMixin";
+import { streetNameArr } from "../../data/streets";
+import customerSelectMixin from "../../mixins/customerSelectMixin";
+import storeMixin from "../../mixins/storeMixin";
 
-import { cityNameArr } from "../data/cities";
+import { cityNameArr } from "../../data/cities";
 export default {
   mixins: [customerSelectMixin, storeMixin],
   data() {

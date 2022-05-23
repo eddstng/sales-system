@@ -64,7 +64,8 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
         ${res[0].customer_phone}
         ` + `${res[0].order_type === 2 ? `${res[0].customer_address}
         ` : ''}` + `${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}
-        -----------------------`;
+        -----------------------
+        `;
 
         let clientBillString = `${orderTypeString}
         ${res[0].customer_phone}

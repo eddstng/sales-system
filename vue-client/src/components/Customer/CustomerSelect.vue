@@ -112,9 +112,9 @@
 </template>
 
 <script>
-import { store } from "../store/store";
-import storeMixin from "../mixins/storeMixin";
-import customerSelectMixin from "../mixins/customerSelectMixin";
+import { store } from "../../store/store";
+import storeMixin from "../../mixins/storeMixin";
+import customerSelectMixin from "../../mixins/customerSelectMixin";
 import CustomerSelectCustomerPhoneInputDialog from "./CustomerSelectCustomerPhoneInputDialog";
 import CustomerSelectCreateCustomerFormDialog from "./CustomerSelectCreateCustomerFormDialog";
 import CustomerSelectCustomerDineInTablesDialog from "./CustomerSelectCustomerDineInTablesDialog";

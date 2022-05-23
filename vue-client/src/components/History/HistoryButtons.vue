@@ -41,9 +41,9 @@
 </style>
 
 <script>
-import storeMixin from '../mixins/storeMixin';
+import storeMixin from '../../mixins/storeMixin';
 import axios from 'axios';
-import { store } from '../store/store';
+import { store } from '../../store/store';
 export default {
   mixins: [storeMixin],
   data() {
