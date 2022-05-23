@@ -9,7 +9,9 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
+      - POSTGRES_DB=sales_system_db
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432:5432"
     expose:
@@ -17,16 +19,22 @@ services:
     networks:
       - sales-network
   sss:
-    image: 104c06d8d575
+    image: 1bf51d09a517
     container_name: server
     ports:
       - "3000:3000"
+    expose:
+      - 3000
+    devices:
+      - "/dev/usb:/dev/usb"
     networks:
       - sales-network
     depends_on:
       - psql
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@psql:5432/sales_system_db?schema=public
   ssv:
-    image: 2296e3dde664
+    image: 3745bbe597ed
     container_name: client
     ports:
       - "8080:8080"
