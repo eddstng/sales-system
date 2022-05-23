@@ -11,6 +11,7 @@ import { getAllOrdersItems, createOrdersItems, updateOrdersItems, deleteOneOrder
 import { getAllOrdersHistory } from './repositories/ordersHistory/ordersHistory';
 import { getAllOrdersItemsDetail, getAllOrdersItemsDetailWithOrderId} from './repositories/ordersItemsDetail/ordersItemsDetail';
 import { printOrder } from './repositories/printOrder/printOrder';
+import { logInfo } from './logging/utils';
 
 export default function startServer(): void {
     const port = 3000
@@ -20,10 +21,20 @@ export default function startServer(): void {
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
 
+    app.get('/get/server', async (_req, res) => {
+        try {
+            res.status(200).json(true)
+            console.log()
+        } catch (err: unknown) {
+            res.status(500).send(`${err as string}`);
+        }
+    })
+
     // Items
     app.get('/get/items/all', async (_req, res) => {
         try {
             res.status(200).json(await getAllItems())
+            logInfo('clientConnected', `[✓]`)
         } catch (err: unknown) {
             res.status(500).send(`${err as string}`);
         }
@@ -206,14 +217,13 @@ export default function startServer(): void {
         }
     })
 
-    app.get('/print/id/:id', async (req, res) => {
+    app.post('/post/print', async (req, res) => {
         try {
-            res.status(200).json(await printOrder(parseInt(req.params.id)))
+            res.status(200).json(await printOrder(req.body))
         } catch (err: unknown) {
             res.status(500).send(`${err as string}`);
         }
     })
-
     app.listen(port, () => {
         logger.info('[server] Server started on http://localhost:3000.')
     })

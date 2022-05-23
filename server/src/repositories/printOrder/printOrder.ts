@@ -5,7 +5,7 @@ import { thermalPrinterInterface } from '../../app';
 const ThermalPrinter = require('node-thermal-printer').printer
 const Types = require('node-thermal-printer').types
 
-export async function printOrder(order_id: number): Promise<void> {
+export async function printOrder(printObj: {order_id: number, printClient: boolean, printKitchen: boolean}): Promise<void> {
     try {
         async function printImage() {
             const printer = new ThermalPrinter({
@@ -13,19 +13,23 @@ export async function printOrder(order_id: number): Promise<void> {
                 interface: thermalPrinterInterface,
             });
 
-            const kitchenAndClientBills = await createKitchenAndClientBill(order_id)
+            const kitchenAndClientBills = await createKitchenAndClientBill(printObj.order_id)
             const clientBillPath = kitchenAndClientBills.clientBillPath
             const kitchenBillPath = kitchenAndClientBills.kitchenBillPath
             const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
             await delay(5)
-            await printer.printImage(kitchenBillPath);
-            printer.cut();
-            await printer.printImage('./src/repositories/printOrder/header.png');
-            await printer.printImage(clientBillPath);
-            printer.cut();
-            // await printer.printImage('./src/repositories/printOrder/header.png');
-            // await printer.printImage(clientBillPath);
-            // printer.cut();
+            if (printObj.printKitchen) {
+                await printer.printImage(kitchenBillPath);
+                printer.cut();
+            }
+            if (printObj.printClient) {
+                await printer.printImage('./src/repositories/printOrder/header.png');
+                await printer.printImage(clientBillPath);
+                printer.cut();
+                // await printer.printImage('./src/repositories/printOrder/header.png');
+                // await printer.printImage(clientBillPath);
+                // printer.cut();
+            }
             printer.execute();
         }
         printImage();
@@ -36,7 +40,6 @@ export async function printOrder(order_id: number): Promise<void> {
         throw err;
     }
 }
-
 export async function createKitchenAndClientBill(order_id: number): Promise<{ clientBillPath: string, kitchenBillPath: string }> {
     try {
         const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
