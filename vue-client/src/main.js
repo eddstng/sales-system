@@ -17,7 +17,7 @@ new Vue({
   methods: {
     async init() {
       // Set Items
-      axios.get("http://localhost:3000/get/items/all").catch(() => {
+      axios.get("http://localhost:3000/get/server").then(() => {}).catch(() => {
         store.commit('setNotification', 3);
       });
       const allItemsArray = (await axios.get("http://localhost:3000/get/items/all")).data

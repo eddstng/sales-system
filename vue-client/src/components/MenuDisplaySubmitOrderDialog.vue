@@ -141,7 +141,6 @@ export default {
     insertSelectedItemsIntoOrdersAndOrdersItems: async function(orderIdNum) {
       const ordersItemsCreateManyInputData = [];
       for (const value of Object.entries(this.$store.state.selectedItems)) {
-        console.log(value)
         const item = value[1];
         ordersItemsCreateManyInputData.push({
           // custom_id: item.node.custom_id,
@@ -165,7 +164,10 @@ export default {
       }
     },
     printOrder: async function(order_id) {
-      const res = await axios.get(`http://localhost:3000/print/id/${order_id}`);
+      const res = await axios.post(
+        'http://localhost:3000/post/print',
+        {order_id, printKitchen: true, printClient: true}
+      );
       if (isNaN(res.status !== 200)) {
         throw new Error(
           `Failed to submit order. Received status code of ${res.status}.`

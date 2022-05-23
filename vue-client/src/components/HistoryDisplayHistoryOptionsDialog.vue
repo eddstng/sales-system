@@ -78,7 +78,19 @@
         <v-spacer></v-spacer>
         <v-btn
           x-large
-          width="24.5%"
+          width="19.2%"
+          v-on:click="
+            historyOptionsDetailsUpdate.openHistoryOptionsDialogue = false;
+            historyOptionsDetailsUpdate.confirmingAction = 'REPRINT';
+            historyOptionsDetailsUpdate.openHistoryOptionsReprintDialogue = true;
+            updateHistoryOptionsDetails(historyOptionsDetailsUpdate);
+          "
+        >
+          <div>REPRINT<br /></div>
+        </v-btn>
+        <v-btn
+          x-large
+          width="19.2%"
           v-on:click="
             historyOptionsDetailsUpdate.openHistoryOptionsDialogue = false;
             historyOptionsDetailsUpdate.confirmingAction = 'REORDER';
@@ -90,7 +102,7 @@
         </v-btn>
         <v-btn
           x-large
-          width="24.5%"
+          width="19.2%"
           v-on:click="
             historyOptionsDetailsUpdate.openHistoryOptionsDialogue = false;
             historyOptionsDetailsUpdate.confirmingAction = 'CLEAR';
@@ -102,7 +114,7 @@
         </v-btn>
         <v-btn
           x-large
-          width="24.5%"
+          width="19.2%"
           v-on:click="
             historyOptionsDetailsUpdate.openHistoryOptionsDialogue = false;
             historyOptionsDetailsUpdate.confirmingAction = 'VOID';
@@ -114,7 +126,7 @@
         </v-btn>
         <v-btn
           x-large
-          width="24.5%"
+          width="19.2%"
           v-on:click="
             historyOptionsDetailsUpdate.openHistoryOptionsDialogue = false;
             historyOptionsDetailsUpdate.confirmingAction = 'PAID';
@@ -135,8 +147,9 @@ export default {
   data() {
     return {
       historyOptionsDetailsUpdate: {
-        confirmingAction: "",
+        confirmingAction: '',
         openHistoryOptionsConfirmationDialogue: false,
+        openHistoryOptionsReprintDialogue: false,
         openHistoryOptionsDialogue: false,
       },
     };
