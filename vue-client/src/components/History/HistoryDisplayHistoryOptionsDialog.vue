@@ -80,7 +80,6 @@
           x-large
           width="19.2%"
           v-on:click="
-            historyOptionsDetailsUpdate.openHistoryOptionsDialogue = false;
             historyOptionsDetailsUpdate.confirmingAction = 'REPRINT';
             historyOptionsDetailsUpdate.openHistoryOptionsReprintDialogue = true;
             updateHistoryOptionsDetails(historyOptionsDetailsUpdate);
@@ -92,7 +91,6 @@
           x-large
           width="19.2%"
           v-on:click="
-            historyOptionsDetailsUpdate.openHistoryOptionsDialogue = false;
             historyOptionsDetailsUpdate.confirmingAction = 'REORDER';
             historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialogue = true;
             updateHistoryOptionsDetails(historyOptionsDetailsUpdate);
@@ -104,7 +102,6 @@
           x-large
           width="19.2%"
           v-on:click="
-            historyOptionsDetailsUpdate.openHistoryOptionsDialogue = false;
             historyOptionsDetailsUpdate.confirmingAction = 'CLEAR';
             historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialogue = true;
             updateHistoryOptionsDetails(historyOptionsDetailsUpdate);
@@ -116,7 +113,6 @@
           x-large
           width="19.2%"
           v-on:click="
-            historyOptionsDetailsUpdate.openHistoryOptionsDialogue = false;
             historyOptionsDetailsUpdate.confirmingAction = 'VOID';
             historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialogue = true;
             updateHistoryOptionsDetails(historyOptionsDetailsUpdate);
@@ -128,7 +124,6 @@
           x-large
           width="19.2%"
           v-on:click="
-            historyOptionsDetailsUpdate.openHistoryOptionsDialogue = false;
             historyOptionsDetailsUpdate.confirmingAction = 'PAID';
             historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialogue = true;
             updateHistoryOptionsDetails(historyOptionsDetailsUpdate);
@@ -156,6 +151,7 @@ export default {
   },
   methods: {
     updateHistoryOptionsDetails() {
+      this.historyOptionsDetailsUpdate.openHistoryOptionsDialogue = false;
       this.$emit('setHistoryOptionsDetails', this.historyOptionsDetailsUpdate);
     },
   },

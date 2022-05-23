@@ -16,13 +16,11 @@
 
           <v-btn
             x-large
-            width="33%"
+            width="24%"
             v-on:click="
               historyOptionsDetailsUpdate = historyOptionsDetails;
               historyOptionsDetailsUpdate.confirmingAction = 'REPRINT KITCHEN';
               historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialogue = true;
-              historyOptionsDetailsUpdate.openHistoryOptionsDialogue = false;
-              historyOptionsDetailsUpdate.openHistoryOptionsReprintDialogue = false;
               updateHistoryOptionsDetails(historyOptionsDetails);
             "
           >
@@ -30,13 +28,11 @@
           </v-btn>
           <v-btn
             x-large
-            width="33%"
+            width="24%"
             v-on:click="
               historyOptionsDetailsUpdate = historyOptionsDetails;
               historyOptionsDetailsUpdate.confirmingAction = 'REPRINT CLIENT';
               historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialogue = true;
-              historyOptionsDetailsUpdate.openHistoryOptionsDialogue = false;
-              historyOptionsDetailsUpdate.openHistoryOptionsReprintDialogue = false;
               updateHistoryOptionsDetails(historyOptionsDetails);
             "
           >
@@ -44,17 +40,27 @@
           </v-btn>
           <v-btn
             x-large
-            width="33%"
+            width="24%"
             v-on:click="
               historyOptionsDetailsUpdate = historyOptionsDetails;
               historyOptionsDetailsUpdate.confirmingAction = 'REPRINT BOTH';
               historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialogue = true;
-              historyOptionsDetailsUpdate.openHistoryOptionsDialogue = false;
-              historyOptionsDetailsUpdate.openHistoryOptionsReprintDialogue = false;
               updateHistoryOptionsDetails(historyOptionsDetails);
             "
           >
             <div>BOTH<br /></div>
+          </v-btn>
+          <v-btn
+            x-large
+            width="24%"
+            v-on:click="
+              historyOptionsDetailsUpdate = historyOptionsDetails;
+              historyOptionsDetailsUpdate.openHistoryOptionsReprintDialogue = false;
+              historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialogue = false;
+              updateHistoryOptionsDetails(historyOptionsDetails);
+            "
+          >
+            <div>CANCEL<br /></div>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -67,13 +73,15 @@ export default {
   props: ['historyOptionsDetails'],
   data() {
     return {
-      historyOptionsDetailsUpdate: {
-        openHistoryOptionsReprintDialogue: false,
-      },
+      historyOptionsDetailsUpdate: {},
     };
   },
   methods: {
     updateHistoryOptionsDetails() {
+      // REMOVE THE PREVIOUS COMMIT LOG AND THEN INVESTIGATE WHY THIS MESSES UP THE STATUS CHANGE AFTER REPRINT
+      // ALSO WHAT IS 'Will-change memory consumption is too high. Budget limit is the document surface area multiplied by 3 (1477216 px). Occurrences of will-change over the budget will be ignored.'
+      this.historyOptionsDetailsUpdate.openHistoryOptionsDialogue = false;
+      this.historyOptionsDetailsUpdate.openHistoryOptionsReprintDialogue = false;
       this.$emit('setHistoryOptionsDetails', this.historyOptionsDetailsUpdate);
     },
   },
