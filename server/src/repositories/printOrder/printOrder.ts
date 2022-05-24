@@ -5,7 +5,9 @@ import { thermalPrinterInterface } from '../../app';
 const ThermalPrinter = require('node-thermal-printer').printer
 const Types = require('node-thermal-printer').types
 
-export async function printOrder(printObj: {order_id: number, printClient: boolean, printKitchen: boolean}): Promise<void> {
+const english = /^[A-Za-z0-9]*$/;
+
+export async function printOrder(printObj: { order_id: number, printClient: boolean, printKitchen: boolean }): Promise<void> {
     try {
         async function printImage() {
             const printer = new ThermalPrinter({
@@ -61,10 +63,17 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
         }
 
         let kitchenBillString = `${orderTypeString}
+
+
         ${res[0].customer_phone}
+
+
         ` + `${res[0].order_type === 2 ? `${res[0].customer_address}
         ` : ''}` + `${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}
+        
         -----------------------
+        
+
         `;
 
         let clientBillString = `${orderTypeString}
@@ -82,14 +91,27 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
             }
 
             // if (element.item_custom_name !== null) {
+            // TO DO: update 214 with a variable
             if (element.item_id === 214) {
                 kitchenBillString += `
+
+
                 ⊵____________ x${element.orders_items_quantity}${kitchenCustomizationString ? kitchenCustomizationString : ''}`
 
             } else {
-                kitchenBillString += `
-                ${element.item_name_chn} x${element.orders_items_quantity}
-                ${kitchenCustomizationString}`
+                if (english.test(element.item_name_chn)) {
+                    kitchenBillString += `
+
+
+
+
+                    ${element.item_name_chn} x${element.orders_items_quantity}
+                    ${kitchenCustomizationString}`
+                } else {
+                    kitchenBillString += `
+                    ${element.item_name_chn} x${element.orders_items_quantity}
+                    ${kitchenCustomizationString}`
+                }
             }
 
             kitchenBillString += `
@@ -111,6 +133,7 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
         })
 
         kitchenBillString += `
+
         `
 
         clientBillString += `
@@ -126,7 +149,7 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
 
         const kitchenBillImageURI = textToImage.generateSync(
             kitchenBillString,
-            { fontSize: 55, lineHeight: 45, maxWidth: 600 });
+            { fontSize: 55, lineHeight: 20, maxWidth: 600 });
 
         const clientBillImageURI = textToImage.generateSync(
             clientBillString,
