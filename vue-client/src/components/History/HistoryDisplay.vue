@@ -21,6 +21,7 @@
           <v-list-item three-line>
             <v-list-item-content>
               <div class="history-display-item-text">
+                <!-- {{ item.node.custom_name }} -->
                 {{ item.node.name_eng }}
               </div>
               <div class="history-display-item-text">

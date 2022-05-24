@@ -81,7 +81,8 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
                 })
             }
 
-            if (element.item_custom_name !== null) {
+            // if (element.item_custom_name !== null) {
+            if (element.item_id === 214) {
                 kitchenBillString += `
                 ⊵____________ x${element.orders_items_quantity}${kitchenCustomizationString ? kitchenCustomizationString : ''}`
 
@@ -105,7 +106,7 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
 
             clientBillString += `
             ${element.item_name_chn === 'Custom Item' ? `⊵${element.item_name_chn}` : element.item_name_chn}
-            ${element.item_name_eng}${clientCustomizationString ? clientCustomizationString : ''}
+            ${element.item_name_chn === 'Custom Item' ? `${element.item_custom_name}` : element.item_name_eng}${clientCustomizationString ? clientCustomizationString : ''}
             ${element.orders_items_quantity}x ${(element.item_price as number).toFixed(2)}`
         })
 

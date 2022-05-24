@@ -131,10 +131,16 @@ c.note as customer_note,
 i.id as item_id,
 i.menu_id as item_menu_id,
 i.category as item_category,
+-- case
+-- 	when oi.custom_name IS NULL then i.name_eng
+-- 	when oi.custom_name IS NOT NULL then i.name_eng
+-- end as item_name_eng,
+-- TO DO: update the 214 with a variable or try name_chn
 case
-	when oi.custom_name IS NULL then i.name_eng
-	when oi.custom_name IS NOT NULL then oi.custom_name
+	when i.id = 214 then oi.custom_name
+	else i.name_eng
 end as item_name_eng,
+-- i.name_eng as item_name_eng,
 i.name_chn as item_name_chn,
 case
 	when oi.custom_price IS NULL then i.price

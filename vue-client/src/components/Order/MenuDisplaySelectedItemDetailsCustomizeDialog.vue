@@ -169,12 +169,12 @@ export default {
         selectedItems[
           `${customizedItemKeyName}${customizedItemKeyNumber}`
         ].node.custom_id = `${customizedItemKeyName}${customizedItemKeyNumber}`;
-        // selectedItems[
-        //   `${customizedItemKeyName}${customizedItemKeyNumber}`
-        // ].node.custom_name = `${
-        //   selectedItems[`${customizedItemKeyName}${customizedItemKeyNumber}`]
-        //     .node.name_eng
-        // } [C-${customizedItemKeyNumber}]`;
+        selectedItems[
+          `${customizedItemKeyName}${customizedItemKeyNumber}`
+        ].node.custom_name = `${
+          selectedItems[`${customizedItemKeyName}${customizedItemKeyNumber}`]
+            .node.name_eng
+        } [C-${customizedItemKeyNumber}]`;
 
         delete selectedItems[selectedItemIdToUseString];
       }
