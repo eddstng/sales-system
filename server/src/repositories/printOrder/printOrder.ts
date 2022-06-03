@@ -85,8 +85,13 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
         res.forEach((element: any) => {
             let kitchenCustomizationString: string = '';
             if (element.orders_items_customizations !== null) {
-                element.orders_items_customizations.forEach((element: { name_eng: string }) => {
-                    kitchenCustomizationString += `\n ⤷___________`
+                console.log(element)
+                element.orders_items_customizations.forEach((customization: { name_eng: string }) => {
+                    if (english.test(element.item_name_chn)) {
+                        kitchenCustomizationString += `\n⤷___________\n`
+                    } else {
+                        kitchenCustomizationString += `\n\n\n⤷___________`
+                    }
                 })
             }
 
@@ -102,15 +107,13 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
                 if (english.test(element.item_name_chn)) {
                     kitchenBillString += `
 
-
-
-
                     ${element.item_name_chn} x${element.orders_items_quantity}
                     ${kitchenCustomizationString}`
                 } else {
                     kitchenBillString += `
                     ${element.item_name_chn} x${element.orders_items_quantity}
-                    ${kitchenCustomizationString}`
+                    ${kitchenCustomizationString}
+                    `
                 }
             }
 
@@ -122,9 +125,6 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
                     clientCustomizationString += `\n ⤷${element.name_eng}`
                 })
             }
-            console.log("==========")
-            console.log(element)
-            console.log("==========")
 
             clientBillString += `
             ${element.item_name_chn === 'Custom Item' ? `⊵${element.item_name_chn}` : element.item_name_chn}
