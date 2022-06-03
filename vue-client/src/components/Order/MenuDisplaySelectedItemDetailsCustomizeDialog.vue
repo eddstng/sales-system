@@ -142,7 +142,8 @@ export default {
 
       if (
         selectedItemIdToUseString in selectedItems &&
-        selectedItems[selectedItemIdToUseString].customizations !== undefined
+        selectedItems[selectedItemIdToUseString].customizations !== undefined &&
+        selectedItems[selectedItemIdToUseString].customizations !== null
       ) {
         selectedItems[selectedItemIdToUseString].customizations.push(
           customizationObj
