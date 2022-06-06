@@ -1,6 +1,6 @@
 <template>
   <v-dialog
-    v-model="historyOptionsDetails.openHistoryOptionsConfirmationDialogue"
+    v-model="historyOptionsDetails.openHistoryOptionsConfirmationDialog"
     width="900"
   >
     <v-card>
@@ -39,10 +39,10 @@
 </template>
 
 <script>
-import axios from 'axios';
-import { store } from '../../store/store';
+import axios from "axios";
+import { store } from "../../store/store";
 export default {
-  props: ['historyOptionsDetails'],
+  props: ["historyOptionsDetails"],
   data() {
     return {
       historyOptionsDetailsUpdate: {},
@@ -50,9 +50,9 @@ export default {
   },
   methods: {
     updateHistoryOptionsDetails() {
-      this.historyOptionsDetailsUpdate.openHistoryOptionsDialogue = false;
-      this.historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialogue = false;
-      this.$emit('setHistoryOptionsDetails', this.historyOptionsDetailsUpdate);
+      this.historyOptionsDetailsUpdate.openHistoryOptionsDialog = false;
+      this.historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialog = false;
+      this.$emit("setHistoryOptionsDetails", this.historyOptionsDetailsUpdate);
     },
     async updateOrderStatus(currentOrderWithUpdatedStatus) {
       const res = await axios.put(
@@ -60,12 +60,12 @@ export default {
         currentOrderWithUpdatedStatus
       );
       if (!res) {
-        console.log('');
+        console.log("");
       }
     },
     // The following function is repeated. TO DO: Find a place to store this function to export.
-    printOrder: async function(order_id, printKitchen, printClient) {
-      const res = await axios.post('http://localhost:3000/post/print', {
+    printOrder: async function (order_id, printKitchen, printClient) {
+      const res = await axios.post("http://localhost:3000/post/print", {
         order_id,
         printKitchen,
         printClient,
@@ -77,9 +77,9 @@ export default {
       }
       return res;
     },
-    performHistoryOption: function(actionStr) {
+    performHistoryOption: function (actionStr) {
       const orderHistory = this.$store.state.orderHistory;
-      if (actionStr === 'VOID') {
+      if (actionStr === "VOID") {
         this.updateOrderStatus({
           ...this.$store.state.currentOrder,
           void: true,
@@ -88,7 +88,7 @@ export default {
           `order_${actionStr.toLowerCase()}`
         ] = true;
       }
-      if (actionStr === 'PAID') {
+      if (actionStr === "PAID") {
         this.updateOrderStatus({
           ...this.$store.state.currentOrder,
           paid: true,
@@ -98,7 +98,7 @@ export default {
         ] = true;
       }
       // Maybe give this a better name than clear?
-      if (actionStr === 'CLEAR') {
+      if (actionStr === "CLEAR") {
         this.updateOrderStatus({
           ...this.$store.state.currentOrder,
           paid: false,
@@ -111,19 +111,19 @@ export default {
           `order_void`
         ] = false;
       }
-      if (actionStr === 'REORDER') {
-        store.commit('setComponent', 'ORDER');
+      if (actionStr === "REORDER") {
+        store.commit("setComponent", "ORDER");
       }
-      if (actionStr === 'REPRINT KITCHEN') {
+      if (actionStr === "REPRINT KITCHEN") {
         this.printOrder(this.$store.state.currentOrder.id, true, false);
       }
-      if (actionStr === 'REPRINT CLIENT') {
+      if (actionStr === "REPRINT CLIENT") {
         this.printOrder(this.$store.state.currentOrder.id, false, true);
       }
-      if (actionStr === 'REPRINT BOTH') {
+      if (actionStr === "REPRINT BOTH") {
         this.printOrder(this.$store.state.currentOrder.id, true, true);
       }
-      this.historyOptionsDetails.confirmingAction = '';
+      this.historyOptionsDetails.confirmingAction = "";
     },
   },
 };

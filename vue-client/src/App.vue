@@ -39,25 +39,7 @@
       </v-row>
     </div>
     <template v-if="$store.state.component === 'ORDER'">
-      <v-row no-gutters>
-        <v-col lg="1">
-          <Sidebar />
-        </v-col>
-        <v-col lg="4">
-          <v-card outlined tile>
-            <v-container class="grey lighten-5">
-              <MenuDisplay />
-            </v-container>
-          </v-card>
-        </v-col>
-        <v-col lg="7" height="100vh">
-          <v-card class="fill-height" tile>
-            <v-container class="grey lighten-5">
-              <MenuButtons />
-            </v-container>
-          </v-card>
-        </v-col>
-      </v-row>
+      <Menu />
     </template>
     <template v-if="$store.state.component === 'HISTORY'">
       <v-row no-gutters>
@@ -84,21 +66,19 @@
 </template>
 
 <script>
-import storeMixin from './mixins/storeMixin';
-import Sidebar from './components/Sidebar';
-import MenuButtons from './components/Order/MenuButtons';
-import MenuDisplay from './components/Order/MenuDisplay';
-import HistoryButtons from './components/History/HistoryButtons';
-import HistoryDisplay from './components/History/HistoryDisplay';
-import { serverNotRunning } from '../src/main';
+import storeMixin from "./mixins/storeMixin";
+import Sidebar from "./components/Sidebar";
+import Menu from "./components/Menu/Menu";
+import HistoryButtons from "./components/History/HistoryButtons";
+import HistoryDisplay from "./components/History/HistoryDisplay";
+import { serverNotRunning } from "../src/main";
 const date = new Date();
 export default {
   mixins: [storeMixin],
-  name: 'App',
+  name: "App",
   components: {
     Sidebar,
-    MenuButtons,
-    MenuDisplay,
+    Menu,
     HistoryButtons,
     HistoryDisplay,
   },
@@ -108,7 +88,7 @@ export default {
       hours: date.getHours(),
       minutes: date.getMinutes(),
       seconds: date.getSeconds(),
-      amPm: 'AM',
+      amPm: "AM",
       interval: 0,
       notification: 0,
       render: true,
@@ -143,8 +123,9 @@ export default {
     },
     currentDate() {
       const current = new Date();
-      const date = `${current.getFullYear()}/${current.getMonth() +
-        1}/${current.getDate()}`;
+      const date = `${current.getFullYear()}/${
+        current.getMonth() + 1
+      }/${current.getDate()}`;
       return date;
     },
   },

@@ -1,7 +1,7 @@
 <template>
   <v-dialog
-    v-if="removeMenuDisplayItemDetails.openCustomizeItemDialogue"
-    v-model="removeMenuDisplayItemDetails.selectedItemDialog"
+    v-if="menuDisplayItemDetails.openCustomizeSelectedItemDialog"
+    v-model="menuDisplayItemDetails.selectedItemDialog"
     width="1000px"
   >
     <v-card>
@@ -10,9 +10,9 @@
           CUSTOMIZE ITEM
           <br />
           <br />
-          {{ removeMenuDisplayItemDetails.removeSelectedItem.node.name_eng }}
+          {{ menuDisplayItemDetails.removeSelectedItem.node.name_eng }}
           <br />
-          {{ removeMenuDisplayItemDetails.removeSelectedItem.node.name_chn }}
+          {{ menuDisplayItemDetails.removeSelectedItem.node.name_chn }}
         </h3>
         <br />
         <v-btn
@@ -23,16 +23,13 @@
           width="16.26%"
           height="80px"
           v-on:click="
-            openCustomizeItemDialogue = false;
-            toggleSelectedItemDialogCustomizeItemDialog(false);
-            toggleSelectedItemDialogOff();
-            addCustomizationToItem(
-              removeMenuDisplayItemDetails.removeSelectedItem,
-              {
-                name_eng: `NO ${customization.name_eng}`,
-                name_chn: `${customization.name_chn}`,
-              }
-            );
+            openCustomizeSelectedItemDialog = false;
+            closeCustomizeSelectedItemDialog(false);
+            closeSelectedItemDialog();
+            addCustomizationToItem(menuDisplayItemDetails.removeSelectedItem, {
+              name_eng: `NO ${customization.name_eng}`,
+              name_chn: `${customization.name_chn}`,
+            });
           "
         >
           <p>
@@ -57,10 +54,10 @@
             width="20%"
             height="80px"
             v-on:click="
-              openCustomizeItemDialogue = false;
-              removeMenuDisplayItemDetails.selectedItemDialog = false;
+              openCustomizeSelectedItemDialog = false;
+              menuDisplayItemDetails.selectedItemDialog = false;
               addCustomizationToItem(
-                removeMenuDisplayItemDetails.removeSelectedItem,
+                menuDisplayItemDetails.removeSelectedItem,
                 {
                   name_eng: customCustomizationInput.toUpperCase(),
                   name_chn: ``,
@@ -80,7 +77,7 @@
         <v-btn
           x-large
           width="100%"
-          v-on:click="toggleSelectedItemDialogCustomizeItemDialog(false)"
+          v-on:click="closeCustomizeSelectedItemDialog(false)"
         >
           <div>CANCEL<br /></div>
         </v-btn>
@@ -90,51 +87,51 @@
 </template>
 
 <script>
-import storeMixin from '../../mixins/storeMixin';
-import { store } from '../../store/store';
+import storeMixin from "../../mixins/storeMixin";
+import { store } from "../../store/store";
 export default {
   mixins: [storeMixin],
-  props: ['removeMenuDisplayItemDetails'],
+  props: ["menuDisplayItemDetails"],
   data() {
     return {
-      customCustomizationInput: '',
+      customCustomizationInput: "",
       customizations: [
         {
-          name_eng: 'MSG',
-          name_chn: '',
+          name_eng: "MSG",
+          name_chn: "",
         },
         {
-          name_eng: 'SESAME',
-          name_chn: '',
+          name_eng: "SESAME",
+          name_chn: "",
         },
         {
-          name_eng: 'SALT',
-          name_chn: '',
+          name_eng: "SALT",
+          name_chn: "",
         },
         {
-          name_eng: 'OIL',
-          name_chn: '',
+          name_eng: "OIL",
+          name_chn: "",
         },
         {
-          name_eng: 'SPICY',
-          name_chn: '',
+          name_eng: "SPICY",
+          name_chn: "",
         },
         {
-          name_eng: 'ONIONS',
-          name_chn: '',
+          name_eng: "ONIONS",
+          name_chn: "",
         },
       ],
     };
   },
   methods: {
     //repeated
-    toggleSelectedItemDialogCustomizeItemDialog(bool) {
-      this.$emit('setSelectedItemDialogCustomizeItemDialogToBool', bool);
+    closeCustomizeSelectedItemDialog() {
+      this.$emit("closeCustomizeSelectedItemDialog");
     },
-    toggleSelectedItemDialogOff() {
-      this.$emit('setSelectedItemDialogToBool', false);
+    closeSelectedItemDialog() {
+      this.$emit("closeSelectedItemDialog");
     },
-    addCustomizationToItem: function(selectedItem, customizationObj) {
+    addCustomizationToItem: function (selectedItem, customizationObj) {
       const selectedItemIdToUseString =
         selectedItem.node.custom_id ?? selectedItem.node.id.toString();
 
@@ -163,9 +160,8 @@ export default {
         ) {
           customizedItemKeyNumber++;
         }
-        selectedItems[
-          `${customizedItemKeyName}${customizedItemKeyNumber}`
-        ] = JSON.parse(JSON.stringify(selectedItemWithCustomizations));
+        selectedItems[`${customizedItemKeyName}${customizedItemKeyNumber}`] =
+          JSON.parse(JSON.stringify(selectedItemWithCustomizations));
 
         selectedItems[
           `${customizedItemKeyName}${customizedItemKeyNumber}`
@@ -179,24 +175,7 @@ export default {
 
         delete selectedItems[selectedItemIdToUseString];
       }
-
-      store.commit('setSelectedItems', selectedItems);
-    },
-    removeSelectedItemOneByVueStoreKey: function(vueStoreKeyToDelete) {
-      const selectedItems = Object.assign({}, this.$store.state.selectedItems);
-      if (selectedItems[vueStoreKeyToDelete].quantity === 1) {
-        delete selectedItems[vueStoreKeyToDelete];
-      } else {
-        selectedItems[vueStoreKeyToDelete].quantity - 1;
-      }
-      store.commit('setSelectedItems', selectedItems);
-      this.storeMixinUpdateStorePriceDetails();
-    },
-    addSelectedItemOne: function(selectedItem) {
-      const selectedItems = Object.assign({}, this.$store.state.selectedItems);
-      selectedItems[selectedItem.node.id].quantity++;
-      store.commit('setSelectedItems', selectedItems);
-      this.storeMixinUpdateStorePriceDetails();
+      store.commit("setSelectedItems", selectedItems);
     },
   },
 };

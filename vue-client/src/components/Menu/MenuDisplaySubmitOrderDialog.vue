@@ -9,7 +9,7 @@
               {{
                 $store.state.selectedCustomer.phone.replace(
                   /(\d{3})(\d{3})(\d{3})/,
-                  '$1-$2-$3'
+                  "$1-$2-$3"
                 )
               }}
               <br />
@@ -52,9 +52,9 @@
             <div class="submitOrderDialogText pl-25 mb-5">
               ➡ {{ customization.name_eng }}
               {{
-                customization.name_chn === ''
-                  ? ''
-                  : '/' + customization.name_chn
+                customization.name_chn === ""
+                  ? ""
+                  : "/" + customization.name_chn
               }}
             </div>
           </v-list-item-content>
@@ -79,14 +79,14 @@
       <v-divider></v-divider>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn x-large width="50%" v-on:click="toggleSubmitOrderDialogOff()">
+        <v-btn x-large width="50%" v-on:click="closeSubmitOrderDialog()">
           <div>CANCEL<br /></div>
         </v-btn>
         <v-btn
           x-large
           width="50%"
           submitOrderDialog="submitOrderDialog"
-          v-on:click="toggleSubmitOrderDialogOff(), submitOrder()"
+          v-on:click="closeSubmitOrderDialog(), submitOrder()"
         >
           <div>SUBMIT<br /></div>
         </v-btn>
@@ -102,43 +102,43 @@
 </style>
 
 <script>
-import storeMixin from '../../mixins/storeMixin';
-import { store } from '../../store/store';
-import axios from 'axios';
+import storeMixin from "../../mixins/storeMixin";
+import { store } from "../../store/store";
+import axios from "axios";
 export default {
   mixins: [storeMixin],
-  props: ['submitOrderDialog'],
+  props: ["submitOrderDialog"],
   methods: {
-    toggleSubmitOrderDialogOff() {
-      this.$emit('setSubmitOrderDialogToBool', false);
+    closeSubmitOrderDialog() {
+      this.$emit("closeSubmitOrderDialog");
     },
-    submitOrder: async function() {
+    submitOrder: async function () {
       try {
         const newOrder = await this.createOrder();
         this.insertSelectedItemsIntoOrdersAndOrdersItems(newOrder.data.id);
         this.updateOrderWithTotalPrice(newOrder);
         this.storeMixinClearOrderRelatedDetails();
         this.printOrder(newOrder.data.id);
-        this.toggleSubmitOrderDialogOff();
-        store.commit('setNotification', 1);
+        this.closeSubmitOrderDialog();
+        store.commit("setNotification", 1);
       } catch (err) {
-        this.toggleSubmitOrderDialogOff();
-        store.commit('setNotification', 2);
+        this.closeSubmitOrderDialog();
+        store.commit("setNotification", 2);
         console.log(err);
       }
     },
-    createOrder: async function() {
-      const res = await axios.post('http://localhost:3000/post/orders/create', {
+    createOrder: async function () {
+      const res = await axios.post("http://localhost:3000/post/orders/create", {
         total: 0,
         customer_id: this.$store.state.selectedCustomer.id,
         type: this.$store.state.currentOrder.type,
       });
       if (isNaN(res.data.id)) {
-        throw new Error('Failed to submit order. No order id retrieved.');
+        throw new Error("Failed to submit order. No order id retrieved.");
       }
       return res;
     },
-    insertSelectedItemsIntoOrdersAndOrdersItems: async function(orderIdNum) {
+    insertSelectedItemsIntoOrdersAndOrdersItems: async function (orderIdNum) {
       const ordersItemsCreateManyInputData = [];
       for (const value of Object.entries(this.$store.state.selectedItems)) {
         const item = value[1];
@@ -153,9 +153,9 @@ export default {
           custom_name: item.node.custom_name,
         });
       }
-      console.log(ordersItemsCreateManyInputData)
+      console.log(ordersItemsCreateManyInputData);
       const res = await axios.post(
-        'http://localhost:3000/post/ordersitems/create/bulk',
+        "http://localhost:3000/post/ordersitems/create/bulk",
         ordersItemsCreateManyInputData
       );
       if (res.status !== 200) {
@@ -164,11 +164,12 @@ export default {
         );
       }
     },
-    printOrder: async function(order_id) {
-      const res = await axios.post(
-        'http://localhost:3000/post/print',
-        {order_id, printKitchen: true, printClient: true}
-      );
+    printOrder: async function (order_id) {
+      const res = await axios.post("http://localhost:3000/post/print", {
+        order_id,
+        printKitchen: true,
+        printClient: true,
+      });
       if (isNaN(res.status !== 200)) {
         throw new Error(
           `Failed to submit order. Received status code of ${res.status}.`
@@ -176,7 +177,7 @@ export default {
       }
       return res;
     },
-    updateOrderWithTotalPrice: async function(orderDetails) {
+    updateOrderWithTotalPrice: async function (orderDetails) {
       const res = await axios.put(
         `http://localhost:3000/put/orders/update/id/${orderDetails.data.id}`,
         {

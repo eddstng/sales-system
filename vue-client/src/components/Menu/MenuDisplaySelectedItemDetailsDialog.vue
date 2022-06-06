@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-dialog
-      v-if="removeMenuDisplayItemDetails.removeSelectedItem.node !== undefined"
-      v-model="removeMenuDisplayItemDetails.selectedItemDialog"
+      v-if="menuDisplayItemDetails.removeSelectedItem.node !== undefined"
+      v-model="menuDisplayItemDetails.selectedItemDialog"
       width="1000px"
     >
       <v-card>
@@ -12,13 +12,12 @@
             <br />
             <br />
             <br />
-            {{ removeMenuDisplayItemDetails.removeSelectedItem.node.name_eng }}
+            {{ menuDisplayItemDetails.removeSelectedItem.node.name_eng }}
             <br />
 
-            {{ removeMenuDisplayItemDetails.removeSelectedItem.node.name_chn }}
+            {{ menuDisplayItemDetails.removeSelectedItem.node.name_chn }}
             <br />
             <br />
-
           </h3>
 
           <br />
@@ -30,8 +29,8 @@
             x-large
             width="15%"
             v-on:click="
-              toggleSelectedItemDialogFalse();
-              removeMenuDisplayItemDetails.removeSelectedItem = {};
+              closeSelectedItemDialog();
+              menuDisplayItemDetails.removeSelectedItem = {};
             "
           >
             <div>CANCEL<br /></div>
@@ -39,7 +38,7 @@
           <v-btn
             x-large
             width="15%"
-            v-on:click="toggleSelectedItemDialogCustomizeItemDialog(true)"
+            v-on:click="openCustomizeSelectedItemDialog(true)"
           >
             <div>CUSTOMIZE<br /></div>
           </v-btn>
@@ -47,11 +46,9 @@
             x-large
             width="15%"
             v-on:click="
-              toggleSelectedItemDialogFalse();
-              removeSelectedItemAll(
-                removeMenuDisplayItemDetails.removeSelectedItem
-              );
-              removeMenuDisplayItemDetails.removeSelectedItem = {};
+              closeSelectedItemDialog();
+              removeSelectedItemAll(menuDisplayItemDetails.removeSelectedItem);
+              menuDisplayItemDetails.removeSelectedItem = {};
               storeMixinSumSelectedItemsQuantity();
             "
           >
@@ -61,11 +58,9 @@
             x-large
             width="15%"
             v-on:click="
-              toggleSelectedItemDialogFalse();
-              removeSelectedItemOne(
-                removeMenuDisplayItemDetails.removeSelectedItem
-              );
-              removeMenuDisplayItemDetails.removeSelectedItem = {};
+              closeSelectedItemDialog();
+              removeSelectedItemOne(menuDisplayItemDetails.removeSelectedItem);
+              menuDisplayItemDetails.removeSelectedItem = {};
               storeMixinSumSelectedItemsQuantity();
             "
           >
@@ -75,11 +70,9 @@
             x-large
             width="19.6%"
             v-on:click="
-              toggleSelectedItemDialogFalse();
-              addSelectedItemOne(
-                removeMenuDisplayItemDetails.removeSelectedItem
-              );
-              removeMenuDisplayItemDetails.removeSelectedItem = {};
+              closeSelectedItemDialog();
+              addSelectedItemOne(menuDisplayItemDetails.removeSelectedItem);
+              menuDisplayItemDetails.removeSelectedItem = {};
               storeMixinSumSelectedItemsQuantity();
             "
           >
@@ -89,7 +82,7 @@
             x-large
             width="15%"
             v-on:click="
-              toggleSelectedItemDialogFalse();
+              closeSelectedItemDialog();
               storeMixinSumSelectedItemsQuantity();
               toggleUpdateQuantityDialogTrue('ADD');
             "
@@ -167,7 +160,7 @@
             width="50%"
             v-on:click="
               updateQuantityDialog = false;
-              removeMenuDisplayItemDetails.selectedItemDialog = false;
+              menuDisplayItemDetails.selectedItemDialog = false;
             "
           >
             <div>NO<br /></div>
@@ -178,7 +171,7 @@
             v-on:click="
               updateSelectedItemAmount(updateQuantityDialogItem);
               updateQuantityDialog = false;
-              removeMenuDisplayItemDetails.selectedItemDialog = false;
+              menuDisplayItemDetails.selectedItemDialog = false;
             "
           >
             <div>YES<br /></div>
@@ -210,20 +203,20 @@ export default {
     };
   },
   mixins: [storeMixin],
-  props: ["removeMenuDisplayItemDetails"],
+  props: ["menuDisplayItemDetails"],
   methods: {
     toggleUpdateQuantityDialogTrue() {
       this.updateQuantityDialogItem = Object.assign(
         {},
-        this.removeMenuDisplayItemDetails.removeSelectedItem
+        this.menuDisplayItemDetails.removeSelectedItem
       );
       this.updateQuantityDialog = true;
     },
-    toggleSelectedItemDialogFalse() {
-      this.$emit("setSelectedItemDialogToBool", false);
+    closeSelectedItemDialog() {
+      this.$emit("closeSelectedItemDialog");
     },
-    toggleSelectedItemDialogCustomizeItemDialog(bool) {
-      this.$emit("setSelectedItemDialogCustomizeItemDialogToBool", bool);
+    openCustomizeSelectedItemDialog() {
+      this.$emit("openCustomizeSelectedItemDialog");
     },
     handleKeypad(buttonValue) {
       if (buttonValue === "🠔") {
@@ -254,7 +247,7 @@ export default {
       const quantityAsIntValue = parseInt(quantityAsStringValue);
       this.updateQuantityDialogItem = Object.assign(
         {},
-        this.removeMenuDisplayItemDetails.removeSelectedItem
+        this.menuDisplayItemDetails.removeSelectedItem
       );
       this.updateQuantityDialogItem.quantity = quantityAsIntValue;
     },

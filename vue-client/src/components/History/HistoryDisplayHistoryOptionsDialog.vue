@@ -1,6 +1,6 @@
 <template>
   <v-dialog
-    v-model="historyOptionsDetails.openHistoryOptionsDialogue"
+    v-model="historyOptionsDetails.openHistoryOptionsDialog"
     width="900"
   >
     <v-card>
@@ -12,7 +12,7 @@
               {{
                 $store.state.selectedCustomer.phone.replace(
                   /(\d{3})(\d{3})(\d{3})/,
-                  '$1-$2-$3'
+                  "$1-$2-$3"
                 )
               }}
               <br />
@@ -49,9 +49,9 @@
             <div class="submitOrderDialogText pl-25 mb-5">
               ➡ {{ customization.name_eng }}
               {{
-                customization.name_chn === ''
-                  ? ''
-                  : '/' + customization.name_chn
+                customization.name_chn === ""
+                  ? ""
+                  : "/" + customization.name_chn
               }}
             </div>
           </v-list-item-content>
@@ -81,7 +81,7 @@
           width="19.2%"
           v-on:click="
             historyOptionsDetailsUpdate.confirmingAction = 'REPRINT';
-            historyOptionsDetailsUpdate.openHistoryOptionsReprintDialogue = true;
+            historyOptionsDetailsUpdate.openHistoryOptionsReprintDialog = true;
             updateHistoryOptionsDetails(historyOptionsDetailsUpdate);
           "
         >
@@ -92,7 +92,7 @@
           width="19.2%"
           v-on:click="
             historyOptionsDetailsUpdate.confirmingAction = 'REORDER';
-            historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialogue = true;
+            historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialog = true;
             updateHistoryOptionsDetails(historyOptionsDetailsUpdate);
           "
         >
@@ -103,7 +103,7 @@
           width="19.2%"
           v-on:click="
             historyOptionsDetailsUpdate.confirmingAction = 'CLEAR';
-            historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialogue = true;
+            historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialog = true;
             updateHistoryOptionsDetails(historyOptionsDetailsUpdate);
           "
         >
@@ -114,7 +114,7 @@
           width="19.2%"
           v-on:click="
             historyOptionsDetailsUpdate.confirmingAction = 'VOID';
-            historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialogue = true;
+            historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialog = true;
             updateHistoryOptionsDetails(historyOptionsDetailsUpdate);
           "
         >
@@ -125,7 +125,7 @@
           width="19.2%"
           v-on:click="
             historyOptionsDetailsUpdate.confirmingAction = 'PAID';
-            historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialogue = true;
+            historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialog = true;
             updateHistoryOptionsDetails(historyOptionsDetailsUpdate);
           "
         >
@@ -138,21 +138,21 @@
 
 <script>
 export default {
-  props: ['historyOptionsDetails'],
+  props: ["historyOptionsDetails"],
   data() {
     return {
       historyOptionsDetailsUpdate: {
-        confirmingAction: '',
-        openHistoryOptionsConfirmationDialogue: false,
-        openHistoryOptionsReprintDialogue: false,
-        openHistoryOptionsDialogue: false,
+        confirmingAction: "",
+        openHistoryOptionsConfirmationDialog: false,
+        openHistoryOptionsReprintDialog: false,
+        openHistoryOptionsDialog: false,
       },
     };
   },
   methods: {
     updateHistoryOptionsDetails() {
-      this.historyOptionsDetailsUpdate.openHistoryOptionsDialogue = false;
-      this.$emit('setHistoryOptionsDetails', this.historyOptionsDetailsUpdate);
+      this.historyOptionsDetailsUpdate.openHistoryOptionsDialog = false;
+      this.$emit("setHistoryOptionsDetails", this.historyOptionsDetailsUpdate);
     },
   },
 };

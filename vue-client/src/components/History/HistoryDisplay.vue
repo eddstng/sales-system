@@ -44,18 +44,16 @@
             <div class="menu-display-item-text pl-5">
               ➡ {{ customization.name_eng }}
               {{
-                customization.name_chn === ''
-                  ? ''
-                  : '/' + customization.name_chn
+                customization.name_chn === ""
+                  ? ""
+                  : "/" + customization.name_chn
               }}
             </div>
           </v-list-item-content>
         </v-card>
       </template>
     </v-card>
-    <v-card
-      v-on:click="historyOptionsDetails.openHistoryOptionsDialogue = true"
-    >
+    <v-card v-on:click="historyOptionsDetails.openHistoryOptionsDialog = true">
       <v-list-item three-line>
         <v-list-item-content>
           <div class="menu-display-item-text">Subtotal:</div>
@@ -101,23 +99,23 @@
 </style>
 
 <script>
-import HistoryDisplayHistoryOptionsDialog from './HistoryDisplayHistoryOptionsDialog';
-import HistoryDisplayHistoryOptionsConfirmationDialog from './HistoryDisplayHistoryOptionsConfirmationDialog';
-import HistoryDisplayHistoryOptionsReprintDialog from './HistoryDisplayHistoryOptionsReprintDialog';
-import HistoryDisplayCustomer from './HistoryDisplayCustomer';
+import HistoryDisplayHistoryOptionsDialog from "./HistoryDisplayHistoryOptionsDialog";
+import HistoryDisplayHistoryOptionsConfirmationDialog from "./HistoryDisplayHistoryOptionsConfirmationDialog";
+import HistoryDisplayHistoryOptionsReprintDialog from "./HistoryDisplayHistoryOptionsReprintDialog";
+import HistoryDisplayCustomer from "./HistoryDisplayCustomer";
 export default {
   data() {
     return {
       historyOptionsDetails: {
-        confirmingAction: '',
-        openHistoryOptionsConfirmationDialogue: false,
-        openHistoryOptionsReprintDialogue: false,
-        openHistoryOptionsDialogue: false,
+        confirmingAction: "",
+        openHistoryOptionsConfirmationDialog: false,
+        openHistoryOptionsReprintDialog: false,
+        openHistoryOptionsDialog: false,
       },
     };
   },
   methods: {
-    setHistoryOptionsDetails: function(historyOptionsDetails) {
+    setHistoryOptionsDetails: function (historyOptionsDetails) {
       this.historyOptionsDetails = historyOptionsDetails;
     },
   },

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-dialog v-model="addCustomItemDialogue" width="500">
+    <v-dialog v-model="addCustomItemDialog" width="500">
       <v-card>
         <div>
           <br />
@@ -45,7 +45,7 @@
             width="50%"
             v-on:click="
               phone = '';
-              addCustomItemDialogue = false;
+              addCustomItemDialog = false;
               customItem.name = '';
             "
           >
@@ -70,7 +70,7 @@
                 price: 0.0,
                 id: '',
               }),
-                (addCustomItemDialogue = false);
+                (addCustomItemDialog = false);
             "
           >
             <div>ADD<br /></div>
@@ -101,7 +101,7 @@
           height="250px"
           width="19.6%"
           class="mt-1 mr-1"
-          v-on:click="addCustomItemDialogue = true"
+          v-on:click="addCustomItemDialog = true"
           ><div>
             <p class="menu-button-text-eng">CUSTOM</p>
           </div>
@@ -141,7 +141,7 @@
           height="250px"
           width="19.6%"
           class="mt-1 mr-1"
-          v-on:click="addCustomItemDialogue = true"
+          v-on:click="addCustomItemDialog = true"
           ><div>
             <p class="menu-button-text-eng">CUSTOM</p>
           </div>
@@ -222,7 +222,7 @@ export default {
         "Broccoli",
         "Black Bean Sauce",
       ],
-      addCustomItemDialogue: false,
+      addCustomItemDialog: false,
       categories: [
         {
           name_eng: "Appetizers",
@@ -319,7 +319,7 @@ export default {
           name_chn: "Specials/Drinks",
           id: 15,
         },
-            {
+        {
           name_eng: "MINI SPECIAL",
           name_chn: "MINI SPECIAL",
           num_range: "1-6",

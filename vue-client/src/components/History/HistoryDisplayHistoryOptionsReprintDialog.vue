@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-dialog
-      v-model="historyOptionsDetails.openHistoryOptionsReprintDialogue"
+      v-model="historyOptionsDetails.openHistoryOptionsReprintDialog"
       width="900"
     >
       <v-card>
@@ -20,7 +20,7 @@
             v-on:click="
               historyOptionsDetailsUpdate = historyOptionsDetails;
               historyOptionsDetailsUpdate.confirmingAction = 'REPRINT KITCHEN';
-              historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialogue = true;
+              historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialog = true;
               updateHistoryOptionsDetails(historyOptionsDetails);
             "
           >
@@ -32,7 +32,7 @@
             v-on:click="
               historyOptionsDetailsUpdate = historyOptionsDetails;
               historyOptionsDetailsUpdate.confirmingAction = 'REPRINT CLIENT';
-              historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialogue = true;
+              historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialog = true;
               updateHistoryOptionsDetails(historyOptionsDetails);
             "
           >
@@ -44,7 +44,7 @@
             v-on:click="
               historyOptionsDetailsUpdate = historyOptionsDetails;
               historyOptionsDetailsUpdate.confirmingAction = 'REPRINT BOTH';
-              historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialogue = true;
+              historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialog = true;
               updateHistoryOptionsDetails(historyOptionsDetails);
             "
           >
@@ -55,8 +55,8 @@
             width="24%"
             v-on:click="
               historyOptionsDetailsUpdate = historyOptionsDetails;
-              historyOptionsDetailsUpdate.openHistoryOptionsReprintDialogue = false;
-              historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialogue = false;
+              historyOptionsDetailsUpdate.openHistoryOptionsReprintDialog = false;
+              historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialog = false;
               updateHistoryOptionsDetails(historyOptionsDetails);
             "
           >
@@ -70,7 +70,7 @@
 
 <script>
 export default {
-  props: ['historyOptionsDetails'],
+  props: ["historyOptionsDetails"],
   data() {
     return {
       historyOptionsDetailsUpdate: {},
@@ -80,9 +80,9 @@ export default {
     updateHistoryOptionsDetails() {
       // REMOVE THE PREVIOUS COMMIT LOG AND THEN INVESTIGATE WHY THIS MESSES UP THE STATUS CHANGE AFTER REPRINT
       // ALSO WHAT IS 'Will-change memory consumption is too high. Budget limit is the document surface area multiplied by 3 (1477216 px). Occurrences of will-change over the budget will be ignored.'
-      this.historyOptionsDetailsUpdate.openHistoryOptionsDialogue = false;
-      this.historyOptionsDetailsUpdate.openHistoryOptionsReprintDialogue = false;
-      this.$emit('setHistoryOptionsDetails', this.historyOptionsDetailsUpdate);
+      this.historyOptionsDetailsUpdate.openHistoryOptionsDialog = false;
+      this.historyOptionsDetailsUpdate.openHistoryOptionsReprintDialog = false;
+      this.$emit("setHistoryOptionsDetails", this.historyOptionsDetailsUpdate);
     },
   },
 };

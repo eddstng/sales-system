@@ -1,5 +1,8 @@
 <template>
-  <v-dialog v-model="selectedCustomerDetails.selectDineInFormDialogue" width="500">
+  <v-dialog
+    v-model="selectedCustomerDetails.selectDineInFormDialog"
+    width="500"
+  >
     <v-card>
       <div>
         <br />
@@ -26,7 +29,7 @@
         <v-btn
           x-large
           width="100%"
-          v-on:click="selectedCustomerDetails.selectDineInFormDialogue = false"
+          v-on:click="selectedCustomerDetails.selectDineInFormDialog = false"
         >
           <div>CANCEL<br /></div>
         </v-btn>
@@ -43,7 +46,7 @@ export default {
   methods: {
     toggleCreateCustomerFormDialogOn() {
       this.$emit("setCreateCustomerFormDialogToBool", true);
-    }
-  }
-}
+    },
+  },
+};
 </script>

@@ -9,7 +9,7 @@
           ff
           style="height: 10vh"
           v-on:click="
-            selectedCustomerDetails.selectDineInFormDialogue = true;
+            selectedCustomerDetails.selectDineInFormDialog = true;
             setStoreOrderType(0);
           "
         >
@@ -49,12 +49,20 @@
       x-large
       width="97%"
       min-height="100%"
-      v-on:click="selectedCustomerDetails.openClearSelectedCustomerConfirmationDialogue = true"
+      v-on:click="
+        selectedCustomerDetails.openClearSelectedCustomerConfirmationDialog = true
+      "
       style="height: 10vh"
     >
       <div>
         {{ this.orderTypeString[$store.state.currentOrder.type] }} <br />
-        {{ $store.state.selectedCustomer.phone.replace(/(\d{3})(\d{3})(\d{3})/, "$1-$2-$3") }} <br />
+        {{
+          $store.state.selectedCustomer.phone.replace(
+            /(\d{3})(\d{3})(\d{3})/,
+            "$1-$2-$3"
+          )
+        }}
+        <br />
         {{ $store.state.selectedCustomer.address }} <br />
         {{ $store.state.selectedCustomer.name }} <br />
         {{ $store.state.selectedCustomer.note }}
@@ -72,7 +80,9 @@
     />
 
     <v-dialog
-      v-model="selectedCustomerDetails.openClearSelectedCustomerConfirmationDialogue"
+      v-model="
+        selectedCustomerDetails.openClearSelectedCustomerConfirmationDialog
+      "
       width="900"
     >
       <v-card>
@@ -83,7 +93,9 @@
           <v-btn
             x-large
             width="33%"
-            v-on:click="selectedCustomerDetails.openClearSelectedCustomerConfirmationDialogue = false"
+            v-on:click="
+              selectedCustomerDetails.openClearSelectedCustomerConfirmationDialog = false
+            "
           >
             <div>NO<br /></div>
           </v-btn>
@@ -91,17 +103,19 @@
             x-large
             width="33%"
             v-on:click="
-              selectedCustomerDetails.openClearSelectedCustomerConfirmationDialogue = false;
+              selectedCustomerDetails.openClearSelectedCustomerConfirmationDialog = false;
               clearSelectedCustomer();
             "
           >
             <div>CLEAR<br /></div>
           </v-btn>
-                    <v-btn
+          <v-btn
             x-large
             width="33%"
-            v-on:click="selectedCustomerDetails.openClearSelectedCustomerConfirmationDialogue = false
-            selectedCustomerDetails.createCustomerFormDialog = true"
+            v-on:click="
+              selectedCustomerDetails.openClearSelectedCustomerConfirmationDialog = false;
+              selectedCustomerDetails.createCustomerFormDialog = true;
+            "
           >
             <div>YES<br /></div>
           </v-btn>
@@ -136,10 +150,10 @@ export default {
           note: "",
         },
         suggestedCustomers: [],
-        selectDineInFormDialogue: false,
+        selectDineInFormDialog: false,
         customerPhoneInputDialog: false,
         createCustomerFormDialog: false,
-      openClearSelectedCustomerConfirmationDialogue: false,
+        openClearSelectedCustomerConfirmationDialog: false,
       },
       suggestedStreetName: [],
       orderType: null,
