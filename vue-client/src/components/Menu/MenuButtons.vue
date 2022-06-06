@@ -184,6 +184,63 @@
         </v-btn>
       </div>
     </v-card>
+
+    <v-dialog
+      v-if="itemThatRequiresCustomization !== null"
+      v-model="customizeChowMeinDialog"
+      width="1000px"
+    >
+      <v-card>
+        <div>
+          <h3 class="text-center pt-10 pb-5">
+            CHOW MEIN TYPE SELECTION
+            <br />
+            <br />
+            <br />
+            {{ itemThatRequiresCustomization.name_eng }}
+            <br />
+
+            {{ itemThatRequiresCustomization.name_chn }}
+
+            <br />
+            <br />
+          </h3>
+
+          <br />
+        </div>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn x-large width="33%" v-on:click="cancelCustomizeSelectedItem()">
+            <div>CANCEL<br /></div>
+          </v-btn>
+          <v-btn
+            x-large
+            width="33%"
+            v-on:click="
+              customizeSelectedItem({
+                name_eng: 'SOFT (干)',
+                name_chn: '干',
+              })
+            "
+          >
+            <div>SOFT (干)<br /></div>
+          </v-btn>
+          <v-btn
+            x-large
+            width="33%"
+            v-on:click="
+              customizeSelectedItem({
+                name_eng: 'CRISPY (湿)',
+                name_chn: '湿',
+              })
+            "
+          >
+            <div>CRISPY (湿)<br /></div>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -206,6 +263,8 @@ export default {
   mixins: [storeMixin],
   data() {
     return {
+      customizeChowMeinDialog: false,
+      itemThatRequiresCustomization: null,
       selectedCategory: null,
       customItem: {
         id: "",
@@ -340,7 +399,90 @@ export default {
   methods: {
     onClickMenuButton(item) {
       this.addItemToSelectedItems(item);
+      this.checkIfSelectedItemRequiresCustomization(item);
       this.storeMixinUpdateStorePriceDetails();
+    },
+
+    checkIfSelectedItemRequiresCustomization(item) {
+      if (item.category === 12 && item.name_chn.includes("炒麵")) {
+        this.itemThatRequiresCustomization = item;
+        this.customizeChowMeinDialog = true;
+        // add the hard or soft as customization.
+        // we will throw up a dialog asking soft or hard
+      }
+      // if chowmein we need extra dialog
+      // if soup we want extra dialog
+      // soup is 7 - 17
+      //cm is 124-148
+    },
+
+    cancelCustomizeSelectedItem() {
+      this.removeSelectedItemAll(this.itemThatRequiresCustomization);
+      this.itemThatRequiresCustomization = null;
+    },
+
+    removeSelectedItemAll: function (selectedItem) {
+      const selectedItems = Object.assign({}, this.$store.state.selectedItems);
+      delete selectedItems[selectedItem.custom_id ?? selectedItem.id];
+      this.storeMixinSetStoreSelectedItems(selectedItems);
+      this.storeMixinUpdateStorePriceDetails();
+    },
+
+    customizeSelectedItem(customizationObj) {
+      this.addCustomizationToItem(
+        this.$store.state.selectedItems[this.itemThatRequiresCustomization.id],
+        customizationObj
+      );
+      this.itemThatRequiresCustomization = null;
+      this.customizeChowMeinDialog = false;
+    },
+
+    addCustomizationToItem: function (selectedItem, customizationObj) {
+      console.log(selectedItem);
+      const selectedItemIdToUseString =
+        selectedItem.node.custom_id ?? selectedItem.node.id.toString();
+
+      const selectedItems = Object.assign({}, this.$store.state.selectedItems);
+
+      if (
+        selectedItemIdToUseString in selectedItems &&
+        selectedItems[selectedItemIdToUseString].customizations !== undefined &&
+        selectedItems[selectedItemIdToUseString].customizations !== null
+      ) {
+        selectedItems[selectedItemIdToUseString].customizations.push(
+          customizationObj
+        );
+      } else {
+        const selectedItemWithCustomizations = {
+          ...selectedItem,
+          customizations: [customizationObj],
+        };
+        let customizedItemKeyName = `${selectedItem.node.id.toString()}C-`;
+        let customizedItemKeyNumber = 0;
+
+        while (
+          selectedItems[
+            `${customizedItemKeyName}${customizedItemKeyNumber}`
+          ] !== undefined
+        ) {
+          customizedItemKeyNumber++;
+        }
+        selectedItems[`${customizedItemKeyName}${customizedItemKeyNumber}`] =
+          JSON.parse(JSON.stringify(selectedItemWithCustomizations));
+
+        selectedItems[
+          `${customizedItemKeyName}${customizedItemKeyNumber}`
+        ].node.custom_id = `${customizedItemKeyName}${customizedItemKeyNumber}`;
+        selectedItems[
+          `${customizedItemKeyName}${customizedItemKeyNumber}`
+        ].node.custom_name = `${
+          selectedItems[`${customizedItemKeyName}${customizedItemKeyNumber}`]
+            .node.name_eng
+        } [C-${customizedItemKeyNumber}]`;
+
+        delete selectedItems[selectedItemIdToUseString];
+      }
+      store.commit("setSelectedItems", selectedItems);
     },
     addItemToSelectedItems(item) {
       let idWeCareAbout = item.custom_id ?? item.id;

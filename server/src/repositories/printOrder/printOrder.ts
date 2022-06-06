@@ -62,7 +62,7 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
             orderTypeString = 'DELIVERY'
         }
 
-        let kitchenBillString = `${orderTypeString}
+        let kitchenBillString = `${res[0].order_id} \n\n\n ${orderTypeString}
 
 
         ${res[0].customer_phone}
@@ -76,7 +76,7 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
 
         `;
 
-        let clientBillString = `${orderTypeString}
+        let clientBillString = `${res[0].order_id} \n ${orderTypeString}
         ${res[0].customer_phone}
         ` + `${res[0].order_type === 2 ? `${res[0].customer_address}
         ` : ''}` + `${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}
@@ -86,11 +86,11 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
             let kitchenCustomizationString: string = '';
             if (element.orders_items_customizations !== null) {
                 console.log(element)
-                element.orders_items_customizations.forEach((customization: { name_eng: string }) => {
-                    if (english.test(element.item_name_chn)) {
-                        kitchenCustomizationString += `\n⤷___________\n`
+                element.orders_items_customizations.forEach((customization: { name_eng: string, name_chn: string }) => {
+                    if (english.test(element.item_name_chn)) { // To handle formatting for items such as Dinner Specials.
+                        kitchenCustomizationString += `\n⤷${customization.name_chn === '' ? '___________' : customization.name_chn}\n`
                     } else {
-                        kitchenCustomizationString += `\n\n\n⤷___________`
+                        kitchenCustomizationString += `\n\n\n⤷${customization.name_chn === '' ? '___________' : customization.name_chn}\n`
                     }
                 })
             }
@@ -122,7 +122,11 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
             let clientCustomizationString: string = '';
             if (element.orders_items_customizations !== null) {
                 element.orders_items_customizations.forEach((element: { name_eng: string }) => {
-                    clientCustomizationString += `\n ⤷${element.name_eng}`
+                    if (english.test(element.name_eng)) {
+                        clientCustomizationString += `\n⤷${element.name_eng}`
+                    } else {
+                        clientCustomizationString += `\n⤷${element.name_eng}`
+                    }
                 })
             }
 
