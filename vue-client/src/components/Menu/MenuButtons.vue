@@ -80,87 +80,260 @@
     </v-dialog>
     <v-card outlined tile class="overflow-y-auto" height="92.4vh">
       <div class="p-0" v-if="displayMenuButtons" max-height="400">
-        <v-btn
-          x-large
-          dark
-          height="250px"
-          width="19.6%"
-          class="mt-1 mr-1"
-          v-on:click="
-            displayCategoriesButtons = true;
-            displayMenuButtons = false;
-            selectedCategory = null;
-          "
-          ><div>
-            <p class="menu-button-text-eng">BACK</p>
-          </div>
-        </v-btn>
-        <v-btn
-          x-large
-          dark
-          height="250px"
-          width="19.6%"
-          class="mt-1 mr-1"
-          v-on:click="addCustomItemDialog = true"
-          ><div>
-            <p class="menu-button-text-eng">CUSTOM</p>
-          </div>
-        </v-btn>
-        <v-btn
-          v-for="item in $store.state.items[selectedCategory]"
-          v-bind:key="item.name_eng"
-          x-large
-          dark
-          height="250px"
-          width="19.6%"
-          class="mt-1 mr-1"
-          v-on:click="
-            onClickMenuButton(item);
-            displayCategoriesButtons = true;
-            displayMenuButtons = false;
-          "
-          ><div>
-            <p class="menu-button-text-eng">#{{ item.menu_id }}</p>
-            <p class="mb-0 menu-button-text-eng">
-              {{ item.name_eng.match(/.{1,20}(\s|$)/g)[0] }}
-            </p>
-            <p class="mb-0 menu-button-text-eng">
-              {{
-                item.name_eng.toString().length > 20
-                  ? item.name_eng.match(/.{1,20}(\s|$)/g)[1]
-                  : "⠀"
-              }}
-            </p>
-            <p class="menu-button-text-chn">{{ item.name_chn }}</p>
-            <p class="menu-button-text-price">{{ item.price.toFixed(2) }}</p>
-          </div>
-        </v-btn>
-        <v-btn
-          x-large
-          dark
-          height="250px"
-          width="19.6%"
-          class="mt-1 mr-1"
-          v-on:click="addCustomItemDialog = true"
-          ><div>
-            <p class="menu-button-text-eng">CUSTOM</p>
-          </div>
-        </v-btn>
-        <v-btn
-          x-large
-          dark
-          height="250px"
-          width="19.6%"
-          class="mt-1 mr-1"
-          v-on:click="
-            displayCategoriesButtons = true;
-            displayMenuButtons = false;
-            selectedCategory = null;
-          "
-          ><div>
-            <p class="menu-button-text-eng">BACK</p>
-          </div>
-        </v-btn>
+        <!-- Lets handle soup sizes here. -->
+        <div v-if="selectedCategory === 12">
+          <v-btn
+            x-large
+            dark
+            height="250px"
+            width="19.6%"
+            class="mt-1 mr-1"
+            v-on:click="
+              displayCategoriesButtons = true;
+              displayMenuButtons = false;
+              selectedCategory = null;
+            "
+            ><div>
+              <p class="menu-button-text-eng">BACK</p>
+            </div>
+          </v-btn>
+          <v-btn
+            x-large
+            dark
+            height="250px"
+            width="19.6%"
+            class="mt-1 mr-1"
+            v-on:click="addCustomItemDialog = true"
+            ><div>
+              <p class="menu-button-text-eng">CUSTOM</p>
+            </div>
+          </v-btn>
+          <v-btn
+            v-for="item in chowMeinItems"
+            v-bind:key="item.name_eng"
+            x-large
+            dark
+            height="250px"
+            width="19.6%"
+            class="mt-1 mr-1"
+            v-on:click="
+              onClickMenuButton(item);
+              displayCategoriesButtons = true;
+              displayMenuButtons = false;
+            "
+            ><div>
+              <p class="menu-button-text-eng">#{{ item.menu_id }}</p>
+              <p class="mb-0 menu-button-text-eng">
+                {{ item.name_eng.match(/.{1,20}(\s|$)/g)[0] }}
+              </p>
+              <p class="mb-0 menu-button-text-eng">
+                {{
+                  item.name_eng.toString().length > 20
+                    ? item.name_eng.match(/.{1,20}(\s|$)/g)[1]
+                    : "⠀"
+                }}
+              </p>
+              <p class="menu-button-text-chn">{{ item.name_chn }}</p>
+              <!-- <p class="menu-button-text-price">
+                {{ item.price.toFixed(2) }}
+              </p> -->
+            </div>
+          </v-btn>
+          <v-btn
+            x-large
+            dark
+            height="250px"
+            width="19.6%"
+            class="mt-1 mr-1"
+            v-on:click="addCustomItemDialog = true"
+            ><div>
+              <p class="menu-button-text-eng">CUSTOM</p>
+            </div>
+          </v-btn>
+          <v-btn
+            x-large
+            dark
+            height="250px"
+            width="19.6%"
+            class="mt-1 mr-1"
+            v-on:click="
+              displayCategoriesButtons = true;
+              displayMenuButtons = false;
+              selectedCategory = null;
+            "
+            ><div>
+              <p class="menu-button-text-eng">BACK</p>
+            </div>
+          </v-btn>
+        </div>
+        <div v-if="selectedCategory === 1">
+          <v-btn
+            x-large
+            dark
+            height="250px"
+            width="19.6%"
+            class="mt-1 mr-1"
+            v-on:click="
+              displayCategoriesButtons = true;
+              displayMenuButtons = false;
+              selectedCategory = null;
+            "
+            ><div>
+              <p class="menu-button-text-eng">BACK</p>
+            </div>
+          </v-btn>
+          <v-btn
+            x-large
+            dark
+            height="250px"
+            width="19.6%"
+            class="mt-1 mr-1"
+            v-on:click="addCustomItemDialog = true"
+            ><div>
+              <p class="menu-button-text-eng">CUSTOM</p>
+            </div>
+          </v-btn>
+          <v-btn
+            v-for="item in soupItems"
+            v-bind:key="item.name_eng"
+            x-large
+            dark
+            height="250px"
+            width="19.6%"
+            class="mt-1 mr-1"
+            v-on:click="
+              onClickMenuButton(item);
+              displayCategoriesButtons = true;
+              displayMenuButtons = false;
+            "
+            ><div>
+              <p class="menu-button-text-eng">#{{ item.menu_id }}</p>
+              <p class="mb-0 menu-button-text-eng">
+                {{ item.name_eng.match(/.{1,20}(\s|$)/g)[0] }}
+              </p>
+              <p class="mb-0 menu-button-text-eng">
+                {{
+                  item.name_eng.toString().length > 20
+                    ? item.name_eng.match(/.{1,20}(\s|$)/g)[1]
+                    : "⠀"
+                }}
+              </p>
+              <p class="menu-button-text-chn">{{ item.name_chn }}</p>
+              <!-- <p class="menu-button-text-price">
+                {{ item.price.toFixed(2) }}
+              </p> -->
+            </div>
+          </v-btn>
+          <v-btn
+            x-large
+            dark
+            height="250px"
+            width="19.6%"
+            class="mt-1 mr-1"
+            v-on:click="addCustomItemDialog = true"
+            ><div>
+              <p class="menu-button-text-eng">CUSTOM</p>
+            </div>
+          </v-btn>
+          <v-btn
+            x-large
+            dark
+            height="250px"
+            width="19.6%"
+            class="mt-1 mr-1"
+            v-on:click="
+              displayCategoriesButtons = true;
+              displayMenuButtons = false;
+              selectedCategory = null;
+            "
+            ><div>
+              <p class="menu-button-text-eng">BACK</p>
+            </div>
+          </v-btn>
+        </div>
+        <div v-if="selectedCategory !== 1 && selectedCategory !== 12">
+          <v-btn
+            x-large
+            dark
+            height="250px"
+            width="19.6%"
+            class="mt-1 mr-1"
+            v-on:click="
+              displayCategoriesButtons = true;
+              displayMenuButtons = false;
+              selectedCategory = null;
+            "
+            ><div>
+              <p class="menu-button-text-eng">BACK</p>
+            </div>
+          </v-btn>
+          <v-btn
+            x-large
+            dark
+            height="250px"
+            width="19.6%"
+            class="mt-1 mr-1"
+            v-on:click="addCustomItemDialog = true"
+            ><div>
+              <p class="menu-button-text-eng">CUSTOM</p>
+            </div>
+          </v-btn>
+          <v-btn
+            v-for="item in $store.state.items[selectedCategory]"
+            v-bind:key="item.name_eng"
+            x-large
+            dark
+            height="250px"
+            width="19.6%"
+            class="mt-1 mr-1"
+            v-on:click="
+              onClickMenuButton(item);
+              displayCategoriesButtons = true;
+              displayMenuButtons = false;
+            "
+            ><div>
+              <p class="menu-button-text-eng">#{{ item.menu_id }}</p>
+              <p class="mb-0 menu-button-text-eng">
+                {{ item.name_eng.match(/.{1,20}(\s|$)/g)[0] }}
+              </p>
+              <p class="mb-0 menu-button-text-eng">
+                {{
+                  item.name_eng.toString().length > 20
+                    ? item.name_eng.match(/.{1,20}(\s|$)/g)[1]
+                    : "⠀"
+                }}
+              </p>
+              <p class="menu-button-text-chn">{{ item.name_chn }}</p>
+              <p class="menu-button-text-price">{{ item.price.toFixed(2) }}</p>
+            </div>
+          </v-btn>
+          <v-btn
+            x-large
+            dark
+            height="250px"
+            width="19.6%"
+            class="mt-1 mr-1"
+            v-on:click="addCustomItemDialog = true"
+            ><div>
+              <p class="menu-button-text-eng">CUSTOM</p>
+            </div>
+          </v-btn>
+          <v-btn
+            x-large
+            dark
+            height="250px"
+            width="19.6%"
+            class="mt-1 mr-1"
+            v-on:click="
+              displayCategoriesButtons = true;
+              displayMenuButtons = false;
+              selectedCategory = null;
+            "
+            ><div>
+              <p class="menu-button-text-eng">BACK</p>
+            </div>
+          </v-btn>
+        </div>
       </div>
       <div class="p-0" v-if="displayCategoriesButtons" max-height="400">
         <v-btn
@@ -187,7 +360,7 @@
 
     <v-dialog
       v-if="itemThatRequiresCustomization !== null"
-      v-model="customizeChowMeinDialog"
+      v-model="customizeChowMeinTypeDialog"
       width="1000px"
     >
       <v-card>
@@ -218,25 +391,82 @@
             x-large
             width="33%"
             v-on:click="
-              customizeSelectedItem({
-                name_eng: 'SOFT (干)',
-                name_chn: '干',
-              })
+              addItemToSelectedItems(
+                chowMeinItemsObj[itemThatRequiresCustomization.id]
+              );
+              customizeChowMeinTypeDialog = false;
             "
           >
-            <div>SOFT (干)<br /></div>
+            <div>CRISPY (湿)<br /></div>
           </v-btn>
           <v-btn
             x-large
             width="33%"
             v-on:click="
-              customizeSelectedItem({
-                name_eng: 'CRISPY (湿)',
-                name_chn: '湿',
-              })
+              addItemToSelectedItems(
+                chowMeinItemsObj[itemThatRequiresCustomization.id + 1]
+              );
+              customizeChowMeinTypeDialog = false;
             "
           >
-            <div>CRISPY (湿)<br /></div>
+            <div>SOFT (干)<br /></div>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog
+      v-if="itemThatRequiresCustomization !== null"
+      v-model="customizeSoupSizeDialog"
+      width="1000px"
+    >
+      <v-card>
+        <div>
+          <h3 class="text-center pt-10 pb-5">
+            SOUP SIZE SELECTION
+            <br />
+            <br />
+            <br />
+            {{ itemThatRequiresCustomization.name_eng }}
+            <br />
+
+            {{ itemThatRequiresCustomization.name_chn }}
+
+            <br />
+            <br />
+          </h3>
+
+          <br />
+        </div>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn x-large width="33%" v-on:click="cancelCustomizeSelectedItem()">
+            <div>CANCEL<br /></div>
+          </v-btn>
+          <v-btn
+            x-large
+            width="33%"
+            v-on:click="
+              addItemToSelectedItems(
+                soupItemsObj[itemThatRequiresCustomization.id]
+              );
+              customizeSoupSizeDialog = false;
+            "
+          >
+            <div>SMALL (小)<br /></div>
+          </v-btn>
+          <v-btn
+            x-large
+            width="33%"
+            v-on:click="
+              addItemToSelectedItems(
+                soupItemsObj[itemThatRequiresCustomization.id + 1]
+              );
+              customizeSoupSizeDialog = false;
+            "
+          >
+            <div>LARGE (大)<br /></div>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -261,9 +491,68 @@ import storeMixin from "../../mixins/storeMixin";
 import { store } from "../../store/store";
 export default {
   mixins: [storeMixin],
+  computed: {
+    soupItems: function () {
+      const soupItems = this.$store.state.items[1];
+      const soupItemsOneSize = [];
+      soupItems.forEach((item) => {
+        if (item.name_eng.includes("(S)")) {
+          const itemCopy = Object.assign({}, item);
+          itemCopy.name_eng = itemCopy.name_eng.substring(
+            0,
+            itemCopy.name_eng.length - 4
+          );
+          itemCopy.name_chn = itemCopy.name_chn.substring(
+            0,
+            itemCopy.name_chn.length - 4
+          );
+          soupItemsOneSize.push(itemCopy);
+        }
+      });
+      return soupItemsOneSize;
+    },
+    soupItemsObj: function () {
+      return this.$store.state.items[1].reduce(
+        (accumulator, value) => ({ ...accumulator, [value.id]: value }),
+        {}
+      );
+    },
+    chowMeinItems: function () {
+      const chowMeinItems = this.$store.state.items[12];
+      const chowMeinItemsOneSize = [];
+      chowMeinItems.forEach((item) => {
+        if (item.name_eng.includes("(CRISPY)")) {
+          const itemCopy = Object.assign({}, item);
+          itemCopy.name_eng = itemCopy.name_eng.substring(
+            0,
+            itemCopy.name_eng.length - 8
+          );
+          itemCopy.name_chn = itemCopy.name_chn.substring(
+            0,
+            itemCopy.name_chn.length - 3
+          );
+          chowMeinItemsOneSize.push(itemCopy);
+        }
+        if (
+          !item.name_eng.includes("(CRISPY)") &&
+          !item.name_eng.includes("(SOFT)")
+        ) {
+          chowMeinItemsOneSize.push(item);
+        }
+      });
+      return chowMeinItemsOneSize;
+    },
+    chowMeinItemsObj: function () {
+      return this.$store.state.items[12].reduce(
+        (accumulator, value) => ({ ...accumulator, [value.id]: value }),
+        {}
+      );
+    },
+  },
   data() {
     return {
-      customizeChowMeinDialog: false,
+      customizeChowMeinTypeDialog: false,
+      customizeSoupSizeDialog: false,
       itemThatRequiresCustomization: null,
       selectedCategory: null,
       customItem: {
@@ -398,17 +687,29 @@ export default {
 
   methods: {
     onClickMenuButton(item) {
-      this.addItemToSelectedItems(item);
+      // this.addItemToSelectedItems(item);
       this.checkIfSelectedItemRequiresCustomization(item);
       this.storeMixinUpdateStorePriceDetails();
     },
 
     checkIfSelectedItemRequiresCustomization(item) {
-      if (item.category === 12 && item.name_chn.includes("炒麵")) {
+      if (
+        item.category === 12 &&
+        item.name_eng.includes(" CM")
+        // (item.name_eng.includes("(CRISPY)") || item.name_eng.includes("(SOFT)")) - doesn't work due to modification in chowMeinItems
+      ) {
         this.itemThatRequiresCustomization = item;
-        this.customizeChowMeinDialog = true;
+        this.customizeChowMeinTypeDialog = true;
         // add the hard or soft as customization.
         // we will throw up a dialog asking soft or hard
+      } else if (item.category === 1) {
+        this.itemThatRequiresCustomization = item;
+        this.customizeSoupSizeDialog = true;
+        console.log(this.soupItemsObj);
+        // add the hard or soft as customization.
+        // we will throw up a dialog asking soft or hard
+      } else {
+        this.addItemToSelectedItems(item);
       }
       // if chowmein we need extra dialog
       // if soup we want extra dialog
@@ -434,7 +735,7 @@ export default {
         customizationObj
       );
       this.itemThatRequiresCustomization = null;
-      this.customizeChowMeinDialog = false;
+      this.customizeChowMeinTypeDialog = false;
     },
 
     addCustomizationToItem: function (selectedItem, customizationObj) {
