@@ -42,45 +42,23 @@
       <Menu />
     </template>
     <template v-if="$store.state.component === 'HISTORY'">
-      <v-row no-gutters>
-        <v-col lg="1">
-          <Sidebar />
-        </v-col>
-        <v-col lg="4">
-          <v-card outlined tile>
-            <v-container class="grey lighten-5">
-              <HistoryDisplay />
-            </v-container>
-          </v-card>
-        </v-col>
-        <v-col lg="7" height="100vh">
-          <v-card class="fill-height" tile>
-            <v-container class="grey lighten-5">
-              <HistoryButtons />
-            </v-container>
-          </v-card>
-        </v-col>
-      </v-row>
+      <History />
     </template>
   </v-app>
 </template>
 
 <script>
 import storeMixin from "./mixins/storeMixin";
-import Sidebar from "./components/Sidebar";
 import Menu from "./components/Menu/Menu";
-import HistoryButtons from "./components/History/HistoryButtons";
-import HistoryDisplay from "./components/History/HistoryDisplay";
+import History from "./components/History/History";
 import { serverNotRunning } from "../src/main";
 const date = new Date();
 export default {
   mixins: [storeMixin],
   name: "App",
   components: {
-    Sidebar,
     Menu,
-    HistoryButtons,
-    HistoryDisplay,
+    History,
   },
 
   data() {

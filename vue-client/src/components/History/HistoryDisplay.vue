@@ -77,18 +77,6 @@
         </v-list-item-content>
       </v-list-item>
     </v-card>
-    <HistoryDisplayHistoryOptionsDialog
-      v-bind:historyOptionsDetails="historyOptionsDetails"
-      @setHistoryOptionsDetails="setHistoryOptionsDetails"
-    />
-    <HistoryDisplayHistoryOptionsConfirmationDialog
-      v-bind:historyOptionsDetails="historyOptionsDetails"
-      @setHistoryOptionsDetails="setHistoryOptionsDetails"
-    />
-    <HistoryDisplayHistoryOptionsReprintDialog
-      v-bind:historyOptionsDetails="historyOptionsDetails"
-      @setHistoryOptionsDetails="setHistoryOptionsDetails"
-    />
   </v-container>
 </template>
 
@@ -99,31 +87,11 @@
 </style>
 
 <script>
-import HistoryDisplayHistoryOptionsDialog from "./HistoryDisplayHistoryOptionsDialog";
-import HistoryDisplayHistoryOptionsConfirmationDialog from "./HistoryDisplayHistoryOptionsConfirmationDialog";
-import HistoryDisplayHistoryOptionsReprintDialog from "./HistoryDisplayHistoryOptionsReprintDialog";
 import HistoryDisplayCustomer from "./HistoryDisplayCustomer";
 export default {
-  data() {
-    return {
-      historyOptionsDetails: {
-        confirmingAction: "",
-        openHistoryOptionsConfirmationDialog: false,
-        openHistoryOptionsReprintDialog: false,
-        openHistoryOptionsDialog: false,
-      },
-    };
-  },
-  methods: {
-    setHistoryOptionsDetails: function (historyOptionsDetails) {
-      this.historyOptionsDetails = historyOptionsDetails;
-    },
-  },
+  props: ["historyOptionsDetails"],
   components: {
     HistoryDisplayCustomer,
-    HistoryDisplayHistoryOptionsDialog,
-    HistoryDisplayHistoryOptionsConfirmationDialog,
-    HistoryDisplayHistoryOptionsReprintDialog,
   },
 };
 </script>
