@@ -14,7 +14,7 @@ async function getThermalPrinterInterface(): Promise<string> {
     let thermalPrinterInterface = null;
     try {
         const { stdout } = await exec('ls /dev/usb | grep lp');
-        thermalPrinterInterface =  `/dev/usb/${stdout.trim()}`
+        thermalPrinterInterface = `/dev/usb/${stdout.trim()}`
         console.log(`Success: Found thermal printer after ${printerConnectionRetries} retries.`)
     } catch (err) {
         if ((err.message).includes('Command failed: ls /dev/usb | grep lp') && printerConnectionRetries < 10) {
@@ -23,7 +23,7 @@ async function getThermalPrinterInterface(): Promise<string> {
             const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
             await delay(retryDelay)
             console.log(`Warning: Unable to find thermal printer interface after ${printerConnectionRetries}/10 retries.`)
-            console.log(`Warning: Attempting search again after ${retryDelay/1000} seconds.`)
+            console.log(`Warning: Attempting search again after ${retryDelay / 1000} seconds.`)
             thermalPrinterInterface = await getThermalPrinterInterface()
         }
     }

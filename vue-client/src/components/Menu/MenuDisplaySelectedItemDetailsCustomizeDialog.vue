@@ -16,32 +16,35 @@
         </h3>
         <br />
         <v-btn
-          v-for="customization in customizations"
-          v-bind:key="customization.name_eng"
-          class="mt-1 mr-1"
+          v-for="text in customizationTexts"
+          v-bind:key="text"
           x-large
-          width="16.26%"
-          height="80px"
+          width="15%"
+          height="80"
+          class="mb-5 mr-2 ml-2"
           v-on:click="
-            openCustomizeSelectedItemDialog = false;
-            closeCustomizeSelectedItemDialog(false);
-            closeSelectedItemDialog();
-            addCustomizationToItem(menuDisplayItemDetails.removeSelectedItem, {
-              name_eng: `NO ${customization.name_eng}`,
-              name_chn: `${customization.name_chn}`,
-            });
+            phone = '';
+            addCustomizationToCustomizationInput(text);
           "
         >
-          <p>
-            NO {{ customization.name_eng }}
-            <!-- <br /> -->
-            <!-- {{ customization.name_chn }} -->
-          </p>
+          <div>{{ text }}<br /></div>
         </v-btn>
+        <v-row class="justify-center mt-10 mb-10">
+          <v-btn
+            class="mt-3 mb-3"
+            x-large
+            width="20%"
+            height="80px"
+            v-on:click="addCustomizationToCustomizationInput('+')"
+          >
+            <!-- lets make this a input bar where we can input our custom order for name_eng -->
+            <p>+</p>
+          </v-btn>
+        </v-row>
         <v-row class="justify-center mt-10 mb-10">
           <v-col cols="12" md="6">
             <v-text-field
-              v-model="customCustomizationInput"
+              v-model="customizationInput"
               label="Customization"
               required
               width="10%"
@@ -53,21 +56,10 @@
             x-large
             width="20%"
             height="80px"
-            v-on:click="
-              openCustomizeSelectedItemDialog = false;
-              menuDisplayItemDetails.selectedItemDialog = false;
-              addCustomizationToItem(
-                menuDisplayItemDetails.removeSelectedItem,
-                {
-                  name_eng: customCustomizationInput.toUpperCase(),
-                  name_chn: ``,
-                }
-              );
-              customCustomizationInput = '';
-            "
+            v-on:click="removeLastWordIncustomizationInput()"
           >
             <!-- lets make this a input bar where we can input our custom order for name_eng -->
-            <p>CUSTOM</p>
+            <p>⌫</p>
           </v-btn>
         </v-row>
       </div>
@@ -76,10 +68,25 @@
         <v-spacer></v-spacer>
         <v-btn
           x-large
-          width="100%"
+          width="50%"
           v-on:click="closeCustomizeSelectedItemDialog(false)"
         >
           <div>CANCEL<br /></div>
+        </v-btn>
+        <v-btn
+          x-large
+          width="50%"
+          v-on:click="
+            openCustomizeSelectedItemDialog = false;
+            menuDisplayItemDetails.selectedItemDialog = false;
+            addCustomizationToItem(menuDisplayItemDetails.removeSelectedItem, {
+              name_eng: customizationInput.toUpperCase(),
+              name_chn: ``,
+            });
+            customizationInput = '';
+          "
+        >
+          <div>ADD<br /></div>
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -94,7 +101,33 @@ export default {
   props: ["menuDisplayItemDetails"],
   data() {
     return {
-      customCustomizationInput: "",
+      customizationInput: "",
+      customizationTexts: [
+        "NO",
+        "LESS",
+        "ADD",
+        "EXTRA",
+        "ON SIDE",
+        "CHANGE TO",
+        "MSG",
+        "SALT",
+        "OIL",
+        "SESAME",
+        "SPICY",
+        "ONIONS",
+        "SAUCE",
+        "OYSTER SAUCE",
+        "SOY SAUCE",
+        "BLACK BEAN SAUCE",
+        "SWEET SOUR SAUCE",
+        "LEMON SAUCE",
+        "MEAT",
+        "PORK",
+        "BEEF",
+        "CHKN",
+        "SEAFOOD",
+        "EGG",
+      ],
       customizations: [
         {
           name_eng: "MSG",
@@ -124,6 +157,26 @@ export default {
     };
   },
   methods: {
+    addCustomizationToCustomizationInput(text) {
+      if (this.customizationInput.slice(-1) !== " ") {
+        this.customizationInput += " ";
+      }
+      this.customizationInput += `${text} `;
+    },
+    removeLastWordIncustomizationInput() {
+      if (this.customizationInput.slice(-1) === " ") {
+        this.customizationInput = this.customizationInput.slice(0, -1);
+      }
+      const lastIndexOfSpace = this.customizationInput.lastIndexOf(" ");
+      if (lastIndexOfSpace === -1) {
+        return;
+      }
+
+      this.customizationInput = this.customizationInput.substring(
+        0,
+        lastIndexOfSpace
+      );
+    },
     //repeated
     closeCustomizeSelectedItemDialog() {
       this.$emit("closeCustomizeSelectedItemDialog");

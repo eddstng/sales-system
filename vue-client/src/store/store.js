@@ -74,7 +74,6 @@ export const store = new Vuex.Store({
         let selectedItemsOrderedByEntry = state.selectedItemsOrderedByEntry;
         selectedItemsOrderedByEntry[selectedItemTimestamp] = state.selectedItems[key];
         state.selectedItemsOrderedByEntry = selectedItemsOrderedByEntry;
-
       })
     },
     setSelectedCustomer(state, selectedCustomer) {
