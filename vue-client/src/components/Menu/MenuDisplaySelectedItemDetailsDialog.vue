@@ -18,6 +18,34 @@
             {{ menuDisplayItemDetails.removeSelectedItem.node.name_chn }}
             <br />
             <br />
+            <div
+              class="item-details-customizations"
+              v-for="customization in menuDisplayItemDetails.removeSelectedItem
+                .customizations"
+              v-bind:key="customization.name_eng"
+            >
+              <v-container>
+                <v-row no-gutters>
+                  <v-col>
+                    <div class="pa-2">
+                      {{ customization.name_eng }}
+                      {{ customization.name_chn }}
+                    </div>
+                  </v-col>
+                  <div class="pa-1">
+                    <v-btn
+                      small
+                      width="5px"
+                      v-on:click="
+                        removeCustomizationFromSelectedItem(customization)
+                      "
+                    >
+                      <div>X<br /></div>
+                    </v-btn>
+                  </div>
+                </v-row>
+              </v-container>
+            </div>
           </h3>
 
           <br />
@@ -185,6 +213,10 @@
 .ml-20 {
   margin-left: 36%;
 }
+.item-details-customizations {
+  margin-left: 30%;
+  margin-right: 25%;
+}
 </style>
 
 
@@ -292,6 +324,18 @@ export default {
         store.commit("setSelectedItems", selectedItems);
         this.storeMixinUpdateStorePriceDetails();
       }
+    },
+    removeCustomizationFromSelectedItem(customization) {
+      const selectedItems = Object.assign({}, this.$store.state.selectedItems);
+      const customIdOrId =
+        this.menuDisplayItemDetails.removeSelectedItem.node.custom_id ??
+        this.menuDisplayItemDetails.removeSelectedItem.node.id;
+      selectedItems[customIdOrId].customizations = selectedItems[
+        customIdOrId
+      ].customizations.filter(function (obj) {
+        return obj.name_eng !== customization.name_eng;
+      });
+      store.commit("setSelectedItems", selectedItems);
     },
   },
 };
