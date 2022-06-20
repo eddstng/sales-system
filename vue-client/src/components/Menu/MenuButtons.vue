@@ -687,9 +687,7 @@ export default {
 
   methods: {
     onClickMenuButton(item) {
-      // this.addItemToSelectedItems(item);
       this.checkIfSelectedItemRequiresCustomization(item);
-      this.storeMixinUpdateStorePriceDetails();
     },
 
     checkIfSelectedItemRequiresCustomization(item) {
@@ -798,6 +796,7 @@ export default {
       }
       store.commit("setSelectedItems", selectedItems);
       this.storeMixinSumSelectedItemsQuantity();
+      this.storeMixinUpdateStorePriceDetails();
     },
   },
 };

@@ -16,18 +16,22 @@
         </h3>
         <br />
         <v-btn
-          v-for="text in customizationTexts"
-          v-bind:key="text"
+          v-for="obj in customizationTextObjs"
+          v-bind:key="obj"
           x-large
           width="15%"
-          height="80"
-          class="mb-5 mr-2 ml-2"
+          height="100"
+          class="mb-5 mr-2 ml-2 customization-button"
           v-on:click="
             phone = '';
-            addCustomizationToCustomizationInput(text);
+            addCustomizationToCustomizationInput(obj);
           "
         >
-          <div>{{ text }}<br /></div>
+          <div>
+            <br />
+            <p class="pt-10">{{ obj.name_eng }}</p>
+            <p class="pb-10 customization-button-chn">{{ obj.name_chn }}</p>
+          </div>
         </v-btn>
         <v-row class="justify-center mt-10 mb-10">
           <v-btn
@@ -35,16 +39,21 @@
             x-large
             width="20%"
             height="80px"
-            v-on:click="addCustomizationToCustomizationInput('+')"
+            v-on:click="
+              addCustomizationToCustomizationInput({
+                name_eng: '&',
+                name_chn: '&',
+              })
+            "
           >
             <!-- lets make this a input bar where we can input our custom order for name_eng -->
-            <p>+</p>
+            <p>&</p>
           </v-btn>
         </v-row>
-        <v-row class="justify-center mt-10 mb-10">
+        <v-row class="justify-center mt-10">
           <v-col cols="12" md="6">
             <v-text-field
-              v-model="customizationInput"
+              v-model="customizationInput.eng"
               label="Customization"
               required
               width="10%"
@@ -52,16 +61,38 @@
             ></v-text-field>
           </v-col>
           <v-btn
-            class="mt-3 mb-3"
-            x-large
             width="20%"
-            height="80px"
+            height="60px"
             v-on:click="removeLastWordIncustomizationInput()"
           >
             <!-- lets make this a input bar where we can input our custom order for name_eng -->
-            <p>⌫</p>
+            <p class="pt-4">⌫</p>
           </v-btn>
         </v-row>
+        <v-row class="justify-center mb-10 customization-button-chn">
+          <p label="Customization" required width="10%" autofocus>
+            {{ customizationInput.chn }}
+          </p>
+        </v-row>
+        <!-- <v-row class="justify-center mt-10 additional-price-row">
+          <v-col cols="12" md="4">
+            <v-text-field
+              class="additional-price-text"
+              prefix="$"
+              value="0.00"
+              label="Additional Price"
+              required
+              autofocus
+            ></v-text-field>
+          </v-col>
+          <v-btn
+            width="26%"
+            height="60px"
+            v-on:click="removeLastWordIncustomizationInput()"
+          >
+            <p class="pt-4">CLEAR</p>
+          </v-btn>
+        </v-row> -->
       </div>
       <v-divider></v-divider>
       <v-card-actions>
@@ -80,10 +111,10 @@
             openCustomizeSelectedItemDialog = false;
             menuDisplayItemDetails.selectedItemDialog = false;
             addCustomizationToItem(menuDisplayItemDetails.removeSelectedItem, {
-              name_eng: customizationInput.toUpperCase(),
-              name_chn: ``,
+              name_eng: customizationInput.eng.toUpperCase(),
+              name_chn: customizationInput.chn,
             });
-            customizationInput = '';
+            customizationInput = { eng: '', chn: '' };
           "
         >
           <div>ADD<br /></div>
@@ -93,6 +124,19 @@
   </v-dialog>
 </template>
 
+<style scoped>
+.additional-price-text {
+  font-size: 25px;
+}
+.additional-price-row {
+  margin-left: 24%;
+}
+.customization-button-chn {
+  font-size: 30px;
+  margin-top: 0px;
+}
+</style>
+
 <script>
 import storeMixin from "../../mixins/storeMixin";
 import { store } from "../../store/store";
@@ -101,32 +145,32 @@ export default {
   props: ["menuDisplayItemDetails"],
   data() {
     return {
-      customizationInput: "",
-      customizationTexts: [
-        "NO",
-        "LESS",
-        "ADD",
-        "EXTRA",
-        "ON SIDE",
-        "CHANGE TO",
-        "MSG",
-        "SALT",
-        "OIL",
-        "SESAME",
-        "SPICY",
-        "ONIONS",
-        "SAUCE",
-        "OYSTER SAUCE",
-        "SOY SAUCE",
-        "BLACK BEAN SAUCE",
-        "SWEET SOUR SAUCE",
-        "LEMON SAUCE",
-        "MEAT",
-        "PORK",
-        "BEEF",
-        "CHKN",
-        "SEAFOOD",
-        "EGG",
+      customizationInput: { eng: "", chn: "" },
+      customizationTextObjs: [
+        { name_eng: "NO", name_chn: "走" },
+        { name_eng: "LESS", name_chn: "小" },
+        { name_eng: "ADD", name_chn: "加" },
+        { name_eng: "EXTRA", name_chn: "多" },
+        { name_eng: "ON SIDE", name_chn: "分" },
+        { name_eng: "CHANGE TO", name_chn: "轉" },
+        { name_eng: "MSG", name_chn: "味精" },
+        { name_eng: "SALT", name_chn: "鹽" },
+        { name_eng: "OIL", name_chn: "油" },
+        { name_eng: "SESAME", name_chn: "芝麻" },
+        { name_eng: "SPICY", name_chn: "辣" },
+        { name_eng: "ONIONS", name_chn: "雙葱" },
+        { name_eng: "SAUCE", name_chn: "汁" },
+        { name_eng: "OYSTER SAUCE", name_chn: "蠔油" },
+        { name_eng: "SOY SAUCE", name_chn: "醬油" },
+        { name_eng: "BB SAUCE", name_chn: "豉汁" },
+        { name_eng: "SS SAUCE", name_chn: "咕嚕汁" },
+        { name_eng: "LEMON SAUCE", name_chn: "檸檬汁" },
+        { name_eng: "MEAT", name_chn: "肉" },
+        { name_eng: "PORK", name_chn: "豬肉" },
+        { name_eng: "BEEF", name_chn: "牛肉" },
+        { name_eng: "CHKN", name_chn: "雞肉" },
+        { name_eng: "SEAFOOD", name_chn: "海鮮" },
+        { name_eng: "EGG", name_chn: "蛋" },
       ],
       customizations: [
         {
@@ -157,24 +201,38 @@ export default {
     };
   },
   methods: {
-    addCustomizationToCustomizationInput(text) {
-      if (this.customizationInput.slice(-1) !== " ") {
-        this.customizationInput += " ";
+    addCustomizationToCustomizationInput(customizationObj) {
+      if (this.customizationInput.eng.slice(-1) !== " ") {
+        this.customizationInput.eng += " ";
       }
-      this.customizationInput += `${text} `;
-    },
-    removeLastWordIncustomizationInput() {
-      if (this.customizationInput.slice(-1) === " ") {
-        this.customizationInput = this.customizationInput.slice(0, -1);
-      }
-      const lastIndexOfSpace = this.customizationInput.lastIndexOf(" ");
-      if (lastIndexOfSpace === -1) {
-        return;
-      }
+      this.customizationInput.eng += `${customizationObj.name_eng} `;
 
-      this.customizationInput = this.customizationInput.substring(
+      if (this.customizationInput.chn.slice(-1) !== " ") {
+        this.customizationInput.chn += " ";
+      }
+      this.customizationInput.chn += `${customizationObj.name_chn} `;
+    },
+    // TO DO: update this to delete the full inputed text, not by spaces.
+    removeLastWordIncustomizationInput() {
+      if (this.customizationInput.eng.slice(-1) === " ") {
+        this.customizationInput.eng = this.customizationInput.eng.slice(0, -1);
+      }
+      if (this.customizationInput.chn.slice(-1) === " ") {
+        this.customizationInput.chn = this.customizationInput.chn.slice(0, -1);
+      }
+      const lastIndexOfSpaceEng = this.customizationInput.eng.lastIndexOf(" ");
+      const lastIndexOfSpaceChn = this.customizationInput.chn.lastIndexOf(" ");
+      // if (lastIndexOfSpace === -1) {
+      //   return;
+      // }
+
+      this.customizationInput.eng = this.customizationInput.eng.substring(
         0,
-        lastIndexOfSpace
+        lastIndexOfSpaceEng
+      );
+      this.customizationInput.chn = this.customizationInput.chn.substring(
+        0,
+        lastIndexOfSpaceChn
       );
     },
     //repeated

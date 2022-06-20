@@ -199,7 +199,7 @@ export default {
       );
       currentOrder.type = null;
       store.commit("setCurrentOrder", currentOrder);
-      store.commit("setSelectedCustomer", {});
+      store.commit("setSelectedCustomer", { phone: "" });
     },
     suggestCustomerFromPhoneInput: function () {
       this.selectedCustomerDetails.suggestedCustomers = [];

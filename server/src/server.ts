@@ -9,7 +9,7 @@ import { getAllCustomers, getOneCustomer, createCustomer, updateCustomer, delete
 import { createOrder, deleteOneOrder, getAllOrders, getOneOrder, updateOrder } from './repositories/orders/orders';
 import { getAllOrdersItems, createOrdersItems, updateOrdersItems, deleteOneOrdersItems, getOneOrdersItems, createOrdersItemsBulk } from './repositories/ordersItems/ordersItems';
 import { getAllOrdersHistory } from './repositories/ordersHistory/ordersHistory';
-import { getAllOrdersItemsDetail, getAllOrdersItemsDetailWithOrderId} from './repositories/ordersItemsDetail/ordersItemsDetail';
+import { getAllOrdersItemsDetail, getAllOrdersItemsDetailWithOrderId } from './repositories/ordersItemsDetail/ordersItemsDetail';
 import { printOrder } from './repositories/printOrder/printOrder';
 import { logInfo } from './logging/utils';
 

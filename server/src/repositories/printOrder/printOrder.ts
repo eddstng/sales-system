@@ -23,6 +23,8 @@ export async function printOrder(printObj: { order_id: number, printClient: bool
             if (printObj.printKitchen) {
                 await printer.printImage(kitchenBillPath);
                 printer.cut();
+                await printer.printImage(kitchenBillPath);
+                printer.cut();
             }
             if (printObj.printClient) {
                 await printer.printImage('./src/repositories/printOrder/header.png');
@@ -101,7 +103,9 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
                 kitchenBillString += `
 
 
-                ⊵____________ x${element.orders_items_quantity}${kitchenCustomizationString ? kitchenCustomizationString : ''}`
+                ⊵____________ x${element.orders_items_quantity}${kitchenCustomizationString ? kitchenCustomizationString : ''}
+                
+                `
 
             } else {
                 if (english.test(element.item_name_chn)) {
@@ -121,11 +125,11 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
             `
             let clientCustomizationString: string = '';
             if (element.orders_items_customizations !== null) {
-                element.orders_items_customizations.forEach((element: { name_eng: string }) => {
+                element.orders_items_customizations.forEach((element: { name_eng: string, name_chn: string }) => {
                     if (english.test(element.name_eng)) {
                         clientCustomizationString += `\n⤷${element.name_eng}`
                     } else {
-                        clientCustomizationString += `\n⤷${element.name_eng}`
+                        clientCustomizationString += `\n⤷${element.name_chn}/${element.name_eng}`
                     }
                 })
             }

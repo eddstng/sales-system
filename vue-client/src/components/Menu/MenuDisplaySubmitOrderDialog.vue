@@ -140,8 +140,13 @@ export default {
     },
     insertSelectedItemsIntoOrdersAndOrdersItems: async function (orderIdNum) {
       const ordersItemsCreateManyInputData = [];
+      const arrayOfSubmitOrderItems = []; // this is just for temp console log
       for (const value of Object.entries(this.$store.state.selectedItems)) {
         const item = value[1];
+        arrayOfSubmitOrderItems.push({
+          menu_id: item.node.menu_id,
+          item_name: item.node.name_eng,
+        });
         ordersItemsCreateManyInputData.push({
           // custom_id: item.node.custom_id,
           order_id: orderIdNum,
@@ -153,7 +158,10 @@ export default {
           custom_name: item.node.custom_name,
         });
       }
-      console.log(ordersItemsCreateManyInputData);
+      // here we are logging the orders incase there are failures which make us lose our orders. Need a better way to handle this later.
+      console.log("=Order's Item=====================");
+      console.log(JSON.stringify(arrayOfSubmitOrderItems));
+      console.log("======================================");
       const res = await axios.post(
         "http://localhost:3000/post/ordersitems/create/bulk",
         ordersItemsCreateManyInputData
