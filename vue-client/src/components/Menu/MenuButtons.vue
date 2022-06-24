@@ -384,12 +384,16 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn x-large width="33%" v-on:click="cancelCustomizeSelectedItem()">
+          <v-btn
+            x-large
+            width="24.5%"
+            v-on:click="cancelCustomizeSelectedItem()"
+          >
             <div>CANCEL<br /></div>
           </v-btn>
           <v-btn
             x-large
-            width="33%"
+            width="24.5%"
             v-on:click="
               addItemToSelectedItems(
                 chowMeinItemsObj[itemThatRequiresCustomization.id]
@@ -401,10 +405,22 @@
           </v-btn>
           <v-btn
             x-large
-            width="33%"
+            width="24.5%"
             v-on:click="
               addItemToSelectedItems(
                 chowMeinItemsObj[itemThatRequiresCustomization.id + 1]
+              );
+              customizeChowMeinTypeDialog = false;
+            "
+          >
+            <div>DRY (軟)<br /></div>
+          </v-btn>
+          <v-btn
+            x-large
+            width="24.5%"
+            v-on:click="
+              addItemToSelectedItems(
+                chowMeinItemsObj[itemThatRequiresCustomization.id + 2]
               );
               customizeChowMeinTypeDialog = false;
             "
@@ -535,6 +551,7 @@ export default {
         }
         if (
           !item.name_eng.includes("(CRISPY)") &&
+          !item.name_eng.includes("(DRY)") &&
           !item.name_eng.includes("(SOFT)")
         ) {
           chowMeinItemsOneSize.push(item);
