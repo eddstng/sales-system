@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="submitOrderDialog" width="900">
+  <v-dialog v-model="modifyOrderDialog" width="900">
     <v-card>
       <div>
         <br />
@@ -79,15 +79,15 @@
       <v-divider></v-divider>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn x-large width="50%" v-on:click="closeSubmitOrderDialog()">
+        <v-btn x-large width="50%" v-on:click="closeModifyOrderDialog()">
           <div>CANCEL<br /></div>
         </v-btn>
         <v-btn
           x-large
           width="50%"
-          v-on:click="closeSubmitOrderDialog(), submitOrder()"
+          v-on:click="closeModifyOrderDialog(), modifyOrder()"
         >
-          <div>SUBMIT<br /></div>
+          <div>MODIFY<br /></div>
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -106,34 +106,38 @@ import { store } from "../../store/store";
 import axios from "axios";
 export default {
   mixins: [storeMixin],
-  props: ["submitOrderDialog"],
+  props: ["modifyOrderDialog"],
   methods: {
-    closeSubmitOrderDialog() {
-      this.$emit("closeSubmitOrderDialog");
+    closeModifyOrderDialog() {
+      this.$emit("closeModifyOrderDialog");
     },
-    submitOrder: async function () {
+    modifyOrder: async function () {
       try {
-        const newOrder = await this.createOrder();
-        this.insertSelectedItemsIntoOrdersAndOrdersItems(newOrder.data.id);
-        this.updateOrderWithTotalPrice(newOrder);
+        this.clearTheOrderItemsOfCurrentOrder(
+          this.$store.state.currentOrder.id
+        );
+        this.insertSelectedItemsIntoOrdersAndOrdersItems(
+          this.$store.state.currentOrder.id
+        );
+        this.updateOrderWithTotalPrice(this.$store.state.currentOrder.id);
+        this.printOrder(this.$store.state.currentOrder.id);
         this.storeMixinClearOrderRelatedDetails();
-        this.printOrder(newOrder.data.id);
-        this.closeSubmitOrderDialog();
+        this.closeModifyOrderDialog();
         store.commit("setNotification", 1);
       } catch (err) {
-        this.closeSubmitOrderDialog();
+        this.closeModifyOrderDialog();
         store.commit("setNotification", 2);
         console.log(err);
       }
     },
-    createOrder: async function () {
-      const res = await axios.post("http://localhost:3000/post/orders/create", {
-        total: 0,
-        customer_id: this.$store.state.selectedCustomer.id,
-        type: this.$store.state.currentOrder.type,
-      });
+    clearTheOrderItemsOfCurrentOrder: async function () {
+      const res = await axios.delete(
+        `http://localhost:3000/delete/ordersitems/delete/all/order_id/${this.$store.state.currentOrder.id}`
+      );
       if (isNaN(res.data.id)) {
-        throw new Error("Failed to submit order. No order id retrieved.");
+        throw new Error(
+          `Failed to clear order items for order id ${this.$store.state.currentOrder.id}`
+        );
       }
       return res;
     },
@@ -172,6 +176,7 @@ export default {
       }
     },
     printOrder: async function (order_id) {
+      console.log("mmmm", order_id);
       const res = await axios.post("http://localhost:3000/post/print", {
         order_id,
         printKitchen: true,
@@ -184,9 +189,9 @@ export default {
       }
       return res;
     },
-    updateOrderWithTotalPrice: async function (orderDetails) {
+    updateOrderWithTotalPrice: async function (orderId) {
       const res = await axios.put(
-        `http://localhost:3000/put/orders/update/id/${orderDetails.data.id}`,
+        `http://localhost:3000/put/orders/update/id/${orderId}`,
         {
           ...this.orderDetails,
           ...this.$store.state.priceDetails,

@@ -50,12 +50,7 @@
         </v-card>
       </template>
     </v-card>
-    <v-card
-      v-on:click="
-        phone = '';
-        openSubmitOrderDialog();
-      "
-    >
+    <v-card v-on:click="openMenuDisplayDialog()">
       <v-list-item three-line>
         <v-list-item-content>
           <div class="menu-display-item-text">Subtotal:</div>
@@ -102,8 +97,19 @@ export default {
 
   mixins: [storeMixin],
   methods: {
+    openMenuDisplayDialog() {
+      if (this.$store.state.menuDisplayType === "ORDER") {
+        this.openSubmitOrderDialog();
+      }
+      if (this.$store.state.menuDisplayType === "MODIFY") {
+        this.openModifyOrderDialog();
+      }
+    },
     openSubmitOrderDialog() {
       this.$emit("openSubmitOrderDialog");
+    },
+    openModifyOrderDialog() {
+      this.$emit("openModifyOrderDialog");
     },
     openSelectedItemDialog(item) {
       this.$emit("openSelectedItemDialog", item);

@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     v-model="historyOptionsDetails.openHistoryOptionsDialog"
-    width="900"
+    width="1300"
   >
     <v-card>
       <div>
@@ -78,7 +78,7 @@
         <v-spacer></v-spacer>
         <v-btn
           x-large
-          width="19.2%"
+          width="13.8%"
           v-on:click="
             historyOptionsDetailsUpdate.confirmingAction = 'REPRINT';
             historyOptionsDetailsUpdate.openHistoryOptionsReprintDialog = true;
@@ -89,7 +89,7 @@
         </v-btn>
         <v-btn
           x-large
-          width="19.2%"
+          width="13.8%"
           v-on:click="
             historyOptionsDetailsUpdate.confirmingAction = 'REORDER';
             historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialog = true;
@@ -100,7 +100,7 @@
         </v-btn>
         <v-btn
           x-large
-          width="19.2%"
+          width="13.8%"
           v-on:click="
             historyOptionsDetailsUpdate.confirmingAction = 'CLEAR';
             historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialog = true;
@@ -111,7 +111,7 @@
         </v-btn>
         <v-btn
           x-large
-          width="19.2%"
+          width="13.8%"
           v-on:click="
             historyOptionsDetailsUpdate.confirmingAction = 'VOID';
             historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialog = true;
@@ -122,7 +122,7 @@
         </v-btn>
         <v-btn
           x-large
-          width="19.2%"
+          width="13.8%"
           v-on:click="
             historyOptionsDetailsUpdate.confirmingAction = 'PAID';
             historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialog = true;
@@ -130,6 +130,28 @@
           "
         >
           <div>PAID<br /></div>
+        </v-btn>
+        <v-btn
+          x-large
+          width="13.8%"
+          v-on:click="
+            historyOptionsDetailsUpdate.confirmingAction = 'MODIFY';
+            historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialog = true;
+            updateHistoryOptionsDetails(historyOptionsDetailsUpdate);
+          "
+        >
+          <div>MODIFY<br /></div>
+        </v-btn>
+        <v-btn
+          x-large
+          width="13.8%"
+          v-on:click="
+            historyOptionsDetailsUpdate.confirmingAction = '';
+            historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialog = true;
+            updateHistoryOptionsDetails(historyOptionsDetailsUpdate);
+          "
+        >
+          <div>DELETE<br /></div>
         </v-btn>
       </v-card-actions>
     </v-card>

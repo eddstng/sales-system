@@ -112,6 +112,11 @@ export default {
         ] = false;
       }
       if (actionStr === "REORDER") {
+        store.commit("setMenuDisplayType", "ORDER");
+        store.commit("setComponent", "ORDER");
+      }
+      if (actionStr === "MODIFY") {
+        store.commit("setMenuDisplayType", "MODIFY");
         store.commit("setComponent", "ORDER");
       }
       if (actionStr === "REPRINT KITCHEN") {

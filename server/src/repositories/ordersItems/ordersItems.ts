@@ -16,7 +16,7 @@ export class OrdersItems {
     @IsNotEmpty()
     quantity!: number;
 
-    customizations?: {name_eng: string, name_chn: string}[] | undefined;
+    customizations?: { name_eng: string, name_chn: string }[] | undefined;
 }
 
 export async function getAllOrdersItems(): Promise<Record<string, unknown>[]> {
@@ -74,7 +74,7 @@ export async function createOrdersItemsBulk(items: JSON[]) {
             await validateClassFields(OrdersItems, item)
         })
         const res = await prisma.orders_items.createMany({ data: <Prisma.orders_itemsCreateManyInput>items })
-        
+
         logInfo(createOrdersItemsBulk.name, `[✓] OrdersItemsBulk Created: {id: ${res})`)
     } catch (err) {
         logError(createOrdersItemsBulk.name, err, `[✗]`);
@@ -88,6 +88,18 @@ export async function deleteOneOrdersItems(id: number): Promise<void> {
             where: { id: id },
         })
         logInfo(deleteOneOrdersItems.name, `[✓] OrdersItems Deleted: {id: ${res.id}, total: ${res.order_id}, customer_id: ${res.item_id}`)
+    } catch (err) {
+        logError(deleteOneOrdersItems.name, err, `[✗]`);
+        throw new Error(`${err} `)
+    }
+}
+
+export async function deleteAllOrdersItemsWithOrderId(id: number): Promise<void> {
+    try {
+        const res = await prisma.orders_items.deleteMany({
+            where: { order_id: id },
+        })
+        logInfo(deleteOneOrdersItems.name, `[✓] OrdersItems Deleted: {id: ${res}`)
     } catch (err) {
         logError(deleteOneOrdersItems.name, err, `[✗]`);
         throw new Error(`${err} `)

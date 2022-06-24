@@ -4,6 +4,10 @@
       v-bind:submitOrderDialog="submitOrderDialog"
       @closeSubmitOrderDialog="closeSubmitOrderDialog"
     />
+    <MenuDisplayModifyOrderDialog
+      v-bind:modifyOrderDialog="modifyOrderDialog"
+      @closeModifyOrderDialog="closeModifyOrderDialog"
+    />
     <MenuDisplaySelectedItemDetailsDialog
       v-bind:menuDisplayItemDetails="menuDisplayItemDetails"
       @openCustomizeSelectedItemDialog="openCustomizeSelectedItemDialog"
@@ -23,6 +27,7 @@
             <MenuDisplay
               v-bind:menuDisplayItemDetails="menuDisplayItemDetails"
               @openSubmitOrderDialog="openSubmitOrderDialog"
+              @openModifyOrderDialog="openModifyOrderDialog"
               @openSelectedItemDialog="openSelectedItemDialog"
             />
           </v-container>
@@ -46,6 +51,7 @@ import { store } from "../../store/store";
 import MenuButtons from "../Menu/MenuButtons.vue";
 import MenuDisplay from "../Menu/MenuDisplay.vue";
 import MenuDisplaySubmitOrderDialog from "./MenuDisplaySubmitOrderDialog";
+import MenuDisplayModifyOrderDialog from "./MenuDisplayModifyOrderDialog";
 import MenuDisplaySelectedItemDetailsDialog from "./MenuDisplaySelectedItemDetailsDialog";
 import MenuDisplaySelectedItemDetailsCustomizeDialog from "./MenuDisplaySelectedItemDetailsCustomizeDialog";
 
@@ -57,6 +63,7 @@ export default {
     MenuButtons,
     MenuDisplay,
     MenuDisplaySubmitOrderDialog,
+    MenuDisplayModifyOrderDialog,
     MenuDisplaySelectedItemDetailsDialog,
     MenuDisplaySelectedItemDetailsCustomizeDialog,
   },
@@ -68,6 +75,7 @@ export default {
         removeSelectedItem: {},
       },
       submitOrderDialog: false,
+      modifyOrderDialog: false,
       suggestedStreetName: [],
     };
   },
@@ -95,8 +103,20 @@ export default {
         this.submitOrderDialog = true;
       }
     },
+    openModifyOrderDialog: function () {
+      this.modifyOrderDialog = false;
+      if (
+        this.$store.state.selectedCustomer.phone !== undefined &&
+        Object.keys(store.state.selectedItems).length !== 0
+      ) {
+        this.modifyOrderDialog = true;
+      }
+    },
     closeSubmitOrderDialog: function () {
       this.submitOrderDialog = false;
+    },
+    closeModifyOrderDialog: function () {
+      this.modifyOrderDialog = false;
     },
   },
 };

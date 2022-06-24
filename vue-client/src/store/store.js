@@ -25,6 +25,8 @@ export const store = new Vuex.Store({
       paid: null,
       itemQuantity: 0,
     },
+    // menuDisplayType = "ORDER" | "MODIFY"
+    menuDisplayType: "ORDER",
     notification: 0,
     component: "HISTORY",
     orderHistory: [],
@@ -32,6 +34,9 @@ export const store = new Vuex.Store({
     selectedItemsOrderedByEntry: {}
   },
   mutations: {
+    setMenuDisplayType(state, type) {
+      state.menuDisplayType = type;
+    },
     setOrderHistory(state, orderHistory) {
       state.orderHistory = orderHistory;
     },
