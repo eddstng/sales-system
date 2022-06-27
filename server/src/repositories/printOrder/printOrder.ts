@@ -70,9 +70,8 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
         ${res[0].customer_phone}
 
 
-        ` + `${res[0].order_type === 2 ? `${res[0].customer_address}
-        ` : ''}` + `${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}
-        
+        ` + `${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}
+        \n總數: ${res[0].items_quantity_total}\n\n
         -----------------------
         
 
@@ -146,6 +145,7 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
 
         clientBillString += `
         -----------------------
+        Number of Items: ${res[0].items_quantity_total}
         Subtotal: $${(res[0].order_subtotal as number).toFixed(2)}` +
             `${res[0].order_discount !== 0 ? `
         Discount: -$${(res[0].order_discount as number).toFixed(2)}` : ''}` + `

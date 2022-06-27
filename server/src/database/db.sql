@@ -149,7 +149,8 @@ end as item_price,
 oi.custom_name as item_custom_name,
 oi.quantity as orders_items_quantity,
 oi.customizations as orders_items_customizations,
-oi.timestamp as orders_items_timestamp
+oi.timestamp as orders_items_timestamp,
+(select sum(quantity) from orders_items where order_id = o.id group by order_id) as items_quantity_total
 from orders_items oi 
 LEFT JOIN items i ON oi.item_id = i.id
 LEFT JOIN orders o ON oi.order_id = o.id

@@ -92,6 +92,7 @@ model orders_items_detail {
   item_name_chn                 String?       @unique @db.VarChar(100)
   item_custom_name              String?       @db.VarChar(30)
   item_price                    Float?
+  items_quantity_total          Int
   orders_items_quantity         Int?
   orders_items_customizations   Json?
   orders_items_timestamp        DateTime? @db.Timestamp(6)
