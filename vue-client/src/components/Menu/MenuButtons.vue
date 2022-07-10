@@ -57,8 +57,8 @@
             width="50%"
             v-on:click="
               onClickMenuButton({
-                id: 214, // TODO: TERRIBLE! Bugs!
-                custom_id: 214 + customItem.name,
+                id: 230, // TODO: TERRIBLE! Bugs!
+                custom_id: 230 + customItem.name,
                 name_eng: customItem.name,
                 custom_name: customItem.name,
                 name_chn: 'Custom Item',
@@ -413,7 +413,7 @@
               customizeChowMeinTypeDialog = false;
             "
           >
-            <div>DRY (軟)<br /></div>
+            <div>DRY (干)<br /></div>
           </v-btn>
           <v-btn
             x-large
@@ -425,7 +425,7 @@
               customizeChowMeinTypeDialog = false;
             "
           >
-            <div>SOFT (干)<br /></div>
+            <div>SOFT (軟)<br /></div>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -543,10 +543,10 @@ export default {
             0,
             itemCopy.name_eng.length - 8
           );
-          itemCopy.name_chn = itemCopy.name_chn.substring(
-            0,
-            itemCopy.name_chn.length - 3
-          );
+          // itemCopy.name_chn = itemCopy.name_chn.substring(
+          //   0,
+          //   itemCopy.name_chn.length - 3
+          // );
           chowMeinItemsOneSize.push(itemCopy);
         }
         if (

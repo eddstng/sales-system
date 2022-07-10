@@ -8,13 +8,13 @@ DROP TABLE IF EXISTS customers;
 
 \c postgres;
 
-DROP OWNED BY sales_system_db;
+-- DROP OWNED BY sales_system_db;
 
-DROP DATABASE IF EXISTS sales_system_db;
+-- DROP DATABASE IF EXISTS sales_system_db;
 
-CREATE DATABASE sales_system_db;
+-- CREATE DATABASE sales_system_db;
 
-DROP ROLE IF EXISTS sales_system_db;
+-- DROP ROLE IF EXISTS sales_system_db;
 
 CREATE ROLE sales_system_db WITH LOGIN;
 

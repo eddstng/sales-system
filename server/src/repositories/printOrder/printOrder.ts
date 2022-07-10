@@ -5,7 +5,7 @@ import { thermalPrinterInterface } from '../../app';
 const ThermalPrinter = require('node-thermal-printer').printer
 const Types = require('node-thermal-printer').types
 
-const english = /^[A-Za-z0-9]*$/;
+const english = /^[A-Za-z\d_-]+$/;
 
 export async function printOrder(printObj: { order_id: number, printClient: boolean, printKitchen: boolean }): Promise<void> {
     try {
@@ -18,8 +18,9 @@ export async function printOrder(printObj: { order_id: number, printClient: bool
             const kitchenAndClientBills = await createKitchenAndClientBill(printObj.order_id)
             const clientBillPath = kitchenAndClientBills.clientBillPath
             const kitchenBillPath = kitchenAndClientBills.kitchenBillPath
+            const isDelivery = kitchenAndClientBills.isDelivery
             const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
-            await delay(5)
+            await delay(10)
             if (printObj.printKitchen) {
                 await printer.printImage(kitchenBillPath);
                 printer.cut();
@@ -30,9 +31,11 @@ export async function printOrder(printObj: { order_id: number, printClient: bool
                 await printer.printImage('./src/repositories/printOrder/header.png');
                 await printer.printImage(clientBillPath);
                 printer.cut();
-                // await printer.printImage('./src/repositories/printOrder/header.png');
-                // await printer.printImage(clientBillPath);
-                // printer.cut();
+                if (isDelivery) {
+                    await printer.printImage('./src/repositories/printOrder/header.png');
+                    await printer.printImage(clientBillPath);
+                    printer.cut();
+                }
             }
             printer.execute();
         }
@@ -44,7 +47,7 @@ export async function printOrder(printObj: { order_id: number, printClient: bool
         throw err;
     }
 }
-export async function createKitchenAndClientBill(order_id: number): Promise<{ clientBillPath: string, kitchenBillPath: string }> {
+export async function createKitchenAndClientBill(order_id: number): Promise<{ clientBillPath: string, kitchenBillPath: string, isDelivery: boolean }> {
     try {
         const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
         await delay(100)
@@ -89,7 +92,7 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
                 console.log(element)
                 element.orders_items_customizations.forEach((customization: { name_eng: string, name_chn: string }) => {
                     if (english.test(element.item_name_chn)) { // To handle formatting for items such as Dinner Specials.
-                        kitchenCustomizationString += `\n⤷${customization.name_chn === '' ? '___________' : customization.name_chn}\n`
+                        kitchenCustomizationString += `\n⤷${customization.name_chn === '' ? '___________' : customization.name_chn}\n\n\n`
                     } else {
                         kitchenCustomizationString += `\n\n\n⤷${customization.name_chn === '' ? '___________' : customization.name_chn}\n`
                     }
@@ -97,25 +100,24 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
             }
 
             // if (element.item_custom_name !== null) {
-            // TO DO: update 214 with a variable
-            if (element.item_id === 214) {
+            // TO DO: update 230 with a variable
+            if (element.item_id === 230) {
                 kitchenBillString += `
 
 
-                ⊵____________ x${element.orders_items_quantity}${kitchenCustomizationString ? kitchenCustomizationString : ''}
+                x${element.orders_items_quantity}${kitchenCustomizationString ? kitchenCustomizationString : ''} ⊵____________
                 
                 `
 
             } else {
                 if (english.test(element.item_name_chn)) {
                     kitchenBillString += `
-
-                    ${element.item_name_chn} x${element.orders_items_quantity}
+                    x${element.orders_items_quantity} ${element.item_name_chn}
                     ${kitchenCustomizationString}`
                 } else {
-                    kitchenBillString += `
-                    ${element.item_name_chn} x${element.orders_items_quantity}
+                    kitchenBillString += `x${element.orders_items_quantity} ${element.item_name_chn}
                     ${kitchenCustomizationString}
+
                     `
                 }
             }
@@ -173,7 +175,8 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
             .then((res: any) => console.log(res))
 
         logInfo(createKitchenAndClientBill.name, `[✓]`)
-        return { clientBillPath, kitchenBillPath };
+        console.log()
+        return { clientBillPath, kitchenBillPath, isDelivery: res[0].order_type === 2 };
     } catch (err) {
         logInfo(createKitchenAndClientBill.name, `[✗] ${err}`)
         throw err;
