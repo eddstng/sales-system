@@ -112,7 +112,7 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
             } else {
                 if (english.test(element.item_name_chn)) {
                     kitchenBillString += `
-                    x${element.orders_items_quantity} ${element.item_name_chn}
+                     x${element.orders_items_quantity} ${element.item_name_chn}
                     ${kitchenCustomizationString}`
                 } else {
                     kitchenBillString += `x${element.orders_items_quantity} ${element.item_name_chn}
