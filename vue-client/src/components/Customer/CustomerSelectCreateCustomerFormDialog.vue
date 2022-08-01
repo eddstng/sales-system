@@ -52,7 +52,6 @@
               <br />
               <v-select
                 v-model="selectedCustomerDetails.selectedCustomer.city"
-                :items="cityNameArr"
                 label="City"
                 dense
               ></v-select>
@@ -197,7 +196,6 @@
               <br />
               <v-select
                 v-model="selectedCustomerDetails.selectedCustomer.city"
-                :items="cityNameArr"
                 label="City"
                 dense
               ></v-select>
@@ -306,18 +304,15 @@
 
 <script>
 import axios from "axios";
-import { streetNameArr } from "../../data/streets";
 import customerSelectMixin from "../../mixins/customerSelectMixin";
 import storeMixin from "../../mixins/storeMixin";
 
-import { cityNameArr } from "../../data/cities";
 export default {
   mixins: [customerSelectMixin, storeMixin],
   data() {
     return {
       createCustomerWarning: null,
       createCustomerError: null,
-      cityNameArr,
       suggestedStreetName: [],
       confirmCustomerUpdateDialog: false,
     };
@@ -502,28 +497,6 @@ export default {
           this.selectedCustomerDetails.selectedCustomer.street_name == null)
       ) {
         this.createCustomerError = "DELIVERY REQUIRES A VALID ADDRESS";
-      }
-      return;
-    },
-    suggestStreetNameFromStreetNameInput: function () {
-      this.suggestedStreetName = [];
-      if (this.selectedCustomerDetails.selectedCustomer.street_name === "") {
-        this.suggestedStreetName = [];
-      } else {
-        streetNameArr.forEach((v) => {
-          if (this.suggestedStreetName.length >= 5) {
-            return;
-          }
-          if (
-            v
-              .toLowerCase()
-              .startsWith(
-                this.selectedCustomerDetails.selectedCustomer.street_name
-              )
-          ) {
-            this.suggestedStreetName.push(v);
-          }
-        });
       }
       return;
     },
