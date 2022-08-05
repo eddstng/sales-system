@@ -103,7 +103,6 @@ export default {
     async setComponent() {
       switch (this.changeComponentDetails.component) {
         case "HISTORY":
-          this.setComponentToOrder(); // TO DO: needed to fix a bug where you cannot scroll up and click on an older history record
           this.setComponentToHistory();
           break;
         case "ORDER":

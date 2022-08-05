@@ -6,32 +6,17 @@
           <br />
           <v-col>
             <v-form ref="form" lazy-validation>
-              <v-text-field
-                v-model="customItem.name"
-                label="Custom Item Name"
-                required
-                autocomplete="off"
-                autofocus
-              ></v-text-field>
-              <v-text-field
-                label="Price"
-                v-model="customItem.price"
-                required
-                prefix="$"
-              ></v-text-field>
+              <v-text-field v-model="customItem.name" label="Custom Item Name" required autocomplete="off" autofocus>
+              </v-text-field>
+              <v-text-field label="Price" v-model="customItem.price" required prefix="$"></v-text-field>
             </v-form>
             <p>Quick Suggestions</p>
+            <p>{{}}</p>
             <v-divider></v-divider>
-            <v-btn
-              v-for="suggestion in customItemSuggestions"
-              v-bind:key="suggestion"
-              x-large
-              width="50%"
-              v-on:click="
-                phone = '';
-                customItem.name += `${suggestion} `;
-              "
-            >
+            <v-btn v-for="suggestion in customItemSuggestions" v-bind:key="suggestion" x-large width="50%" v-on:click="
+  phone = '';
+customItem.name += `${suggestion} `;
+            ">
               <div>{{ suggestion }}<br /></div>
             </v-btn>
           </v-col>
@@ -40,39 +25,30 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            x-large
-            width="50%"
-            v-on:click="
-              phone = '';
-              addCustomItemDialog = false;
-              customItem.name = '';
-            "
-          >
+          <v-btn x-large width="50%" v-on:click="
+  phone = '';
+addCustomItemDialog = false;
+customItem.name = '';
+          ">
             <div>CANCEL<br /></div>
           </v-btn>
-          <!-- TO DO: We want to make the id an environment variable instead. -->
-          <v-btn
-            x-large
-            width="50%"
-            v-on:click="
-              onClickMenuButton({
-                id: 230, // TODO: TERRIBLE! Bugs!
-                custom_id: 230 + customItem.name,
-                name_eng: customItem.name,
-                custom_name: customItem.name,
-                name_chn: 'Custom Item',
-                price: parseFloat(customItem.price),
-                custom_price: parseFloat(customItem.price),
-              });
-              (customItem = {
-                name: '',
-                price: 0.0,
-                id: '',
-              }),
-                (addCustomItemDialog = false);
-            "
-          >
+          <v-btn x-large width="50%" v-on:click="
+  onClickMenuButton({
+    id: customItemId,
+    custom_id: customItemId + customItem.name,
+    name_eng: customItem.name,
+    custom_name: customItem.name,
+    name_chn: 'Custom Item',
+    price: parseFloat(customItem.price),
+    custom_price: parseFloat(customItem.price),
+  });
+(customItem = {
+  name: '',
+  price: 0.0,
+  id: '',
+}),
+  (addCustomItemDialog = false);
+          ">
             <div>ADD<br /></div>
           </v-btn>
         </v-card-actions>
@@ -82,55 +58,36 @@
       <div class="p-0" v-if="displayMenuButtons" max-height="400">
         <!-- Lets handle soup sizes here. -->
         <div v-if="selectedCategory === 12">
-          <v-btn
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="
-              displayCategoriesButtons = true;
-              displayMenuButtons = false;
-              selectedCategory = null;
-            "
-            ><div>
+          <v-btn x-large dark height="250px" width="19.6%" class="mt-1 mr-1" v-on:click="
+  displayCategoriesButtons = true;
+displayMenuButtons = false;
+selectedCategory = null;
+          ">
+            <div>
               <p class="menu-button-text-eng">BACK</p>
             </div>
           </v-btn>
-          <v-btn
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="addCustomItemDialog = true"
-            ><div>
+          <v-btn x-large dark height="250px" width="19.6%" class="mt-1 mr-1" v-on:click="addCustomItemDialog = true">
+            <div>
               <p class="menu-button-text-eng">CUSTOM</p>
             </div>
           </v-btn>
-          <v-btn
-            v-for="item in chowMeinItems"
-            v-bind:key="item.name_eng"
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="
-              onClickMenuButton(item);
-              displayCategoriesButtons = true;
-              displayMenuButtons = false;
-            "
-            ><div>
+          <v-btn v-for="item in chowMeinItems" v-bind:key="item.name_eng" x-large dark height="250px" width="19.6%"
+            class="mt-1 mr-1" v-on:click="
+  onClickMenuButton(item);
+displayCategoriesButtons = true;
+displayMenuButtons = false;
+            ">
+            <div>
               <p class="menu-button-text-eng">#{{ item.menu_id }}</p>
               <p class="mb-0 menu-button-text-eng">
                 {{ item.name_eng.match(/.{1,20}(\s|$)/g)[0] }}
               </p>
               <p class="mb-0 menu-button-text-eng">
                 {{
-                  item.name_eng.toString().length > 20
-                    ? item.name_eng.match(/.{1,20}(\s|$)/g)[1]
-                    : "⠀"
+                    item.name_eng.toString().length > 20
+                      ? item.name_eng.match(/.{1,20}(\s|$)/g)[1]
+                      : "⠀"
                 }}
               </p>
               <p class="menu-button-text-chn">{{ item.name_chn }}</p>
@@ -139,83 +96,52 @@
               </p> -->
             </div>
           </v-btn>
-          <v-btn
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="addCustomItemDialog = true"
-            ><div>
+          <v-btn x-large dark height="250px" width="19.6%" class="mt-1 mr-1" v-on:click="addCustomItemDialog = true">
+            <div>
               <p class="menu-button-text-eng">CUSTOM</p>
             </div>
           </v-btn>
-          <v-btn
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="
-              displayCategoriesButtons = true;
-              displayMenuButtons = false;
-              selectedCategory = null;
-            "
-            ><div>
+          <v-btn x-large dark height="250px" width="19.6%" class="mt-1 mr-1" v-on:click="
+  displayCategoriesButtons = true;
+displayMenuButtons = false;
+selectedCategory = null;
+          ">
+            <div>
               <p class="menu-button-text-eng">BACK</p>
             </div>
           </v-btn>
         </div>
         <div v-if="selectedCategory === 1">
-          <v-btn
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="
-              displayCategoriesButtons = true;
-              displayMenuButtons = false;
-              selectedCategory = null;
-            "
-            ><div>
+          <v-btn x-large dark height="250px" width="19.6%" class="mt-1 mr-1" v-on:click="
+  displayCategoriesButtons = true;
+displayMenuButtons = false;
+selectedCategory = null;
+          ">
+            <div>
               <p class="menu-button-text-eng">BACK</p>
             </div>
           </v-btn>
-          <v-btn
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="addCustomItemDialog = true"
-            ><div>
+          <v-btn x-large dark height="250px" width="19.6%" class="mt-1 mr-1" v-on:click="addCustomItemDialog = true">
+            <div>
               <p class="menu-button-text-eng">CUSTOM</p>
             </div>
           </v-btn>
-          <v-btn
-            v-for="item in soupItems"
-            v-bind:key="item.name_eng"
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="
-              onClickMenuButton(item);
-              displayCategoriesButtons = true;
-              displayMenuButtons = false;
-            "
-            ><div>
+          <v-btn v-for="item in soupItems" v-bind:key="item.name_eng" x-large dark height="250px" width="19.6%"
+            class="mt-1 mr-1" v-on:click="
+  onClickMenuButton(item);
+displayCategoriesButtons = true;
+displayMenuButtons = false;
+            ">
+            <div>
               <p class="menu-button-text-eng">#{{ item.menu_id }}</p>
               <p class="mb-0 menu-button-text-eng">
                 {{ item.name_eng.match(/.{1,20}(\s|$)/g)[0] }}
               </p>
               <p class="mb-0 menu-button-text-eng">
                 {{
-                  item.name_eng.toString().length > 20
-                    ? item.name_eng.match(/.{1,20}(\s|$)/g)[1]
-                    : "⠀"
+                    item.name_eng.toString().length > 20
+                      ? item.name_eng.match(/.{1,20}(\s|$)/g)[1]
+                      : "⠀"
                 }}
               </p>
               <p class="menu-button-text-chn">{{ item.name_chn }}</p>
@@ -224,132 +150,82 @@
               </p> -->
             </div>
           </v-btn>
-          <v-btn
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="addCustomItemDialog = true"
-            ><div>
+          <v-btn x-large dark height="250px" width="19.6%" class="mt-1 mr-1" v-on:click="addCustomItemDialog = true">
+            <div>
               <p class="menu-button-text-eng">CUSTOM</p>
             </div>
           </v-btn>
-          <v-btn
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="
-              displayCategoriesButtons = true;
-              displayMenuButtons = false;
-              selectedCategory = null;
-            "
-            ><div>
+          <v-btn x-large dark height="250px" width="19.6%" class="mt-1 mr-1" v-on:click="
+  displayCategoriesButtons = true;
+displayMenuButtons = false;
+selectedCategory = null;
+          ">
+            <div>
               <p class="menu-button-text-eng">BACK</p>
             </div>
           </v-btn>
         </div>
         <div v-if="selectedCategory !== 1 && selectedCategory !== 12">
-          <v-btn
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="
-              displayCategoriesButtons = true;
-              displayMenuButtons = false;
-              selectedCategory = null;
-            "
-            ><div>
+          <v-btn x-large dark height="250px" width="19.6%" class="mt-1 mr-1" v-on:click="
+  displayCategoriesButtons = true;
+displayMenuButtons = false;
+selectedCategory = null;
+          ">
+            <div>
               <p class="menu-button-text-eng">BACK</p>
             </div>
           </v-btn>
-          <v-btn
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="addCustomItemDialog = true"
-            ><div>
+          <v-btn x-large dark height="250px" width="19.6%" class="mt-1 mr-1" v-on:click="addCustomItemDialog = true">
+            <div>
               <p class="menu-button-text-eng">CUSTOM</p>
             </div>
           </v-btn>
-          <v-btn
-            v-for="item in $store.state.items[selectedCategory]"
-            v-bind:key="item.name_eng"
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="
-              onClickMenuButton(item);
-              displayCategoriesButtons = true;
-              displayMenuButtons = false;
-            "
-            ><div>
+          <v-btn v-for="item in $store.state.items[selectedCategory]" v-bind:key="item.name_eng" x-large dark
+            height="250px" width="19.6%" class="mt-1 mr-1" v-on:click="
+  onClickMenuButton(item);
+displayCategoriesButtons = true;
+displayMenuButtons = false;
+            ">
+            <div>
               <p class="menu-button-text-eng">#{{ item.menu_id }}</p>
               <p class="mb-0 menu-button-text-eng">
                 {{ item.name_eng.match(/.{1,20}(\s|$)/g)[0] }}
               </p>
               <p class="mb-0 menu-button-text-eng">
                 {{
-                  item.name_eng.toString().length > 20
-                    ? item.name_eng.match(/.{1,20}(\s|$)/g)[1]
-                    : "⠀"
+                    item.name_eng.toString().length > 20
+                      ? item.name_eng.match(/.{1,20}(\s|$)/g)[1]
+                      : "⠀"
                 }}
               </p>
               <p class="menu-button-text-chn">{{ item.name_chn }}</p>
               <p class="menu-button-text-price">{{ item.price.toFixed(2) }}</p>
             </div>
           </v-btn>
-          <v-btn
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="addCustomItemDialog = true"
-            ><div>
+          <v-btn x-large dark height="250px" width="19.6%" class="mt-1 mr-1" v-on:click="addCustomItemDialog = true">
+            <div>
               <p class="menu-button-text-eng">CUSTOM</p>
             </div>
           </v-btn>
-          <v-btn
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="
-              displayCategoriesButtons = true;
-              displayMenuButtons = false;
-              selectedCategory = null;
-            "
-            ><div>
+          <v-btn x-large dark height="250px" width="19.6%" class="mt-1 mr-1" v-on:click="
+  displayCategoriesButtons = true;
+displayMenuButtons = false;
+selectedCategory = null;
+          ">
+            <div>
               <p class="menu-button-text-eng">BACK</p>
             </div>
           </v-btn>
         </div>
       </div>
       <div class="p-0" v-if="displayCategoriesButtons" max-height="400">
-        <v-btn
-          v-for="item in categories"
-          v-bind:key="item.id"
-          x-large
-          dark
-          height="200px"
-          width="24.5%"
-          class="mt-1 mr-1"
-          v-on:click="
-            selectedCategory = item.id;
-            displayCategoriesButtons = false;
-            displayMenuButtons = true;
-          "
-          ><div>
+        <v-btn v-for="item in categories" v-bind:key="item.id" x-large dark height="200px" width="24.5%"
+          class="mt-1 mr-1" v-on:click="
+  selectedCategory = item.id;
+displayCategoriesButtons = false;
+displayMenuButtons = true;
+          ">
+          <div>
             <p class="menu-button-text-eng">{{ item.name_eng }}</p>
             <!-- <p class="menu-button-text-eng" >{{ item.name_chn }}</p> -->
             <p class="menu-button-text-eng">{{ item.num_range }}</p>
@@ -358,11 +234,7 @@
       </div>
     </v-card>
 
-    <v-dialog
-      v-if="itemThatRequiresCustomization !== null"
-      v-model="customizeChowMeinTypeDialog"
-      width="1000px"
-    >
+    <v-dialog v-if="itemThatRequiresCustomization !== null" v-model="customizeChowMeinTypeDialog" width="1000px">
       <v-card>
         <div>
           <h3 class="text-center pt-10 pb-5">
@@ -384,58 +256,38 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            x-large
-            width="24.5%"
-            v-on:click="cancelCustomizeSelectedItem()"
-          >
+          <v-btn x-large width="24.5%" v-on:click="cancelCustomizeSelectedItem()">
             <div>CANCEL<br /></div>
           </v-btn>
-          <v-btn
-            x-large
-            width="24.5%"
-            v-on:click="
-              addItemToSelectedItems(
-                chowMeinItemsObj[itemThatRequiresCustomization.id]
-              );
-              customizeChowMeinTypeDialog = false;
-            "
-          >
+          <v-btn x-large width="24.5%" v-on:click="
+  addItemToSelectedItems(
+    chowMeinItemsObj[itemThatRequiresCustomization.id]
+  );
+customizeChowMeinTypeDialog = false;
+          ">
             <div>CRISPY (湿)<br /></div>
           </v-btn>
-          <v-btn
-            x-large
-            width="24.5%"
-            v-on:click="
-              addItemToSelectedItems(
-                chowMeinItemsObj[itemThatRequiresCustomization.id + 1]
-              );
-              customizeChowMeinTypeDialog = false;
-            "
-          >
+          <v-btn x-large width="24.5%" v-on:click="
+  addItemToSelectedItems(
+    chowMeinItemsObj[itemThatRequiresCustomization.id + 1]
+  );
+customizeChowMeinTypeDialog = false;
+          ">
             <div>DRY (干)<br /></div>
           </v-btn>
-          <v-btn
-            x-large
-            width="24.5%"
-            v-on:click="
-              addItemToSelectedItems(
-                chowMeinItemsObj[itemThatRequiresCustomization.id + 2]
-              );
-              customizeChowMeinTypeDialog = false;
-            "
-          >
+          <v-btn x-large width="24.5%" v-on:click="
+  addItemToSelectedItems(
+    chowMeinItemsObj[itemThatRequiresCustomization.id + 2]
+  );
+customizeChowMeinTypeDialog = false;
+          ">
             <div>SOFT (軟)<br /></div>
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
-    <v-dialog
-      v-if="itemThatRequiresCustomization !== null"
-      v-model="customizeSoupSizeDialog"
-      width="1000px"
-    >
+    <v-dialog v-if="itemThatRequiresCustomization !== null" v-model="customizeSoupSizeDialog" width="1000px">
       <v-card>
         <div>
           <h3 class="text-center pt-10 pb-5">
@@ -460,28 +312,20 @@
           <v-btn x-large width="33%" v-on:click="cancelCustomizeSelectedItem()">
             <div>CANCEL<br /></div>
           </v-btn>
-          <v-btn
-            x-large
-            width="33%"
-            v-on:click="
-              addItemToSelectedItems(
-                soupItemsObj[itemThatRequiresCustomization.id]
-              );
-              customizeSoupSizeDialog = false;
-            "
-          >
+          <v-btn x-large width="33%" v-on:click="
+  addItemToSelectedItems(
+    soupItemsObj[itemThatRequiresCustomization.id]
+  );
+customizeSoupSizeDialog = false;
+          ">
             <div>SMALL (小)<br /></div>
           </v-btn>
-          <v-btn
-            x-large
-            width="33%"
-            v-on:click="
-              addItemToSelectedItems(
-                soupItemsObj[itemThatRequiresCustomization.id + 1]
-              );
-              customizeSoupSizeDialog = false;
-            "
-          >
+          <v-btn x-large width="33%" v-on:click="
+  addItemToSelectedItems(
+    soupItemsObj[itemThatRequiresCustomization.id + 1]
+  );
+customizeSoupSizeDialog = false;
+          ">
             <div>LARGE (大)<br /></div>
           </v-btn>
         </v-card-actions>
@@ -494,9 +338,11 @@
 .menu-button-text-eng {
   font-size: 0.9em;
 }
+
 .menu-button-text-chn {
   font-size: 1.7em;
 }
+
 .menu-button-text-price {
   font-size: 1.7em;
 }
@@ -505,6 +351,7 @@
 <script>
 import storeMixin from "../../mixins/storeMixin";
 import { store } from "../../store/store";
+
 export default {
   mixins: [storeMixin],
   computed: {
@@ -568,6 +415,7 @@ export default {
   },
   data() {
     return {
+      customItemId: parseInt(process.env.VUE_APP_CUSTOM_ITEM_ID),
       customizeChowMeinTypeDialog: false,
       customizeSoupSizeDialog: false,
       itemThatRequiresCustomization: null,
@@ -778,7 +626,7 @@ export default {
 
         while (
           selectedItems[
-            `${customizedItemKeyName}${customizedItemKeyNumber}`
+          `${customizedItemKeyName}${customizedItemKeyNumber}`
           ] !== undefined
         ) {
           customizedItemKeyNumber++;
@@ -791,9 +639,8 @@ export default {
         ].node.custom_id = `${customizedItemKeyName}${customizedItemKeyNumber}`;
         selectedItems[
           `${customizedItemKeyName}${customizedItemKeyNumber}`
-        ].node.custom_name = `${
-          selectedItems[`${customizedItemKeyName}${customizedItemKeyNumber}`]
-            .node.name_eng
+        ].node.custom_name = `${selectedItems[`${customizedItemKeyName}${customizedItemKeyNumber}`]
+          .node.name_eng
         } [C-${customizedItemKeyNumber}]`;
 
         delete selectedItems[selectedItemIdToUseString];

@@ -1,6 +1,9 @@
 import startServer from './server'
 import { PrismaClient } from "@prisma/client"
 import 'reflect-metadata';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
@@ -37,7 +40,9 @@ async function getThermalPrinterInterface(): Promise<string> {
 
 async function main() {
     try {
-        thermalPrinterInterface = await getThermalPrinterInterface()
+        if (process.env.PRINTING !== 'false') {
+            thermalPrinterInterface = await getThermalPrinterInterface()
+        }
         startServer()
     } catch (err) {
         process.exit(1);

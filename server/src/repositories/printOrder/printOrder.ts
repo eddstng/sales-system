@@ -1,6 +1,9 @@
 import { prisma } from '../../app'
 import { logInfo } from '../../logging/utils'
 import { thermalPrinterInterface } from '../../app';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 const ThermalPrinter = require('node-thermal-printer').printer
 const Types = require('node-thermal-printer').types
@@ -39,7 +42,9 @@ export async function printOrder(printObj: { order_id: number, printClient: bool
             }
             printer.execute();
         }
-        printImage();
+        if (process.env.PRINTING !== "false") {
+            printImage();
+        }
         logInfo(printOrder.name, `[✓]`)
         return;
     } catch (err) {
@@ -99,9 +104,7 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
                 })
             }
 
-            // if (element.item_custom_name !== null) {
-            // TO DO: update 230 with a variable
-            if (element.item_id === 230) {
+            if (element.item_id === process.env.CUSTOM_ITEM_ID) {
                 kitchenBillString += `
 
 

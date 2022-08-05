@@ -1,16 +1,13 @@
 <template>
   <v-card outlined tile class="overflow-y-auto" height="90.4vh" v-chat-scroll>
-    <div class="p-0" max-height="400">
-      <v-btn
-        class="history-button-text"
-        v-for="order in $store.state.orderHistory"
-        v-bind:key="order.order_id"
-        x-large
-        dark
-        height="100px"
-        width="100%"
-        v-on:click="onClickHistoryButton(order.order_id)"
-      >
+    <div v-if="Object.keys($store.state.orderHistory).length === 0" class="p-0" max-height="400">
+      <p class="text-subtitle-2 text-center pt-20p">
+        NO ORDERS FOUND
+      </p>
+    </div>
+    <div v-else class="p-0" max-height="400">
+      <v-btn class="history-button-text" v-for="order in $store.state.orderHistory" v-bind:key="order.order_id" x-large
+        dark height="100px" width="100%" v-on:click="onClickHistoryButton(order.order_id)">
         <v-row>
           <v-col>
             {{ new Date(order.order_timestamp).toLocaleDateString() }}
@@ -23,7 +20,7 @@
           <v-col v-else> </v-col>
           <v-col>
             {{
-              order.customer_phone.replace(/(\d{3})(\d{3})(\d{3})/, '$1-$2-$3')
+                order.customer_phone.replace(/(\d{3})(\d{3})(\d{3})/, '$1-$2-$3')
             }}
           </v-col>
           <v-col> {{ order.order_total.toFixed(2) }} </v-col>
@@ -37,6 +34,10 @@
 .history-button-text {
   font-size: 1.2em;
   overflow: hidden;
+}
+
+.pt-35p {
+  padding-top: 35%;
 }
 </style>
 
@@ -53,7 +54,7 @@ export default {
     this.$root.$refs.MenuButtons = this;
   },
   methods: {
-    getFormattedTimeStamp: function(orderTimestamp) {
+    getFormattedTimeStamp: function (orderTimestamp) {
       var hours = orderTimestamp.getHours();
       var minutes = orderTimestamp.getMinutes();
       var ampm = hours >= 12 ? 'pm' : 'am';
