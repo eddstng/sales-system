@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm run db:start && nodemon src/app.ts --exec ts-node",
     "db:start": "sudo service postgresql stop && yes | docker-compose stop psql && docker-compose up -d psql",
-    "db:delete": "npm run db:start && echo '\n!!!!!!!!!! WARNING !!!!!!!!!! \n' && docker-compose rm -s -v psql",
+    "db:delete": "npm run db:start && echo '\n!!!!!!!!!! WARNING !!!!!!!!!! \n' && docker-compose rm -s -v psql"
   },
   "author": "edstngdv",
   "license": "ISC",
