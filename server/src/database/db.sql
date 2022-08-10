@@ -39,6 +39,7 @@ CREATE TABLE customers (
     street_number INTEGER,
     street_name VARCHAR(30),
     city VARCHAR(15),
+    buzzer_number VARCHAR(5),
     address TEXT,
     note TEXT
 );

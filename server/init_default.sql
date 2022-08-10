@@ -24,6 +24,7 @@ CREATE TABLE customers (
     street_number INTEGER,
     street_name VARCHAR(30),
     city VARCHAR(15),
+    buzzer_number VARCHAR(5),
     address TEXT,
     note TEXT
 );
@@ -109,6 +110,7 @@ c.id as customer_id,
 c.name as customer_name,
 c.phone as customer_phone,
 c.address as customer_address,
+c.buzzer_number as customer_buzzer_number,
 c.note as customer_note,
 i.id as item_id,
 i.menu_id as item_menu_id,

@@ -85,10 +85,12 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
 
         `;
 
-        let clientBillString = `${res[0].order_id} \n ${orderTypeString}
+        const buzzerNumber = res[0].customer_buzzer_number ? `Buzzer: ${res[0].customer_buzzer_number} \n` : '';
+        let clientBillString = `
+        ${res[0].order_id} \n ${orderTypeString}
         ${res[0].customer_phone}
         ` + `${res[0].order_type === 2 ? `${res[0].customer_address}
-        ` : ''}` + `${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}
+        ` : ''}` + `${buzzerNumber}`+`${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}
         -----------------------`;
 
         res.forEach((element: any) => {

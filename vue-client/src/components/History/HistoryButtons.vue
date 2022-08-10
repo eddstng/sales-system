@@ -1,7 +1,7 @@
 <template>
   <v-card outlined tile class="overflow-y-auto" height="90.4vh" v-chat-scroll>
     <div v-if="Object.keys($store.state.orderHistory).length === 0" class="p-0" max-height="400">
-      <p class="text-subtitle-2 text-center pt-20p">
+      <p class="text-subtitle-2 text-center pt-35p">
         NO ORDERS FOUND
       </p>
     </div>
@@ -127,6 +127,7 @@ export default {
         street_number:
           ordersItemsDetailWithOrderIdArray[0].customer_street_number,
         unit_number: ordersItemsDetailWithOrderIdArray[0].customer_unit_number,
+        buzzer_number: ordersItemsDetailWithOrderIdArray[0].customer_buzzer_number,
       });
       // Provide a total item count to the $store.state.currentOrder details. 
       this.storeMixinSumSelectedItemsQuantity();

@@ -11,7 +11,6 @@
               <v-text-field label="Price" v-model="customItem.price" required prefix="$"></v-text-field>
             </v-form>
             <p>Quick Suggestions</p>
-            <p>{{}}</p>
             <v-divider></v-divider>
             <v-btn v-for="suggestion in customItemSuggestions" v-bind:key="suggestion" x-large width="50%" v-on:click="
   phone = '';

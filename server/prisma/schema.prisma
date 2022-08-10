@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
 }
 
 datasource db {
@@ -11,6 +11,7 @@ model customers {
   id            Int      @id @default(autoincrement())
   name          String?  @db.VarChar(100)
   phone         String?  @unique @db.VarChar(15)
+  buzzer_number String?  @db.VarChar(5)
   unit_number   String?  @db.VarChar(5)
   street_number Int?
   street_name   String?  @db.VarChar(30)
@@ -59,41 +60,42 @@ model orders_items {
 }
 
 model orders_history {
-  order_id        Int         @id @default(autoincrement())
-  order_timestamp DateTime?   @default(now()) @db.Timestamp(6)
-  order_type      Int?        @db.SmallInt
+  order_id        Int       @id @default(autoincrement())
+  order_timestamp DateTime? @default(now()) @db.Timestamp(6)
+  order_type      Int?      @db.SmallInt
   order_total     Float?
-  order_void      Boolean     @default(false)
-  order_paid      Boolean     @default(false)
-  customer_id     Int         @default(autoincrement())
-  customer_name   String?     @db.VarChar(100)
-  customer_phone  String?     @unique @db.VarChar(15)
+  order_void      Boolean   @default(false)
+  order_paid      Boolean   @default(false)
+  customer_id     Int       @default(autoincrement())
+  customer_name   String?   @db.VarChar(100)
+  customer_phone  String?   @unique @db.VarChar(15)
 }
 
 model orders_items_detail {
-  order_id                      Int           @id @default(autoincrement())
-  order_timestamp               DateTime?     @default(now()) @db.Timestamp(6)
-  order_type                    Int?          @db.SmallInt
-  order_total                   Float
-  order_subtotal                Float
-  order_gst                     Float
-  order_discount                Float
-  order_void                    Boolean       @default(false)
-  order_paid                    Boolean       @default(false)
-  customer_id                   Int           @default(autoincrement())
-  customer_name                 String?       @db.VarChar(100)
-  customer_phone                String?       @unique @db.VarChar(15)
-  customer_address              String?
-  customer_note                 String?
-  item_id                       Int         
-  item_menu_id                  Int?
-  item_category                 Int?
-  item_name_eng                 String?       @unique @db.VarChar(100)
-  item_name_chn                 String?       @unique @db.VarChar(100)
-  item_custom_name              String?       @db.VarChar(30)
-  item_price                    Float?
-  items_quantity_total          Int
-  orders_items_quantity         Int?
-  orders_items_customizations   Json?
-  orders_items_timestamp        DateTime? @db.Timestamp(6)
+  order_id                    Int       @id @default(autoincrement())
+  order_timestamp             DateTime? @default(now()) @db.Timestamp(6)
+  order_type                  Int?      @db.SmallInt
+  order_total                 Float
+  order_subtotal              Float
+  order_gst                   Float
+  order_discount              Float
+  order_void                  Boolean   @default(false)
+  order_paid                  Boolean   @default(false)
+  customer_id                 Int       @default(autoincrement())
+  customer_name               String?   @db.VarChar(100)
+  customer_phone              String?   @unique @db.VarChar(15)
+  customer_address            String?
+  customer_buzzer_number      String?
+  customer_note               String?
+  item_id                     Int
+  item_menu_id                Int?
+  item_category               Int?
+  item_name_eng               String?   @unique @db.VarChar(100)
+  item_name_chn               String?   @unique @db.VarChar(100)
+  item_custom_name            String?   @db.VarChar(30)
+  item_price                  Float?
+  items_quantity_total        Int
+  orders_items_quantity       Int?
+  orders_items_customizations Json?
+  orders_items_timestamp      DateTime? @db.Timestamp(6)
 }
