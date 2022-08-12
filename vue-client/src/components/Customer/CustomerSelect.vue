@@ -35,7 +35,7 @@
         }}
         <br />
         {{ $store.state.selectedCustomer.address }} <br />
-        {{ $store.state.selectedCustomer.buzzer_number !== '' ? `Buzzer:` : '' }}{{
+        {{ $store.state.selectedCustomer.buzzer_number !== '' && $store.state.selectedCustomer.buzzer_number !== null ? `Buzzer:` : '' }}{{
             $store.state.selectedCustomer.buzzer_number
         }} <br />
         {{ $store.state.selectedCustomer.name }} <br />

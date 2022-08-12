@@ -176,7 +176,6 @@ export default {
       }
     },
     printOrder: async function (order_id) {
-      console.log("mmmm", order_id);
       const res = await axios.post("http://localhost:3000/post/print", {
         order_id,
         printKitchen: true,

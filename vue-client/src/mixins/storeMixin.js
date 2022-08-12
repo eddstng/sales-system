@@ -40,10 +40,10 @@ export default {
     storeMixinUpdateStorePriceDetails() {
       let specialItemNegatingDiscount = false;
       this.storeMixinClearStorePriceDetails();
-      let priceDetails = Object.assign({}, this.$store.state.priceDetails);
+      let priceDetails = Object.assign({}, this.$store.state.priceDetails); 
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
       Object.keys(selectedItems).forEach((key) => {
-        const itemPrice = parseFloat(selectedItems[key].node.price);
+        const itemPrice = selectedItems[key].node.price; 
         const itemQuantity = selectedItems[key].quantity;
         if (selectedItems[key].node.name_eng.includes("Dinner Special")) {
           specialItemNegatingDiscount = true;
