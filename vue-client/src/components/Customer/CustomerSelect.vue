@@ -68,7 +68,8 @@
           </v-btn>
           <v-btn x-large width="33%" v-on:click="
             selectedCustomerDetails.openClearSelectedCustomerConfirmationDialog = false;
-          selectedCustomerDetails.createCustomerFormDialog = true;
+            selectedCustomerDetails.createCustomerFormDialog = true;
+            selectedCustomerDetails.selectedCustomer = $store.state.selectedCustomer;
           ">
             <div>YES<br /></div>
           </v-btn>
