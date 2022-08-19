@@ -2,60 +2,72 @@ import { prisma } from '../../app'
 import { logInfo } from '../../logging/utils'
 import { thermalPrinterInterface } from '../../app';
 import * as dotenv from 'dotenv';
+import { orders_items_detail } from '@prisma/client';
 
 dotenv.config();
-
 const ThermalPrinter = require('node-thermal-printer').printer
 const Types = require('node-thermal-printer').types
-
 const english = /^[A-Za-z\d_-]+$/;
+let printer: any;
 
-export async function printOrder(printObj: { order_id: number, printClient: boolean, printKitchen: boolean }): Promise<void> {
-    try {
-        async function printImage() {
-            const printer = new ThermalPrinter({
-                type: Types.EPSON,
-                interface: thermalPrinterInterface,
-            });
-
-            const kitchenAndClientBills = await createKitchenAndClientBill(printObj.order_id)
-            const clientBillPath = kitchenAndClientBills.clientBillPath
-            const kitchenBillPath = kitchenAndClientBills.kitchenBillPath
-            const isDelivery = kitchenAndClientBills.isDelivery
-            const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
-            await delay(10)
-            if (printObj.printKitchen) {
-                await printer.printImage(kitchenBillPath);
-                printer.cut();
-                await printer.printImage(kitchenBillPath);
-                printer.cut();
-            }
-            if (printObj.printClient) {
-                await printer.printImage('./src/repositories/printOrder/header.png');
-                await printer.printImage(clientBillPath);
-                printer.cut();
-                if (isDelivery) {
-                    await printer.printImage('./src/repositories/printOrder/header.png');
-                    await printer.printImage(clientBillPath);
-                    printer.cut();
-                }
-            }
-            printer.execute();
-        }
-        if (process.env.PRINTING !== "false") {
-            printImage();
-        }
-        logInfo(printOrder.name, `[✓]`)
-        return;
-    } catch (err) {
-        logInfo(printOrder.name, `[✗] ${err}`)
-        throw err;
+function thermalPrinterSetup(): any {
+    if (printer === undefined) {
+        console.log('PRINTER INITIALIZED')
+        printer = new ThermalPrinter({
+            type: Types.EPSON,
+            interface: thermalPrinterInterface,
+        });
     }
 }
-export async function createKitchenAndClientBill(order_id: number): Promise<{ clientBillPath: string, kitchenBillPath: string, isDelivery: boolean }> {
+
+async function billSetup(
+    printer: any,
+    printObj: { order_id: number, printClient: boolean, printKitchen: boolean },
+    kitchenAndClientBills: { clientBillPath: string, kitchenBillPath: string, isDelivery: boolean }
+): Promise<void> {
+    if (printObj.printKitchen) {
+        await printer.printImage(kitchenAndClientBills.kitchenBillPath);
+        printer.cut();
+        await printer.printImage(kitchenAndClientBills.kitchenBillPath);
+        printer.cut();
+    }
+    if (printObj.printClient) {
+        await printer.printImage('./src/repositories/printOrder/header.png');
+        await printer.printImage(kitchenAndClientBills.clientBillPath);
+        printer.cut();
+    }
+    if (kitchenAndClientBills.isDelivery) {
+        await printer.printImage('./src/repositories/printOrder/header.png');
+        await printer.printImage(kitchenAndClientBills.clientBillPath);
+        printer.cut();
+    }
+}
+
+export async function createAndPrintOrderBill(printObj: { order_id: number, printClient: boolean, printKitchen: boolean }): Promise<void> {
     try {
+        const kitchenAndClientBills = await createKitchenAndClientBill(printObj.order_id)
+        thermalPrinterSetup()
+        printer.clear()
+        // The delay is required to give time for the image to save. 
         const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
-        await delay(100)
+        await delay(10)
+        await billSetup(printer, printObj, kitchenAndClientBills)
+        printer.execute();
+        logInfo(createAndPrintOrderBill.name, `[✓]`)
+        return;
+    } catch (err) {
+        logInfo(createAndPrintOrderBill.name, `[✗] ${err}`)
+        throw err;
+    }
+
+}
+
+// Hoping that this fixes the order_subtotal null issue.
+async function getOrderToPrint(order_id: number, retries: number, err?: unknown | undefined): Promise<orders_items_detail[]> {
+    if (retries > 3 && err) {
+        throw new Error(err as string)
+    }
+    try {
         const res = await prisma.orders_items_detail.findMany(
             {
                 where: {
@@ -63,6 +75,18 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
                 }
             }
         )
+        return res
+    } catch (err) {
+        console.log('=============================')
+        console.log(`ALERT: prisma.orders_items_detail.findMany has failed during createAndPrintOrderBill retrying. ${retries++}/3`)
+        console.log('=============================')
+        return getOrderToPrint(order_id, retries++, err)
+    }
+}
+
+export async function createKitchenAndClientBill(order_id: number): Promise<{ clientBillPath: string, kitchenBillPath: string, isDelivery: boolean }> {
+    try {
+        const res = await getOrderToPrint(order_id, 0)
 
         let orderTypeString = 'PICK UP'
         if (res[0].order_type === 0) {
@@ -90,13 +114,12 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
         ${res[0].order_id} \n ${orderTypeString}
         ${res[0].customer_phone}
         ` + `${res[0].order_type === 2 ? `${res[0].customer_address}
-        ` : ''}` + `${buzzerNumber}`+`${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}
+        ` : ''}` + `${buzzerNumber}` + `${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}
         -----------------------`;
 
         res.forEach((element: any) => {
             let kitchenCustomizationString: string = '';
             if (element.orders_items_customizations !== null) {
-                console.log(element)
                 element.orders_items_customizations.forEach((customization: { name_eng: string, name_chn: string }) => {
                     if (english.test(element.item_name_chn)) { // To handle formatting for items such as Dinner Specials.
                         kitchenCustomizationString += `\n⤷${customization.name_chn === '' ? '___________' : customization.name_chn}\n\n\n`
@@ -106,9 +129,9 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
                 })
             }
 
-            if (element.item_id === process.env.CUSTOM_ITEM_ID) {
-                kitchenBillString += `
 
+            if (process.env.CUSTOM_ITEM_ID && element.item_id === parseInt(process.env.CUSTOM_ITEM_ID)) {
+                kitchenBillString += `
 
                 x${element.orders_items_quantity}${kitchenCustomizationString ? kitchenCustomizationString : ''} ⊵____________
                 
@@ -149,7 +172,7 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
         kitchenBillString += `
 
         `
-
+        
         clientBillString += `
         -----------------------
         Number of Items: ${res[0].items_quantity_total}
@@ -175,12 +198,9 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
 
         const imageDataURI = require('image-data-uri');
         imageDataURI.outputFile(kitchenBillImageURI, kitchenBillPath)
-            .then((res: any) => console.log(res))
         imageDataURI.outputFile(clientBillImageURI, clientBillPath)
-            .then((res: any) => console.log(res))
 
         logInfo(createKitchenAndClientBill.name, `[✓]`)
-        console.log()
         return { clientBillPath, kitchenBillPath, isDelivery: res[0].order_type === 2 };
     } catch (err) {
         logInfo(createKitchenAndClientBill.name, `[✗] ${err}`)
