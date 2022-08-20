@@ -32,10 +32,10 @@ export async function getAllItems(): Promise<Record<string, unknown>[]> {
         },
       ],
     });
-    logInfo(getAllItems.name, `[✓]`)
+    logInfo(getAllItems.name, `Success!`)
     return allItems;
   } catch (err) {
-    logInfo(getAllItems.name, `[✗] ${err}`)
+    logInfo(getAllItems.name, `${err}`)
     throw err;
   }
 }
@@ -51,10 +51,10 @@ export async function getOneItem(id: number): Promise<items> {
       await validateClassFields(Item, <JSON>(<unknown>oneItem));
       return oneItem;
     }
-    logInfo(getOneItem.name, `[✓] Item Record ID:${id} retrieved.`)
+    logInfo(getOneItem.name, `Item Record ID:${id} retrieved.`)
     return <items>(<unknown>[]);
   } catch (err) {
-    logInfo(getOneItem.name, `[✗] ${err}`)
+    logInfo(getOneItem.name, `${err}`)
     throw err;
   }
 }
@@ -65,9 +65,9 @@ export async function createItem(body: JSON) {
     const res = await prisma.items.create({
       data: <Prisma.itemsCreateInput>body,
     });
-    logInfo(createItem.name, `[✓] Item Created: {id: ${res.id}, price: ${res.price}, name_eng: ${res.name_eng}, name_chn: ${res.name_chn}, category: ${res.category}}`)
+    logInfo(createItem.name, `Item Created: {id: ${res.id}, price: ${res.price}, name_eng: ${res.name_eng}, name_chn: ${res.name_chn}, category: ${res.category}}`)
   } catch (err) {
-    logError(createItem.name, err, `[✗]`);
+    logError(createItem.name, `${err}`);
     throw new Error(`${err} `);
   }
 }
@@ -77,9 +77,9 @@ export async function deleteOneItem(id: number): Promise<void> {
     const res = await prisma.items.delete({
       where: { id: id },
     });
-    logInfo(deleteOneItem.name, `[✓] Item Deleted: {id: ${res.id}, price: ${res.price}, name_eng: ${res.name_eng}, name_chn: ${res.name_chn}, category: ${res.category}}`)
+    logInfo(deleteOneItem.name, `Item Deleted: {id: ${res.id}, price: ${res.price}, name_eng: ${res.name_eng}, name_chn: ${res.name_chn}, category: ${res.category}}`)
   } catch (err) {
-    logError(deleteOneItem.name, err, `[✗]`);
+    logError(deleteOneItem.name, `${err}`);
     throw new Error(`${err} `);
   }
 }
@@ -99,9 +99,9 @@ export async function updateItem(
         category: item.category,
       },
     });
-    logInfo(updateItem.name, `[✓] Item Updated: {id: ${res.id}, price: ${res.price}, name_eng: ${res.name_eng}, name_chn: ${res.name_chn}, category: ${res.category}}`)
+    logInfo(updateItem.name, `Item Updated: {id: ${res.id}, price: ${res.price}, name_eng: ${res.name_eng}, name_chn: ${res.name_chn}, category: ${res.category}}`)
   } catch (err) {
-    logError(updateItem.name, err, `[✗]`);
+    logError(updateItem.name, `${err}`);
     throw new Error(`${err} `);
   }
 }

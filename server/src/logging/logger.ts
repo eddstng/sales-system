@@ -20,7 +20,17 @@ const customColours = {
 winston.addColors(customColours.colors);
 
 const customFormat = printf(({ level, message, label, timestamp }) => {
-    return `${timestamp} [${level}] | [${label}]: ${message}`;
+    if (level === "\u001b[32minfo\u001b[39m") {
+        return `[🟢] ${timestamp} [${level}] | [${label}]: ${message}`;
+
+    }
+    if (level === "\u001b[33mwarn\u001b[39m") {
+        return `[🟡] ${timestamp} [${level}] | [${label}]: ${message}`;
+    }
+    if (level === '\u001b[31merror\u001b[39m') {
+        return `[🔴] ${timestamp} [${level}]| [${label}]: ${message}`;
+    }
+    return `${timestamp} [${level}] ${level == '\u001b[31merror\u001b[39m' ? '| ' : ' | '} [${label}]: ${message}`;
 });
 
 const config = {

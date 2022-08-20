@@ -46,7 +46,7 @@ CREATE TABLE customers (
 
 CREATE TABLE orders_items (
     id SERIAL NOT NULL PRIMARY KEY,
-    quantity INTEGER,
+    quantity FLOAT,
     customizations jsonb,
     custom_price FLOAT,
     custom_name VARCHAR(50),

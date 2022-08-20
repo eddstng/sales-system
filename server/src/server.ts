@@ -10,7 +10,7 @@ import { createOrder, deleteOneOrder, getAllOrders, getOneOrder, updateOrder } f
 import { getAllOrdersItems, createOrdersItems, updateOrdersItems, deleteOneOrdersItems, getOneOrdersItems, createOrdersItemsBulk, deleteAllOrdersItemsWithOrderId } from './repositories/ordersItems/ordersItems';
 import { getAllOrdersHistory } from './repositories/ordersHistory/ordersHistory';
 import { getAllOrdersItemsDetail, getAllOrdersItemsDetailWithOrderId } from './repositories/ordersItemsDetail/ordersItemsDetail';
-import { printOrder } from './repositories/printOrder/printOrder';
+import { createAndPrintOrderBill } from './repositories/printOrder/printOrder';
 import { logInfo } from './logging/utils';
 
 export default function startServer(): void {
@@ -34,7 +34,7 @@ export default function startServer(): void {
     app.get('/get/items/all', async (_req, res) => {
         try {
             res.status(200).json(await getAllItems())
-            logInfo('clientConnected', `[✓]`)
+            logInfo('clientConnected', `Success!`)
         } catch (err: unknown) {
             res.status(500).send(`${err as string}`);
         }
@@ -169,9 +169,9 @@ export default function startServer(): void {
     })
     app.post('/post/ordersitems/create/bulk', async (req, res) => {
         try {
-            console.log('===============/post/ordersitems/create/bulk-req.body-START')
-            console.log(req.body)
-            console.log('===============/post/ordersitems/create/bulk-req.body-END')
+            // console.log('===============/post/ordersitems/create/bulk-req.body-START')
+            // console.log(req.body)
+            // console.log('===============/post/ordersitems/create/bulk-req.body-END')
             res.status(200).json(await createOrdersItemsBulk(req.body))
         } catch (err: unknown) {
             res.status(500).send(`${err as string}`);
@@ -228,7 +228,7 @@ export default function startServer(): void {
 
     app.post('/post/print', async (req, res) => {
         try {
-            await printOrder(req.body)
+            await createAndPrintOrderBill(req.body)
             res.status(200)
         } catch (err: unknown) {
             res.status(500).send(`${err as string}`);

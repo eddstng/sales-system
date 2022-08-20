@@ -173,6 +173,7 @@ export default {
       this.storeMixinUpdateStorePriceDetails();
       return this.$store.state.priceDetails
     },
+    // This function may not be necessary. It seems that the issue is with the writing speed into the database which has been dealt with by retrying prisma query to orders_items.
     ensurePriceDetailsAreCorrect: function (priceDetails) {
       for (const value of Object.entries(priceDetails)) {
         if (value == null || isNaN(value)) {

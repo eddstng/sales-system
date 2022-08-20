@@ -48,7 +48,7 @@ model orders {
 
 model orders_items {
   id             Int       @id @default(autoincrement())
-  quantity       Int?
+  quantity       Float?
   customizations Json?
   custom_price   Float?
   custom_name    String?   @db.VarChar(30)
@@ -98,7 +98,7 @@ model orders_items_detail {
   item_custom_name            String?   @db.VarChar(30)
   item_price                  Float?
   items_quantity_total        Int
-  orders_items_quantity       Int?
+  orders_items_quantity       Float?
   orders_items_customizations Json?
   orders_items_timestamp      DateTime? @db.Timestamp(6)
 }

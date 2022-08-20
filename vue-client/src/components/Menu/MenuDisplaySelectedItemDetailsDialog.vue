@@ -1,10 +1,7 @@
 <template>
   <div>
-    <v-dialog
-      v-if="menuDisplayItemDetails.removeSelectedItem.node !== undefined"
-      v-model="menuDisplayItemDetails.selectedItemDialog"
-      width="1000px"
-    >
+    <v-dialog v-if="menuDisplayItemDetails.removeSelectedItem.node !== undefined"
+      v-model="menuDisplayItemDetails.selectedItemDialog" width="1000px">
       <v-card>
         <div>
           <h3 class="text-center pt-10 pb-5">
@@ -18,12 +15,8 @@
             {{ menuDisplayItemDetails.removeSelectedItem.node.name_chn }}
             <br />
             <br />
-            <div
-              class="item-details-customizations"
-              v-for="customization in menuDisplayItemDetails.removeSelectedItem
-                .customizations"
-              v-bind:key="customization.name_eng"
-            >
+            <div class="item-details-customizations" v-for="customization in menuDisplayItemDetails.removeSelectedItem
+            .customizations" v-bind:key="customization.name_eng">
               <v-container>
                 <v-row no-gutters>
                   <v-col>
@@ -33,13 +26,9 @@
                     </div>
                   </v-col>
                   <div class="pa-1">
-                    <v-btn
-                      small
-                      width="5px"
-                      v-on:click="
-                        removeCustomizationFromSelectedItem(customization)
-                      "
-                    >
+                    <v-btn small width="5px" v-on:click="
+                      removeCustomizationFromSelectedItem(customization)
+                    ">
                       <div>X<br /></div>
                     </v-btn>
                   </div>
@@ -53,68 +42,44 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            x-large
-            width="15%"
-            v-on:click="
-              closeSelectedItemDialog();
-              menuDisplayItemDetails.removeSelectedItem = {};
-            "
-          >
+          <v-btn x-large width="15%" v-on:click="
+  closeSelectedItemDialog();
+menuDisplayItemDetails.removeSelectedItem = {};
+          ">
             <div>CANCEL<br /></div>
           </v-btn>
-          <v-btn
-            x-large
-            width="15%"
-            v-on:click="openCustomizeSelectedItemDialog(true)"
-          >
+          <v-btn x-large width="15%" v-on:click="openCustomizeSelectedItemDialog(true)">
             <div>CUSTOMIZE<br /></div>
           </v-btn>
-          <v-btn
-            x-large
-            width="15%"
-            v-on:click="
-              closeSelectedItemDialog();
-              removeSelectedItemAll(menuDisplayItemDetails.removeSelectedItem);
-              menuDisplayItemDetails.removeSelectedItem = {};
-              storeMixinSumSelectedItemsQuantity();
-            "
-          >
+          <v-btn x-large width="15%" v-on:click="
+  closeSelectedItemDialog();
+removeSelectedItemAll(menuDisplayItemDetails.removeSelectedItem);
+menuDisplayItemDetails.removeSelectedItem = {};
+storeMixinSumSelectedItemsQuantity();
+          ">
             <div>REMOVE ALL<br /></div>
           </v-btn>
-          <v-btn
-            x-large
-            width="15%"
-            v-on:click="
-              closeSelectedItemDialog();
-              removeSelectedItemOne(menuDisplayItemDetails.removeSelectedItem);
-              menuDisplayItemDetails.removeSelectedItem = {};
-              storeMixinSumSelectedItemsQuantity();
-            "
-          >
+          <v-btn x-large width="15%" v-on:click="
+  closeSelectedItemDialog();
+removeSelectedItemOne(menuDisplayItemDetails.removeSelectedItem);
+menuDisplayItemDetails.removeSelectedItem = {};
+storeMixinSumSelectedItemsQuantity();
+          ">
             <div>REMOVE 1<br /></div>
           </v-btn>
-          <v-btn
-            x-large
-            width="19.6%"
-            v-on:click="
-              closeSelectedItemDialog();
-              addSelectedItemOne(menuDisplayItemDetails.removeSelectedItem);
-              menuDisplayItemDetails.removeSelectedItem = {};
-              storeMixinSumSelectedItemsQuantity();
-            "
-          >
+          <v-btn x-large width="19.6%" v-on:click="
+  closeSelectedItemDialog();
+addSelectedItemOne(menuDisplayItemDetails.removeSelectedItem);
+menuDisplayItemDetails.removeSelectedItem = {};
+storeMixinSumSelectedItemsQuantity();
+          ">
             <div>ADD 1<br /></div>
           </v-btn>
-          <v-btn
-            x-large
-            width="15%"
-            v-on:click="
-              closeSelectedItemDialog();
-              storeMixinSumSelectedItemsQuantity();
-              toggleUpdateQuantityDialogTrue('ADD');
-            "
-          >
+          <v-btn x-large width="15%" v-on:click="
+  closeSelectedItemDialog();
+storeMixinSumSelectedItemsQuantity();
+toggleUpdateQuantityDialogTrue('ADD');
+          ">
             <div>UPDATE QTY<br /></div>
           </v-btn>
         </v-card-actions>
@@ -125,57 +90,38 @@
         <h2 class="text-center pt-8 pb-16">UPDATE ITEM QUANTITY</h2>
         <v-row class="justify-center mb-3">
           <v-col cols="12" md="1">
-            <v-text-field
-              reverse
-              v-model="updateQuantityDialogItem.quantity"
-              label="Quantity"
-              required
-              autofocus
-            ></v-text-field>
+            <v-text-field reverse v-model="updateQuantityDialogItem.quantity" label="Quantity" required autofocus>
+            </v-text-field>
           </v-col>
         </v-row>
         <div class="ml-20 pb-16">
           <v-row>
-            <v-btn
-              class="mt-1 ml-1 mb-1 mr-1"
-              x-large
-              v-for="intValue in updateQuantityDialogNumberPadRow1"
-              v-bind:key="intValue"
-              v-on:click="handleKeypad(intValue)"
-            >
+            <v-btn class="mt-1 ml-1 mb-1 mr-1" x-large v-for="intValue in updateQuantityDialogNumberPadRow1"
+              v-bind:key="intValue" v-on:click="handleKeypad(intValue)">
               <div>{{ intValue }}<br /></div>
             </v-btn>
           </v-row>
           <v-row>
-            <v-btn
-              class="mt-1 ml-1 mb-1 mr-1"
-              x-large
-              v-for="intValue in updateQuantityDialogNumberPadRow2"
-              v-bind:key="intValue"
-              v-on:click="handleKeypad(intValue)"
-            >
+            <v-btn class="mt-1 ml-1 mb-1 mr-1" x-large v-for="intValue in updateQuantityDialogNumberPadRow2"
+              v-bind:key="intValue" v-on:click="handleKeypad(intValue)">
               <div>{{ intValue }}<br /></div>
             </v-btn>
           </v-row>
           <v-row>
-            <v-btn
-              class="mt-1 ml-1 mb-1 mr-1"
-              x-large
-              v-for="intValue in updateQuantityDialogNumberPadRow3"
-              v-bind:key="intValue"
-              v-on:click="handleKeypad(intValue)"
-            >
+            <v-btn class="mt-1 ml-1 mb-1 mr-1" x-large v-for="intValue in updateQuantityDialogNumberPadRow3"
+              v-bind:key="intValue" v-on:click="handleKeypad(intValue)">
               <div>{{ intValue }}<br /></div>
             </v-btn>
           </v-row>
           <v-row>
-            <v-btn
-              class="mt-1 ml-1 mb-1 mr-1"
-              x-large
-              v-for="intValue in updateQuantityDialogNumberPadRow4"
-              v-bind:key="intValue"
-              v-on:click="handleKeypad(intValue)"
-            >
+            <v-btn class="mt-1 ml-1 mb-1 mr-1" x-large v-for="intValue in updateQuantityDialogNumberPadRow4"
+              v-bind:key="intValue" v-on:click="handleKeypad(intValue)">
+              <div>{{ intValue }}<br /></div>
+            </v-btn>
+          </v-row>
+          <v-row>
+            <v-btn class="mt-1 ml-05 mb-1 mr-1" x-large v-for="intValue in updateQuantityDialogNumberPadRow5"
+              v-bind:key="intValue" v-on:click="handleKeypad(intValue)">
               <div>{{ intValue }}<br /></div>
             </v-btn>
           </v-row>
@@ -183,25 +129,17 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            x-large
-            width="50%"
-            v-on:click="
-              updateQuantityDialog = false;
-              menuDisplayItemDetails.selectedItemDialog = false;
-            "
-          >
+          <v-btn x-large width="50%" v-on:click="
+  updateQuantityDialog = false;
+menuDisplayItemDetails.selectedItemDialog = false;
+          ">
             <div>NO<br /></div>
           </v-btn>
-          <v-btn
-            x-large
-            width="50%"
-            v-on:click="
-              updateSelectedItemAmount(updateQuantityDialogItem);
-              updateQuantityDialog = false;
-              menuDisplayItemDetails.selectedItemDialog = false;
-            "
-          >
+          <v-btn x-large width="50%" v-on:click="
+  updateSelectedItemAmount(updateQuantityDialogItem);
+updateQuantityDialog = false;
+menuDisplayItemDetails.selectedItemDialog = false;
+          ">
             <div>YES<br /></div>
           </v-btn>
         </v-card-actions>
@@ -213,6 +151,11 @@
 .ml-20 {
   margin-left: 36%;
 }
+
+.ml-05 {
+  margin-left: 15.5%;
+}
+
 .item-details-customizations {
   margin-left: 30%;
   margin-right: 25%;
@@ -231,6 +174,7 @@ export default {
       updateQuantityDialogNumberPadRow2: [4, 5, 6],
       updateQuantityDialogNumberPadRow3: [7, 8, 9],
       updateQuantityDialogNumberPadRow4: ["CLR", 0, "🠔"],
+      updateQuantityDialogNumberPadRow5: [0.5],
       updateQuantityDialogItem: {},
     };
   },
@@ -254,9 +198,11 @@ export default {
       if (buttonValue === "🠔") {
         this.handleKeypadBackspace(buttonValue);
       }
-
       if (buttonValue === "CLR") {
         this.updateQuantityDialogItem.quantity = 0;
+      }
+      if (buttonValue === 0.5) {
+        this.handleKeypadNumber('.5');
       }
       if (!isNaN(buttonValue)) {
         this.handleKeypadNumber(buttonValue);
@@ -276,7 +222,7 @@ export default {
       let quantityAsStringValue =
         this.updateQuantityDialogItem.quantity.toString();
       quantityAsStringValue = quantityAsStringValue + buttonValue;
-      const quantityAsIntValue = parseInt(quantityAsStringValue);
+      const quantityAsIntValue = parseFloat(quantityAsStringValue);
       this.updateQuantityDialogItem = Object.assign(
         {},
         this.menuDisplayItemDetails.removeSelectedItem

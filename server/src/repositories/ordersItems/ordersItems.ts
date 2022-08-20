@@ -30,10 +30,10 @@ export async function getAllOrdersItems(): Promise<Record<string, unknown>[]> {
                 ]
             }
         )
-        logInfo(getAllOrdersItems.name, `[✓]`)
+        logInfo(getAllOrdersItems.name, `Success!`)
         return allOrdersItemss;
     } catch (err) {
-        logInfo(getAllOrdersItems.name, `[✗] ${err}`)
+        logInfo(getAllOrdersItems.name, `${err}`)
         throw err;
     }
 }
@@ -49,10 +49,10 @@ export async function getOneOrdersItems(id: number): Promise<orders_items> {
             await validateClassFields(OrdersItems, <JSON><unknown>oneOrdersItems)
             return oneOrdersItems
         }
-        logInfo(getOneOrdersItems.name, `[✓] OrdersItems Record ID:${id} retrieved.`)
+        logInfo(getOneOrdersItems.name, `OrdersItems Record ID:${id} retrieved.`)
         return <orders_items><unknown>[]
     } catch (err) {
-        logInfo(getOneOrdersItems.name, `[✗] ${err}`)
+        logInfo(getOneOrdersItems.name, `${err}`)
         throw err;
     }
 }
@@ -61,9 +61,9 @@ export async function createOrdersItems(body: JSON) {
     try {
         await validateClassFields(OrdersItems, body)
         const res = await prisma.orders_items.create({ data: <Prisma.orders_itemsCreateInput>body })
-        logInfo(createOrdersItems.name, `[✓] OrdersItems Created: {id: ${res.id}, order_id: ${res.order_id}, item_id: ${res.item_id}, customizations: ${res.customizations}`)
+        logInfo(createOrdersItems.name, `OrdersItems Created: {id: ${res.id}, order_id: ${res.order_id}, item_id: ${res.item_id}, customizations: ${res.customizations}`)
     } catch (err) {
-        logError(createOrdersItems.name, err, `[✗]`);
+        logError(createOrdersItems.name, `${err}`);
         throw new Error(`${err} `)
     }
 }
@@ -75,9 +75,9 @@ export async function createOrdersItemsBulk(items: JSON[]) {
         })
         const res = await prisma.orders_items.createMany({ data: <Prisma.orders_itemsCreateManyInput>items })
 
-        logInfo(createOrdersItemsBulk.name, `[✓] OrdersItemsBulk Created: {id: ${res})`)
+        logInfo(createOrdersItemsBulk.name, `OrdersItemsBulk Created: {id: ${res})`)
     } catch (err) {
-        logError(createOrdersItemsBulk.name, err, `[✗]`);
+        logError(createOrdersItemsBulk.name, `${err}`);
         throw new Error(`${err} `)
     }
 }
@@ -87,9 +87,9 @@ export async function deleteOneOrdersItems(id: number): Promise<void> {
         const res = await prisma.orders_items.delete({
             where: { id: id },
         })
-        logInfo(deleteOneOrdersItems.name, `[✓] OrdersItems Deleted: {id: ${res.id}, total: ${res.order_id}, customer_id: ${res.item_id}`)
+        logInfo(deleteOneOrdersItems.name, `OrdersItems Deleted: {id: ${res.id}, total: ${res.order_id}, customer_id: ${res.item_id}`)
     } catch (err) {
-        logError(deleteOneOrdersItems.name, err, `[✗]`);
+        logError(deleteOneOrdersItems.name, `${err}`);
         throw new Error(`${err} `)
     }
 }
@@ -99,9 +99,9 @@ export async function deleteAllOrdersItemsWithOrderId(id: number): Promise<void>
         const res = await prisma.orders_items.deleteMany({
             where: { order_id: id },
         })
-        logInfo(deleteOneOrdersItems.name, `[✓] OrdersItems Deleted: {id: ${res}`)
+        logInfo(deleteOneOrdersItems.name, `OrdersItems Deleted: {id: ${res}`)
     } catch (err) {
-        logError(deleteOneOrdersItems.name, err, `[✗]`);
+        logError(deleteOneOrdersItems.name, `${err}`);
         throw new Error(`${err} `)
     }
 }
@@ -115,9 +115,9 @@ export async function updateOrdersItems(id: number, order: Prisma.orders_itemsUn
                 item_id: order.item_id
             },
         })
-        logInfo(updateOrdersItems.name, `[✓] OrdersItems Updated: {id: ${res.id}, total: ${res.order_id}, item_id: ${res.item_id}, customizations: ${res.customizations}`)
+        logInfo(updateOrdersItems.name, `OrdersItems Updated: {id: ${res.id}, total: ${res.order_id}, item_id: ${res.item_id}, customizations: ${res.customizations}`)
     } catch (err) {
-        logError(updateOrdersItems.name, err, `[✗]`);
+        logError(updateOrdersItems.name, `${err}`);
         throw new Error(`${err} `)
     }
 }

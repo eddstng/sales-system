@@ -47,10 +47,10 @@ export async function getAllCustomers(): Promise<Record<string, unknown>[]> {
                 ]
             }
         )
-        logInfo(getAllCustomers.name, `[✓]`)
+        logInfo(getAllCustomers.name, `Success!`)
         return allCustomers;
     } catch (err) {
-        logInfo(getAllCustomers.name, `[✗] ${err}`)
+        logInfo(getAllCustomers.name, `${err}`)
         throw err;
     }
 }
@@ -66,10 +66,10 @@ export async function getOneCustomer(id: number): Promise<customers> {
             await validateClassFields(Customer, <JSON><unknown>oneCustomer)
             return oneCustomer
         }
-        logInfo(getOneCustomer.name, `[✓] Customer Record ID:${id} retrieved.`)
+        logInfo(getOneCustomer.name, `Customer Record ID:${id} retrieved.`)
         return <customers><unknown>[]
     } catch (err) {
-        logInfo(getOneCustomer.name, `[✗] ${err}`)
+        logInfo(getOneCustomer.name, `${err}`)
         throw err;
     }
 }
@@ -91,10 +91,10 @@ export async function createCustomer(body: JSON): Promise<customers> {
         }
 
         const res = await prisma.customers.create({ data: <Prisma.customersCreateInput>customer })
-        logInfo(createCustomer.name, `[✓] Customer Created: {id: ${res.id}, name: ${res.name}, phone: ${res.phone}, address: ${res.address}, note: ${res.note}}`)
+        logInfo(createCustomer.name, `Customer Created: {id: ${res.id}, name: ${res.name}, phone: ${res.phone}, address: ${res.address}, note: ${res.note}}`)
         return res
     } catch (err) {
-        logError(createCustomer.name, err, `[✗]`);
+        logError(createCustomer.name, `${err}`);
         throw err;
     }
 }
@@ -104,9 +104,9 @@ export async function deleteOneCustomer(id: number): Promise<void> {
         const res = await prisma.customers.delete({
             where: { id: id },
         })
-        logInfo(deleteOneCustomer.name, `[✓] Customer Deleted: {id: ${res.id}, name: ${res.name}, phone: ${res.phone}, address: ${res.address}, note: ${res.note}}`)
+        logInfo(deleteOneCustomer.name, `Customer Deleted: {id: ${res.id}, name: ${res.name}, phone: ${res.phone}, address: ${res.address}, note: ${res.note}}`)
     } catch (err) {
-        logError(deleteOneCustomer.name, err, `[✗]`);
+        logError(deleteOneCustomer.name, `${err}`);
         throw err;
     }
 }
@@ -128,10 +128,10 @@ export async function updateCustomer(id: number, customer: Prisma.customersUpdat
             where: { id: id },
             data: customerDetails,
         })
-        logInfo(updateCustomer.name, `[✓] Customer Updated: {id: ${res.id}, name: ${res.name}, phone: ${res.phone}, address: ${res.address}, note: ${res.note}}`)
+        logInfo(updateCustomer.name, `Customer Updated: {id: ${res.id}, name: ${res.name}, phone: ${res.phone}, address: ${res.address}, note: ${res.note}}`)
         return customerDetails;
-    } catch (err) {
-        logError(updateCustomer.name, err, `[✗]`);
+    } catch (err: unknown) {
+        logError(updateCustomer.name, `${err}`);
         throw err;
     }
 }

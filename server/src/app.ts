@@ -2,6 +2,7 @@ import startServer from './server'
 import { PrismaClient } from "@prisma/client"
 import 'reflect-metadata';
 import * as dotenv from 'dotenv';
+import { logger } from './logging/logger';
 
 dotenv.config();
 
@@ -18,15 +19,16 @@ async function getThermalPrinterInterface(): Promise<string> {
     try {
         const { stdout } = await exec('ls /dev/usb | grep lp');
         thermalPrinterInterface = `/dev/usb/${stdout.trim()}`
-        console.log(`Success: Found thermal printer after ${printerConnectionRetries} retries.`)
+        logger.info(`[server] Found thermal printer after ${printerConnectionRetries} retries.`)
     } catch (err) {
         if ((err.message).includes('Command failed: ls /dev/usb | grep lp') && printerConnectionRetries < 10) {
             printerConnectionRetries++;
             retryDelay += 1000;
             const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
             await delay(retryDelay)
-            console.log(`Warning: Unable to find thermal printer interface after ${printerConnectionRetries}/10 retries.`)
-            console.log(`Warning: Attempting search again after ${retryDelay / 1000} seconds.`)
+            logger.warn(`[server] Unable to find thermal printer interface after ${printerConnectionRetries}/10 retries.`)
+            logger.warn(`[server] Unable to find thermal printer interface after ${printerConnectionRetries}/10 retries.`)
+            logger.warn(`[server] Attempting search again after ${retryDelay / 1000} seconds.`)
             thermalPrinterInterface = await getThermalPrinterInterface()
         }
     }

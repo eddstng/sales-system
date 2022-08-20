@@ -32,10 +32,10 @@ export async function getAllOrders(): Promise<Record<string, unknown>[]> {
                 ]
             }
         )
-        logInfo(getAllOrders.name, `[✓]`)
+        logInfo(getAllOrders.name, `Success!`)
         return allOrders;
     } catch (err) {
-        logInfo(getAllOrders.name, `[✗] ${err}`)
+        logInfo(getAllOrders.name, `${err}`)
         throw err;
     }
 }
@@ -51,10 +51,10 @@ export async function getOneOrder(id: number): Promise<orders> {
             await validateClassFields(Order, <JSON><unknown>oneOrder)
             return oneOrder
         }
-        logInfo(getOneOrder.name, `[✓] Order Record ID:${id} retrieved.`)
+        logInfo(getOneOrder.name, `Order Record ID:${id} retrieved.`)
         return <orders><unknown>[]
     } catch (err) {
-        logInfo(getOneOrder.name, `[✗] ${err}`)
+        logInfo(getOneOrder.name, `${err}`)
         throw err;
     }
 }
@@ -63,10 +63,10 @@ export async function createOrder(body: JSON): Promise<orders> {
     try {
         await validateClassFields(Order, body)
         const res = await prisma.orders.create({ data: <Prisma.ordersCreateInput>body })
-        logInfo(createOrder.name, `[✓] Order Created: {id: ${res.id}, total: ${res.total}, customer_id: ${res.customer_id}, timestamp: ${res.timestamp}}, type: ${res.type}}`)
+        logInfo(createOrder.name, `Order Created: {id: ${res.id}, total: ${res.total}, customer_id: ${res.customer_id}, timestamp: ${res.timestamp}}, type: ${res.type}}`)
         return res;
     } catch (err) {
-        logError(createOrder.name, err, `[✗]`);
+        logError(createOrder.name, `${err}`);
         throw new Error(`${err} `)
     }
 }
@@ -76,9 +76,9 @@ export async function deleteOneOrder(id: number): Promise<void> {
         const res = await prisma.orders.delete({
             where: { id: id },
         })
-        logInfo(deleteOneOrder.name, `[✓] Order Deleted: {id: ${res.id}, total: ${res.total}, customer_id: ${res.customer_id}, timestamp: ${res.timestamp}}, type: ${res.type}}`)
+        logInfo(deleteOneOrder.name, `Order Deleted: {id: ${res.id}, total: ${res.total}, customer_id: ${res.customer_id}, timestamp: ${res.timestamp}}, type: ${res.type}}`)
     } catch (err) {
-        logError(deleteOneOrder.name, err, `[✗]`);
+        logError(deleteOneOrder.name, `${err}`);
         throw new Error(`${err} `)
     }
 }
@@ -99,9 +99,9 @@ export async function updateOrder(id: number, order: Prisma.ordersUncheckedUpdat
                 discount: order.discount
             },
         })
-        logInfo(updateOrder.name, `[✓] Order Updated: {id: ${res.id}, total: ${res.total}, customer_id: ${res.customer_id}, timestamp: ${res.timestamp}}, type: ${res.type}}`)
+        logInfo(updateOrder.name, `Order Updated: {id: ${res.id}, total: ${res.total}, customer_id: ${res.customer_id}, timestamp: ${res.timestamp}}, type: ${res.type}}`)
     } catch (err) {
-        logError(updateOrder.name, err, `[✗]`);
+        logError(updateOrder.name, `${err}`);
         throw new Error(`${err} `)
     }
 }

@@ -12,10 +12,10 @@ export async function getAllOrdersItemsDetail(): Promise<Record<string, unknown>
                 ]
             }
         )
-        logInfo(getAllOrdersItemsDetail.name, `[✓]`)
+        logInfo(getAllOrdersItemsDetail.name, `Success!`)
         return allOrdersHistory;
     } catch (err) {
-        logInfo(getAllOrdersItemsDetail.name, `[✗] ${err}`)
+        logInfo(getAllOrdersItemsDetail.name, `${err}`)
         throw err;
     }
 }
@@ -34,13 +34,13 @@ export async function getAllOrdersItemsDetailWithOrderId(order_id: number): Prom
                 }
             }
         )
-        logInfo(getAllOrdersItemsDetailWithOrderId.name, `[✓]`)
+        logInfo(getAllOrdersItemsDetailWithOrderId.name, `Success!`)
         console.log('===========allOrdersHistoryWithOrderId-START')
         console.log(allOrdersHistoryWithOrderId)
         console.log('===========allOrdersHistoryWithOrderId-END')
         return allOrdersHistoryWithOrderId;
     } catch (err) {
-        logInfo(getAllOrdersItemsDetailWithOrderId.name, `[✗] ${err}`)
+        logInfo(getAllOrdersItemsDetailWithOrderId.name, `${err}`)
         throw err;
     }
 }
