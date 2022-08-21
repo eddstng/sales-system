@@ -9,3 +9,4 @@ printing/header/
 server/src/repositories/printOrder/bills/
 server/init.sql
 new-server
+vue-client/src/components/Customer/streets.js

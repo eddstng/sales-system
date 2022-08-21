@@ -13,22 +13,21 @@ export class Customer {
     @IsNotEmpty()
     phone!: string | Prisma.NullableStringFieldUpdateOperationsInput | null | undefined
 
-    
     @IsOptional()
     buzzer_number?: string | Prisma.NullableStringFieldUpdateOperationsInput | null | undefined
-    
+
     @IsOptional()
     unit_number?: string | Prisma.NullableStringFieldUpdateOperationsInput | null | undefined
-    
+
     @IsOptional()
     street_number?: number | Prisma.NullableIntFieldUpdateOperationsInput | null | undefined
-    
+
     @IsOptional()
     street_name?: string | Prisma.NullableStringFieldUpdateOperationsInput | null | undefined
-    
+
     @IsOptional()
     address?: string | null;
-    
+
     @IsOptional()
     note?: string | Prisma.NullableStringFieldUpdateOperationsInput | null | undefined
 
@@ -89,7 +88,6 @@ export async function createCustomer(body: JSON): Promise<customers> {
             ...body,
             address: buildCustomerAddress(body as unknown as Customer)
         }
-
         const res = await prisma.customers.create({ data: <Prisma.customersCreateInput>customer })
         logInfo(createCustomer.name, `Customer Created: {id: ${res.id}, name: ${res.name}, phone: ${res.phone}, address: ${res.address}, note: ${res.note}}`)
         return res
@@ -129,7 +127,7 @@ export async function updateCustomer(id: number, customer: Prisma.customersUpdat
             data: customerDetails,
         })
         logInfo(updateCustomer.name, `Customer Updated: {id: ${res.id}, name: ${res.name}, phone: ${res.phone}, address: ${res.address}, note: ${res.note}}`)
-        return customerDetails;
+        return { id, ...customerDetails };
     } catch (err: unknown) {
         logError(updateCustomer.name, `${err}`);
         throw err;

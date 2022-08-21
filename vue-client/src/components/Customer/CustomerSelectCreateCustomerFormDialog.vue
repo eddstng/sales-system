@@ -56,17 +56,6 @@
               }}
               - {{ customer.name }}</v-btn>
           </div>
-          <div v-if="
-            this.selectedCustomerDetails.selectedCustomer.street_name &&
-            this.selectedCustomerDetails.selectedCustomer.street_name
-              .length >= 1
-          ">
-            <v-btn v-for="streetName in this.suggestedStreetName" :key="streetName" x-large dark width="100%"
-              v-on:click="
-                selectedCustomerDetails.selectedCustomer.street_name =
-                streetName
-              ">{{ streetName }}</v-btn>
-          </div>
           <br />
         </div>
         <v-alert v-if="this.createCustomerError" class="ml-2 mr-2" dense type="error" outlined>
@@ -75,9 +64,7 @@
         <v-alert v-if="this.createCustomerWarning" class="ml-2 mr-2" dense type="warning" outlined>
           Warning: {{ this.createCustomerWarning }}
         </v-alert>
-        <v-divider></v-divider>
-        <v-card-actions>
-          <v-spacer></v-spacer>
+        <v-card-actions class="stay-bottom">
           <v-btn x-large width="50%" v-on:click="
   phone = '';
 selectedCustomerDetails.createCustomerFormDialog = false;
@@ -88,6 +75,17 @@ selectedCustomerDetails.createCustomerFormDialog = false;
             <div>CONFIRM<br /></div>
           </v-btn>
         </v-card-actions>
+        <div v-if="this.suggestedStreetName.length != 0">
+        <br/>
+          <h3 class="text-center"> Suggestions:</h3>
+
+          <v-btn v-for="streetName in this.suggestedStreetName" :key="streetName" x-large dark width="100%" class="mt-2"
+            v-on:click="
+              selectedCustomerDetails.selectedCustomer.street_name =
+              streetName
+            ">{{ streetName }}</v-btn>
+        </div>
+        <br v-if="this.suggestedStreetName.length != 0"/>
       </v-card>
     </v-dialog>
     <!-- dialog to confirm updating customer -->
@@ -139,27 +137,7 @@ selectedCustomerDetails.createCustomerFormDialog = false;
               }}
               - {{ customer.name }}</v-btn>
           </div>
-          <div v-if="
-            this.selectedCustomerDetails.selectedCustomer.street_name &&
-            this.selectedCustomerDetails.selectedCustomer.street_name
-              .length >= 1
-          ">
-            <v-btn v-for="streetName in this.suggestedStreetName" :key="streetName" x-large dark width="100%"
-              v-on:click="
-                selectedCustomerDetails.selectedCustomer.street_name =
-                streetName
-              ">{{ streetName }}</v-btn>
-          </div>
         </div>
-        <br />
-        <h3 class="text-center">
-          This action will update the customer details.
-        </h3>
-        <h3 class="text-center">To confirm this action click [UPDATE].</h3>
-        <h3 class="text-center">To stop this action click [CANCEL].</h3>
-        <br />
-        <br />
-
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -186,14 +164,33 @@ selectedCustomerDetails.createCustomerFormDialog = true;
             <div>UPDATE<br /></div>
           </v-btn>
         </v-card-actions>
+           <div v-if="this.suggestedStreetName.length != 0">
+        <br/>
+          <h3 class="text-center"> Suggestions:</h3>
+
+          <v-btn v-for="streetName in this.suggestedStreetName" :key="streetName" x-large dark width="100%" class="mt-2"
+            v-on:click="
+              selectedCustomerDetails.selectedCustomer.street_name =
+              streetName
+            ">{{ streetName }}</v-btn>
+        </div>
+        <br v-if="this.suggestedStreetName.length != 0"/>
         <!-- dialog to confirm updating customer -->
       </v-card>
     </v-dialog>
   </div>
 </template>
 
+<style>
+.stay-bottom {
+  display: fixed;
+  bottom: 0;
+}
+</style>
+
 <script>
 import axios from "axios";
+import { streetData } from "./streets";
 import customerSelectMixin from "../../mixins/customerSelectMixin";
 import storeMixin from "../../mixins/storeMixin";
 
@@ -314,7 +311,7 @@ export default {
           JSON.stringify(this.selectedCustomerDetails.selectedCustomer) ===
           JSON.stringify(
             this.$store.state.customers[
-            this.selectedCustomerDetails.selectedCustomer.phone
+              this.selectedCustomerDetails.selectedCustomer.phone
             ]
           )
         ) {
@@ -372,7 +369,7 @@ export default {
         );
         if (res.status !== 200) {
           throw new Error('Error occured while trying to update customer details during PUT request.')
-        } 
+        }
 
         // If the PUT request was successful, update the store with the new customer details. 
         this.customerSelectMixinSetSelectedCustomer(
@@ -398,6 +395,31 @@ export default {
           this.selectedCustomerDetails.selectedCustomer.street_name == null)
       ) {
         this.createCustomerError = "DELIVERY REQUIRES A VALID ADDRESS";
+      }
+      return;
+    },
+    suggestStreetNameFromStreetNameInput: function () {
+      console.log('00000000000000000000')
+      console.log(streetData)
+      console.log('00000000000000000000')
+      this.suggestedStreetName = [];
+      if (this.selectedCustomerDetails.selectedCustomer.street_name === "") {
+        this.suggestedStreetName = [];
+      } else {
+        streetData.forEach((v) => {
+          if (this.suggestedStreetName.length >= 4) {
+            return;
+          }
+          if (
+            v
+              .toLowerCase()
+              .startsWith(
+                this.selectedCustomerDetails.selectedCustomer.street_name
+              )
+          ) {
+            this.suggestedStreetName.push(v);
+          }
+        });
       }
       return;
     },
