@@ -64,7 +64,7 @@
         <v-alert v-if="this.createCustomerWarning" class="ml-2 mr-2" dense type="warning" outlined>
           Warning: {{ this.createCustomerWarning }}
         </v-alert>
-        <v-card-actions class="stay-bottom">
+        <v-card-actions>
           <v-btn x-large width="50%" v-on:click="
   phone = '';
 selectedCustomerDetails.createCustomerFormDialog = false;
@@ -181,16 +181,9 @@ selectedCustomerDetails.createCustomerFormDialog = true;
   </div>
 </template>
 
-<style>
-.stay-bottom {
-  display: fixed;
-  bottom: 0;
-}
-</style>
-
 <script>
 import axios from "axios";
-import { streetData } from "./streets";
+import { streetData } from "./streets_default";
 import customerSelectMixin from "../../mixins/customerSelectMixin";
 import storeMixin from "../../mixins/storeMixin";
 
@@ -399,9 +392,6 @@ export default {
       return;
     },
     suggestStreetNameFromStreetNameInput: function () {
-      console.log('00000000000000000000')
-      console.log(streetData)
-      console.log('00000000000000000000')
       this.suggestedStreetName = [];
       if (this.selectedCustomerDetails.selectedCustomer.street_name === "") {
         this.suggestedStreetName = [];
