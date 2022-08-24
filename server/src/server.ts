@@ -6,7 +6,7 @@ import { getAllItems, createItem, getOneItem, deleteOneItem, updateItem } from '
 import { logger } from '../src/logging/logger';
 import { Prisma } from '@prisma/client';
 import { getAllCustomers, getOneCustomer, createCustomer, updateCustomer, deleteOneCustomer } from './repositories/customers/customers';
-import { createOrder, deleteOneOrder, getAllOrders, getOneOrder, updateOrder } from './repositories/orders/orders';
+import { createOrder, deleteOneOrder, ForSubmitOrders, getAllOrders, getOneOrder, updateOrder } from './repositories/orders/orders';
 import { getAllOrdersItems, createOrdersItems, updateOrdersItems, deleteOneOrdersItems, getOneOrdersItems, createOrdersItemsBulk, deleteAllOrdersItemsWithOrderId } from './repositories/ordersItems/ordersItems';
 import { getAllOrdersHistory } from './repositories/ordersHistory/ordersHistory';
 import { getAllOrdersItemsDetail, getAllOrdersItemsDetailWithOrderId } from './repositories/ordersItemsDetail/ordersItemsDetail';
@@ -196,6 +196,7 @@ export default function startServer(): void {
         try {
             res.status(200).json(await deleteAllOrdersItemsWithOrderId(parseInt(req.params.id)))
         } catch (err: unknown) {
+            res.status(500).json({error: `${err as string}`, })
             res.status(500).send(`${err as string}`);
         }
     })
@@ -231,9 +232,21 @@ export default function startServer(): void {
             await createAndPrintOrderBill(req.body)
             res.status(200)
         } catch (err: unknown) {
+            // I am passing the error here but the frontend is not seeing it. 
+            const resError = err as {message: string}
+            console.log((resError))
+            res.status(500).json({error: resError.message})
+        }
+    })
+
+    app.post('/post/forsubmit', async (req, res) => {
+        try {
+            res.status(200).json(await ForSubmitOrders(req.body))
+        } catch (err: unknown) {
             res.status(500).send(`${err as string}`);
         }
     })
+
     app.listen(port, () => {
         logger.info('[server] Server started on http://localhost:3000.')
     })

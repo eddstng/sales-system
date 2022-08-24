@@ -31,9 +31,13 @@ export const store = new Vuex.Store({
     component: "HISTORY",
     orderHistory: [],
     orderHistoryPriceTotal: 0,
-    selectedItemsOrderedByEntry: {}
+    selectedItemsOrderedByEntry: {},
+    errorToDisplay: ''
   },
   mutations: {
+    setErrorToDisplay(state, error) {
+      state.errorToDisplay = error;
+    },
     setMenuDisplayType(state, type) {
       state.menuDisplayType = type;
     },
@@ -95,6 +99,8 @@ export const store = new Vuex.Store({
     // - 1 = Order successfully added.
     // - 2 = Order failed please check the status and try again.
     // - 3 = No connection to the server.
+    // - 4 = Trying to submit order. Please wait. 
+    // - 5 = $store.state.errorToDisplay
     setNotification(state, notificationCode) {
       state.notification = notificationCode;
     },

@@ -3,6 +3,8 @@ import { IsNotEmpty } from "class-validator";
 import { validateClassFields } from "../utils";
 import { prisma } from '../../app'
 import { logInfo, logError } from '../../logging/utils'
+import { createOrdersItemsBulk } from "../ordersItems/ordersItems";
+import { createAndPrintOrderBill } from "../printOrder/printOrder";
 
 export class Order {
     id!: number;
@@ -59,9 +61,9 @@ export async function getOneOrder(id: number): Promise<orders> {
     }
 }
 
-export async function createOrder(body: JSON): Promise<orders> {
+export async function createOrder(body: { total: number, customer_id: number, type: number }): Promise<orders> {
     try {
-        await validateClassFields(Order, body)
+        // await validateClassFields(Order, body)
         const res = await prisma.orders.create({ data: <Prisma.ordersCreateInput>body })
         logInfo(createOrder.name, `Order Created: {id: ${res.id}, total: ${res.total}, customer_id: ${res.customer_id}, timestamp: ${res.timestamp}}, type: ${res.type}}`)
         return res;
@@ -94,8 +96,8 @@ export async function updateOrder(id: number, order: Prisma.ordersUncheckedUpdat
                 type: order.type,
                 void: order.void,
                 paid: order.paid,
-                subtotal: order.subtotal, 
-                gst: order.gst, 
+                subtotal: order.subtotal,
+                gst: order.gst,
                 discount: order.discount
             },
         })
@@ -104,4 +106,75 @@ export async function updateOrder(id: number, order: Prisma.ordersUncheckedUpdat
         logError(updateOrder.name, `${err}`);
         throw new Error(`${err} `)
     }
+}
+
+export async function ForSubmitOrders(
+    data: {
+        customer_id: number,
+        type: number,
+        items: {
+            [key: string]: {
+                node: {
+                    id: number;
+                    menu_id: number;
+                    price: number;
+                    name_eng: string;
+                    name_chn: string;
+                    category: number;
+                    custom_id: string,
+                    custom_name: string,
+                }
+                quantity: number,
+                timestamp: Date,
+                customizations: { name_eng: string, name_chn: string }[]
+            }
+            
+        }
+        priceDetails: { subtotal: number, gst: number, total: number, discount: number }
+    }) {
+    try {
+        const newOrder = await createOrder({ total: 0, customer_id: data.customer_id, type: data.type });
+        const itemsArray = createOrdersItemsCreateManyInputData(newOrder.id, data.items)
+        await createOrdersItemsBulk(itemsArray);
+        await updateOrder(newOrder.id, data.priceDetails) // update price details
+        await createAndPrintOrderBill({ order_id: newOrder.id, printKitchen: true, printClient: true });
+    } catch (err) {
+        console.log(err)
+        throw err
+    }
+}
+
+function createOrdersItemsCreateManyInputData(order_id: number, items: {
+    [key: string]: {
+        node: {
+            id: number;
+            menu_id: number;
+            price: number;
+            name_eng: string;
+            name_chn: string;
+            category: number;
+            custom_id: string,
+            custom_name: string,
+        }
+        quantity: number,
+        timestamp: Date,
+        customizations: { name_eng: string, name_chn: string }[]
+    }
+}): {
+    order_id: any; item_id: any; quantity: any; customizations: any; timestamp: string; custom_price: any; custom_name: any
+}[] {
+    const ordersItemsCreateManyInputData = [];
+    for (const value of Object.entries(items)) {
+        const item = value[1];
+        ordersItemsCreateManyInputData.push({
+            order_id: order_id,
+            item_id: item.node.id,
+            quantity: item.quantity,
+            customizations: item.customizations ? item.customizations : undefined,
+            timestamp: new Date(item.timestamp).toISOString(),
+            custom_price: item.node.price,
+            custom_name: item.node.custom_name,
+        });
+    }
+    return ordersItemsCreateManyInputData;
 }

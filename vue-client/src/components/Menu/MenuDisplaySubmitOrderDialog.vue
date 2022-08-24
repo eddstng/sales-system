@@ -101,106 +101,30 @@ export default {
     },
     submitOrder: async function () {
       try {
-        const newOrder = await this.createOrder();
-        this.insertSelectedItemsIntoOrdersAndOrdersItems(newOrder.data.id);
-        this.updateOrderWithPriceDetails(newOrder);
+        store.commit("setNotification", 4);
+        await this.submitOrdersFunction({
+          customer_id: this.$store.state.selectedCustomer.id,
+          type: this.$store.state.currentOrder.type,
+          items: this.$store.state.selectedItems,
+          priceDetails: this.$store.state.priceDetails
+        })
         this.storeMixinClearOrderRelatedDetails();
-        this.printOrder(newOrder.data.id);
         this.closeSubmitOrderDialog();
         store.commit("setNotification", 1);
       } catch (err) {
         this.closeSubmitOrderDialog();
-        store.commit("setNotification", 2);
-        console.log(err);
+        store.commit('setErrorToDisplay', err.response.data)
+        store.commit("setNotification", 5);
       }
     },
-    createOrder: async function () {
-      const res = await axios.post("http://localhost:3000/post/orders/create", {
-        total: 0,
-        customer_id: this.$store.state.selectedCustomer.id,
-        type: this.$store.state.currentOrder.type,
+
+    submitOrdersFunction: async function ({ customer_id, type, items, priceDetails }) {
+      await axios.post("http://localhost:3000/post/forsubmit", {
+        customer_id: customer_id,
+        type: type,
+        items: items,
+        priceDetails: priceDetails,
       });
-      if (isNaN(res.data.id)) {
-        throw new Error("Failed to submit order. No order id retrieved.");
-      }
-      return res;
-    },
-    insertSelectedItemsIntoOrdersAndOrdersItems: async function (orderIdNum) {
-      const ordersItemsCreateManyInputData = [];
-      const arrayOfSubmitOrderItems = []; // this is just for temp console log
-      for (const value of Object.entries(this.$store.state.selectedItems)) {
-        const item = value[1];
-        arrayOfSubmitOrderItems.push({
-          menu_id: item.node.menu_id,
-          item_name: item.node.name_eng,
-        });
-        ordersItemsCreateManyInputData.push({
-          // custom_id: item.node.custom_id,
-          order_id: orderIdNum,
-          item_id: item.node.id,
-          quantity: item.quantity,
-          customizations: item.customizations ? item.customizations : undefined,
-          timestamp: new Date(item.timestamp).toISOString(),
-          custom_price: item.node.price,
-          custom_name: item.node.custom_name,
-        });
-      }
-      // here we are logging the orders incase there are failures which make us lose our orders. Need a better way to handle this later.
-      const res = await axios.post(
-        "http://localhost:3000/post/ordersitems/create/bulk",
-        ordersItemsCreateManyInputData
-      );
-      if (res.status !== 200) {
-        throw new Error(
-          `Failed to submit order during insertSelectedItemsIntoOrdersAndOrdersItems. ${res}`
-        );
-      }
-    },
-    printOrder: async function (order_id) {
-      const res = await axios.post("http://localhost:3000/post/print", {
-        order_id,
-        printKitchen: true,
-        printClient: true,
-      });
-      if (isNaN(res.status !== 200)) {
-        throw new Error(
-          `Failed to submit order. Received status code of ${res.status}.`
-        );
-      }
-      return res;
-    },
-    recalculatePriceDetailsAndReturnIt() {
-      this.storeMixinUpdateStorePriceDetails();
-      return this.$store.state.priceDetails
-    },
-    // This function may not be necessary. It seems that the issue is with the writing speed into the database which has been dealt with by retrying prisma query to orders_items.
-    ensurePriceDetailsAreCorrect: function (priceDetails) {
-      for (const value of Object.entries(priceDetails)) {
-        if (value == null || isNaN(value)) {
-          console.log('======================================');
-          console.log('ALERT: AN INVALID VALUE HAS BEEN DETECTED IN PRICE DETAILS.');
-          console.log(priceDetails);
-          console.log('======================================');
-          return this.recalculatePriceDetailsAndReturnIt()
-        }
-        return priceDetails;
-      }
-    },
-    updateOrderWithPriceDetails: async function (orderDetails) {
-      const priceDetails = this.ensurePriceDetailsAreCorrect(this.$store.state.priceDetails);
-      const res = await axios.put(
-        `http://localhost:3000/put/orders/update/id/${orderDetails.data.id}`,
-        {
-          ...this.orderDetails,
-          ...priceDetails,
-        }
-      );
-      if (isNaN(res.status !== 200)) {
-        throw new Error(
-          `Failed to submit order. Received status code of ${res.status}.`
-        );
-      }
-      return res;
     },
   },
 };

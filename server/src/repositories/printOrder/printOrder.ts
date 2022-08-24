@@ -2,8 +2,7 @@ import { prisma } from '../../app'
 import { logError, logInfo, logWarn } from '../../logging/utils'
 import { thermalPrinterInterface } from '../../app';
 import * as dotenv from 'dotenv';
-import { orders_items_detail } from '@prisma/client';
-import { logger } from '../../logging/logger';
+import { orders, orders_items_detail } from '@prisma/client';
 import { deleteOneOrder } from '../orders/orders';
 import { deleteAllOrdersItemsWithOrderId } from '../ordersItems/ordersItems';
 
@@ -50,35 +49,35 @@ async function billSetup(
 }
 
 async function handleFailure(order_id: number) {
-    console.log()
     await deleteAllOrdersItemsWithOrderId(order_id)
-    await deleteOneOrder(order_id) 
+    await deleteOneOrder(order_id)
+    // once delete the order will skip the deleted id. need to add a column called order_number and then use that instead of order_id. 
+    // also this is deleting the order if we fail to reprint. this is bad. 
+    // also when repritning alert with notifications
+    const error = new Error(`An error occured while attempting to create and print bill. Order with order_id ${order_id} has been deleted.`)
+    logError(createAndPrintOrderBill.name, error)
+    throw error
 }
 
 export async function createAndPrintOrderBill(printObj: { order_id: number, printClient: boolean, printKitchen: boolean }): Promise<void> {
     try {
-        const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
-        // await delay(10)
         const kitchenAndClientBills = await createKitchenAndClientBill(printObj.order_id)
         thermalPrinterSetup()
         if (printer !== undefined) {
             printer.clear()
         }
-        // The delay is required to give time for the image to save. 
-        await delay(10)
+
         if (process.env.PRINTING !== 'false') {
+            const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+            await delay(10)
             await billSetup(printer, printObj, kitchenAndClientBills)
             printer.execute();
         }
         logInfo(createAndPrintOrderBill.name, `Success!`)
         return;
     } catch (err) {
-        // handleFailure(printObj.order_id);
-                // How far along in the process did we get to before failure?
-        // does it matter or should we just delete all from this order and try again?
-        // if an error happens we want to make sure that we have all the data required to go back to reordering this order.
         logError(createAndPrintOrderBill.name, `${err}`)
-        throw err;
+        await handleFailure(printObj.order_id);
     }
 
 }
@@ -92,11 +91,11 @@ async function getOrderToPrint(order_id: number, retries: number, err?: unknown 
         logWarn(getOrderToPrint.name, `Unable to print order due to error. Retry: ${retries}/5`)
     }
     try {
-        // if (retries <= 5) {
-        //     const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
-        //     await delay(1000)
-        //     throw new Error('fake error')
-        // }
+        if (retries <= 6) {
+            const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+            await delay(1000)
+            throw new Error('fake error')
+        }
         const res = await prisma.orders_items_detail.findMany(
             {
                 where: {
@@ -116,7 +115,7 @@ async function getOrderToPrint(order_id: number, retries: number, err?: unknown 
     }
 }
 
-export async function createKitchenAndClientBill(order_id: number): Promise<{ clientBillPath: string, kitchenBillPath: string, isDelivery: boolean }> {
+export async function createKitchenAndClientBill(order_id: number): Promise<{ clientBillPath: string, kitchenBillPath: string, isDelivery: boolean}> {
     try {
         const res = await getOrderToPrint(order_id, 0)
         let orderTypeString = 'PICK UP'
@@ -230,9 +229,8 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
         const imageDataURI = require('image-data-uri');
         imageDataURI.outputFile(kitchenBillImageURI, kitchenBillPath)
         imageDataURI.outputFile(clientBillImageURI, clientBillPath)
-
         logInfo(createKitchenAndClientBill.name, `Success!`)
-        return { clientBillPath, kitchenBillPath, isDelivery: res[0].order_type === 2 };
+        return { clientBillPath, kitchenBillPath, isDelivery: res[0].order_type === 2};
     } catch (err) {
         logError(createKitchenAndClientBill.name, `${err}`)
         throw err;

@@ -68,11 +68,19 @@ export async function createOrdersItems(body: JSON) {
     }
 }
 
-export async function createOrdersItemsBulk(items: JSON[]) {
+export async function createOrdersItemsBulk(items: {
+    order_id: any;
+    item_id: any;
+    quantity: any;
+    customizations: any;
+    timestamp: string;
+    custom_price: any;
+    custom_name: any;
+}[]) {
     try {
-        items.forEach(async item => {
-            await validateClassFields(OrdersItems, item)
-        })
+        // items.forEach(async item => {
+        //     await validateClassFields(OrdersItems, item)
+        // })
         const res = await prisma.orders_items.createMany({ data: <Prisma.orders_itemsCreateManyInput>items })
 
         logInfo(createOrdersItemsBulk.name, `OrdersItemsBulk Created: {id: ${res})`)

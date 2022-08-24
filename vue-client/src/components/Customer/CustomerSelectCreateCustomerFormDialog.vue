@@ -183,7 +183,7 @@ selectedCustomerDetails.createCustomerFormDialog = true;
 
 <script>
 import axios from "axios";
-import { streetData } from "./streets_default";
+import { streetData } from "./streets";
 import customerSelectMixin from "../../mixins/customerSelectMixin";
 import storeMixin from "../../mixins/storeMixin";
 

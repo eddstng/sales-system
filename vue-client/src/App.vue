@@ -9,31 +9,22 @@
           </v-alert>
         </v-col>
         <v-col :cols="10">
-          <v-alert
-            class="menu-notification"
-            v-if="$store.state.notification === 0"
-          >
+          <v-alert class="menu-notification" v-if="$store.state.notification === 0">
           </v-alert>
-          <v-alert
-            class="menu-notification"
-            type="success"
-            v-if="$store.state.notification === 1"
-          >
+          <v-alert class="menu-notification" type="success" v-if="$store.state.notification === 1">
             Order successfully added.
           </v-alert>
-          <v-alert
-            class="menu-notification"
-            type="error"
-            v-if="$store.state.notification === 2"
-          >
+          <v-alert class="menu-notification" type="error" v-if="$store.state.notification === 2">
             Order failed please check the status and try again.
           </v-alert>
-          <v-alert
-            class="menu-notification"
-            type="error"
-            v-if="$store.state.notification === 3"
-          >
+          <v-alert class="menu-notification" type="error" v-if="$store.state.notification === 3">
             No connection to the server.
+          </v-alert>
+          <v-alert class="menu-notification" type="info" v-if="$store.state.notification === 4">
+            Trying to submit order. Please wait.
+          </v-alert>
+          <v-alert class="menu-notification" type="error" v-if="$store.state.notification === 5">
+            {{ $store.state.errorToDisplay }} - Please try again.
           </v-alert>
         </v-col>
       </v-row>
@@ -101,9 +92,8 @@ export default {
     },
     currentDate() {
       const current = new Date();
-      const date = `${current.getFullYear()}/${
-        current.getMonth() + 1
-      }/${current.getDate()}`;
+      const date = `${current.getFullYear()}/${current.getMonth() + 1
+        }/${current.getDate()}`;
       return date;
     },
   },
@@ -115,6 +105,7 @@ export default {
   position: relative;
   margin-bottom: 0;
 }
+
 .sidebar-buttons {
   height: 100px;
 }
