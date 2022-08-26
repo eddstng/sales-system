@@ -28,13 +28,16 @@ function thermalPrinterSetup(): any {
 async function billSetup(
     printer: any,
     printObj: { order_id: number, printClient: boolean, printKitchen: boolean },
-    kitchenAndClientBills: { clientBillPath: string, kitchenBillPath: string, isDelivery: boolean }
+    kitchenAndClientBills: { clientBillPath: string, kitchenBillPath: string, isDelivery: boolean },
+    reprint?: boolean
 ): Promise<void> {
     if (printObj.printKitchen) {
         await printer.printImage(kitchenAndClientBills.kitchenBillPath);
         printer.cut();
-        await printer.printImage(kitchenAndClientBills.kitchenBillPath);
-        printer.cut();
+        if (reprint !== true) {
+            await printer.printImage(kitchenAndClientBills.kitchenBillPath);
+            printer.cut();
+        }
     }
     if (printObj.printClient) {
         await printer.printImage('./src/repositories/printOrder/header.png');
@@ -43,7 +46,7 @@ async function billSetup(
     }
     if (kitchenAndClientBills.isDelivery) {
         await printer.printImage('./src/repositories/printOrder/header.png');
-        await printer.printImage(kitchenAndClientBills.clientBillPath);
+        await printer.printImage(kitchenAndClientBills.clientBillPath); 
         printer.cut();
     }
 }
@@ -55,8 +58,8 @@ async function handleFailure(order_id: number) {
     // also this is deleting the order if we fail to reprint. this is bad. 
     // also when repritning alert with notifications
     const error = new Error(`An error occured while attempting to create and print bill. Order with order_id ${order_id} has been deleted.`)
-    logError(createAndPrintOrderBill.name, error)
-    throw error
+    logError(createAndPrintOrderBill.name, new Error(`An error occured while attempting to create and print bill. Order creation has been cancelled. Order with order_id ${order_id} has been deleted.`))
+    throw new Error(`An error occured while attempting to create and print bill. Order creation has been cancelled.`)
 }
 
 export async function createAndPrintOrderBill(printObj: { order_id: number, printClient: boolean, printKitchen: boolean }): Promise<void> {
@@ -82,7 +85,6 @@ export async function createAndPrintOrderBill(printObj: { order_id: number, prin
 
 }
 
-// Hoping that this fixes the order_subtotal null issue.
 async function getOrderToPrint(order_id: number, retries: number, err?: unknown | undefined): Promise<orders_items_detail[]> {
     if (retries > 5 && err) {
         throw new Error(err as string)
@@ -91,11 +93,11 @@ async function getOrderToPrint(order_id: number, retries: number, err?: unknown 
         logWarn(getOrderToPrint.name, `Unable to print order due to error. Retry: ${retries}/5`)
     }
     try {
-        if (retries <= 6) {
-            const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
-            await delay(1000)
-            throw new Error('fake error')
-        }
+        // if (retries <= 6) {
+        //     const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+        //     await delay(1000)
+        //     throw new Error('fake error')
+        // }
         const res = await prisma.orders_items_detail.findMany(
             {
                 where: {
@@ -115,7 +117,27 @@ async function getOrderToPrint(order_id: number, retries: number, err?: unknown 
     }
 }
 
-export async function createKitchenAndClientBill(order_id: number): Promise<{ clientBillPath: string, kitchenBillPath: string, isDelivery: boolean}> {
+export async function reprintOrder(printObj: { order_id: number, printClient: boolean, printKitchen: boolean, order_timestamp: Date }): Promise<void> {
+    try {
+        const orderTimestamp = new Date(printObj.order_timestamp)
+        const timestampPath = `${orderTimestamp.toLocaleDateString("zh-Hans-CN")}`
+        const kitchenAndClientBills = {
+            clientBillPath: `./src/repositories/printOrder/bills/${timestampPath}/${printObj.order_id}-e.png`,
+            kitchenBillPath: `./src/repositories/printOrder/bills/${timestampPath}/${printObj.order_id}-c.png`,
+            isDelivery: false
+        }
+        thermalPrinterSetup()
+        printer.clear()
+        await billSetup(printer, printObj, kitchenAndClientBills, true)
+        printer.execute()
+    } catch (err) {
+        const error = new Error(`Failed to reprint order bill.`)
+        logError(reprintOrder.name, error)
+        throw new Error(`An error occured while attempting to reprint order bill.`)
+    }
+}
+
+export async function createKitchenAndClientBill(order_id: number): Promise<{ clientBillPath: string, kitchenBillPath: string, isDelivery: boolean }> {
     try {
         const res = await getOrderToPrint(order_id, 0)
         let orderTypeString = 'PICK UP'
@@ -230,7 +252,7 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
         imageDataURI.outputFile(kitchenBillImageURI, kitchenBillPath)
         imageDataURI.outputFile(clientBillImageURI, clientBillPath)
         logInfo(createKitchenAndClientBill.name, `Success!`)
-        return { clientBillPath, kitchenBillPath, isDelivery: res[0].order_type === 2};
+        return { clientBillPath, kitchenBillPath, isDelivery: res[0].order_type === 2 };
     } catch (err) {
         logError(createKitchenAndClientBill.name, `${err}`)
         throw err;

@@ -1,36 +1,25 @@
 <template>
-  <v-dialog
-    v-model="historyOptionsDetails.openHistoryOptionsConfirmationDialog"
-    width="900"
-  >
+  <v-dialog v-model="historyOptionsDetails.openHistoryOptionsConfirmationDialog" width="900">
     <v-card>
       <h2 class="text-center pt-16 pb-12">
         {{ historyOptionsDetails.confirmingAction }} ORDER #{{
-          $store.state.currentOrder.id
+            $store.state.currentOrder.id
         }}
       </h2>
       <v-divider></v-divider>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn
-          x-large
-          width="50%"
-          v-on:click="
-            historyOptionsDetailsUpdate = historyOptionsDetails;
-            updateHistoryOptionsDetails(historyOptionsDetailsUpdate);
-          "
-        >
+        <v-btn x-large width="50%" v-on:click="
+  historyOptionsDetailsUpdate = historyOptionsDetails;
+updateHistoryOptionsDetails(historyOptionsDetailsUpdate);
+        ">
           <div>NO<br /></div>
         </v-btn>
-        <v-btn
-          x-large
-          width="50%"
-          v-on:click="
-            historyOptionsDetailsUpdate = historyOptionsDetails;
-            performHistoryOption(historyOptionsDetails.confirmingAction);
-            updateHistoryOptionsDetails(historyOptionsDetails);
-          "
-        >
+        <v-btn x-large width="50%" v-on:click="
+  historyOptionsDetailsUpdate = historyOptionsDetails;
+performHistoryOption(historyOptionsDetails.confirmingAction);
+updateHistoryOptionsDetails(historyOptionsDetails);
+        ">
           <div>YES<br /></div>
         </v-btn>
       </v-card-actions>
@@ -63,19 +52,21 @@ export default {
         console.log("");
       }
     },
-    // The following function is repeated. TO DO: Find a place to store this function to export.
-    printOrder: async function (order_id, printKitchen, printClient) {
-      const res = await axios.post("http://localhost:3000/post/print", {
-        order_id,
-        printKitchen,
-        printClient,
-      });
-      if (isNaN(res.status !== 200)) {
-        throw new Error(
-          `Failed to submit order. Received status code of ${res.status}.`
-        );
+    reprintOrder: async function (order_id, printKitchen, printClient, order_timestamp) {
+      try {
+        store.commit("setNotification", 4);
+        await axios.post("http://localhost:3000/post/reprint", {
+          order_id,
+          printKitchen,
+          printClient,
+          order_timestamp
+        });
+      } catch (err) {
+        const errorMessage = `${err.response.data}`
+        store.commit('setErrorToDisplay', errorMessage)
+        store.commit("setNotification", 5);
+        throw errorMessage;
       }
-      return res;
     },
     performHistoryOption: function (actionStr) {
       const orderHistory = this.$store.state.orderHistory;
@@ -120,13 +111,13 @@ export default {
         store.commit("setComponent", "ORDER");
       }
       if (actionStr === "REPRINT KITCHEN") {
-        this.printOrder(this.$store.state.currentOrder.id, true, false);
+        this.reprintOrder(this.$store.state.currentOrder.id, true, false, this.$store.state.currentOrder.timestamp);
       }
       if (actionStr === "REPRINT CLIENT") {
-        this.printOrder(this.$store.state.currentOrder.id, false, true);
+        this.reprintOrder(this.$store.state.currentOrder.id, false, true, this.$store.state.currentOrder.timestamp);
       }
       if (actionStr === "REPRINT BOTH") {
-        this.printOrder(this.$store.state.currentOrder.id, true, true);
+        this.reprintOrder(this.$store.state.currentOrder.id, true, true, this.$store.state.currentOrder.timestamp);
       }
       this.historyOptionsDetails.confirmingAction = "";
     },

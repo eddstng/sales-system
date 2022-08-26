@@ -114,6 +114,7 @@ export default {
         customer_id: ordersItemsDetailWithOrderIdArray[0].customer_id,
         void: ordersItemsDetailWithOrderIdArray[0].order_void,
         paid: ordersItemsDetailWithOrderIdArray[0].order_paid,
+        timestamp: ordersItemsDetailWithOrderIdArray[0].order_timestamp,
       });
       // Update the $store.state.selectedCustomer.
       store.commit('setSelectedCustomer', {

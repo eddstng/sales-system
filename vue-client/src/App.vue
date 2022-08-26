@@ -21,7 +21,7 @@
             No connection to the server.
           </v-alert>
           <v-alert class="menu-notification" type="info" v-if="$store.state.notification === 4">
-            Trying to submit order. Please wait.
+            Please wait...
           </v-alert>
           <v-alert class="menu-notification" type="error" v-if="$store.state.notification === 5">
             {{ $store.state.errorToDisplay }} - Please try again.
