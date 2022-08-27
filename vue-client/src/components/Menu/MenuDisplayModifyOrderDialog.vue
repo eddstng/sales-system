@@ -188,12 +188,16 @@ export default {
       }
       return res;
     },
+
+    // we will also update customer during this, optimize later
     updateOrderWithTotalPrice: async function (orderId) {
       const res = await axios.put(
         `http://localhost:3000/put/orders/update/id/${orderId}`,
         {
           ...this.orderDetails,
           ...this.$store.state.priceDetails,
+          customer_id: this.$store.state.selectedCustomer.id,
+          type: this.$store.state.currentOrder.type
         }
       );
       if (isNaN(res.status !== 200)) {
