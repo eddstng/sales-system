@@ -40,6 +40,7 @@ CREATE TABLE orders_items (
 
 CREATE TABLE orders (
     id SERIAL NOT NULL PRIMARY KEY,
+    number INT NOT NULL,
     total FLOAT,
     subtotal FLOAT,
     gst FLOAT,
@@ -98,6 +99,7 @@ CREATE OR REPLACE view orders_items_detail
 AS
 SELECT
 o.id as order_id,
+o.number as order_number,
 o.timestamp as order_timestamp,
 o.type as order_type,
 o.total as order_total,
@@ -141,6 +143,7 @@ CREATE OR REPLACE view orders_history
 AS
 SELECT
 o.id as order_id,
+o.number as order_number,
 o.timestamp as order_timestamp,
 o.type as order_type,
 o.total as order_total,

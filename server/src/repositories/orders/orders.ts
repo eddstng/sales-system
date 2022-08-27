@@ -62,9 +62,12 @@ export async function getOneOrder(id: number): Promise<orders> {
 }
 
 export async function createOrder(body: { total: number, customer_id: number, type: number }): Promise<orders> {
+    
+    const order = await getLatestOrderNumber();
+    
+    const orderCreateInput = {...body, number: order ? order.number+1 : 1}
     try {
-        // await validateClassFields(Order, body)
-        const res = await prisma.orders.create({ data: <Prisma.ordersCreateInput>body })
+        const res = await prisma.orders.create({ data: <Prisma.ordersCreateInput>orderCreateInput })
         logInfo(createOrder.name, `Order Created: {id: ${res.id}, total: ${res.total}, customer_id: ${res.customer_id}, timestamp: ${res.timestamp}}, type: ${res.type}}`)
         return res;
     } catch (err) {
@@ -83,6 +86,21 @@ export async function deleteOneOrder(id: number): Promise<void> {
         logError(deleteOneOrder.name, `${err}`);
         throw new Error(`${err} `)
     }
+}
+
+async function getLatestOrderNumber(): Promise<{id: number, number: number} | null> {
+    const res = await prisma.orders.findFirst(
+        {
+            select: {
+                id: true,
+                number: true,
+            },
+            orderBy: {
+                id: 'desc'
+            }
+        }
+    )
+    return res
 }
 
 export async function updateOrder(id: number, order: Prisma.ordersUncheckedUpdateInput): Promise<void> {

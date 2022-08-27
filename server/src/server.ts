@@ -10,7 +10,7 @@ import { createOrder, deleteOneOrder, ForSubmitOrders, getAllOrders, getOneOrder
 import { getAllOrdersItems, createOrdersItems, updateOrdersItems, deleteOneOrdersItems, getOneOrdersItems, createOrdersItemsBulk, deleteAllOrdersItemsWithOrderId } from './repositories/ordersItems/ordersItems';
 import { getAllOrdersHistory } from './repositories/ordersHistory/ordersHistory';
 import { getAllOrdersItemsDetail, getAllOrdersItemsDetailWithOrderId } from './repositories/ordersItemsDetail/ordersItemsDetail';
-import { createAndPrintOrderBill } from './repositories/printOrder/printOrder';
+import { createAndPrintOrderBill, reprintOrder } from './repositories/printOrder/printOrder';
 import { logInfo } from './logging/utils';
 
 export default function startServer(): void {
@@ -232,10 +232,18 @@ export default function startServer(): void {
             await createAndPrintOrderBill(req.body)
             res.status(200)
         } catch (err: unknown) {
-            // I am passing the error here but the frontend is not seeing it. 
             const resError = err as {message: string}
             console.log((resError))
             res.status(500).json({error: resError.message})
+        }
+    })
+
+    app.post('/post/reprint', async (req, res) => {
+        try {
+            await reprintOrder(req.body)
+            res.status(200)
+        } catch (err: unknown) {
+            res.status(500).send(`${err as string}`);
         }
     })
 
