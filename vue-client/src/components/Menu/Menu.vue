@@ -95,6 +95,7 @@ export default {
       this.menuDisplayItemDetails.selectedItemDialog = false;
     },
     openSubmitOrderDialog: function () {
+        this.submitOrderDialog = false;
       if (
         this.$store.state.selectedCustomer.phone !== undefined &&
         Object.keys(store.state.selectedItems).length !== 0
