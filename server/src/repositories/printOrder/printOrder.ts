@@ -131,14 +131,17 @@ export async function reprintOrder(printObj: { order_id: number, printClient: bo
         await billSetup(printer, printObj, kitchenAndClientBills, true)
         printer.execute()
     } catch (err) {
+        logError(reprintOrder.name, `${err}`)
         const error = new Error(`Failed to reprint order bill.`)
-        logError(reprintOrder.name, error)
         throw new Error(`An error occured while attempting to reprint order bill.`)
     }
 }
 
 export async function createKitchenAndClientBill(order_id: number): Promise<{ clientBillPath: string, kitchenBillPath: string, isDelivery: boolean }> {
     try {
+        // This delay is required to temporarily fix the issue with incorrect printing after modifying an order. The database is not updating quick enough so the old order is printed.
+        const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+        await delay(100)
         const res = await getOrderToPrint(order_id, 0)
         let orderTypeString = 'PICK UP'
         if (res[0].order_type === 0) {
@@ -148,7 +151,7 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
             orderTypeString = 'DELIVERY'
         }
 
-        let kitchenBillString = `${res[0].order_id} \n\n\n ${orderTypeString}
+        let kitchenBillString = `${res[0].order_number} \n\n\n ${orderTypeString}
 
 
         ${res[0].customer_phone}
@@ -163,7 +166,7 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
 
         const buzzerNumber = res[0].customer_buzzer_number ? `Buzzer: ${res[0].customer_buzzer_number} \n` : '';
         let clientBillString = `
-        ${res[0].order_id} \n ${orderTypeString}
+        ${res[0].order_number} \n ${orderTypeString}
         ${res[0].customer_phone}
         ` + `${res[0].order_type === 2 ? `${res[0].customer_address}
         ` : ''}` + `${buzzerNumber}` + `${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}
@@ -245,8 +248,9 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
             clientBillString,
             { fontSize: 40, lineHeight: 55, margin: 30, maxWidth: 550 });
 
-        let kitchenBillPath = `./src/repositories/printOrder/bills/${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")}/${order_id}-c.png`;
-        let clientBillPath = `./src/repositories/printOrder/bills/${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")}/${order_id}-e.png`;
+        // Consideration: Need to consider whether to save the file with order_number or order_id.
+        let kitchenBillPath = `./src/repositories/printOrder/bills/${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")}/${res[0].order_id}-c.png`;
+        let clientBillPath = `./src/repositories/printOrder/bills/${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")}/${res[0].order_id}-e.png`;
 
         const imageDataURI = require('image-data-uri');
         imageDataURI.outputFile(kitchenBillImageURI, kitchenBillPath)
