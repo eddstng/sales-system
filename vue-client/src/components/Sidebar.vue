@@ -85,7 +85,7 @@ export default {
         (JSON.stringify(this.$store.state.selectedItems) !== "{}" ||
           this.$store.state.selectedCustomer.phone !== "" ||
           JSON.stringify(this.$store.state.currentOrder) !==
-            '{"id":null,"type":null,"total":0,"customer_id":null,"void":null,"paid":null}') &&
+            '{"id":null,"type":null,"total":0,"customer_id":null,"void":null,"paid":null,"itemQuantity":0}') &&
         this.$store.state.component !== "HISTORY"
       ) {
         return true;
