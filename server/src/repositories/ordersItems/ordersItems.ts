@@ -107,9 +107,9 @@ export async function deleteAllOrdersItemsWithOrderId(id: number): Promise<void>
         const res = await prisma.orders_items.deleteMany({
             where: { order_id: id },
         })
-        logInfo(deleteOneOrdersItems.name, `OrdersItems Deleted: {id: ${res}`)
+        logInfo(deleteAllOrdersItemsWithOrderId.name, `OrdersItems Deleted: {id: ${res}`)
     } catch (err) {
-        logError(deleteOneOrdersItems.name, `${err}`);
+        logError(deleteAllOrdersItemsWithOrderId.name, `${err}`);
         throw new Error(`${err} `)
     }
 }

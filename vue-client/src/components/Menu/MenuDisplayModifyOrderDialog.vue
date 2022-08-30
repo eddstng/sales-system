@@ -113,16 +113,17 @@ export default {
     },
     modifyOrder: async function () {
       try {
-        this.clearTheOrderItemsOfCurrentOrder(
+        await this.clearTheOrderItemsOfCurrentOrder(
           this.$store.state.currentOrder.id
         );
-        this.insertSelectedItemsIntoOrdersAndOrdersItems(
+        await this.insertSelectedItemsIntoOrdersAndOrdersItems(
           this.$store.state.currentOrder.id
         );
-        this.updateOrderWithTotalPrice(this.$store.state.currentOrder.id);
+        await this.updateOrderWithTotalPrice(this.$store.state.currentOrder.id);
         this.printOrder(this.$store.state.currentOrder.id);
         this.storeMixinClearOrderRelatedDetails();
         this.closeModifyOrderDialog();
+        store.commit("setMenuDisplayType", "ORDER");
         store.commit("setNotification", 1);
       } catch (err) {
         this.closeModifyOrderDialog();
@@ -134,7 +135,7 @@ export default {
       const res = await axios.delete(
         `http://localhost:3000/delete/ordersitems/delete/all/order_id/${this.$store.state.currentOrder.id}`
       );
-      if (isNaN(res.data.id)) {
+      if (res.status !== 200) {
         throw new Error(
           `Failed to clear order items for order id ${this.$store.state.currentOrder.id}`
         );
