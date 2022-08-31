@@ -102,7 +102,7 @@ export default {
     submitOrder: async function () {
       try {
         store.commit("setNotification", 4);
-        await this.submitOrdersFunction({
+        await this.submitOrderFunction({
           customer_id: this.$store.state.selectedCustomer.id,
           type: this.$store.state.currentOrder.type,
           items: this.$store.state.selectedItems,
@@ -118,8 +118,8 @@ export default {
       }
     },
 
-    submitOrdersFunction: async function ({ customer_id, type, items, priceDetails }) {
-      await axios.post("http://localhost:3000/post/forsubmit", {
+    submitOrderFunction: async function ({ customer_id, type, items, priceDetails }) {
+      await axios.post("http://localhost:3000/post/submitorder", {
         customer_id: customer_id,
         type: type,
         items: items,

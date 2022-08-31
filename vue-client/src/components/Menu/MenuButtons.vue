@@ -259,26 +259,26 @@ displayMenuButtons = true;
             <div>CANCEL<br /></div>
           </v-btn>
           <v-btn x-large width="24.5%" v-on:click="
-  addItemToSelectedItems(
-    chowMeinItemsObj[itemThatRequiresCustomization.id]
-  );
-customizeChowMeinTypeDialog = false;
+              addItemToSelectedItems(
+                chowMeinItemsObj[itemThatRequiresCustomization.id]
+              );
+            customizeChowMeinTypeDialog = false;
           ">
             <div>CRISPY (湿)<br /></div>
           </v-btn>
           <v-btn x-large width="24.5%" v-on:click="
-  addItemToSelectedItems(
-    chowMeinItemsObj[itemThatRequiresCustomization.id + 1]
-  );
-customizeChowMeinTypeDialog = false;
+              addItemToSelectedItems(
+                chowMeinItemsObj[itemThatRequiresCustomization.id + 1]
+              );
+            customizeChowMeinTypeDialog = false;
           ">
             <div>DRY (干)<br /></div>
           </v-btn>
           <v-btn x-large width="24.5%" v-on:click="
-  addItemToSelectedItems(
-    chowMeinItemsObj[itemThatRequiresCustomization.id + 2]
-  );
-customizeChowMeinTypeDialog = false;
+              addItemToSelectedItems(
+                chowMeinItemsObj[itemThatRequiresCustomization.id + 2]
+              );
+            customizeChowMeinTypeDialog = false;
           ">
             <div>SOFT (軟)<br /></div>
           </v-btn>
@@ -312,18 +312,18 @@ customizeChowMeinTypeDialog = false;
             <div>CANCEL<br /></div>
           </v-btn>
           <v-btn x-large width="33%" v-on:click="
-  addItemToSelectedItems(
-    soupItemsObj[itemThatRequiresCustomization.id]
-  );
-customizeSoupSizeDialog = false;
+              addItemToSelectedItems(
+                soupItemsObj[itemThatRequiresCustomization.id]
+              );
+            customizeSoupSizeDialog = false;
           ">
             <div>SMALL (小)<br /></div>
           </v-btn>
           <v-btn x-large width="33%" v-on:click="
-  addItemToSelectedItems(
-    soupItemsObj[itemThatRequiresCustomization.id + 1]
-  );
-customizeSoupSizeDialog = false;
+              addItemToSelectedItems(
+                soupItemsObj[itemThatRequiresCustomization.id + 1]
+              );
+            customizeSoupSizeDialog = false;
           ">
             <div>LARGE (大)<br /></div>
           </v-btn>

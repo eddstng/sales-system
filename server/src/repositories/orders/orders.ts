@@ -3,7 +3,7 @@ import { IsNotEmpty } from "class-validator";
 import { validateClassFields } from "../utils";
 import { prisma } from '../../app'
 import { logInfo, logError } from '../../logging/utils'
-import { createOrdersItemsBulk } from "../ordersItems/ordersItems";
+import { createOrdersItemsBulk, deleteAllOrdersItemsWithOrderId } from "../ordersItems/ordersItems";
 import { createAndPrintOrderBill } from "../printOrder/printOrder";
 
 export class Order {
@@ -126,7 +126,7 @@ export async function updateOrder(id: number, order: Prisma.ordersUncheckedUpdat
     }
 }
 
-export async function ForSubmitOrders(
+export async function submitOrder(
     data: {
         customer_id: number,
         type: number,
@@ -195,4 +195,40 @@ function createOrdersItemsCreateManyInputData(order_id: number, items: {
         });
     }
     return ordersItemsCreateManyInputData;
+}
+
+export async function modifyOrder(
+    data: {
+        order_id: number,
+        items: {
+            [key: string]: {
+                node: {
+                    id: number;
+                    menu_id: number;
+                    price: number;
+                    name_eng: string;
+                    name_chn: string;
+                    category: number;
+                    custom_id: string,
+                    custom_name: string,
+                }
+                quantity: number,
+                timestamp: Date,
+                customizations: { name_eng: string, name_chn: string }[]
+            }
+        }
+        priceDetails: { subtotal: number, gst: number, total: number, discount: number }
+        customer_id: number,
+        type: number,
+    }) {
+    try {
+        await deleteAllOrdersItemsWithOrderId(data.order_id);
+        const itemsArray = createOrdersItemsCreateManyInputData(data.order_id, data.items)
+        await createOrdersItemsBulk(itemsArray);
+        await updateOrder(data.order_id, {...data.priceDetails, type: data.type, customer_id: data.customer_id}) // update price details
+        await createAndPrintOrderBill({ order_id: data.order_id, printKitchen: true, printClient: true });
+    } catch (err) {
+        console.log(err)
+        throw err
+    }
 }
