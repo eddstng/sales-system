@@ -34,10 +34,10 @@ async function billSetup(
     if (printObj.printKitchen) {
         await printer.printImage(kitchenAndClientBills.kitchenBillPath);
         printer.cut();
-        if (reprint !== true) {
-            await printer.printImage(kitchenAndClientBills.kitchenBillPath);
-            printer.cut();
-        }
+            if (reprint !== true) {
+                await printer.printImage(kitchenAndClientBills.kitchenBillPath);
+                printer.cut();
+            }
     }
     if (printObj.printClient) {
         await printer.printImage('./src/repositories/printOrder/header.png');
@@ -174,6 +174,7 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
 
         res.forEach((element: any) => {
             let kitchenCustomizationString: string = '';
+            let kitchenBillStringItemNameChnDisplay = getKitchenBillStringItemNameChnDisplay(element.item_name_chn)
             if (element.orders_items_customizations !== null) {
                 element.orders_items_customizations.forEach((customization: { name_eng: string, name_chn: string }) => {
                     if (english.test(element.item_name_chn)) { // To handle formatting for items such as Dinner Specials.
@@ -198,7 +199,7 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
                      x${element.orders_items_quantity} ${element.item_name_chn}
                     ${kitchenCustomizationString}`
                 } else {
-                    kitchenBillString += `x${element.orders_items_quantity} ${element.item_name_chn}
+                    kitchenBillString += `x${element.orders_items_quantity} ${kitchenBillStringItemNameChnDisplay}
                     ${kitchenCustomizationString}
 
                     `
@@ -260,5 +261,17 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
     } catch (err) {
         logError(createKitchenAndClientBill.name, `${err}`)
         throw err;
+    }
+
+    function getKitchenBillStringItemNameChnDisplay(itemNameChn: string) {
+        if (itemNameChn.slice(-1) === ')') {
+            const indexOfOpenBracket = itemNameChn.lastIndexOf('(');
+            if (english.test((itemNameChn.substring(indexOfOpenBracket)).charAt(1))) {
+                return (`${itemNameChn.replace(itemNameChn.substring(indexOfOpenBracket), '')}\n\n\n\n\n⤷${itemNameChn.substring(indexOfOpenBracket)}`)
+            } else {
+                return (`${itemNameChn.replace(itemNameChn.substring(indexOfOpenBracket), '')}\n\n\n\n⤷${itemNameChn.substring(indexOfOpenBracket)}`)
+            }
+        }
+        return itemNameChn
     }
 }
