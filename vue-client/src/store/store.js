@@ -5,17 +5,17 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   state: {
-    items: [],
-    customers: [],
-    tables: [],
-    selectedCustomer: {phone: ''},
-    selectedItems: {},
+    items: [], // array of all items
+    customers: [], // array of all customers that are not tables
+    tables: [], // array of all customers that are tables
+    selectedCustomer: {phone: ''}, // the selected customer of the current order
+    selectedItems: {}, // the selected items of the current order with item id as key
     priceDetails: {
       subtotal: 0,
       gst: 0,
       total: 0,
       discount: 0,
-    },
+    }, // the price details of the current order
     currentOrder: {
       id: null,
       type: null,
@@ -24,15 +24,14 @@ export const store = new Vuex.Store({
       void: null,
       paid: null,
       itemQuantity: 0,
-    },
-    // menuDisplayType = "ORDER" | "MODIFY"
-    menuDisplayType: "ORDER",
-    notification: 0,
-    component: "ORDER",
-    orderHistory: [],
-    orderHistoryPriceTotal: 0,
-    selectedItemsOrderedByEntry: {},
-    errorToDisplay: ''
+    }, // the details of the current order
+    menuDisplayType: "ORDER", // sets the menu mode - either "ORDER" or "MODIFY"
+    notification: 0, // determines whether to display a notification and which notification to display
+    component: "ORDER", // sets the component to be displayed
+    orderHistory: [], // an array of all of the saved orders
+    orderHistoryPriceTotal: 0, // the total of all of the saved orders - currently not in use
+    selectedItemsOrderedByEntry: {}, // the selected items of the current order with timestamp as key
+    errorToDisplay: '' // the error string to be displayed when notification is 5
   },
   mutations: {
     setErrorToDisplay(state, error) {

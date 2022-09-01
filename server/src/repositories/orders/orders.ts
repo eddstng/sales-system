@@ -179,7 +179,7 @@ function createOrdersItemsCreateManyInputData(order_id: number, items: {
         customizations: { name_eng: string, name_chn: string }[]
     }
 }): {
-    order_id: any; item_id: any; quantity: any; customizations: any; timestamp: string; custom_price: any; custom_name: any
+    order_id: any; item_id: any; quantity: any; customizations: any; timestamp: string; price: any; custom_name: any
 }[] {
     const ordersItemsCreateManyInputData = [];
     for (const value of Object.entries(items)) {
@@ -190,7 +190,7 @@ function createOrdersItemsCreateManyInputData(order_id: number, items: {
             quantity: item.quantity,
             customizations: item.customizations ? item.customizations : undefined,
             timestamp: new Date(item.timestamp).toISOString(),
-            custom_price: item.node.price,
+            price: item.node.price,
             custom_name: item.node.custom_name,
         });
     }

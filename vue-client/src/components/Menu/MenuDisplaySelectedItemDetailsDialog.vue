@@ -78,7 +78,7 @@ storeMixinSumSelectedItemsQuantity();
           <v-btn x-large width="15%" v-on:click="
   closeSelectedItemDialog();
 storeMixinSumSelectedItemsQuantity();
-toggleUpdateQuantityDialogTrue('ADD');
+toggleUpdateQuantityDialogTrue();
           ">
             <div>UPDATE QTY<br /></div>
           </v-btn>
@@ -94,6 +94,16 @@ toggleUpdateQuantityDialogTrue('ADD');
             </v-text-field>
           </v-col>
         </v-row>
+        <v-alert
+        v-if="isNaN(updateQuantityDialogItem.quantity)"
+              class="mx-auto mb-10"
+              width="300px"
+              dense
+              type="error"
+              outlined
+            >
+              Error: Quantity needs to be a number.
+            </v-alert>
         <div class="ml-20 pb-16">
           <v-row>
             <v-btn class="mt-1 ml-1 mb-1 mr-1" x-large v-for="intValue in updateQuantityDialogNumberPadRow1"
@@ -260,29 +270,32 @@ export default {
     },
     updateSelectedItemAmount: function (selectedItem) {
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
-
       if (selectedItem.quantity === 0) {
         delete selectedItems[selectedItem.node.id];
         store.commit("setSelectedItems", selectedItems);
         this.storeMixinUpdateStorePriceDetails();
-      } else {
-        selectedItems[selectedItem.node.id].quantity = selectedItem.quantity;
-        store.commit("setSelectedItems", selectedItems);
-        this.storeMixinUpdateStorePriceDetails();
+        return;
       }
-    },
-    removeCustomizationFromSelectedItem(customization) {
-      const selectedItems = Object.assign({}, this.$store.state.selectedItems);
-      const customIdOrId =
-        this.menuDisplayItemDetails.removeSelectedItem.node.custom_id ??
-        this.menuDisplayItemDetails.removeSelectedItem.node.id;
-      selectedItems[customIdOrId].customizations = selectedItems[
-        customIdOrId
-      ].customizations.filter(function (obj) {
-        return obj.name_eng !== customization.name_eng;
-      });
+      if (typeof selectedItem.quantity === 'string') {
+        selectedItem.quantity = parseFloat(selectedItem.quantity);
+      }
+
+      selectedItems[selectedItem.node.id].quantity = selectedItem.quantity;
       store.commit("setSelectedItems", selectedItems);
-    },
+      this.storeMixinUpdateStorePriceDetails();
+    }
+  },
+  removeCustomizationFromSelectedItem(customization) {
+    const selectedItems = Object.assign({}, this.$store.state.selectedItems);
+    const customIdOrId =
+      this.menuDisplayItemDetails.removeSelectedItem.node.custom_id ??
+      this.menuDisplayItemDetails.removeSelectedItem.node.id;
+    selectedItems[customIdOrId].customizations = selectedItems[
+      customIdOrId
+    ].customizations.filter(function (obj) {
+      return obj.name_eng !== customization.name_eng;
+    });
+    store.commit("setSelectedItems", selectedItems);
   },
 };
 </script>

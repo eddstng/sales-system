@@ -33,7 +33,7 @@ CREATE TABLE orders_items (
     id SERIAL NOT NULL PRIMARY KEY,
     quantity FLOAT,
     customizations jsonb,
-    custom_price FLOAT,
+    price FLOAT,
     custom_name VARCHAR(50),
     timestamp TIMESTAMP WITHOUT TIME ZONE
 );
@@ -126,8 +126,8 @@ case
 end as item_name_eng,
 i.name_chn as item_name_chn,
 case
-	when oi.custom_price IS NULL then i.price
-	when oi.custom_price IS NOT NULL then oi.custom_price
+	when oi.price IS NULL then i.price
+	when oi.price IS NOT NULL then oi.price
 end as item_price,
 oi.custom_name as item_custom_name,
 oi.quantity as orders_items_quantity,

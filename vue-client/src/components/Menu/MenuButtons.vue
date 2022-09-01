@@ -39,7 +39,6 @@ customItem.name = '';
     custom_name: customItem.name,
     name_chn: 'Custom Item',
     price: parseFloat(customItem.price),
-    custom_price: parseFloat(customItem.price),
   });
 (customItem = {
   name: '',

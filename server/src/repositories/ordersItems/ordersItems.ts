@@ -74,7 +74,7 @@ export async function createOrdersItemsBulk(items: {
     quantity: any;
     customizations: any;
     timestamp: string;
-    custom_price: any;
+    price: any;
     custom_name: any;
 }[]) {
     try {
