@@ -12,6 +12,7 @@ import { getAllOrdersHistory } from './repositories/ordersHistory/ordersHistory'
 import { getAllOrdersItemsDetail, getAllOrdersItemsDetailWithOrderId } from './repositories/ordersItemsDetail/ordersItemsDetail';
 import { createAndPrintOrderBill, reprintOrder } from './repositories/printOrder/printOrder';
 import { logInfo } from './logging/utils';
+import { createAndPrintHistoryStatement } from './repositories/printHistory/printHistory';
 
 export default function startServer(): void {
     const port = 3000
@@ -258,6 +259,15 @@ export default function startServer(): void {
     app.post('/post/modifyorder', async (req, res) => {
         try {
             res.status(200).json(await modifyOrder(req.body))
+        } catch (err: unknown) {
+            res.status(500).send(`${err as string}`);
+        }
+    })
+
+    app.get('/get/todayhistorystatement', async (req, res) => {
+        try {
+            await createAndPrintHistoryStatement()
+            res.status(200)
         } catch (err: unknown) {
             res.status(500).send(`${err as string}`);
         }

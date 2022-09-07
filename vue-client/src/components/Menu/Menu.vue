@@ -81,6 +81,7 @@ export default {
   },
   methods: {
     openCustomizeSelectedItemDialog: function () {
+      this.menuDisplayItemDetails.openCustomizeSelectedItemDialog = false;
       this.menuDisplayItemDetails.openCustomizeSelectedItemDialog = true;
     },
     closeCustomizeSelectedItemDialog: function () {

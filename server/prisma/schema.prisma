@@ -51,7 +51,7 @@ model orders_items {
   id             Int       @id @default(autoincrement())
   quantity       Float?
   customizations Json?
-  custom_price   Float?
+  price          Float?
   custom_name    String?   @db.VarChar(50)
   timestamp      DateTime? @db.Timestamp(6)
   item_id        Int?

@@ -94,10 +94,16 @@ toggleUpdateQuantityDialogTrue();
             </v-text-field>
           </v-col>
         </v-row>
-        <v-alert v-if="isNaN(updateQuantityDialogItem.quantity)" class="mx-auto mb-10" width="300px" dense type="error"
-          outlined>
-          Error: Quantity needs to be a number.
-        </v-alert>
+        <v-alert
+        v-if="isNaN(updateQuantityDialogItem.quantity)"
+              class="mx-auto mb-10"
+              width="300px"
+              dense
+              type="error"
+              outlined
+            >
+              Error: Quantity needs to be a number.
+            </v-alert>
         <div class="ml-20 pb-16">
           <v-row>
             <v-btn class="mt-1 ml-1 mb-1 mr-1" x-large v-for="intValue in updateQuantityDialogNumberPadRow1"
