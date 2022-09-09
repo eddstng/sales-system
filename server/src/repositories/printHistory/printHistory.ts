@@ -2,9 +2,7 @@ import { prisma } from '../../app'
 import { logError, logInfo, logWarn } from '../../logging/utils'
 import { thermalPrinterInterface } from '../../app';
 import * as dotenv from 'dotenv';
-import { orders, orders_history, orders_items_detail } from '@prisma/client';
-import { deleteOneOrder } from '../orders/orders';
-import { deleteAllOrdersItemsWithOrderId } from '../ordersItems/ordersItems';
+import { orders_history } from '@prisma/client';
 
 dotenv.config();
 const ThermalPrinter = require('node-thermal-printer').printer
@@ -34,9 +32,7 @@ export async function createAndPrintHistoryStatement(
         printer.clear()
     }
 
-    // get all order_history from today (later we can set a given date and time)
     const historyToPrint = await getHistoryToPrint()
-    console.log(historyToPrint)
     const historyStatementPath = createHistoryStatement(historyToPrint)
     const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
     await delay(10)
@@ -49,12 +45,25 @@ function createHistoryStatement(history: orders_history[]) {
     if (history.length === 0) {
         throw new Error('empty');
     }
-    let timestampOfHistoryStatementCreationString = `${history[history.length - 1].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${history[history.length - 1].order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}`
-    // let timestampOfHistoryStatementCreationString = `${new Date().toLocaleDateString("zh-Hans-CN")} - ${new Date().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}`
-    let startTimestamp = `${history[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${history[0].order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}`
-    let endTimestamp = `${history[history.length - 1].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${history[history.length - 1].order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}`
+    let startTimestamp = `${history[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} ${history[0].order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}`
+    let endTimestamp = `${history[history.length - 1].order_timestamp?.toLocaleDateString("zh-Hans-CN")} ${history[history.length - 1].order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}`
 
-    let historyStatementString = `HISTORY STATEMENT${`\xa0`.repeat(12)}\n-------------------------------------------------\nSTART: ${`\xa0`.repeat(2)}${startTimestamp}${`\xa0`.repeat(7)}\nEND:${`\xa0`.repeat(3)}${endTimestamp}${`\xa0`.repeat(7)}\n-------------------------------------------------`;
+    if (startTimestamp.length === 18) {
+        startTimestamp = `\xa0`.repeat(2) + startTimestamp
+    }
+    if (startTimestamp.length === 17) {
+        startTimestamp = `\xa0`.repeat(4) + startTimestamp
+    }
+    if (endTimestamp.length === 18) {
+        endTimestamp = `\xa0`.repeat(2) + endTimestamp
+    }
+    if (endTimestamp.length === 17) {
+        endTimestamp = `\xa0`.repeat(4) + endTimestamp
+    }
+
+    let historyStatementString = `HISTORY STATEMENT${`\xa0`.repeat(12)}\n-------------------------------------------------\nSTART: ${startTimestamp}${`\xa0`.repeat(7)}\nEND: ${endTimestamp}${`\xa0`.repeat(7)}\n-------------------------------------------------`;
+
+    historyStatementString += `\nID${`\xa0`.repeat(12)}TIMESTAMP${`\xa0`.repeat(11)}PRICE${`\xa0`.repeat(0)}`
 
     let historyStatementTotal = 0
     history.forEach((element: orders_history) => {
@@ -68,26 +77,49 @@ function createHistoryStatement(history: orders_history[]) {
         if (element.order_total?.toFixed(2).length === 6) {
             formattedOrderTotal = `${`\xa0`.repeat(2)}${element.order_total?.toFixed(2)}`
         }
-        historyStatementString += `\n ${element.order_id} ${`\xa0`.repeat(4)} ${element.order_timestamp?.toLocaleDateString("zh-Hans-CN")} ${element.order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })} ${`\xa0`.repeat(3)}${formattedOrderTotal}`
+        let elementTimestamp = `${element.order_timestamp?.toLocaleDateString("zh-Hans-CN")} ${element.order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}`
+
+        if (elementTimestamp.length === 17) {
+            elementTimestamp = `\xa0`.repeat(7) + elementTimestamp
+        }
+        if (elementTimestamp.length === 18) {
+            elementTimestamp = `\xa0`.repeat(5) + elementTimestamp
+        }
+        if (elementTimestamp.length === 19) {
+            elementTimestamp = `\xa0`.repeat(3) + elementTimestamp
+        }
+        historyStatementString += `\n ${element.order_id} ${elementTimestamp} ${`\xa0`.repeat(2)}${formattedOrderTotal}`
         if (element.order_total === null) {
             throw new Error('total is null')
         }
         historyStatementTotal += element.order_total
     })
-    historyStatementString += `\n-------------------------------------------------\n TOTAL${`\xa0`.repeat(33)} ${historyStatementTotal.toFixed(2)}`
+    let totalSpacing = `\xa0`.repeat(35)
+    if (`${historyStatementTotal.toFixed(2)}`.length === 5) {
+        totalSpacing = `\xa0`.repeat(39)
+    }
+    if (`${historyStatementTotal.toFixed(2)}`.length === 6) {
+        totalSpacing = `\xa0`.repeat(37)
+    }
+    if (`${historyStatementTotal.toFixed(2)}`.length === 7) {
+        totalSpacing = `\xa0`.repeat(35)
+    }
+    if (`${historyStatementTotal.toFixed(2)}`.length === 8) {
+        totalSpacing = `\xa0`.repeat(32)
+    }
+    historyStatementString += `\n-------------------------------------------------\n TOTAL${totalSpacing} ${historyStatementTotal.toFixed(2)}`
 
     const textToImage = require('text-to-image');
 
     const historyStatementImageURI = textToImage.generateSync(
         historyStatementString,
         { fontSize: 30, lineHeight: 55, margin: 30, maxWidth: 550, textAlign: 'right' });
-    let historyStatementPath = `./src/repositories/printOrder/bills/${history[history.length - 1].order_timestamp?.toLocaleDateString("zh-Hans-CN")}/${history[history.length - 1].order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}.png`;
+    let historyStatementPath = `./src/repositories/printHistory/statements/${history[history.length - 1].order_timestamp?.toLocaleDateString("zh-Hans-CN")}/${history[history.length - 1].order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}.png`;
     const imageDataURI = require('image-data-uri');
     imageDataURI.outputFile(historyStatementImageURI, historyStatementPath)
     return historyStatementPath
 }
 
-// async function getHistoryToPrint(order_id: number, retries: number, err?: unknown | undefined): Promise<orders_items_detail[]> {
 export async function getHistoryToPrint(): Promise<orders_history[]> {
     try {
         var gteDate = new Date;
