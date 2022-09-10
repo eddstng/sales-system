@@ -68,9 +68,16 @@ export default {
   },
   methods: {
    async printTodayHistoryStatement() {
-      await axios.get(
+    try {
+       await axios.get(
         `http://localhost:3000/get/todayhistorystatement`
-      )
+        )
+        this.optionsDialog = false;
+      } catch (err) {
+        store.commit('setErrorToDisplay', err.response.data)
+        store.commit("setNotification", 5);
+        this.optionsDialog = false;
+      }
     },
     setOrderWarning() {
       if (

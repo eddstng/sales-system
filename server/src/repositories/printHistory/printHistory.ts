@@ -33,12 +33,19 @@ export async function createAndPrintHistoryStatement(
     }
 
     const historyToPrint = await getHistoryToPrint()
+    if (historyToPrint.length === 0) {
+        throw new Error('No history to print.')
+    }
     const historyStatementPath = createHistoryStatement(historyToPrint)
-    const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
-    await delay(10)
-    await printer.printImage(historyStatementPath);
-    printer.cut();
-    printer.execute();
+    if (process.env.PRINTING !== 'false') {
+        const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+        await delay(10)
+        await printer.printImage(historyStatementPath);
+        printer.cut();
+        printer.execute();
+    } else {
+        throw new Error ('Printing is turned off. Turn printing setting on to print history statement.')
+    }
 }
 
 function createHistoryStatement(history: orders_history[]) {
