@@ -48,7 +48,9 @@ CREATE TABLE orders (
     timestamp TIMESTAMP WITHOUT TIME ZONE DEFAULT (NOW()),
     type SMALLINT,
     void BOOLEAN NOT NULL DEFAULT FALSE,
-    paid BOOLEAN NOT NULL DEFAULT FALSE
+    paid BOOLEAN NOT NULL DEFAULT FALSE,
+    internal BOOLEAN NOT NULL DEFAULT FALSE,
+    internal_number INT
 );
 
 ALTER TABLE
@@ -108,6 +110,8 @@ o.gst as order_gst,
 o.discount as order_discount,
 o.void as order_void,
 o.paid as order_paid,
+o.internal as order_internal,
+o.internal_number as order_internal_number,
 c.id as customer_id,
 c.name as customer_name,
 c.phone as customer_phone,
@@ -149,6 +153,8 @@ o.type as order_type,
 o.total as order_total,
 o.void as order_void,
 o.paid as order_paid,
+o.internal as order_internal,
+o.internal_number as order_internal_number,
 c.id as customer_id,
 c.name as customer_name,
 c.phone as customer_phone

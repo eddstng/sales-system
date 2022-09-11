@@ -32,19 +32,21 @@ model items {
 }
 
 model orders {
-  id           Int            @id @default(autoincrement())
-  number       Int
-  total        Float?
-  subtotal     Float?
-  gst          Float?
-  discount     Float?
-  timestamp    DateTime?      @default(now()) @db.Timestamp(6)
-  type         Int?           @db.SmallInt
-  void         Boolean        @default(false)
-  paid         Boolean        @default(false)
-  customer_id  Int?
-  customers    customers?     @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_customers")
-  orders_items orders_items[]
+  id              Int            @id @default(autoincrement())
+  number          Int?
+  total           Float?
+  subtotal        Float?
+  gst             Float?
+  discount        Float?
+  timestamp       DateTime?      @default(now()) @db.Timestamp(6)
+  type            Int?           @db.SmallInt
+  void            Boolean        @default(false)
+  paid            Boolean        @default(false)
+  internal        Boolean        @default(false)
+  internal_number Int?
+  customer_id     Int?
+  customers       customers?     @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_customers")
+  orders_items    orders_items[]
 }
 
 model orders_items {
@@ -61,21 +63,23 @@ model orders_items {
 }
 
 model orders_history {
-  order_id        Int       @id @default(autoincrement())
-  order_number    Int
-  order_timestamp DateTime? @default(now()) @db.Timestamp(6)
-  order_type      Int?      @db.SmallInt
-  order_total     Float?
-  order_void      Boolean   @default(false)
-  order_paid      Boolean   @default(false)
-  customer_id     Int       @default(autoincrement())
-  customer_name   String?   @db.VarChar(100)
-  customer_phone  String?   @unique @db.VarChar(15)
+  order_id              Int       @id @default(autoincrement())
+  order_number          Int?
+  order_timestamp       DateTime? @default(now()) @db.Timestamp(6)
+  order_type            Int?      @db.SmallInt
+  order_total           Float?
+  order_void            Boolean   @default(false)
+  order_paid            Boolean   @default(false)
+  order_internal        Boolean   @default(false)
+  order_internal_number Int?
+  customer_id           Int       @default(autoincrement())
+  customer_name         String?   @db.VarChar(100)
+  customer_phone        String?   @unique @db.VarChar(15)
 }
 
 model orders_items_detail {
   order_id                    Int       @id @default(autoincrement())
-  order_number                Int
+  order_number                Int?
   order_timestamp             DateTime? @default(now()) @db.Timestamp(6)
   order_type                  Int?      @db.SmallInt
   order_total                 Float
@@ -84,6 +88,8 @@ model orders_items_detail {
   order_discount              Float
   order_void                  Boolean   @default(false)
   order_paid                  Boolean   @default(false)
+  order_internal              Boolean   @default(false)
+  order_internal_number       Int?
   customer_id                 Int       @default(autoincrement())
   customer_name               String?   @db.VarChar(100)
   customer_phone              String?   @unique @db.VarChar(15)

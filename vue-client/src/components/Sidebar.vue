@@ -12,7 +12,7 @@
                   <v-btn class="my-2" x-large color="success" dark height="180px" width="100%"
                     v-on:click="changeComponent('HISTORY')">HISTORY</v-btn>
                   <v-btn class="my-2" x-large color="orange" dark height="180px" width="100%"
-                    v-on:click="optionsDialog = true">OPTIONS</v-btn>
+                    v-on:click="openOptions()">OPTIONS</v-btn>
                 </div>
               </div>
             </v-col>
@@ -35,7 +35,36 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="optionsDialog" width="900">
+    <!-- ORDER OPTIONS -->
+    <v-dialog v-model="orderOptionsDialog" width="900">
+      <v-card>
+        <h2 class="text-center pt-16 pb-12">ORDER OPTIONS</h2>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn x-large width="100%" v-on:click="orderOptionsInternalDialog = true">
+            <div>INTERNAL<br /></div>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="orderOptionsInternalDialog" width="900">
+      <v-card>
+        <h2 class="text-center pt-16 pb-12">SET TO INTERNAL ORDER</h2>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn x-large width="50%" v-on:click="setOrderToInternal(false)">
+            <div>FALSE<br /></div>
+          </v-btn>
+          <v-btn x-large width="50%" v-on:click="setOrderToInternal(true)">
+            <div>TRUE<br /></div>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- HISTORY OPTIONS -->
+    <v-dialog v-model="historyOptionsDialog" width="900">
       <v-card>
         <h2 class="text-center pt-16 pb-12">HISTORY OPTIONS</h2>
         <v-divider></v-divider>
@@ -59,7 +88,9 @@ export default {
   mixins: [storeMixin],
   data() {
     return {
-      optionsDialog: false,
+      orderOptionsDialog: false,
+      orderOptionsInternalDialog: false,
+      historyOptionsDialog: false,
       changeComponentDetails: {
         warning: false,
         component: "",
@@ -67,24 +98,45 @@ export default {
     };
   },
   methods: {
-   async printTodayHistoryStatement() {
-    try {
-       await axios.get(
-        `http://localhost:3000/get/todayhistorystatement`
+    async setOrderToInternal(bool) {
+      const order = this.$store.state.currentOrder;
+      order.internal = bool;
+      store.commit("setCurrentOrder", order);
+      this.orderOptionsDialog = false;
+      this.orderOptionsInternalDialog = false;
+    },
+    async openOptions() {
+      this.orderOptionsDialog = false;
+      this.historyOptionsDialog = false;
+      if (this.$store.state.component === "ORDER") {
+        this.orderOptionsDialog = true;
+      }
+      if (this.$store.state.component === "HISTORY") {
+        this.historyOptionsDialog = true;
+      }
+    },
+    async printTodayHistoryStatement() {
+      try {
+        await axios.get(
+          `http://localhost:3000/get/todayhistorystatement`
         )
-        this.optionsDialog = false;
+        this.historyOptionsDialog = false;
       } catch (err) {
         store.commit('setErrorToDisplay', err.response.data)
         store.commit("setNotification", 5);
-        this.optionsDialog = false;
+        this.historyOptionsDialog = false;
       }
     },
     setOrderWarning() {
+      console.log(JSON.stringify(this.$store.state.currentOrder))
+      console.log(JSON.stringify(this.$store.state.currentOrder))
+      console.log(JSON.stringify(this.$store.state.currentOrder))
+      console.log(JSON.stringify(this.$store.state.currentOrder))
       if (
         (JSON.stringify(this.$store.state.selectedItems) !== "{}" ||
           this.$store.state.selectedCustomer.phone !== "" ||
           JSON.stringify(this.$store.state.currentOrder) !==
-          '{"id":null,"type":null,"total":0,"customer_id":null,"void":null,"paid":null,"itemQuantity":0}') &&
+          '{"id":null,"type":null,"total":0,"customer_id":null,"void":null,"paid":null,"itemQuantity":0,"internal":false}') &&
         this.$store.state.component !== "HISTORY"
       ) {
         return true;

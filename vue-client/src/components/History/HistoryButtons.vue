@@ -14,7 +14,7 @@
             {{ getFormattedTimeStamp(new Date(order.order_timestamp)) }}
           </v-col>
           <!-- <v-col> {{ order.order_id }} </v-col> -->
-          <v-col> {{ order.order_number }} </v-col>
+          <v-col> {{ order.order_number ? order.order_number : `I - ` + order.order_internal_number }}  </v-col>
           <v-col> {{ orderTypeString[order.order_type] }} </v-col>
           <v-col v-if="order.order_void === true"> VOID </v-col>
           <v-col v-else-if="order.order_paid === true"> PAID </v-col>
@@ -116,6 +116,9 @@ export default {
         void: ordersItemsDetailWithOrderIdArray[0].order_void,
         paid: ordersItemsDetailWithOrderIdArray[0].order_paid,
         timestamp: ordersItemsDetailWithOrderIdArray[0].order_timestamp,
+        internal: ordersItemsDetailWithOrderIdArray[0].order_internal,
+        number: ordersItemsDetailWithOrderIdArray[0].order_number,
+        internal_number: ordersItemsDetailWithOrderIdArray[0].order_internal_number,
       });
       // Update the $store.state.selectedCustomer.
       store.commit('setSelectedCustomer', {

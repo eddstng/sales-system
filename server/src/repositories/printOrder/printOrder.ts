@@ -54,17 +54,15 @@ async function billSetup(
 async function handleFailure(order_id: number) {
     await deleteAllOrdersItemsWithOrderId(order_id)
     await deleteOneOrder(order_id)
-    // once delete the order will skip the deleted id. need to add a column called order_number and then use that instead of order_id. 
-    // also this is deleting the order if we fail to reprint. this is bad. 
-    // also when repritning alert with notifications
+    // once deleted the order will skip the deleted id. need to add a column called order_number and then use that instead of order_id. 
     const error = new Error(`An error occured while attempting to create and print bill. Order with order_id ${order_id} has been deleted.`)
     logError(createAndPrintOrderBill.name, new Error(`An error occured while attempting to create and print bill. Order creation has been cancelled. Order with order_id ${order_id} has been deleted.`))
     throw new Error(`An error occured while attempting to create and print bill. Order creation has been cancelled.`)
 }
 
-export async function createAndPrintOrderBill(printObj: { order_id: number, printClient: boolean, printKitchen: boolean }): Promise<void> {
+export async function createAndPrintOrderBill(printObj: { order_id: number, printClient: boolean, printKitchen: boolean, voided?: boolean }): Promise<void> {
     try {
-        const kitchenAndClientBills = await createKitchenAndClientBill(printObj.order_id)
+        const kitchenAndClientBills = await createKitchenAndClientBill(printObj.order_id, printObj.voided)
         thermalPrinterSetup()
         if (printer !== undefined) {
             printer.clear()
@@ -117,6 +115,7 @@ async function getOrderToPrint(order_id: number, retries: number, err?: unknown 
     }
 }
 
+    // when repritning alert with notifications
 export async function reprintOrder(printObj: { order_id: number, printClient: boolean, printKitchen: boolean, order_timestamp: Date }): Promise<void> {
     try {
         const orderTimestamp = new Date(printObj.order_timestamp)
@@ -137,7 +136,7 @@ export async function reprintOrder(printObj: { order_id: number, printClient: bo
     }
 }
 
-export async function createKitchenAndClientBill(order_id: number): Promise<{ clientBillPath: string, kitchenBillPath: string, isDelivery: boolean }> {
+export async function createKitchenAndClientBill(order_id: number, voided?: boolean): Promise<{ clientBillPath: string, kitchenBillPath: string, isDelivery: boolean }> {
     try {
         // This delay is required to temporarily fix the issue with incorrect printing after modifying an order. The database is not updating quick enough so the old order is printed.
         const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
@@ -151,7 +150,7 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
             orderTypeString = 'DELIVERY'
         }
 
-        let kitchenBillString = `${res[0].order_number} \n\n\n ${orderTypeString}
+        let kitchenBillString = `${res[0].order_number ?? `I-` + res[0].order_internal_number} \n\n\n ${orderTypeString}
 
 
         ${res[0].customer_phone}
@@ -166,7 +165,7 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
 
         const buzzerNumber = res[0].customer_buzzer_number ? `Buzzer: ${res[0].customer_buzzer_number} \n` : '';
         let clientBillString = `
-        ${res[0].order_number} \n ${orderTypeString}
+        ${res[0].order_number ?? `I-` + res[0].order_internal_number} \n ${orderTypeString}
         ${res[0].customer_phone}
         ` + `${res[0].order_type === 2 ? `${res[0].customer_address}
         ` : ''}` + `${buzzerNumber}` + `${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}
@@ -184,7 +183,6 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
                     }
                 })
             }
-
 
             if (process.env.CUSTOM_ITEM_ID && element.item_id === parseInt(process.env.CUSTOM_ITEM_ID)) {
                 kitchenBillString += `
@@ -239,6 +237,10 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
         Total: $${res[0].order_total.toFixed(2)}
         `
 
+        if (voided) {
+            clientBillString = `${`\xa0`.repeat(3)}VOID VOID VOID VOID\n` + clientBillString + `\n${`\xa0`.repeat(3)}VOID VOID VOID VOID`
+        }
+
         const textToImage = require('text-to-image');
 
         const kitchenBillImageURI = textToImage.generateSync(
@@ -250,8 +252,9 @@ export async function createKitchenAndClientBill(order_id: number): Promise<{ cl
             { fontSize: 40, lineHeight: 55, margin: 30, maxWidth: 550 });
 
         // Consideration: Need to consider whether to save the file with order_number or order_id.
-        let kitchenBillPath = `./src/repositories/printOrder/bills/${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")}/${res[0].order_id}-c.png`;
-        let clientBillPath = `./src/repositories/printOrder/bills/${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")}/${res[0].order_id}-e.png`;
+
+        let kitchenBillPath = `./src/repositories/printOrder/bills/${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")}/${order_id}-c.png`;
+        let clientBillPath = `./src/repositories/printOrder/bills/${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")}/${order_id}-e${voided ? '-void' : ''}.png`;
 
         const imageDataURI = require('image-data-uri');
         imageDataURI.outputFile(kitchenBillImageURI, kitchenBillPath)

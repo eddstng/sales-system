@@ -7,44 +7,47 @@
           <div>
             <v-col :cols="15">
               {{
-               $store.state.selectedCustomer.phone.replace(
-                 /(\d{3})(\d{3})(\d{3})/,
-                 "$1-$2-$3"
-               )
+              $store.state.selectedCustomer.phone.replace(
+              /(\d{3})(\d{3})(\d{3})/,
+              "$1-$2-$3"
+              )
               }}
               <br />
-              {{  $store.state.selectedCustomer.address  }} <br />
-              {{  $store.state.selectedCustomer.name  }}
+              {{ $store.state.selectedCustomer.address }} <br />
+              {{ $store.state.selectedCustomer.name }}
             </v-col>
             <v-col v-if="$store.state.selectedCustomer.note">
-              * {{  $store.state.selectedCustomer.note  }} <br />
+              * {{ $store.state.selectedCustomer.note }} <br />
             </v-col>
             <v-col>
               Number of Items:
-              {{  $store.state.currentOrder.itemQuantity  }}</v-col>
+              {{ $store.state.currentOrder.itemQuantity }}</v-col>
+            <v-col v-if="$store.state.currentOrder.internal === true">
+              Internal Order:
+              TRUE</v-col>
             <br />
           </div>
         </v-row>
         <div v-for="value in $store.state.selectedItemsOrderedByEntry" v-bind:key="value.id">
           <v-row v-if="value.node !== undefined" class="submitOrderDialogText mt-5 mb-5">
-            <v-col> x{{  value.quantity  }} </v-col>
+            <v-col> x{{ value.quantity }} </v-col>
             <v-col :cols="5">
-              {{  value.node.name_eng  }}
+              {{ value.node.name_eng }}
             </v-col>
             <v-col :cols="3">
-              {{  value.node.name_chn  }}
+              {{ value.node.name_chn }}
             </v-col>
             <v-col :cols="2" class="text-center">
-              ${{  value.node.price.toFixed(2)  }}
+              ${{ value.node.price.toFixed(2) }}
             </v-col>
           </v-row>
           <v-list-item-content v-for="customization in value.customizations" v-bind:key="customization.id">
             <div class="submitOrderDialogText pl-25 mb-5">
-              ➡ {{  customization.name_eng  }}
+              ➡ {{ customization.name_eng }}
               {{
-               customization.name_chn === ""
-               ? ""
-               : "/" + customization.name_chn
+              customization.name_chn === ""
+              ? ""
+              : "/" + customization.name_chn
               }}
             </div>
           </v-list-item-content>
@@ -52,16 +55,16 @@
         <br />
         <v-row class="submitOrderDialogText mt-5 mb-5">
           <v-col :cols="3">
-            Subtotal: {{  $store.state.priceDetails.subtotal.toFixed(2)  }}
+            Subtotal: {{ $store.state.priceDetails.subtotal.toFixed(2) }}
           </v-col>
           <v-col :cols="3" class="text-end">
-            Discount: -{{  $store.state.priceDetails.discount.toFixed(2)  }}
+            Discount: -{{ $store.state.priceDetails.discount.toFixed(2) }}
           </v-col>
           <v-col :cols="3" class="text-end">
-            GST: {{  $store.state.priceDetails.gst.toFixed(2)  }}
+            GST: {{ $store.state.priceDetails.gst.toFixed(2) }}
           </v-col>
           <v-col :cols="3" class="text-end">
-            Total: ${{  $store.state.priceDetails.total.toFixed(2)  }}
+            Total: ${{ $store.state.priceDetails.total.toFixed(2) }}
           </v-col>
         </v-row>
         <br />
@@ -101,7 +104,7 @@ export default {
       try {
         store.commit("setNotification", 4);
         await this.modifyOrdersFunction({
-          order_id: this.$store.state.currentOrder.id,
+          orderDetails: this.$store.state.currentOrder,
           items: this.$store.state.selectedItems,
           priceDetails: this.$store.state.priceDetails,
           customer_id: this.$store.state.selectedCustomer.id,
@@ -118,9 +121,9 @@ export default {
         store.commit("setNotification", 5);
       }
     },
-    modifyOrdersFunction: async function ({ order_id, customer_id, type, items, priceDetails }) {
+    modifyOrdersFunction: async function ({ orderDetails, customer_id, type, items, priceDetails }) {
       await axios.post("http://localhost:3000/post/modifyorder", {
-        order_id: order_id,
+        orderDetails: orderDetails,
         customer_id: customer_id,
         type: type,
         items: items,

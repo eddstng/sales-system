@@ -26,6 +26,10 @@
               Number of Items:
               {{ $store.state.currentOrder.itemQuantity }}</v-col
             >
+            <v-col v-if="$store.state.currentOrder.internal === true">
+              Internal Order:
+              TRUE</v-col
+            >
             <br />
           </div>
         </v-row>

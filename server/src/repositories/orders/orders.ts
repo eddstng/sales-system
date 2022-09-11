@@ -61,11 +61,23 @@ export async function getOneOrder(id: number): Promise<orders> {
     }
 }
 
-export async function createOrder(body: { total: number, customer_id: number, type: number }): Promise<orders> {
-    
-    const order = await getLatestOrderNumber();
-    
-    const orderCreateInput = {...body, number: order ? order.number+1 : 1}
+export async function createOrder(body: { total: number, customer_id: number, type: number, internal: boolean }): Promise<orders> {
+
+    let latestInternalOrderNumberToInsert = undefined;
+    if (body.internal) {
+        const latestInternalOrderNumber = await getLatestInternalOrderNumber();
+        latestInternalOrderNumberToInsert = latestInternalOrderNumber !== null ? latestInternalOrderNumber + 1 : 1
+    }
+
+    let latestOrderNumberToInsert = undefined;
+    if (!body.internal) {
+        const latestOrderNumber = await getLatestOrderNumber();
+        latestOrderNumberToInsert = latestOrderNumber !== null ? latestOrderNumber + 1 : 1
+    }
+
+    console.log({ ...body, number: latestOrderNumberToInsert, internal_number: latestInternalOrderNumberToInsert })
+    const orderCreateInput = { ...body, number: latestOrderNumberToInsert, internal_number: latestInternalOrderNumberToInsert }
+
     try {
         const res = await prisma.orders.create({ data: <Prisma.ordersCreateInput>orderCreateInput })
         logInfo(createOrder.name, `Order Created: {id: ${res.id}, total: ${res.total}, customer_id: ${res.customer_id}, timestamp: ${res.timestamp}}, type: ${res.type}}`)
@@ -88,7 +100,30 @@ export async function deleteOneOrder(id: number): Promise<void> {
     }
 }
 
-async function getLatestOrderNumber(): Promise<{id: number, number: number} | null> {
+async function getLatestInternalOrderNumber(): Promise<number | null> {
+    const res = await prisma.orders.findFirst(
+        {
+            select: {
+                id: true,
+                internal_number: true,
+            },
+            orderBy: {
+                internal_number: 'desc'
+            },
+            where: {
+                NOT: {
+                    internal_number: null
+                }
+            }
+        }
+    )
+    if (res?.internal_number !== undefined && res?.internal_number !== null) {
+        return res.internal_number
+    }
+    return null
+}
+
+async function getLatestOrderNumber(): Promise<number | null> {
     const res = await prisma.orders.findFirst(
         {
             select: {
@@ -96,11 +131,19 @@ async function getLatestOrderNumber(): Promise<{id: number, number: number} | nu
                 number: true,
             },
             orderBy: {
-                id: 'desc'
+                number: 'desc'
+            },
+            where: {
+                NOT: {
+                    number: null
+                }
             }
         }
     )
-    return res
+    if (res?.number !== undefined && res?.number !== null) {
+        return res.number
+    }
+    return null
 }
 
 export async function updateOrder(id: number, order: Prisma.ordersUncheckedUpdateInput): Promise<void> {
@@ -116,7 +159,10 @@ export async function updateOrder(id: number, order: Prisma.ordersUncheckedUpdat
                 paid: order.paid,
                 subtotal: order.subtotal,
                 gst: order.gst,
-                discount: order.discount
+                discount: order.discount,
+                internal: order.internal,
+                internal_number: order.internal_number,
+                number: order.number
             },
         })
         logInfo(updateOrder.name, `Order Updated: {id: ${res.id}, total: ${res.total}, customer_id: ${res.customer_id}, timestamp: ${res.timestamp}}, type: ${res.type}}`)
@@ -129,7 +175,7 @@ export async function updateOrder(id: number, order: Prisma.ordersUncheckedUpdat
 export async function submitOrder(
     data: {
         customer_id: number,
-        type: number,
+        orderDetails: { type: number, internal: boolean },
         items: {
             [key: string]: {
                 node: {
@@ -146,12 +192,12 @@ export async function submitOrder(
                 timestamp: Date,
                 customizations: { name_eng: string, name_chn: string }[]
             }
-            
+
         }
         priceDetails: { subtotal: number, gst: number, total: number, discount: number }
     }) {
     try {
-        const newOrder = await createOrder({ total: 0, customer_id: data.customer_id, type: data.type });
+        const newOrder = await createOrder({ total: 0, customer_id: data.customer_id, type: data.orderDetails.type, internal: data.orderDetails.internal });
         const itemsArray = createOrdersItemsCreateManyInputData(newOrder.id, data.items)
         await createOrdersItemsBulk(itemsArray);
         await updateOrder(newOrder.id, data.priceDetails) // update price details
@@ -199,7 +245,9 @@ function createOrdersItemsCreateManyInputData(order_id: number, items: {
 
 export async function modifyOrder(
     data: {
-        order_id: number,
+        customer_id: number,
+        // order_details: { id: number, type: number, internal: boolean },
+        orderDetails: {id: number,  type: number, number: number | null, internal: boolean, internal_number: number | null},
         items: {
             [key: string]: {
                 node: {
@@ -218,15 +266,42 @@ export async function modifyOrder(
             }
         }
         priceDetails: { subtotal: number, gst: number, total: number, discount: number }
-        customer_id: number,
-        type: number,
     }) {
+        console.log(data.orderDetails)
     try {
-        await deleteAllOrdersItemsWithOrderId(data.order_id);
-        const itemsArray = createOrdersItemsCreateManyInputData(data.order_id, data.items)
+        await deleteAllOrdersItemsWithOrderId(data.orderDetails.id);
+        const itemsArray = createOrdersItemsCreateManyInputData(data.orderDetails.id, data.items)
         await createOrdersItemsBulk(itemsArray);
-        await updateOrder(data.order_id, {...data.priceDetails, type: data.type, customer_id: data.customer_id}) // update price details
-        await createAndPrintOrderBill({ order_id: data.order_id, printKitchen: true, printClient: true });
+
+        let latestOrderNumberToInsert = data.orderDetails.number;
+        let latestInternalOrderNumberToInsert = data.orderDetails.internal_number;
+        let voidOrder = false;
+
+        if (data.orderDetails.internal === false && data.orderDetails.internal_number !== null) {
+            const latestOrderNumber = await getLatestOrderNumber();
+            latestOrderNumberToInsert = latestOrderNumber !== null ? latestOrderNumber + 1 : 1;
+            latestInternalOrderNumberToInsert = null;
+            await createAndPrintOrderBill({ order_id: data.orderDetails.id, printClient: true, printKitchen: false, voided: true })
+            voidOrder = true;
+            await submitOrder(data)
+        }
+
+        if (data.orderDetails.internal === true && data.orderDetails.internal_number === null) {
+            const latestInternalOrderNumber = await getLatestInternalOrderNumber();
+            latestInternalOrderNumberToInsert = latestInternalOrderNumber !== null ? latestInternalOrderNumber + 1 : 1;
+            latestOrderNumberToInsert = null;
+            await createAndPrintOrderBill({ order_id: data.orderDetails.id, printClient: true, printKitchen: false, voided: true })
+            voidOrder = true;
+            await submitOrder(data)
+
+        }
+
+        // await updateOrder(data.order.id, { ...data.priceDetails, type: data.type, customer_id: data.customer_id, internal: data.order.internal, internal_number: latestInternalOrderNumberToInsert, number: latestOrderNumberToInsert }) // update price details
+
+        await updateOrder(data.orderDetails.id, { ...data.priceDetails, type: data.orderDetails.type, customer_id: data.customer_id, void: voidOrder }) // update price details
+        if (!voidOrder) {
+            await createAndPrintOrderBill({ order_id: data.orderDetails.id, printKitchen: true, printClient: true });
+        } 
     } catch (err) {
         console.log(err)
         throw err

@@ -23,6 +23,10 @@
               Number of Items:
               {{ $store.state.currentOrder.itemQuantity }}
             </v-col>
+            <v-col v-if="$store.state.currentOrder.internal === true">
+              Internal Order:
+              TRUE</v-col
+            >
             <br />
           </div>
         </v-row>
@@ -104,7 +108,7 @@ export default {
         store.commit("setNotification", 4);
         await this.submitOrderFunction({
           customer_id: this.$store.state.selectedCustomer.id,
-          type: this.$store.state.currentOrder.type,
+          orderDetails: this.$store.state.currentOrder,
           items: this.$store.state.selectedItems,
           priceDetails: this.$store.state.priceDetails
         })
@@ -118,10 +122,10 @@ export default {
       }
     },
 
-    submitOrderFunction: async function ({ customer_id, type, items, priceDetails }) {
+    submitOrderFunction: async function ({ customer_id, orderDetails, items, priceDetails }) {
       await axios.post("http://localhost:3000/post/submitorder", {
         customer_id: customer_id,
-        type: type,
+        orderDetails: orderDetails,
         items: items,
         priceDetails: priceDetails,
       });

@@ -62,7 +62,8 @@ export default {
         customer_id: null,
         void: null,
         paid: null,
-        itemQuantity: 0
+        itemQuantity: 0,
+        internal: false
       });
       this.storeMixinClearStorePriceDetails();
     },
