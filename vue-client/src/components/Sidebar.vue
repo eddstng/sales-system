@@ -70,8 +70,14 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn x-large width="100%" v-on:click="printTodayHistoryStatement()">
+          <v-btn x-large width="33%" v-on:click="printTodayHistoryStatement()">
             <div>PRINT STATEMENT<br /></div>
+          </v-btn>
+          <v-btn x-large width="33%" v-on:click="printTodayHistoryStatementInternal()">
+            <div>PRINT INTERNAL STATEMENT<br /></div>
+          </v-btn>
+          <v-btn x-large width="33%" v-on:click="printTodayHistoryType()">
+            <div>PRINT DELIVERY STATEMENT<br /></div>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -117,21 +123,45 @@ export default {
     },
     async printTodayHistoryStatement() {
       try {
+        this.historyOptionsDialog = false;
         await axios.get(
           `http://localhost:3000/get/todayhistorystatement`
         )
-        this.historyOptionsDialog = false;
       } catch (err) {
         store.commit('setErrorToDisplay', err.response.data)
         store.commit("setNotification", 5);
         this.historyOptionsDialog = false;
       }
     },
+    async printTodayHistoryStatementInternal() {
+      try {
+        this.historyOptionsDialog = false;
+        await axios.get(
+          `http://localhost:3000/get/todayhistorystatementinternal`
+        )
+      } catch (err) {
+        store.commit('setErrorToDisplay', err.response.data)
+        store.commit("setNotification", 5);
+        this.historyOptionsDialog = false;
+      }
+    },
+    async printTodayHistoryType() {
+      try {
+        this.historyOptionsDialog = false;
+        await axios.post(
+          `http://localhost:3000/post/todayhistorystatementtype`,
+          {
+            type: 2
+          }
+        );
+      } catch (err) {
+        store.commit('setErrorToDisplay', err.response.data)
+        store.commit("setNotification", 5);
+        this.historyOptionsDialog = false;
+      }
+    },
+
     setOrderWarning() {
-      console.log(JSON.stringify(this.$store.state.currentOrder))
-      console.log(JSON.stringify(this.$store.state.currentOrder))
-      console.log(JSON.stringify(this.$store.state.currentOrder))
-      console.log(JSON.stringify(this.$store.state.currentOrder))
       if (
         (JSON.stringify(this.$store.state.selectedItems) !== "{}" ||
           this.$store.state.selectedCustomer.phone !== "" ||

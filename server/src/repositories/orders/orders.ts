@@ -75,7 +75,6 @@ export async function createOrder(body: { total: number, customer_id: number, ty
         latestOrderNumberToInsert = latestOrderNumber !== null ? latestOrderNumber + 1 : 1
     }
 
-    console.log({ ...body, number: latestOrderNumberToInsert, internal_number: latestInternalOrderNumberToInsert })
     const orderCreateInput = { ...body, number: latestOrderNumberToInsert, internal_number: latestInternalOrderNumberToInsert }
 
     try {
@@ -165,6 +164,9 @@ export async function updateOrder(id: number, order: Prisma.ordersUncheckedUpdat
                 number: order.number
             },
         })
+        if (res.void === true) {
+            await createAndPrintOrderBill({ order_id: id, printClient: true, printKitchen: false, voided: true })
+        }
         logInfo(updateOrder.name, `Order Updated: {id: ${res.id}, total: ${res.total}, customer_id: ${res.customer_id}, timestamp: ${res.timestamp}}, type: ${res.type}}`)
     } catch (err) {
         logError(updateOrder.name, `${err}`);
@@ -246,7 +248,6 @@ function createOrdersItemsCreateManyInputData(order_id: number, items: {
 export async function modifyOrder(
     data: {
         customer_id: number,
-        // order_details: { id: number, type: number, internal: boolean },
         orderDetails: {id: number,  type: number, number: number | null, internal: boolean, internal_number: number | null},
         items: {
             [key: string]: {
@@ -267,12 +268,7 @@ export async function modifyOrder(
         }
         priceDetails: { subtotal: number, gst: number, total: number, discount: number }
     }) {
-        console.log(data.orderDetails)
     try {
-        await deleteAllOrdersItemsWithOrderId(data.orderDetails.id);
-        const itemsArray = createOrdersItemsCreateManyInputData(data.orderDetails.id, data.items)
-        await createOrdersItemsBulk(itemsArray);
-
         let latestOrderNumberToInsert = data.orderDetails.number;
         let latestInternalOrderNumberToInsert = data.orderDetails.internal_number;
         let voidOrder = false;
@@ -281,7 +277,6 @@ export async function modifyOrder(
             const latestOrderNumber = await getLatestOrderNumber();
             latestOrderNumberToInsert = latestOrderNumber !== null ? latestOrderNumber + 1 : 1;
             latestInternalOrderNumberToInsert = null;
-            await createAndPrintOrderBill({ order_id: data.orderDetails.id, printClient: true, printKitchen: false, voided: true })
             voidOrder = true;
             await submitOrder(data)
         }
@@ -290,15 +285,15 @@ export async function modifyOrder(
             const latestInternalOrderNumber = await getLatestInternalOrderNumber();
             latestInternalOrderNumberToInsert = latestInternalOrderNumber !== null ? latestInternalOrderNumber + 1 : 1;
             latestOrderNumberToInsert = null;
-            await createAndPrintOrderBill({ order_id: data.orderDetails.id, printClient: true, printKitchen: false, voided: true })
             voidOrder = true;
             await submitOrder(data)
-
         }
 
-        // await updateOrder(data.order.id, { ...data.priceDetails, type: data.type, customer_id: data.customer_id, internal: data.order.internal, internal_number: latestInternalOrderNumberToInsert, number: latestOrderNumberToInsert }) // update price details
+        await deleteAllOrdersItemsWithOrderId(data.orderDetails.id);
+        const itemsArray = createOrdersItemsCreateManyInputData(data.orderDetails.id, data.items)
+        await createOrdersItemsBulk(itemsArray);
 
-        await updateOrder(data.orderDetails.id, { ...data.priceDetails, type: data.orderDetails.type, customer_id: data.customer_id, void: voidOrder }) // update price details
+        await updateOrder(data.orderDetails.id, { ...data.priceDetails, type: data.orderDetails.type, customer_id: data.customer_id, void: voidOrder })
         if (!voidOrder) {
             await createAndPrintOrderBill({ order_id: data.orderDetails.id, printKitchen: true, printClient: true });
         } 

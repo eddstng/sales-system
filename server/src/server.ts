@@ -6,7 +6,7 @@ import { getAllItems, createItem, getOneItem, deleteOneItem, updateItem } from '
 import { logger } from '../src/logging/logger';
 import { Prisma } from '@prisma/client';
 import { getAllCustomers, getOneCustomer, createCustomer, updateCustomer, deleteOneCustomer } from './repositories/customers/customers';
-import { createOrder, deleteOneOrder, submitOrder, getAllOrders, getOneOrder, modifyOrder } from './repositories/orders/orders';
+import { createOrder, deleteOneOrder, submitOrder, getAllOrders, getOneOrder, modifyOrder, updateOrder } from './repositories/orders/orders';
 import { getAllOrdersItems, createOrdersItems, updateOrdersItems, deleteOneOrdersItems, getOneOrdersItems, createOrdersItemsBulk, deleteAllOrdersItemsWithOrderId } from './repositories/ordersItems/ordersItems';
 import { getAllOrdersHistory } from './repositories/ordersHistory/ordersHistory';
 import { getAllOrdersItemsDetail, getAllOrdersItemsDetailWithOrderId } from './repositories/ordersItemsDetail/ordersItemsDetail';
@@ -25,7 +25,6 @@ export default function startServer(): void {
     app.get('/get/server', async (_req, res) => {
         try {
             res.status(200).json(true)
-            console.log()
         } catch (err: unknown) {
             res.status(500).send(`${err as string}`);
         }
@@ -89,7 +88,6 @@ export default function startServer(): void {
             res.status(200).json(await createCustomer(req.body))
         } catch (err: unknown) {
             const error = err as string
-            console.log(error)
             res.status(500).send(`${err as string}`);
         }
     })
@@ -131,13 +129,13 @@ export default function startServer(): void {
             res.status(500).send(`${err as string}`);
         }
     })
-    // app.put('/put/orders/update/id/:id', async (req, res) => {
-    //     try {
-    //         res.status(200).json(await updateOrder(parseInt(req.params.id), <Prisma.ordersUpdateInput>req.body))
-    //     } catch (err: unknown) {
-    //         res.status(500).send(`${err as string}`);
-    //     }
-    // })
+    app.put('/put/orders/update/id/:id', async (req, res) => {
+        try {
+            res.status(200).json(await updateOrder(parseInt(req.params.id), <Prisma.ordersUpdateInput>req.body))
+        } catch (err: unknown) {
+            res.status(500).send(`${err as string}`);
+        }
+    })
     app.delete('/delete/orders/delete/id/:id', async (req, res) => {
         try {
             res.status(200).json(await deleteOneOrder(parseInt(req.params.id)))
@@ -273,6 +271,24 @@ export default function startServer(): void {
         }
     })
 
+
+    app.get('/get/todayhistorystatementinternal', async (req, res) => {
+        try {
+            await createAndPrintHistoryStatement({internal: true})
+            res.status(200)
+        } catch (err: unknown) {
+            res.status(500).send(`${err as string}`);
+        }
+    })
+
+    app.post('/post/todayhistorystatementtype', async (req, res) => {
+        try {
+            res.status(200).json(await createAndPrintHistoryStatement({type: req.body.type}))
+        } catch (err: unknown) {
+            res.status(500).send(`${err as string}`);
+        }
+    })
+    
     app.listen(port, () => {
         logger.info('[server] Server started on http://localhost:3000.')
     })

@@ -35,9 +35,6 @@ export async function getAllOrdersItemsDetailWithOrderId(order_id: number): Prom
             }
         )
         logInfo(getAllOrdersItemsDetailWithOrderId.name, `Success!`)
-        // console.log('===========allOrdersHistoryWithOrderId-START')
-        // console.log(allOrdersHistoryWithOrderId)
-        // console.log('===========allOrdersHistoryWithOrderId-END')
         return allOrdersHistoryWithOrderId;
     } catch (err) {
         logInfo(getAllOrdersItemsDetailWithOrderId.name, `${err}`)

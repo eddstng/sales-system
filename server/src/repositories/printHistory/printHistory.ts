@@ -25,18 +25,17 @@ function thermalPrinterSetup(): any {
     }
 }
 
-export async function createAndPrintHistoryStatement(
-) {
+export async function createAndPrintHistoryStatement(options?: { internal?: boolean, type?: number }) {
     thermalPrinterSetup()
     if (printer !== undefined) {
         printer.clear()
     }
 
-    const historyToPrint = await getHistoryToPrint()
+    const historyToPrint = await getHistoryToPrint(options)
     if (historyToPrint.length === 0) {
         throw new Error('No history to print.')
     }
-    const historyStatementPath = createHistoryStatement(historyToPrint)
+    const historyStatementPath = createHistoryStatement(historyToPrint, options)
     if (process.env.PRINTING !== 'false') {
         const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
         await delay(10)
@@ -44,11 +43,11 @@ export async function createAndPrintHistoryStatement(
         printer.cut();
         printer.execute();
     } else {
-        throw new Error ('Printing is turned off. Turn printing setting on to print history statement.')
+        throw new Error('Printing is turned off. Turn printing setting on to print history statement.')
     }
 }
 
-function createHistoryStatement(history: orders_history[]) {
+function createHistoryStatement(history: orders_history[], options?: { internal?: boolean, type?: number }) {
     if (history.length === 0) {
         throw new Error('empty');
     }
@@ -70,6 +69,14 @@ function createHistoryStatement(history: orders_history[]) {
 
     let historyStatementString = `HISTORY STATEMENT${`\xa0`.repeat(12)}\n-------------------------------------------------\nSTART: ${startTimestamp}${`\xa0`.repeat(7)}\nEND: ${endTimestamp}${`\xa0`.repeat(7)}\n-------------------------------------------------`;
 
+    let historyStatementTypeString = ''
+    if (options?.internal === true) {
+        historyStatementTypeString = `INTERNAL${`\xa0`.repeat(23)}\n` 
+    }
+    if (options?.type === 2) {
+        historyStatementTypeString = `DELIVERY${`\xa0`.repeat(23)}\n` 
+    }
+    historyStatementString = `${historyStatementTypeString}` + historyStatementString
     historyStatementString += `\nID${`\xa0`.repeat(12)}TIMESTAMP${`\xa0`.repeat(11)}PRICE${`\xa0`.repeat(0)}`
 
     let historyStatementTotal = 0
@@ -95,11 +102,13 @@ function createHistoryStatement(history: orders_history[]) {
         if (elementTimestamp.length === 19) {
             elementTimestamp = `\xa0`.repeat(3) + elementTimestamp
         }
-        historyStatementString += `\n ${element.order_id} ${elementTimestamp} ${`\xa0`.repeat(2)}${formattedOrderTotal}`
+        historyStatementString += `\n ${element.order_number ?? 'I-' + element.order_internal_number} ${elementTimestamp} ${`\xa0`.repeat(2)}${element.order_void ? `${`\xa0`.repeat(5)}VOID` : formattedOrderTotal}`
         if (element.order_total === null) {
             throw new Error('total is null')
         }
-        historyStatementTotal += element.order_total
+        if (element.order_void !== true) {
+            historyStatementTotal += element.order_total
+        }
     })
     let totalSpacing = `\xa0`.repeat(35)
     if (`${historyStatementTotal.toFixed(2)}`.length === 5) {
@@ -127,7 +136,7 @@ function createHistoryStatement(history: orders_history[]) {
     return historyStatementPath
 }
 
-export async function getHistoryToPrint(): Promise<orders_history[]> {
+export async function getHistoryToPrint(options?: { internal?: boolean, type?: number }): Promise<orders_history[]> {
     try {
         var gteDate = new Date;
         gteDate.setHours(0);
@@ -139,19 +148,36 @@ export async function getHistoryToPrint(): Promise<orders_history[]> {
         lteDate.setMinutes(0);
         lteDate.setSeconds(0);
         lteDate.setDate(lteDate.getDate() + 1);
-        const res = await prisma.orders_history.findMany(
+
+        const res = options?.type ? await prisma.orders_history.findMany(
             {
                 where: {
                     order_timestamp: {
-                        // gte: gteDate,
+                        gte: gteDate,
                         lte: lteDate
                     },
+                    order_internal: options?.internal ? true : false,
+                    order_type: options.type
+                },
+                orderBy: {
+                    order_id: 'asc'
+                }
+            }
+        ) : await prisma.orders_history.findMany(
+            {
+                where: {
+                    order_timestamp: {
+                        gte: gteDate,
+                        lte: lteDate
+                    },
+                    order_internal: options?.internal ? true : false,
                 },
                 orderBy: {
                     order_id: 'asc'
                 }
             }
         )
+
         return res
     } catch (err) {
         logError(getHistoryToPrint.name, `${err} `)

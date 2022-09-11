@@ -566,7 +566,6 @@ export default {
       } else if (item.category === 1) {
         this.itemThatRequiresCustomization = item;
         this.customizeSoupSizeDialog = true;
-        console.log(this.soupItemsObj);
         // add the hard or soft as customization.
         // we will throw up a dialog asking soft or hard
       } else {
@@ -600,7 +599,6 @@ export default {
     },
 
     addCustomizationToItem: function (selectedItem, customizationObj) {
-      console.log(selectedItem);
       const selectedItemIdToUseString =
         selectedItem.node.custom_id ?? selectedItem.node.id.toString();
 
