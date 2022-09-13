@@ -34,10 +34,10 @@ async function billSetup(
     if (printObj.printKitchen) {
         await printer.printImage(kitchenAndClientBills.kitchenBillPath);
         printer.cut();
-            if (reprint !== true) {
-                await printer.printImage(kitchenAndClientBills.kitchenBillPath);
-                printer.cut();
-            }
+        if (reprint !== true) {
+            await printer.printImage(kitchenAndClientBills.kitchenBillPath);
+            printer.cut();
+        }
     }
     if (printObj.printClient) {
         await printer.printImage('./src/repositories/printOrder/header.png');
@@ -115,7 +115,7 @@ async function getOrderToPrint(order_id: number, retries: number, err?: unknown 
     }
 }
 
-    // when repritning alert with notifications
+// when repritning alert with notifications
 export async function reprintOrder(printObj: { order_id: number, printClient: boolean, printKitchen: boolean, order_timestamp: Date }): Promise<void> {
     try {
         const orderTimestamp = new Date(printObj.order_timestamp)
@@ -177,17 +177,16 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
             if (element.orders_items_customizations !== null) {
                 element.orders_items_customizations.forEach((customization: { name_eng: string, name_chn: string }) => {
                     if (english.test(element.item_name_chn)) { // To handle formatting for items such as Dinner Specials.
-                        kitchenCustomizationString += `\n⤷${customization.name_chn === '' ? '___________' : customization.name_chn}\n\n\n`
+                        kitchenCustomizationString += `\n${`\xa0`.repeat(2)}⤷${customization.name_chn === '' ? '___________' : customization.name_chn}\n\n\n`
                     } else {
-                        kitchenCustomizationString += `\n\n\n⤷${customization.name_chn === '' ? '___________' : customization.name_chn}\n`
+                        kitchenCustomizationString += `\n\n\n${`\xa0`.repeat(2)}⤷${customization.name_chn === '' ? '___________' : customization.name_chn}\n`
                     }
                 })
             }
 
             if (process.env.CUSTOM_ITEM_ID && element.item_id === parseInt(process.env.CUSTOM_ITEM_ID)) {
                 kitchenBillString += `
-
-                x${element.orders_items_quantity}${kitchenCustomizationString ? kitchenCustomizationString : ''} ⊵____________
+                x${element.orders_items_quantity} ⊵____________${kitchenCustomizationString ? kitchenCustomizationString : ''}
                 
                 `
 
@@ -209,10 +208,12 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
             let clientCustomizationString: string = '';
             if (element.orders_items_customizations !== null) {
                 element.orders_items_customizations.forEach((element: { name_eng: string, name_chn: string }) => {
-                    if (english.test(element.name_eng)) {
-                        clientCustomizationString += `\n⤷${element.name_eng}`
+                    if (element.name_chn === '') {
+                        clientCustomizationString += `\n${`\xa0`.repeat(2)}⤷${element.name_eng}`
                     } else {
-                        clientCustomizationString += `\n⤷${element.name_chn}/${element.name_eng}`
+                        const clientCustomizationStringToBeAdded = `\n${`\xa0`.repeat(2)}⤷${element.name_chn}/${element.name_eng}`
+                        const splitClientCustomizationStringToBeAdded = clientCustomizationStringToBeAdded.split('/')
+                        clientCustomizationString += `${splitClientCustomizationStringToBeAdded[0]}\n${`\xa0`.repeat(6)}${splitClientCustomizationStringToBeAdded[1]}`
                     }
                 })
             }
@@ -270,9 +271,9 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
         if (itemNameChn.slice(-1) === ')') {
             const indexOfOpenBracket = itemNameChn.lastIndexOf('(');
             if (english.test((itemNameChn.substring(indexOfOpenBracket)).charAt(1))) {
-                return (`${itemNameChn.replace(itemNameChn.substring(indexOfOpenBracket), '')}\n\n\n\n\n⤷${itemNameChn.substring(indexOfOpenBracket)}`)
+                return (`${itemNameChn.replace(itemNameChn.substring(indexOfOpenBracket), '')}\n\n\n\n\n${`\xa0`.repeat(2)}⤷${itemNameChn.substring(indexOfOpenBracket)}`)
             } else {
-                return (`${itemNameChn.replace(itemNameChn.substring(indexOfOpenBracket), '')}\n\n\n\n⤷${itemNameChn.substring(indexOfOpenBracket)}`)
+                return (`${itemNameChn.replace(itemNameChn.substring(indexOfOpenBracket), '')}\n\n\n\n${`\xa0`.repeat(2)}⤷${itemNameChn.substring(indexOfOpenBracket)}`)
             }
         }
         return itemNameChn
