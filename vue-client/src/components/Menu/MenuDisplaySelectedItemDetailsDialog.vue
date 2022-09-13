@@ -26,9 +26,7 @@
                     </div>
                   </v-col>
                   <div class="pa-1">
-                    <v-btn small width="5px" v-on:click="
-                      removeCustomizationFromSelectedItem(customization)
-                    ">
+                    <v-btn small width="5px" v-on:click="removeCustomizationFromSelectedItem(customization)">
                       <div>X<br /></div>
                     </v-btn>
                   </div>
@@ -283,19 +281,19 @@ export default {
       selectedItems[selectedItem.node.id].quantity = selectedItem.quantity;
       store.commit("setSelectedItems", selectedItems);
       this.storeMixinUpdateStorePriceDetails();
-    }
-  },
-  removeCustomizationFromSelectedItem(customization) {
-    const selectedItems = Object.assign({}, this.$store.state.selectedItems);
-    const customIdOrId =
-      this.menuDisplayItemDetails.removeSelectedItem.node.custom_id ??
-      this.menuDisplayItemDetails.removeSelectedItem.node.id;
-    selectedItems[customIdOrId].customizations = selectedItems[
-      customIdOrId
-    ].customizations.filter(function (obj) {
-      return obj.name_eng !== customization.name_eng;
-    });
-    store.commit("setSelectedItems", selectedItems);
+    },
+    removeCustomizationFromSelectedItem(customization) {
+      const selectedItems = Object.assign({}, this.$store.state.selectedItems);
+      const customIdOrId =
+        this.menuDisplayItemDetails.removeSelectedItem.node.custom_id ??
+        this.menuDisplayItemDetails.removeSelectedItem.node.id;
+      selectedItems[customIdOrId].customizations = selectedItems[
+        customIdOrId
+      ].customizations.filter(function (obj) {
+        return obj.name_eng !== customization.name_eng;
+      });
+      store.commit("setSelectedItems", selectedItems);
+    },
   },
 };
 </script>
