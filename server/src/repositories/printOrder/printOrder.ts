@@ -9,7 +9,7 @@ import { deleteAllOrdersItemsWithOrderId } from '../ordersItems/ordersItems';
 dotenv.config();
 const ThermalPrinter = require('node-thermal-printer').printer
 const Types = require('node-thermal-printer').types
-const english = /^[A-Za-z\d_-]+$/;
+const english = /^[a-zA-Z ]*$/;
 let printer: any;
 
 function thermalPrinterSetup(): any {
@@ -46,7 +46,7 @@ async function billSetup(
     }
     if (kitchenAndClientBills.isDelivery) {
         await printer.printImage('./src/repositories/printOrder/header.png');
-        await printer.printImage(kitchenAndClientBills.clientBillPath); 
+        await printer.printImage(kitchenAndClientBills.clientBillPath);
         printer.cut();
     }
 }
@@ -189,12 +189,12 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
                 x${element.orders_items_quantity} ⊵____________${kitchenCustomizationString ? kitchenCustomizationString : ''}
                 
                 `
-
             } else {
                 if (english.test(element.item_name_chn)) {
                     kitchenBillString += `
                      x${element.orders_items_quantity} ${element.item_name_chn}
-                    ${kitchenCustomizationString}`
+                    ${kitchenCustomizationString}
+                    `
                 } else {
                     kitchenBillString += `x${element.orders_items_quantity} ${kitchenBillStringItemNameChnDisplay}
                     ${kitchenCustomizationString}
@@ -272,9 +272,9 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
             const indexOfOpenBracket = itemNameChn.lastIndexOf('(');
             if (english.test((itemNameChn.substring(indexOfOpenBracket)).charAt(1))) {
                 return (`${itemNameChn.replace(itemNameChn.substring(indexOfOpenBracket), '')}\n\n\n\n\n${`\xa0`.repeat(2)}⤷${itemNameChn.substring(indexOfOpenBracket)}`)
-            } else {
-                return (`${itemNameChn.replace(itemNameChn.substring(indexOfOpenBracket), '')}\n\n\n\n${`\xa0`.repeat(2)}⤷${itemNameChn.substring(indexOfOpenBracket)}`)
             }
+
+            return (`${itemNameChn.replace(itemNameChn.substring(indexOfOpenBracket), '')}\n\n\n\n${`\xa0`.repeat(2)}⤷${itemNameChn.substring(indexOfOpenBracket)}`)
         }
         return itemNameChn
     }
