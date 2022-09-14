@@ -9,7 +9,7 @@ import { deleteAllOrdersItemsWithOrderId } from '../ordersItems/ordersItems';
 dotenv.config();
 const ThermalPrinter = require('node-thermal-printer').printer
 const Types = require('node-thermal-printer').types
-const english = /^[a-zA-Z ]*$/;
+const english = /^[a-zA-Z-0-9 ]*$/;
 let printer: any;
 
 function thermalPrinterSetup(): any {
@@ -159,7 +159,6 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
         ` + `${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}
         \n總數: ${res[0].items_quantity_total}\n\n
         -----------------------
-        
 
         `;
 
@@ -171,6 +170,7 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
         ` : ''}` + `${buzzerNumber}` + `${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}
         -----------------------`;
 
+        let kitchenBillStringEnglish = '';
         res.forEach((element: any) => {
             let kitchenCustomizationString: string = '';
             let kitchenBillStringItemNameChnDisplay = getKitchenBillStringItemNameChnDisplay(element.item_name_chn)
@@ -191,20 +191,27 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
                 `
             } else {
                 if (english.test(element.item_name_chn)) {
-                    kitchenBillString += `
+                    // kitchenBillString += `
+                    //  x${element.orders_items_quantity} ${element.item_name_chn}
+                    // ${kitchenCustomizationString}
+                    // `
+                    kitchenBillStringEnglish += `
+                    
                      x${element.orders_items_quantity} ${element.item_name_chn}
                     ${kitchenCustomizationString}
                     `
+
                 } else {
-                    kitchenBillString += `x${element.orders_items_quantity} ${kitchenBillStringItemNameChnDisplay}
+                    kitchenBillString += `
+                    x${element.orders_items_quantity} ${kitchenBillStringItemNameChnDisplay}
                     ${kitchenCustomizationString}
 
                     `
                 }
             }
 
-            kitchenBillString += `
-            `
+            // kitchenBillString += `
+            // `
             let clientCustomizationString: string = '';
             if (element.orders_items_customizations !== null) {
                 element.orders_items_customizations.forEach((element: { name_eng: string, name_chn: string }) => {
@@ -224,7 +231,7 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
             ${element.orders_items_quantity}x ${(element.item_price as number).toFixed(2)}`
         })
 
-        kitchenBillString += `
+        kitchenBillString += `${kitchenBillStringEnglish}
 
         `
 
