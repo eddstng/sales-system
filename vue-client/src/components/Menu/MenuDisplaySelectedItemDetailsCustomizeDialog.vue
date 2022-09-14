@@ -2,7 +2,7 @@
   <v-dialog
     v-if="menuDisplayItemDetails.openCustomizeSelectedItemDialog"
     v-model="menuDisplayItemDetails.selectedItemDialog"
-    width="1000px"
+    width="1300px"
   >
     <v-card>
       <div>
@@ -21,7 +21,7 @@
           x-large
           width="15%"
           height="100"
-          class="mb-5 mr-2 ml-2 customization-button"
+          class="mb-5 mr-2 ml-3 customization-button"
           v-on:click="
             phone = '';
             addCustomizationToCustomizationInput(obj);
@@ -171,33 +171,39 @@ export default {
         { name_eng: "CHKN", name_chn: "雞肉" },
         { name_eng: "SEAFOOD", name_chn: "海鮮" },
         { name_eng: "EGG", name_chn: "蛋" },
+        { name_eng: "BEANSPROUTS", name_chn: "芽菜" },
+        { name_eng: "PINEAPPLE", name_chn: "菠蘿" },
+        { name_eng: "CORN", name_chn: "粟米" },
+        { name_eng: "MUSHROOMS", name_chn: "菇" },
+        { name_eng: "SHELLESS PRAWN", name_chn: "轉虾球" },
+        { name_eng: "BONELESS PORK", name_chn: "轉肉" },
       ],
-      customizations: [
-        {
-          name_eng: "MSG",
-          name_chn: "",
-        },
-        {
-          name_eng: "SESAME",
-          name_chn: "",
-        },
-        {
-          name_eng: "SALT",
-          name_chn: "",
-        },
-        {
-          name_eng: "OIL",
-          name_chn: "",
-        },
-        {
-          name_eng: "SPICY",
-          name_chn: "",
-        },
-        {
-          name_eng: "ONIONS",
-          name_chn: "",
-        },
-      ],
+      // customizations: [
+      //   {
+      //     name_eng: "MSG",
+      //     name_chn: "",
+      //   },
+      //   {
+      //     name_eng: "SESAME",
+      //     name_chn: "",
+      //   },
+      //   {
+      //     name_eng: "SALT",
+      //     name_chn: "",
+      //   },
+      //   {
+      //     name_eng: "OIL",
+      //     name_chn: "",
+      //   },
+      //   {
+      //     name_eng: "SPICY",
+      //     name_chn: "",
+      //   },
+      //   {
+      //     name_eng: "ONIONS",
+      //     name_chn: "",
+      //   },
+      // ],
     };
   },
   methods: {
