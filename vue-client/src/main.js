@@ -10,8 +10,6 @@ import storeMixin from "./mixins/storeMixin"
 Vue.use(VueChatScroll);
 Vue.config.productionTip = false;
 
-export let serverNotRunning = false;
-
 new Vue({
   mixins: [storeMixin],
   methods: {

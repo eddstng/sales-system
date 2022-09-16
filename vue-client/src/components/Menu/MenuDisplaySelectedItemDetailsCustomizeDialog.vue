@@ -33,7 +33,7 @@
             <p class="pb-10 customization-button-chn">{{ obj.name_chn }}</p>
           </div>
         </v-btn>
-        <v-row class="justify-center mt-10 mb-10">
+        <!-- <v-row class="justify-center mt-10 mb-10">
           <v-btn
             class="mt-3 mb-3"
             x-large
@@ -46,10 +46,9 @@
               })
             "
           >
-            <!-- lets make this a input bar where we can input our custom order for name_eng -->
             <p>&</p>
           </v-btn>
-        </v-row>
+        </v-row> -->
         <v-row class="justify-center mt-10">
           <v-col cols="12" md="6">
             <v-text-field
@@ -178,32 +177,6 @@ export default {
         { name_eng: "SHELLESS PRAWN", name_chn: "轉虾球" },
         { name_eng: "BONELESS PORK", name_chn: "轉肉" },
       ],
-      // customizations: [
-      //   {
-      //     name_eng: "MSG",
-      //     name_chn: "",
-      //   },
-      //   {
-      //     name_eng: "SESAME",
-      //     name_chn: "",
-      //   },
-      //   {
-      //     name_eng: "SALT",
-      //     name_chn: "",
-      //   },
-      //   {
-      //     name_eng: "OIL",
-      //     name_chn: "",
-      //   },
-      //   {
-      //     name_eng: "SPICY",
-      //     name_chn: "",
-      //   },
-      //   {
-      //     name_eng: "ONIONS",
-      //     name_chn: "",
-      //   },
-      // ],
     };
   },
   methods: {
