@@ -9,13 +9,16 @@
       @closeModifyOrderDialog="closeModifyOrderDialog"
     />
     <MenuDisplaySelectedItemDetailsDialog
-      v-bind:menuDisplayItemDetails="menuDisplayItemDetails"
+      v-bind:menuComponentDetails="menuComponentDetails"
       @openCustomizeSelectedItemDialog="openCustomizeSelectedItemDialog"
     />
     <MenuDisplaySelectedItemDetailsCustomizeDialog
-      v-bind:menuDisplayItemDetails="menuDisplayItemDetails"
+      v-bind:menuComponentDetails="menuComponentDetails"
       @closeCustomizeSelectedItemDialog="closeCustomizeSelectedItemDialog"
       @closeSelectedItemDialog="closeSelectedItemDialog"
+    />
+    <MenuButtonsCustomItemDialog
+      v-bind:menuComponentDetails="menuComponentDetails"
     />
     <v-row no-gutters>
       <v-col lg="1">
@@ -25,7 +28,7 @@
         <v-card outlined tile>
           <v-container class="grey lighten-5">
             <MenuDisplay
-              v-bind:menuDisplayItemDetails="menuDisplayItemDetails"
+              v-bind:menuComponentDetails="menuComponentDetails"
               @openSubmitOrderDialog="openSubmitOrderDialog"
               @openModifyOrderDialog="openModifyOrderDialog"
               @openSelectedItemDialog="openSelectedItemDialog"
@@ -36,7 +39,7 @@
       <v-col lg="7" height="100vh">
         <v-card class="fill-height" tile>
           <v-container class="grey lighten-5">
-            <MenuButtons />
+            <MenuButtons v-bind:menuComponentDetails="menuComponentDetails" />
           </v-container>
         </v-card>
       </v-col>
@@ -54,6 +57,7 @@ import MenuDisplaySubmitOrderDialog from "./MenuDisplaySubmitOrderDialog";
 import MenuDisplayModifyOrderDialog from "./MenuDisplayModifyOrderDialog";
 import MenuDisplaySelectedItemDetailsDialog from "./MenuDisplaySelectedItemDetailsDialog";
 import MenuDisplaySelectedItemDetailsCustomizeDialog from "./MenuDisplaySelectedItemDetailsCustomizeDialog";
+import MenuButtonsCustomItemDialog from "./MenuButtonsCustomItemDialog";
 
 export default {
   mixins: [storeMixin],
@@ -66,12 +70,14 @@ export default {
     MenuDisplayModifyOrderDialog,
     MenuDisplaySelectedItemDetailsDialog,
     MenuDisplaySelectedItemDetailsCustomizeDialog,
+    MenuButtonsCustomItemDialog,
   },
   data() {
     return {
-      menuDisplayItemDetails: {
+      menuComponentDetails: {
         openCustomizeSelectedItemDialog: false,
         selectedItemDialog: false,
+        addCustomItemDialog: false,
         removeSelectedItem: {},
       },
       submitOrderDialog: false,
@@ -81,22 +87,22 @@ export default {
   },
   methods: {
     openCustomizeSelectedItemDialog: function () {
-      this.menuDisplayItemDetails.openCustomizeSelectedItemDialog = false;
-      this.menuDisplayItemDetails.openCustomizeSelectedItemDialog = true;
+      this.menuComponentDetails.openCustomizeSelectedItemDialog = false;
+      this.menuComponentDetails.openCustomizeSelectedItemDialog = true;
     },
     closeCustomizeSelectedItemDialog: function () {
-      this.menuDisplayItemDetails.openCustomizeSelectedItemDialog = false;
+      this.menuComponentDetails.openCustomizeSelectedItemDialog = false;
     },
     openSelectedItemDialog: function (item) {
-      this.menuDisplayItemDetails.selectedItemDialog = true;
-      this.menuDisplayItemDetails.openCustomizeSelectedItemDialog = false;
-      this.menuDisplayItemDetails.removeSelectedItem = item;
+      this.menuComponentDetails.selectedItemDialog = true;
+      this.menuComponentDetails.openCustomizeSelectedItemDialog = false;
+      this.menuComponentDetails.removeSelectedItem = item;
     },
     closeSelectedItemDialog: function () {
-      this.menuDisplayItemDetails.selectedItemDialog = false;
+      this.menuComponentDetails.selectedItemDialog = false;
     },
     openSubmitOrderDialog: function () {
-        this.submitOrderDialog = false;
+      this.submitOrderDialog = false;
       if (
         this.$store.state.selectedCustomer.phone !== undefined &&
         Object.keys(store.state.selectedItems).length !== 0

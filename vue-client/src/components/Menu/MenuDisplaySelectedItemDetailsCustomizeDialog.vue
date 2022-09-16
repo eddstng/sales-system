@@ -1,7 +1,7 @@
 <template>
   <v-dialog
-    v-if="menuDisplayItemDetails.openCustomizeSelectedItemDialog"
-    v-model="menuDisplayItemDetails.selectedItemDialog"
+    v-if="menuComponentDetails.openCustomizeSelectedItemDialog"
+    v-model="menuComponentDetails.selectedItemDialog"
     width="1300px"
   >
     <v-card>
@@ -10,9 +10,9 @@
           CUSTOMIZE ITEM
           <br />
           <br />
-          {{ menuDisplayItemDetails.removeSelectedItem.node.name_eng }}
+          {{ menuComponentDetails.removeSelectedItem.node.name_eng }}
           <br />
-          {{ menuDisplayItemDetails.removeSelectedItem.node.name_chn }}
+          {{ menuComponentDetails.removeSelectedItem.node.name_chn }}
         </h3>
         <br />
         <v-btn
@@ -108,8 +108,8 @@
           width="50%"
           v-on:click="
             openCustomizeSelectedItemDialog = false;
-            menuDisplayItemDetails.selectedItemDialog = false;
-            addCustomizationToItem(menuDisplayItemDetails.removeSelectedItem, {
+            menuComponentDetails.selectedItemDialog = false;
+            addCustomizationToItem(menuComponentDetails.removeSelectedItem, {
               name_eng: customizationInput.eng.toUpperCase(),
               name_chn: customizationInput.chn,
             });
@@ -141,7 +141,7 @@ import storeMixin from "../../mixins/storeMixin";
 import { store } from "../../store/store";
 export default {
   mixins: [storeMixin],
-  props: ["menuDisplayItemDetails"],
+  props: ["menuComponentDetails"],
   data() {
     return {
       customizationInput: { eng: "", chn: "" },

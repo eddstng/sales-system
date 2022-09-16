@@ -93,7 +93,7 @@ import storeMixin from "../../mixins/storeMixin";
 import CustomerSelect from "../Customer/CustomerSelect";
 
 export default {
-  props: ["menuDisplayItemDetails"],
+  props: ["menuComponentDetails"],
 
   mixins: [storeMixin],
   methods: {

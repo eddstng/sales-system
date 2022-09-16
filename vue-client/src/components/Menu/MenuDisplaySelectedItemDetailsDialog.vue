@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-dialog v-if="menuDisplayItemDetails.removeSelectedItem.node !== undefined"
-      v-model="menuDisplayItemDetails.selectedItemDialog" width="1000px">
+    <v-dialog v-if="menuComponentDetails.removeSelectedItem.node !== undefined"
+      v-model="menuComponentDetails.selectedItemDialog" width="1000px">
       <v-card>
         <div>
           <h3 class="text-center pt-10 pb-5">
@@ -9,13 +9,13 @@
             <br />
             <br />
             <br />
-            {{ menuDisplayItemDetails.removeSelectedItem.node.name_eng }}
+            {{ menuComponentDetails.removeSelectedItem.node.name_eng }}
             <br />
 
-            {{ menuDisplayItemDetails.removeSelectedItem.node.name_chn }}
+            {{ menuComponentDetails.removeSelectedItem.node.name_chn }}
             <br />
             <br />
-            <div class="item-details-customizations" v-for="customization in menuDisplayItemDetails.removeSelectedItem
+            <div class="item-details-customizations" v-for="customization in menuComponentDetails.removeSelectedItem
             .customizations" v-bind:key="customization.name_eng">
               <v-container>
                 <v-row no-gutters>
@@ -42,7 +42,7 @@
           <v-spacer></v-spacer>
           <v-btn x-large width="15%" v-on:click="
   closeSelectedItemDialog();
-menuDisplayItemDetails.removeSelectedItem = {};
+menuComponentDetails.removeSelectedItem = {};
           ">
             <div>CANCEL<br /></div>
           </v-btn>
@@ -51,24 +51,24 @@ menuDisplayItemDetails.removeSelectedItem = {};
           </v-btn>
           <v-btn x-large width="15%" v-on:click="
   closeSelectedItemDialog();
-removeSelectedItemAll(menuDisplayItemDetails.removeSelectedItem);
-menuDisplayItemDetails.removeSelectedItem = {};
+removeSelectedItemAll(menuComponentDetails.removeSelectedItem);
+menuComponentDetails.removeSelectedItem = {};
 storeMixinSumSelectedItemsQuantity();
           ">
             <div>REMOVE ALL<br /></div>
           </v-btn>
           <v-btn x-large width="15%" v-on:click="
   closeSelectedItemDialog();
-removeSelectedItemOne(menuDisplayItemDetails.removeSelectedItem);
-menuDisplayItemDetails.removeSelectedItem = {};
+removeSelectedItemOne(menuComponentDetails.removeSelectedItem);
+menuComponentDetails.removeSelectedItem = {};
 storeMixinSumSelectedItemsQuantity();
           ">
             <div>REMOVE 1<br /></div>
           </v-btn>
           <v-btn x-large width="19.6%" v-on:click="
   closeSelectedItemDialog();
-addSelectedItemOne(menuDisplayItemDetails.removeSelectedItem);
-menuDisplayItemDetails.removeSelectedItem = {};
+addSelectedItemOne(menuComponentDetails.removeSelectedItem);
+menuComponentDetails.removeSelectedItem = {};
 storeMixinSumSelectedItemsQuantity();
           ">
             <div>ADD 1<br /></div>
@@ -139,14 +139,14 @@ toggleUpdateQuantityDialogTrue();
           <v-spacer></v-spacer>
           <v-btn x-large width="50%" v-on:click="
   updateQuantityDialog = false;
-menuDisplayItemDetails.selectedItemDialog = false;
+menuComponentDetails.selectedItemDialog = false;
           ">
             <div>NO<br /></div>
           </v-btn>
           <v-btn x-large width="50%" v-on:click="
   updateSelectedItemAmount(updateQuantityDialogItem);
 updateQuantityDialog = false;
-menuDisplayItemDetails.selectedItemDialog = false;
+menuComponentDetails.selectedItemDialog = false;
           ">
             <div>YES<br /></div>
           </v-btn>
@@ -187,12 +187,12 @@ export default {
     };
   },
   mixins: [storeMixin],
-  props: ["menuDisplayItemDetails"],
+  props: ["menuComponentDetails"],
   methods: {
     toggleUpdateQuantityDialogTrue() {
       this.updateQuantityDialogItem = Object.assign(
         {},
-        this.menuDisplayItemDetails.removeSelectedItem
+        this.menuComponentDetails.removeSelectedItem
       );
       this.updateQuantityDialog = true;
     },
@@ -233,7 +233,7 @@ export default {
       const quantityAsIntValue = parseFloat(quantityAsStringValue);
       this.updateQuantityDialogItem = Object.assign(
         {},
-        this.menuDisplayItemDetails.removeSelectedItem
+        this.menuComponentDetails.removeSelectedItem
       );
       this.updateQuantityDialogItem.quantity = quantityAsIntValue;
     },
@@ -285,8 +285,8 @@ export default {
     removeCustomizationFromSelectedItem(customization) {
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
       const customIdOrId =
-        this.menuDisplayItemDetails.removeSelectedItem.node.custom_id ??
-        this.menuDisplayItemDetails.removeSelectedItem.node.id;
+        this.menuComponentDetails.removeSelectedItem.node.custom_id ??
+        this.menuComponentDetails.removeSelectedItem.node.id;
       selectedItems[customIdOrId].customizations = selectedItems[
         customIdOrId
       ].customizations.filter(function (obj) {
