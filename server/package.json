@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "start": "npm run db:start && nodemon src/app.ts --exec ts-node",
+    "start": "npm run db:start && nodemon src/app.ts --exec ts-node && echo '\n\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n!!!                   STARTING SERVER                   !!!\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n!!!       ENTER THE PASSWORD TO START THE SERVER.       !!!\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n\n'",
     "db:start": "sudo service postgresql stop && yes | docker-compose stop psql && docker-compose up -d psql",
-    "db:delete": "npm run db:start && echo '\n!!!!!!!!!! WARNING !!!!!!!!!! \n' && docker-compose rm -s -v psql"
+    "db:delete": "npm run db:start && echo '\n\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n!!!                       WARNING                       !!!\n!!!                  DELETING DATABASE                  !!!\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n!!!           ENTER THE PASSWORD AND THEN ENTER         !!!\n!!!           'Y' TO DELETE THE DATABASE.               !!!\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n\n'&& docker-compose rm -s -v psql"
   },
   "author": "edstngdv",
   "license": "ISC",
