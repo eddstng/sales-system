@@ -7,6 +7,7 @@ sales_system_db_menu
 sales_system_db_geo
 printing/header/
 server/src/repositories/printOrder/bills/
+server/src/repositories/printHistory/statements/
 server/init.sql
 new-server
-vue-client/src/components/Customer/streets.js
+*streets.js
