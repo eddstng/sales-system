@@ -5,7 +5,7 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   state: {
-    items: [], // array of all items
+    categorizedItems: [], // array of all items
     customers: [], // array of all customers that are not tables
     tables: [], // array of all customers that are tables
     selectedCustomer: {phone: ''}, // the selected customer of the current order
@@ -50,8 +50,8 @@ export const store = new Vuex.Store({
     setComponent(state, component) {
       state.component = component;
     },
-    setItems(state, items) {
-      state.items = items;
+    setCategorizedItems(state, categorizedItems) {
+      state.categorizedItems = categorizedItems;
     },
     setCustomers(state, customers) {
       state.customers = customers;
@@ -106,7 +106,7 @@ export const store = new Vuex.Store({
     },
   },
   getters: {
-    items: (state) => state.items,
+    // items: (state) => state.categorizedItems,
     selectedItems: (state) => state.selectedItems,
     selectedCustomer: (state) => state.selectedCustomer,
     priceDetails: (state) => state.priceDetails,

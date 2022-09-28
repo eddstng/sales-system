@@ -213,7 +213,7 @@
             </div>
           </v-btn>
           <v-btn
-            v-for="item in $store.state.items[selectedCategory]"
+            v-for="item in $store.state.categorizedItems[selectedCategory]"
             v-bind:key="item.name_eng"
             x-large
             dark
@@ -451,7 +451,7 @@ export default {
   props: ["menuComponentDetails"],
   computed: {
     soupItems: function () {
-      const soupItems = this.$store.state.items[1];
+      const soupItems = this.$store.state.categorizedItems[1];
       const soupItemsOneSize = [];
       soupItems.forEach((item) => {
         if (item.name_eng.includes("(S)")) {
@@ -470,13 +470,13 @@ export default {
       return soupItemsOneSize;
     },
     soupItemsObj: function () {
-      return this.$store.state.items[1].reduce(
+      return this.$store.state.categorizedItems[1].reduce(
         (accumulator, value) => ({ ...accumulator, [value.id]: value }),
         {}
       );
     },
     chowMeinItems: function () {
-      const chowMeinItems = this.$store.state.items[12];
+      const chowMeinItems = this.$store.state.categorizedItems[12];
       const chowMeinItemsOneSize = [];
       chowMeinItems.forEach((item) => {
         if (item.name_eng.includes("(CRISPY)")) {
@@ -502,7 +502,7 @@ export default {
       return chowMeinItemsOneSize;
     },
     chowMeinItemsObj: function () {
-      return this.$store.state.items[12].reduce(
+      return this.$store.state.categorizedItems[12].reduce(
         (accumulator, value) => ({ ...accumulator, [value.id]: value }),
         {}
       );

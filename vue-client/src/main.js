@@ -28,7 +28,7 @@ new Vue({
         return obj;
       }, {});
       store.commit(
-        "setItems",
+        "setCategorizedItems",
         allItemsCategorized
       );
       this.storeMixinUpdateStoreCustomerArray();
