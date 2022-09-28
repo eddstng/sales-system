@@ -28,6 +28,10 @@ new Vue({
         return obj;
       }, {});
       store.commit(
+        "setItems",
+        allItemsArray
+      );
+      store.commit(
         "setCategorizedItems",
         allItemsCategorized
       );

@@ -13,6 +13,23 @@
               autofocus
             >
             </v-text-field>
+             <div v-if="customItem.name.length > 0">
+            <v-btn
+              v-for="item in suggestedItems"
+              :key="item.id"
+              x-large
+              dark
+              width="100%"
+              v-on:click="
+                addItemToSelectedItems(item);
+                menuComponentDetails.addCustomItemDialog = false;
+                customItem.name = '';
+              "
+              >{{ item.id }} - {{ item.name_eng }}</v-btn
+            >
+            <br/>
+            <br/>
+          </div>
             <v-text-field
               label="Price"
               v-model="customItem.price"
@@ -20,6 +37,7 @@
               prefix="$"
             ></v-text-field>
           </v-form>
+          <div v-if="suggestedItems.length === 0">
           <p>Quick Suggestions</p>
           <v-divider></v-divider>
           <v-btn
@@ -34,6 +52,7 @@
           >
             <div>{{ suggestion }}<br /></div>
           </v-btn>
+          </div>
         </v-col>
         <br />
       </div>
@@ -87,6 +106,7 @@ export default {
   props: ["menuComponentDetails"],
   data() {
     return {
+      suggestedItems: [],
       customItemId: parseInt(process.env.VUE_APP_CUSTOM_ITEM_ID),
       customItem: {
         id: "",
@@ -105,8 +125,38 @@ export default {
       ],
     };
   },
-
+  watch: {
+    "customItem.name": function () {
+      this.suggestItemsFromCustomItemNameInput();
+    },
+    deep: true,
+  },
   methods: {
+    suggestItemsFromCustomItemNameInput: function () {
+      const customNameSplit = this.customItem.name.split(" ");
+      console.log(customNameSplit);
+      this.suggestedItems = [];
+      if (this.customItem.name.length < 3) {
+        this.suggestedItems = [];
+      } else {
+        this.$store.state.items.forEach((v) => {
+          console.log(
+            customNameSplit.every((namePart) => v.name_eng.includes(namePart))
+          );
+          if (
+            customNameSplit.every((namePart) =>
+              v.name_eng.toUpperCase().includes(namePart.toUpperCase())
+            )
+            // v.name_eng.toUpperCase().includes(
+            //   this.customItem.name.toUpperCase()
+            // )
+          ) {
+            this.suggestedItems.push(v);
+          }
+        });
+      }
+      return;
+    },
     addItemToSelectedItems(item) {
       let idWeCareAbout = item.custom_id ?? item.id;
       let selectedItems = store.state.selectedItems;
