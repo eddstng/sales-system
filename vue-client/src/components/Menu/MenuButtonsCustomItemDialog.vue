@@ -25,7 +25,9 @@
                   menuComponentDetails.addCustomItemDialog = false;
                   customItem.name = '';
                 "
-                >{{ item.menu_id }} - {{ item.name_eng }} - ${{ item.price.toFixed(2) }}</v-btn
+                >{{ item.menu_id }} - {{ item.name_eng }} - ${{
+                  item.price.toFixed(2)
+                }}</v-btn
               >
               <br />
               <br />
@@ -80,6 +82,8 @@
               name_eng: customItem.name,
               custom_name: customItem.name,
               name_chn: 'Custom Item',
+              menu_id: 0,
+              category: 16,
               price: parseFloat(customItem.price),
             });
             (customItem = {
@@ -101,6 +105,7 @@
 import storeMixin from "../../mixins/storeMixin";
 import searchMixin from "../../mixins/searchMixin";
 import { store } from "../../store/store";
+import axios from "axios";
 
 export default {
   mixins: [storeMixin, searchMixin],
@@ -113,6 +118,7 @@ export default {
         id: "",
         name: "",
         price: 0.0,
+        menu_id: 0,
       },
       customItemSuggestions: [
         "Beef",
@@ -128,12 +134,12 @@ export default {
   },
   watch: {
     "customItem.name": function () {
-      this.suggestedItems = this.getItemsFromString(this.customItem.name)
+      this.suggestedItems = this.getItemsFromString(this.customItem.name);
     },
     deep: true,
   },
   methods: {
-    addItemToSelectedItems(item) {
+    async addItemToSelectedItems(item) {
       let idWeCareAbout = item.custom_id ?? item.id;
       let selectedItems = store.state.selectedItems;
       if (idWeCareAbout in selectedItems) {
@@ -147,6 +153,13 @@ export default {
       store.commit("setSelectedItems", selectedItems);
       this.storeMixinSumSelectedItemsQuantity();
       this.storeMixinUpdateStorePriceDetails();
+      await axios.post("http://localhost:3000/post/items/create", {
+        name_eng: this.customItem.name,
+        name_chn: "Custom Item",
+        menu_id: 0,
+        category: 16,
+        price: parseFloat(this.customItem.price),
+      });
     },
   },
 };
