@@ -3,6 +3,6 @@
 Version=1.0
 Type=Application
 Terminal=true
-Exec='/home/user/sales-system/desktop/pos-delete-database.sh'
+Exec='/home/eddstng/Work/sales-system/sh/pos-delete-database.sh'
 Name=POS-DELETE-DATABASE
-Icon=utilities-terminal
+Icon=clean-up

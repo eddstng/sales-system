@@ -3,6 +3,6 @@
 Version=1.0
 Type=Application
 Terminal=true
-Exec='/home/user/sales-system/desktop/pos-client.sh'
+Exec='/home/eddstng/Work/sales-system/sh/pos-client.sh'
 Name=POS-CLIENT
-Icon=utilities-terminal
+Icon=computer

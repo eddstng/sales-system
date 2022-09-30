@@ -3,6 +3,6 @@
 Version=1.0
 Type=Application
 Terminal=true
-Exec='/home/user/sales-system/desktop/pos-server.sh'
+Exec='/home/eddstng/Work/sales-system/sh/pos-server.sh'
 Name=POS-SERVER
-Icon=utilities-terminal
+Icon=network-workgroup
