@@ -1,3 +1,13 @@
+#!/bin/bash
+echo ''
+echo ''
+echo ''
+echo ''
+echo ''
+echo ''
+echo ''
+echo ''
+echo ''
 echo ''
 echo '========================================================='
 echo '============       BACKING UP DATABASE       ============'
@@ -30,10 +40,10 @@ echo 'item.sql saved to ../dumps/'`date +%Y/%m/%d/`
 cp ../dumps/latest/items.sql ../dumps/`date +%Y/%m/%d/`
 echo 'customers.sql saved to ../dumps/'`date +%Y/%m/%d/`
 cp ../dumps/latest/customers.sql ../dumps/`date +%Y/%m/%d/`
-docker exec -t postgres_db pg_dumpall -c -U postgres > ../dumps/`date +%Y/%m/%d/`full.sql
+docker exec -t postgres_db pg_dumpall -c -U postgres > ../dumps/`date +%Y/%m/%d/`full-`date +%H:%M:%S`.sql
 # To import full database dump use `PGPASSWORD=postgres psql -h localhost -U postgres -f full.sql `
-echo 'full.sql saved to ../dumps/'`date +%Y/%m/%d/`
+echo 'full-'`date +%H:%M:%S`'.sql saved to ../dumps/'`date +%Y/%m/%d/`
 echo ''
 echo '========================================================='
-echo '============               END               ============'
+echo '============  BACKING UP DATABASE - SUCCESS  ============'
 echo '========================================================='
