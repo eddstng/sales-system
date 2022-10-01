@@ -59,11 +59,24 @@ export async function getOneItem(id: number): Promise<items> {
   }
 }
 
-export async function createItem(body: JSON) {
+function formatItemNameEng(itemNameEng: string): string {
+  const itemNameEngSplit = itemNameEng.toLowerCase().split(' ');
+  let formattedItemNameEng = '';
+  itemNameEngSplit.forEach((split, index) => {
+    if (split === 'with' || split === 'and') {
+      formattedItemNameEng += split + ' ';
+      return;
+    }
+    formattedItemNameEng += split.charAt(0).toUpperCase() + split.slice(1) + `${index < itemNameEngSplit.length - 1 ? ' ' : ''}`;
+  })
+  return formattedItemNameEng;
+}
+
+export async function createItem(body: Item) {
   try {
-    await validateClassFields(Item, body);
+    const nameEngSplit = formatItemNameEng(body.name_eng);
     const res = await prisma.items.create({
-      data: <Prisma.itemsCreateInput>body,
+      data: <Prisma.itemsCreateInput>{ ...body, name_eng: nameEngSplit },
     });
     logInfo(createItem.name, `Item Created: {id: ${res.id}, price: ${res.price}, name_eng: ${res.name_eng}, name_chn: ${res.name_chn}, category: ${res.category}}`)
   } catch (err) {
