@@ -12,7 +12,7 @@ CREATE TABLE items (
     menu_id INTEGER,
     price FLOAT,
     name_eng VARCHAR(100) UNIQUE,
-    name_chn VARCHAR(100) UNIQUE,
+    name_chn VARCHAR(100),
     category INTEGER
 );
 
