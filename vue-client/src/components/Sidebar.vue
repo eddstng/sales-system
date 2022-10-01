@@ -7,12 +7,47 @@
             <v-col>
               <div>
                 <div>
-                  <v-btn class="my-2" x-large color="success" dark height="180px" width="100%"
-                    v-on:click="changeComponent('ORDER')">ORDER</v-btn>
-                  <v-btn class="my-2" x-large color="success" dark height="180px" width="100%"
-                    v-on:click="changeComponent('HISTORY')">HISTORY</v-btn>
-                  <v-btn class="my-2" x-large color="orange" dark height="180px" width="100%"
-                    v-on:click="openOptions()">OPTIONS</v-btn>
+                  <v-btn
+                    class="my-2"
+                    x-large
+                    color="success"
+                    dark
+                    height="180px"
+                    width="100%"
+                    v-on:click="changeComponent('ORDER')"
+                    >ORDER</v-btn
+                  >
+                  <v-btn
+                    class="my-2"
+                    x-large
+                    color="success"
+                    dark
+                    height="180px"
+                    width="100%"
+                    v-on:click="changeComponent('HISTORY')"
+                    >HISTORY</v-btn
+                  >
+                  <v-btn
+                    class="my-2"
+                    x-large
+                    color="success"
+                    dark
+                    height="180px"
+                    width="100%"
+                    disabled="true"
+                    v-on:click="changeComponent('CUSTOMER')"
+                    >CUSTOMER</v-btn
+                  >
+                  <v-btn
+                    class="my-2"
+                    x-large
+                    color="orange"
+                    dark
+                    height="180px"
+                    width="100%"
+                    v-on:click="openOptions()"
+                    >OPTIONS</v-btn
+                  >
                 </div>
               </div>
             </v-col>
@@ -26,7 +61,11 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn x-large width="50%" v-on:click="changeComponentDetails.warning = false">
+          <v-btn
+            x-large
+            width="50%"
+            v-on:click="changeComponentDetails.warning = false"
+          >
             <div>NO<br /></div>
           </v-btn>
           <v-btn x-large width="50%" v-on:click="setComponent()">
@@ -42,7 +81,11 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn x-large width="100%" v-on:click="orderOptionsInternalDialog = true">
+          <v-btn
+            x-large
+            width="100%"
+            v-on:click="orderOptionsInternalDialog = true"
+          >
             <div>INTERNAL<br /></div>
           </v-btn>
         </v-card-actions>
@@ -73,7 +116,11 @@
           <v-btn x-large width="33%" v-on:click="printTodayHistoryStatement()">
             <div>PRINT STATEMENT<br /></div>
           </v-btn>
-          <v-btn x-large width="33%" v-on:click="printTodayHistoryStatementInternal()">
+          <v-btn
+            x-large
+            width="33%"
+            v-on:click="printTodayHistoryStatementInternal()"
+          >
             <div>PRINT INTERNAL STATEMENT<br /></div>
           </v-btn>
           <v-btn x-large width="33%" v-on:click="printTodayHistoryType()">
@@ -88,7 +135,7 @@
 <script>
 import storeMixin from "../mixins/storeMixin";
 import { store } from "../store/store";
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   mixins: [storeMixin],
@@ -124,11 +171,9 @@ export default {
     async printTodayHistoryStatement() {
       try {
         this.historyOptionsDialog = false;
-        await axios.get(
-          `http://localhost:3000/get/todayhistorystatement`
-        )
+        await axios.get(`http://localhost:3000/get/todayhistorystatement`);
       } catch (err) {
-        store.commit('setErrorToDisplay', err.response.data)
+        store.commit("setErrorToDisplay", err.response.data);
         store.commit("setNotification", 5);
         this.historyOptionsDialog = false;
       }
@@ -138,9 +183,9 @@ export default {
         this.historyOptionsDialog = false;
         await axios.get(
           `http://localhost:3000/get/todayhistorystatementinternal`
-        )
+        );
       } catch (err) {
-        store.commit('setErrorToDisplay', err.response.data)
+        store.commit("setErrorToDisplay", err.response.data);
         store.commit("setNotification", 5);
         this.historyOptionsDialog = false;
       }
@@ -151,11 +196,11 @@ export default {
         await axios.post(
           `http://localhost:3000/post/todayhistorystatementtype`,
           {
-            type: 2
+            type: 2,
           }
         );
       } catch (err) {
-        store.commit('setErrorToDisplay', err.response.data)
+        store.commit("setErrorToDisplay", err.response.data);
         store.commit("setNotification", 5);
         this.historyOptionsDialog = false;
       }
@@ -166,7 +211,7 @@ export default {
         (JSON.stringify(this.$store.state.selectedItems) !== "{}" ||
           this.$store.state.selectedCustomer.phone !== "" ||
           JSON.stringify(this.$store.state.currentOrder) !==
-          '{"id":null,"type":null,"total":0,"customer_id":null,"void":null,"paid":null,"itemQuantity":0,"internal":false}') &&
+            '{"id":null,"type":null,"total":0,"customer_id":null,"void":null,"paid":null,"itemQuantity":0,"internal":false}') &&
         this.$store.state.component !== "HISTORY"
       ) {
         return true;
