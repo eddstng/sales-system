@@ -153,13 +153,20 @@ export default {
       store.commit("setSelectedItems", selectedItems);
       this.storeMixinSumSelectedItemsQuantity();
       this.storeMixinUpdateStorePriceDetails();
-      await axios.post("http://localhost:3000/post/items/create", {
-        name_eng: this.customItem.name,
-        name_chn: "Custom Item",
-        menu_id: 0,
-        category: 16,
-        price: parseFloat(this.customItem.price),
-      });
+      const newCustomItem = await axios.post(
+        "http://localhost:3000/post/items/create",
+        {
+          name_eng: this.customItem.name,
+          name_chn: "Custom Item",
+          menu_id: 0,
+          category: 16,
+          price: parseFloat(this.customItem.price),
+        }
+      );
+      store.commit("setItems", [
+        ...this.$store.state.items,
+        newCustomItem.data,
+      ]);
     },
   },
 };

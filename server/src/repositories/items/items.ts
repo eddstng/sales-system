@@ -79,6 +79,7 @@ export async function createItem(body: Item) {
       data: <Prisma.itemsCreateInput>{ ...body, name_eng: nameEngSplit },
     });
     logInfo(createItem.name, `Item Created: {id: ${res.id}, price: ${res.price}, name_eng: ${res.name_eng}, name_chn: ${res.name_chn}, category: ${res.category}}`)
+    return res;
   } catch (err) {
     logError(createItem.name, `${err}`);
     throw new Error(`${err} `);

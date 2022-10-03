@@ -6,12 +6,10 @@
   "scripts": {
     "start": "../sh/start-server.sh",
     "start-printing-false": "export PRINTING=false && ../sh/start-server.sh",
-    "db:start": "sudo service postgresql stop && yes | docker-compose stop psql && docker-compose up -d psql | sleep 2",
+    "db:start": "sudo service postgresql stop && yes | docker-compose stop psql && docker-compose up -d psql",
     "db:import": "PGPASSWORD=$(grep PGPASSWORD .env | cut -d '=' -f2) psql -h localhost -U sales_system_db -f ../dumps/latest/items.sql | PGPASSWORD=$(grep PGPASSWORD .env | cut -d '=' -f2) psql -h localhost -U sales_system_db -f ../dumps/latest/customers.sql",
     "db:delete": "../sh/delete-database.sh",
     "db:backup": "../sh/create-database-dumps.sh"
- 
- 
   },
   "author": "eddstng",
   "license": "ISC",
