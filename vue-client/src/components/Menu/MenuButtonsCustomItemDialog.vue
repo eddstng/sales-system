@@ -77,10 +77,7 @@
           width="50%"
           v-on:click="
             addItemToSelectedItems({
-              id: customItemId,
-              custom_id: customItemId + customItem.name,
               name_eng: customItem.name,
-              custom_name: customItem.name,
               name_chn: 'Custom Item',
               menu_id: 0,
               category: 16,
@@ -139,20 +136,7 @@ export default {
     deep: true,
   },
   methods: {
-    async addItemToSelectedItems(item) {
-      let idWeCareAbout = item.custom_id ?? item.id;
-      let selectedItems = store.state.selectedItems;
-      if (idWeCareAbout in selectedItems) {
-        selectedItems[idWeCareAbout].quantity++;
-      } else {
-        selectedItems[idWeCareAbout] = {};
-        selectedItems[idWeCareAbout].node = item;
-        selectedItems[idWeCareAbout].quantity = 1;
-        selectedItems[idWeCareAbout].timestamp = Date.now();
-      }
-      store.commit("setSelectedItems", selectedItems);
-      this.storeMixinSumSelectedItemsQuantity();
-      this.storeMixinUpdateStorePriceDetails();
+    async createCustomItem() {
       const newCustomItem = await axios.post(
         "http://localhost:3000/post/items/create",
         {
@@ -161,12 +145,29 @@ export default {
           menu_id: 0,
           category: 16,
           price: parseFloat(this.customItem.price),
+          custom: true,
         }
       );
       store.commit("setItems", [
         ...this.$store.state.items,
         newCustomItem.data,
       ]);
+      return newCustomItem.data;
+    },
+    async addItemToSelectedItems(item) {
+      let selectedItem = item.id ? item : await this.createCustomItem();
+      let selectedItems = store.state.selectedItems;
+      if (selectedItem.id in selectedItems) {
+        selectedItems[selectedItem.id].quantity++;
+      } else {
+        selectedItems[selectedItem.id] = {};
+        selectedItems[selectedItem.id].node = {...selectedItem};
+        selectedItems[selectedItem.id].quantity = 1;
+        selectedItems[selectedItem.id].timestamp = Date.now();
+      }
+      store.commit("setSelectedItems", selectedItems);
+      this.storeMixinSumSelectedItemsQuantity();
+      this.storeMixinUpdateStorePriceDetails();
     },
   },
 };
