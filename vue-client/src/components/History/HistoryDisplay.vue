@@ -3,17 +3,32 @@
     <v-card outlined tile height="12vh">
       <HistoryDisplayCustomer />
     </v-card>
-    <v-card outlined tile class="overflow-y-auto d-block" height="62.5vh" v-chat-scroll>
+    <v-card
+      outlined
+      tile
+      class="overflow-y-auto d-block"
+      height="62.5vh"
+      v-chat-scroll
+    >
       <template>
-        <v-card class="mx-auto pt-2" outlined v-for="item in $store.state.selectedItemsOrderedByEntry"
-          v-bind:key="item.id" width="100vw">
+        <v-card
+          class="mx-auto pt-2"
+          outlined
+          v-for="item in $store.state.selectedItemsOrderedByEntry"
+          v-bind:key="item.id"
+          width="100vw"
+        >
           <v-list-item three-line>
             <v-list-item-content>
               <div class="history-display-item-text">
-                {{ customItemId == item.node.id ? item.node.custom_name : item.node.name_eng }}
+                {{ item.node.name_eng }}
               </div>
               <div class="history-display-item-text">
-                {{ item.node.name_chn }}
+                {{
+                  item.node.name_chn.length === 0
+                    ? "Custom Item"
+                    : item.node.name_chn
+                }}
               </div>
             </v-list-item-content>
             <v-list-item-content>
@@ -25,13 +40,16 @@
               </div>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item-content v-for="customization in item.customizations" v-bind:key="customization.id">
+          <v-list-item-content
+            v-for="customization in item.customizations"
+            v-bind:key="customization.id"
+          >
             <div class="menu-display-item-text pl-5">
               ➡ {{ customization.name_eng }}
               {{
-                  customization.name_chn === ""
-                    ? ""
-                    : "/" + customization.name_chn
+                customization.name_chn === ""
+                  ? ""
+                  : "/" + customization.name_chn
               }}
             </div>
           </v-list-item-content>
@@ -75,11 +93,6 @@
 import HistoryDisplayCustomer from "./HistoryDisplayCustomer";
 export default {
   props: ["historyOptionsDetails"],
-  data() {
-    return {
-      customItemId: process.env.VUE_APP_CUSTOM_ITEM_ID
-    }
-  },
   components: {
     HistoryDisplayCustomer,
   },

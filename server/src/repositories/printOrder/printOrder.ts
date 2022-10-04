@@ -177,16 +177,16 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
             if (element.orders_items_customizations !== null) {
                 element.orders_items_customizations.forEach((customization: { name_eng: string, name_chn: string }) => {
                     if (english.test(element.item_name_chn)) { // To handle formatting for items such as Dinner Specials.
-                        kitchenCustomizationString += `\n${`\xa0`.repeat(2)}⤷${customization.name_chn === '' ? '___________' : customization.name_chn}\n\n\n`
+                        kitchenCustomizationString += `\n${`\xa0`.repeat(2)}⤷${customization.name_chn === '' ? '___________' : customization.name_chn}\n\n`
                     } else {
                         kitchenCustomizationString += `\n\n\n${`\xa0`.repeat(2)}⤷${customization.name_chn === '' ? '___________' : customization.name_chn}\n`
                     }
                 })
             }
 
-            if (process.env.CUSTOM_ITEM_ID && element.item_id === parseInt(process.env.CUSTOM_ITEM_ID)) {
-                kitchenBillString += `
-                x${element.orders_items_quantity} ⊵____________${kitchenCustomizationString ? kitchenCustomizationString : ''}
+            console.log(JSON.stringify(element))
+            if (element.item_custom === true && element.item_name_chn.length === 0) {
+                kitchenBillString += `\n\nx${element.orders_items_quantity} ____________${kitchenCustomizationString ? `\n\n${kitchenCustomizationString}` : ''}
                 
                 `
             } else {
@@ -195,10 +195,8 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
                     //  x${element.orders_items_quantity} ${element.item_name_chn}
                     // ${kitchenCustomizationString}
                     // `
-                    kitchenBillStringEnglish += `
-                    
-                     x${element.orders_items_quantity} ${element.item_name_chn}
-                    ${kitchenCustomizationString}
+                    kitchenBillStringEnglish += `\nx${element.orders_items_quantity} ${element.item_name_chn}
+                    ${kitchenCustomizationString}\n
                     `
 
                 } else {
@@ -218,16 +216,14 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
                     if (element.name_chn === '') {
                         clientCustomizationString += `\n${`\xa0`.repeat(2)}⤷${element.name_eng}`
                     } else {
-                        const clientCustomizationStringToBeAdded = `\n${`\xa0`.repeat(2)}⤷${element.name_chn}/${element.name_eng}`
-                        const splitClientCustomizationStringToBeAdded = clientCustomizationStringToBeAdded.split('/')
-                        clientCustomizationString += `${splitClientCustomizationStringToBeAdded[0]}\n${`\xa0`.repeat(6)}${splitClientCustomizationStringToBeAdded[1]}`
+                        clientCustomizationString += `\n${`\xa0`.repeat(2)}⤷${element.name_chn}\n${`\xa0`.repeat(6)}${element.name_eng}`
                     }
                 })
             }
 
             clientBillString += `
-            ${element.item_name_chn === 'Custom Item' ? `⊵${element.item_name_chn}` : element.item_name_chn}
-            ${element.item_name_chn === 'Custom Item' ? `${element.item_custom_name}` : element.item_name_eng}${clientCustomizationString ? clientCustomizationString : ''}
+            ${element.item_name_chn.length !== 0 ? `⊵ ${element.item_name_chn}` : `⊵ Custom Item`}
+            ${element.item_name_eng}${clientCustomizationString ? clientCustomizationString : ''}
             ${element.orders_items_quantity}x ${(element.item_price as number).toFixed(2)}`
         })
 

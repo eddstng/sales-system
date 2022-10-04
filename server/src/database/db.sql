@@ -1,25 +1,10 @@
 DROP TABLE IF EXISTS orders_items;
-
 DROP TABLE IF EXISTS orders;
-
 DROP TABLE IF EXISTS items;
-
 DROP TABLE IF EXISTS customers;
-
 \c postgres;
-
--- DROP OWNED BY sales_system_db;
-
--- DROP DATABASE IF EXISTS sales_system_db;
-
--- CREATE DATABASE sales_system_db;
-
--- DROP ROLE IF EXISTS sales_system_db;
-
 CREATE ROLE sales_system_db WITH LOGIN;
-
 ALTER USER sales_system_db WITH PASSWORD 'salessystemdb';
-
 \c sales_system_db;
 
 CREATE TABLE items (
@@ -27,8 +12,9 @@ CREATE TABLE items (
     menu_id INTEGER,
     price FLOAT,
     name_eng VARCHAR(100) UNIQUE,
-    name_chn VARCHAR(100),
-    category INTEGER
+    name_chn VARCHAR(100) NOT NULL DEFAULT '',
+    category INTEGER,
+    custom BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE customers (
@@ -49,14 +35,12 @@ CREATE TABLE orders_items (
     quantity FLOAT,
     customizations jsonb,
     price FLOAT,
-    custom_name VARCHAR(50),
     timestamp TIMESTAMP WITHOUT TIME ZONE
-    --  item_id INT FOREIGN KEY REFERENCES items (id)
-    --  order_id INT FOREIGN KEY REFERENCES orders (id)
 );
 
 CREATE TABLE orders (
     id SERIAL NOT NULL PRIMARY KEY,
+    number INT,
     total FLOAT,
     subtotal FLOAT,
     gst FLOAT,
@@ -64,8 +48,9 @@ CREATE TABLE orders (
     timestamp TIMESTAMP WITHOUT TIME ZONE DEFAULT (NOW()),
     type SMALLINT,
     void BOOLEAN NOT NULL DEFAULT FALSE,
-    paid BOOLEAN NOT NULL DEFAULT FALSE
-    --  customer_id INT FOREIGN KEY REFERENCES customers (id)
+    paid BOOLEAN NOT NULL DEFAULT FALSE,
+    internal BOOLEAN NOT NULL DEFAULT FALSE,
+    internal_number INT
 );
 
 ALTER TABLE
@@ -116,6 +101,7 @@ CREATE OR REPLACE view orders_items_detail
 AS
 SELECT
 o.id as order_id,
+o.number as order_number,
 o.timestamp as order_timestamp,
 o.type as order_type,
 o.total as order_total,
@@ -124,30 +110,27 @@ o.gst as order_gst,
 o.discount as order_discount,
 o.void as order_void,
 o.paid as order_paid,
+o.internal as order_internal,
+o.internal_number as order_internal_number,
 c.id as customer_id,
 c.name as customer_name,
 c.phone as customer_phone,
 c.address as customer_address,
+c.street_name as customer_street_name,
+c.street_number as customer_street_number,
+c.unit_number as customer_unit_number,
+c.buzzer_number as customer_buzzer_number,
 c.note as customer_note,
 i.id as item_id,
 i.menu_id as item_menu_id,
 i.category as item_category,
--- case
--- 	when oi.custom_name IS NULL then i.name_eng
--- 	when oi.custom_name IS NOT NULL then i.name_eng
--- end as item_name_eng,
--- TO DO: update the 214 with a variable or try name_chn
-case
-	when i.id = 214 then oi.custom_name
-	else i.name_eng
-end as item_name_eng,
--- i.name_eng as item_name_eng,
+i.name_eng as item_name_eng,
 i.name_chn as item_name_chn,
 case
 	when oi.price IS NULL then i.price
 	when oi.price IS NOT NULL then oi.price
 end as item_price,
-oi.custom_name as item_custom_name,
+i.custom as item_custom,
 oi.quantity as orders_items_quantity,
 oi.customizations as orders_items_customizations,
 oi.timestamp as orders_items_timestamp,
@@ -161,11 +144,14 @@ CREATE OR REPLACE view orders_history
 AS
 SELECT
 o.id as order_id,
+o.number as order_number,
 o.timestamp as order_timestamp,
 o.type as order_type,
 o.total as order_total,
 o.void as order_void,
 o.paid as order_paid,
+o.internal as order_internal,
+o.internal_number as order_internal_number,
 c.id as customer_id,
 c.name as customer_name,
 c.phone as customer_phone

@@ -510,7 +510,6 @@ export default {
   },
   data() {
     return {
-      customItemId: parseInt(process.env.VUE_APP_CUSTOM_ITEM_ID),
       customizeChowMeinTypeDialog: false,
       customizeSoupSizeDialog: false,
       itemThatRequiresCustomization: null,

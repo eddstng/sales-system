@@ -22,7 +22,7 @@
           <v-list-item three-line v-if="item.node !== undefined">
             <v-list-item-content>
               <div class="menu-display-item-text">{{ item.node.custom_name || item.node.name_eng }}</div>
-              <div class="menu-display-item-text">{{ item.node.name_chn }}</div>
+              <div class="menu-display-item-text">{{ item.node.name_chn.length === 0 ? 'Custom Item' : item.node.name_chn }}</div>
             </v-list-item-content>
             <v-list-item-content>
               <div class="menu-display-item-text text-right">

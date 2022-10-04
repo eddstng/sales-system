@@ -110,7 +110,6 @@ export default {
   data() {
     return {
       suggestedItems: [],
-      customItemId: parseInt(process.env.VUE_APP_CUSTOM_ITEM_ID),
       customItem: {
         id: "",
         name: "",
@@ -141,7 +140,6 @@ export default {
         "http://localhost:3000/post/items/create",
         {
           name_eng: this.customItem.name,
-          name_chn: "Custom Item",
           menu_id: 0,
           category: 16,
           price: parseFloat(this.customItem.price),

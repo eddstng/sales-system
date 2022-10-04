@@ -67,8 +67,7 @@ export default {
     },
     // The parameter ordersItemsDetailWithOrderId is an object.
     addHistoryItemToSelectedItems(ordersItemsDetailWithOrderId) {
-      // If the item has a custom name, we provide it with a custom ID. This is necessary to handle the quantity. Custom items and items with customizations will have a custom name. 
-      const displayId = ordersItemsDetailWithOrderId.item_custom_name ? `${ordersItemsDetailWithOrderId.item_id}${ordersItemsDetailWithOrderId.item_custom_name}` : ordersItemsDetailWithOrderId.item_id;
+      const displayId = ordersItemsDetailWithOrderId.item_id;
       let selectedItems = store.state.selectedItems;
 
       // Create a key value pair for the custom item. 
@@ -78,7 +77,7 @@ export default {
         id: ordersItemsDetailWithOrderId.item_id,
         menu_id: ordersItemsDetailWithOrderId.item_menu_id,
         custom_id: displayId,
-        custom_name: ordersItemsDetailWithOrderId.item_custom_name,
+        // custom_name: ordersItemsDetailWithOrderId.item_custom_name,
         name_eng: ordersItemsDetailWithOrderId.item_name_eng,
         name_chn: ordersItemsDetailWithOrderId.item_name_chn,
         category: ordersItemsDetailWithOrderId.item_category,
