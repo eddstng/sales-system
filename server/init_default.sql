@@ -12,8 +12,9 @@ CREATE TABLE items (
     menu_id INTEGER,
     price FLOAT,
     name_eng VARCHAR(100) UNIQUE,
-    name_chn VARCHAR(100),
-    category INTEGER
+    name_chn VARCHAR(100) NOT NULL DEFAULT '',
+    category INTEGER,
+    custom BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE customers (
@@ -34,13 +35,12 @@ CREATE TABLE orders_items (
     quantity FLOAT,
     customizations jsonb,
     price FLOAT,
-    custom_name VARCHAR(50),
     timestamp TIMESTAMP WITHOUT TIME ZONE
 );
 
 CREATE TABLE orders (
     id SERIAL NOT NULL PRIMARY KEY,
-    number INT NOT NULL,
+    number INT,
     total FLOAT,
     subtotal FLOAT,
     gst FLOAT,
@@ -124,16 +124,13 @@ c.note as customer_note,
 i.id as item_id,
 i.menu_id as item_menu_id,
 i.category as item_category,
-case
-	when i.id = 214 then oi.custom_name
-	else i.name_eng
-end as item_name_eng,
+i.name_eng as item_name_eng,
 i.name_chn as item_name_chn,
 case
 	when oi.price IS NULL then i.price
 	when oi.price IS NOT NULL then oi.price
 end as item_price,
-oi.custom_name as item_custom_name,
+i.custom as item_custom,
 oi.quantity as orders_items_quantity,
 oi.customizations as orders_items_customizations,
 oi.timestamp as orders_items_timestamp,
