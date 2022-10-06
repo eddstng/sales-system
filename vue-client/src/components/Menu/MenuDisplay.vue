@@ -90,7 +90,7 @@
 
 <script>
 import storeMixin from "../../mixins/storeMixin";
-import CustomerSelect from "../Customer/CustomerSelect";
+import CustomerSelect from "./MenuDisplayCustomerSelect";
 
 export default {
   props: ["menuComponentDetails"],

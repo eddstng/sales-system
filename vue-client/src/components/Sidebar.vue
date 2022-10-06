@@ -34,7 +34,6 @@
                     dark
                     height="180px"
                     width="100%"
-                    disabled="true"
                     v-on:click="changeComponent('CUSTOMER')"
                     >CUSTOMER</v-btn
                   >
@@ -219,6 +218,7 @@ export default {
       return false;
     },
     async changeComponent(componentStr) {
+      console.log("eee");
       this.changeComponentDetails.component = componentStr;
       if (this.setOrderWarning()) {
         this.changeComponentDetails.warning = true;
@@ -235,6 +235,9 @@ export default {
           store.commit("setMenuDisplayType", "ORDER");
           this.setComponentToOrder();
           break;
+        case "CUSTOMER":
+          this.setComponentToCustomer();
+          break;
       }
       this.changeComponentDetails.warning = false;
     },
@@ -245,6 +248,10 @@ export default {
     },
     async setComponentToOrder() {
       store.commit("setComponent", "ORDER");
+      this.storeMixinClearOrderRelatedDetails();
+    },
+    async setComponentToCustomer() {
+      store.commit("setComponent", "CUSTOMER");
       this.storeMixinClearOrderRelatedDetails();
     },
   },

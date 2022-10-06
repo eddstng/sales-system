@@ -13,7 +13,7 @@ echo '========================================================='
 echo '============        DELETING DATABASE        ============'
 echo '========================================================='
 echo ''
-echo '> ENTER USER PASSWORD TO CONTINUE' 
+echo '> ENTER USER PASSWORD TO CONTINUE...' 
 npm run db:start
 echo ''
 echo '> BACK UP DATABASE BEFORE DELETING?' 

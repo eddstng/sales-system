@@ -184,7 +184,6 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
                 })
             }
 
-            console.log(JSON.stringify(element))
             if (element.item_custom === true && element.item_name_chn.length === 0) {
                 kitchenBillString += `\n\nx${element.orders_items_quantity} ____________${kitchenCustomizationString ? `\n\n${kitchenCustomizationString}` : ''}
                 

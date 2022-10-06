@@ -42,10 +42,10 @@
         {{ $store.state.selectedCustomer.note }}
       </div>
     </v-btn>
-    <CustomerSelectCustomerPhoneInputDialog v-bind:selectedCustomerDetails="selectedCustomerDetails"
+    <MenuDisplayCustomerSelectCustomerPhoneInputDialog v-bind:selectedCustomerDetails="selectedCustomerDetails"
       @setCreateCustomerFormDialogToBool="setCreateCustomerFormDialogToBool" />
-    <CustomerSelectCustomerDineInTablesDialog v-bind:selectedCustomerDetails="selectedCustomerDetails" />
-    <CustomerSelectCreateCustomerFormDialog v-bind:selectedCustomerDetails="selectedCustomerDetails" />
+    <MenuDisplayCustomerSelectCustomerDineInTablesDialog v-bind:selectedCustomerDetails="selectedCustomerDetails" />
+    <MenuDisplayCustomerSelectCreateCustomerFormDialog v-bind:selectedCustomerDetails="selectedCustomerDetails" />
 
     <v-dialog v-model="
       selectedCustomerDetails.openClearSelectedCustomerConfirmationDialog
@@ -83,9 +83,9 @@
 import { store } from "../../store/store";
 import storeMixin from "../../mixins/storeMixin";
 import customerSelectMixin from "../../mixins/customerSelectMixin";
-import CustomerSelectCustomerPhoneInputDialog from "./CustomerSelectCustomerPhoneInputDialog";
-import CustomerSelectCreateCustomerFormDialog from "./CustomerSelectCreateCustomerFormDialog";
-import CustomerSelectCustomerDineInTablesDialog from "./CustomerSelectCustomerDineInTablesDialog";
+import MenuDisplayCustomerSelectCustomerPhoneInputDialog from "./MenuDisplayCustomerSelectCustomerPhoneInputDialog";
+import MenuDisplayCustomerSelectCreateCustomerFormDialog from "./MenuDisplayCustomerSelectCreateCustomerFormDialog";
+import MenuDisplayCustomerSelectCustomerDineInTablesDialog from "./MenuDisplayCustomerSelectCustomerDineInTablesDialog";
 
 export default {
   mixins: [customerSelectMixin, storeMixin],
@@ -117,9 +117,9 @@ export default {
     };
   },
   components: {
-    CustomerSelectCustomerPhoneInputDialog,
-    CustomerSelectCreateCustomerFormDialog,
-    CustomerSelectCustomerDineInTablesDialog,
+    MenuDisplayCustomerSelectCustomerPhoneInputDialog,
+    MenuDisplayCustomerSelectCreateCustomerFormDialog,
+    MenuDisplayCustomerSelectCustomerDineInTablesDialog,
   },
   watch: {
     "selectedCustomerDetails.selectedCustomer.phone": function () {
