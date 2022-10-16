@@ -6,7 +6,7 @@ import { getAllItems, createItem, getOneItem, deleteOneItem, updateItem } from '
 import { logger } from '../src/logging/logger';
 import { Prisma } from '@prisma/client';
 import { getAllCustomers, getOneCustomer, createCustomer, updateCustomer, deleteOneCustomer } from './repositories/customers/customers';
-import { createOrder, deleteOneOrder, submitOrder, getAllOrders, getOneOrder, modifyOrder, updateOrder } from './repositories/orders/orders';
+import { createOrder, deleteOneOrder, submitOrder, getAllOrders, getOneOrder, modifyOrder, updateOrder, getAllOrdersWithCustomerId } from './repositories/orders/orders';
 import { getAllOrdersItems, createOrdersItems, updateOrdersItems, deleteOneOrdersItems, getOneOrdersItems, createOrdersItemsBulk, deleteAllOrdersItemsWithOrderId } from './repositories/ordersItems/ordersItems';
 import { getAllOrdersHistory } from './repositories/ordersHistory/ordersHistory';
 import { getAllOrdersItemsDetail, getAllOrdersItemsDetailWithOrderId } from './repositories/ordersItemsDetail/ordersItemsDetail';
@@ -118,6 +118,13 @@ export default function startServer(): void {
     app.get('/get/orders/id/:id', async (req, res) => {
         try {
             res.status(200).json(await getOneOrder(parseInt(req.params.id)))
+        } catch (err: unknown) {
+            res.status(500).send(`${err as string}`);
+        }
+    })
+    app.get('/get/customerorders/customerid/:id', async (req, res) => {
+        try {
+            res.status(200).json(await getAllOrdersWithCustomerId(parseInt(req.params.id)))
         } catch (err: unknown) {
             res.status(500).send(`${err as string}`);
         }

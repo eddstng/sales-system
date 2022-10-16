@@ -1,17 +1,25 @@
 <template>
   <div>
+    <CustomerButtonsSearchDialog
+      v-bind:customerOptionDetails="customerOptionDetails"
+      @setCustomerOptionDetails="setCustomerOptionDetails"
+    />
+
     <HistoryDisplayHistoryOptionsDialog
-      v-bind:historyOptionsDetails="historyOptionsDetails"
-      @setHistoryOptionsDetails="setHistoryOptionsDetails"
+      v-bind:historyOptionsDetails="customerOptionDetails"
+      @setHistoryOptionsDetails="setCustomerOptionDetails"
     />
+
     <HistoryDisplayHistoryOptionsConfirmationDialog
-      v-bind:historyOptionsDetails="historyOptionsDetails"
-      @setHistoryOptionsDetails="setHistoryOptionsDetails"
+      v-bind:historyOptionsDetails="customerOptionDetails"
+      @setHistoryOptionsDetails="setCustomerOptionDetails"
     />
+
     <HistoryDisplayHistoryOptionsReprintDialog
-      v-bind:historyOptionsDetails="historyOptionsDetails"
-      @setHistoryOptionsDetails="setHistoryOptionsDetails"
+      v-bind:historyOptionsDetails="customerOptionDetails"
+      @setHistoryOptionsDetails="setCustomerOptionDetails"
     />
+
     <v-row no-gutters>
       <v-col lg="1">
         <Sidebar />
@@ -19,8 +27,8 @@
       <v-col lg="4">
         <v-card outlined tile>
           <v-container class="grey lighten-5">
-            <HistoryDisplay
-              v-bind:historyOptionsDetails="historyOptionsDetails"
+            <CustomerDisplay
+              v-bind:customerOptionDetails="customerOptionDetails"
             />
           </v-container>
         </v-card>
@@ -28,7 +36,24 @@
       <v-col lg="7" height="100vh">
         <v-card class="fill-height" tile>
           <v-container class="grey lighten-5">
-            <CustomerButtons />
+            <CustomerButtonsHeader />
+            <CustomerButtons
+              v-if="$store.state.selectedCustomer.phone === ''"
+              v-bind:customerOptionDetails="customerOptionDetails"
+              @setCustomerOptionDetails="setCustomerOptionDetails"
+            />
+            <CustomerOrderHistoryButtons
+              v-if="$store.state.selectedCustomer.phone !== ''"
+              v-bind:customerOptionDetails="customerOptionDetails"
+              @setCustomerOptionDetails="setCustomerOptionDetails"
+            />
+
+            <!-- show order history like history page but for customer only -->
+            <!-- <CustomerButtons
+            v-if="$store.state.selectedCustomer.phone === ''"
+              v-bind:customerOptionDetails="customerOptionDetails"
+              @setCustomerOptionDetails="setCustomerOptionDetails"
+            /> -->
           </v-container>
         </v-card>
       </v-col>
@@ -39,34 +64,44 @@
 <script>
 import storeMixin from "../../mixins/storeMixin";
 import Sidebar from "../Sidebar";
+import CustomerOrderHistoryButtons from "../Customer/CustomerOrderHistoryButtons";
 import CustomerButtons from "../Customer/CustomerButtons";
-import HistoryDisplay from "../History/HistoryDisplay";
+import CustomerButtonsHeader from "../Customer/CustomerButtonsHeader";
+import CustomerDisplay from "../Customer/CustomerDisplay";
 import HistoryDisplayHistoryOptionsDialog from "../History/HistoryDisplayHistoryOptionsDialog";
 import HistoryDisplayHistoryOptionsConfirmationDialog from "../History/HistoryDisplayHistoryOptionsConfirmationDialog";
 import HistoryDisplayHistoryOptionsReprintDialog from "../History/HistoryDisplayHistoryOptionsReprintDialog";
+
+import CustomerButtonsSearchDialog from "../Customer/CustomerButtonsSearchDialog";
+
 export default {
   mixins: [storeMixin],
   components: {
     Sidebar,
     CustomerButtons,
-    HistoryDisplay,
+    CustomerOrderHistoryButtons,
+    CustomerDisplay,
     HistoryDisplayHistoryOptionsDialog,
-    HistoryDisplayHistoryOptionsConfirmationDialog,
     HistoryDisplayHistoryOptionsReprintDialog,
+    HistoryDisplayHistoryOptionsConfirmationDialog,
+    CustomerButtonsSearchDialog,
+    CustomerButtonsHeader,
   },
   data() {
     return {
-      historyOptionsDetails: {
+      customerOptionDetails: {
         confirmingAction: "",
+        customerOrderHistory: [],
         openHistoryOptionsConfirmationDialog: false,
+        openCustomerOptionSearchDialog: false,
         openHistoryOptionsReprintDialog: false,
         openHistoryOptionsDialog: false,
       },
     };
   },
   methods: {
-    setHistoryOptionsDetails: function (historyOptionsDetails) {
-      this.historyOptionsDetails = historyOptionsDetails;
+    setCustomerOptionDetails: function (customerOptionDetails) {
+      this.customerOptionDetails = customerOptionDetails;
     },
   },
 };

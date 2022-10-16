@@ -302,3 +302,25 @@ export async function modifyOrder(
         throw err
     }
 }
+
+export async function getAllOrdersWithCustomerId(id: number): Promise<Record<string, unknown>[]> {
+    try {
+        const allOrders = await prisma.orders.findMany(
+            {
+                orderBy: [
+                    {
+                        id: 'asc',
+                    },
+                ],
+                where: {
+                    customer_id: id
+                }
+            }
+        )
+        logInfo(getAllOrders.name, `Success!`)
+        return allOrders;
+    } catch (err) {
+        logInfo(getAllOrders.name, `${err}`)
+        throw err;
+    }
+}

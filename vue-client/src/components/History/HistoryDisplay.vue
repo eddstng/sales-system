@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-card outlined tile height="12vh">
+    <v-card outlined tile height="16vh">
       <HistoryDisplayCustomer />
     </v-card>
     <v-card
@@ -87,6 +87,7 @@
 .history-display-item-text {
   font-size: 1.2em;
 }
+
 </style>
 
 <script>

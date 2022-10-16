@@ -45,7 +45,7 @@ export default {
       Object.keys(selectedItems).forEach((key) => {
         const itemPrice = selectedItems[key].node.price; 
         const itemQuantity = selectedItems[key].quantity;
-        if (selectedItems[key].node.name_eng.includes("Dinner Special")) {
+        if (selectedItems[key].node.name_eng.includes("Dinner Special") || selectedItems[key].node.name_eng.includes("(SP)")) {
           specialItemNegatingDiscount = true;
         }
         priceDetails = this.storeMixinCalculatePriceDetails(priceDetails, itemPrice, itemQuantity, specialItemNegatingDiscount);
@@ -53,8 +53,10 @@ export default {
       store.commit("setPriceDetails", priceDetails);
     },
     storeMixinClearOrderRelatedDetails() {
-      store.commit("setSelectedItems", {});
-      store.commit("setSelectedCustomer", {phone: ''});
+      // store.commit("setSelectedItems", {});
+      this.storeMixinClearSelectedItems();
+      this.storeMixinClearSelectedCustomer();
+      // store.commit("setSelectedCustomer", {phone: ''});
       store.commit("setCurrentOrder", {
         id: null,
         type: null,
@@ -67,6 +69,28 @@ export default {
       });
       this.storeMixinClearStorePriceDetails();
     },
+
+    storeMixinClearCurrentOrder() {
+      store.commit("setCurrentOrder", {
+        id: null,
+        type: null,
+        total: 0,
+        customer_id: null,
+        void: null,
+        paid: null,
+        itemQuantity: 0,
+        internal: false
+      });
+    },
+
+    storeMixinClearSelectedItems() {
+      store.commit("setSelectedItems", {});
+    },
+
+    storeMixinClearSelectedCustomer() {
+      store.commit("setSelectedCustomer", {phone: ''});
+    },
+    
     storeMixinSumSelectedItemsQuantity() {
       let selectedItemsQuantitySum = 0;
       for (const value of Object.entries(this.$store.state.selectedItems)) {

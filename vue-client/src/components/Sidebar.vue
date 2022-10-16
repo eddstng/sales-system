@@ -211,14 +211,13 @@ export default {
           this.$store.state.selectedCustomer.phone !== "" ||
           JSON.stringify(this.$store.state.currentOrder) !==
             '{"id":null,"type":null,"total":0,"customer_id":null,"void":null,"paid":null,"itemQuantity":0,"internal":false}') &&
-        this.$store.state.component !== "HISTORY"
+        this.$store.state.component === "ORDER"
       ) {
         return true;
       }
       return false;
     },
     async changeComponent(componentStr) {
-      console.log("eee");
       this.changeComponentDetails.component = componentStr;
       if (this.setOrderWarning()) {
         this.changeComponentDetails.warning = true;
