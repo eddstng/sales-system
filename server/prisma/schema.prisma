@@ -25,10 +25,9 @@ model items {
   id           Int            @id @default(autoincrement())
   menu_id      Int?
   price        Float?
-  name_eng     String?        @unique @db.VarChar(100)
+  name_eng     String         @db.VarChar(100)
   name_chn     String         @default("") @db.VarChar(100)
   category     Int?
-  custom       Boolean        @default(false)
   orders_items orders_items[]
 }
 

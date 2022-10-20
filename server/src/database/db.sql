@@ -11,10 +11,10 @@ CREATE TABLE items (
     id SERIAL NOT NULL PRIMARY KEY,
     menu_id INTEGER,
     price FLOAT,
-    name_eng VARCHAR(100) UNIQUE,
+    name_eng VARCHAR(100) NOT NULL,
     name_chn VARCHAR(100) NOT NULL DEFAULT '',
-    category INTEGER,
-    custom BOOLEAN NOT NULL DEFAULT FALSE
+    category INTEGER
+    -- custom BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE customers (

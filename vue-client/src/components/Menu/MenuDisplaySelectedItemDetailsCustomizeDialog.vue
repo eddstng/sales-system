@@ -16,7 +16,7 @@
         </h3>
         <br />
         <v-btn
-          v-for="obj in customizationTextObjs"
+          v-for="obj in customizationObjs"
           v-bind:key="obj"
           x-large
           width="15%"
@@ -145,7 +145,7 @@ export default {
   data() {
     return {
       customizationInput: { eng: "", chn: "" },
-      customizationTextObjs: [
+      customizationObjs: [
         { name_eng: "NO", name_chn: "走" },
         { name_eng: "LESS", name_chn: "小" },
         { name_eng: "ADD", name_chn: "加" },
