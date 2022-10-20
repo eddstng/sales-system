@@ -75,7 +75,6 @@ export async function createOrdersItemsBulk(items: {
     customizations: any;
     timestamp: string;
     price: any;
-    custom_name: any;
 }[]) {
     try {
         // items.forEach(async item => {

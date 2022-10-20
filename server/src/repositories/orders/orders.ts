@@ -188,7 +188,6 @@ export async function submitOrder(
                     name_chn: string;
                     category: number;
                     custom_id: string,
-                    custom_name: string,
                 }
                 quantity: number,
                 timestamp: Date,
@@ -220,14 +219,13 @@ function createOrdersItemsCreateManyInputData(order_id: number, items: {
             name_chn: string;
             category: number;
             custom_id: string,
-            custom_name: string,
         }
         quantity: number,
         timestamp: Date,
         customizations: { name_eng: string, name_chn: string }[]
     }
 }): {
-    order_id: any; item_id: any; quantity: any; customizations: any; timestamp: string; price: any; custom_name: any
+    order_id: any; item_id: any; quantity: any; customizations: any; timestamp: string; price: any;
 }[] {
     const ordersItemsCreateManyInputData = [];
     for (const value of Object.entries(items)) {
@@ -239,7 +237,6 @@ function createOrdersItemsCreateManyInputData(order_id: number, items: {
             customizations: item.customizations ? item.customizations : undefined,
             timestamp: new Date(item.timestamp).toISOString(),
             price: item.node.price,
-            custom_name: item.node.custom_name,
         });
     }
     return ordersItemsCreateManyInputData;

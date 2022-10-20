@@ -2,76 +2,219 @@
   <div class="p-0" max-height="400">
     <div v-if="$store.state.selectedCustomer.phone === ''">
       <v-row align="center" justify="space-around">
-        <v-btn class="menu-button-text mt-8" min-height="100%" width="25%" ff style="height: 10vh" v-on:click="
-          selectedCustomerDetails.selectDineInFormDialog = true;
-        setStoreOrderType(0);
-        ">
+        <v-btn
+          class="menu-button-text mt-8"
+          min-height="100%"
+          width="25%"
+          style="height: 10vh"
+          v-on:click="
+            selectedCustomerDetails.selectDineInFormDialog = true;
+            setStoreOrderType(0);
+          "
+        >
           <div>DINE IN</div>
         </v-btn>
-        <v-btn class="menu-button-text mt-8" x-large min-height="100%" width="25%" v-on:click="
-          selectedCustomerDetails.customerPhoneInputDialog = true;
-        setStoreOrderType(1);
-        " style="height: 10vh">
+        <v-btn
+          class="menu-button-text mt-8"
+          x-large
+          min-height="100%"
+          width="25%"
+          v-on:click="
+            selectedCustomerDetails.customerPhoneInputDialog = true;
+            setStoreOrderType(1);
+          "
+          style="height: 10vh"
+        >
           <div>TAKE OUT</div>
         </v-btn>
-        <v-btn class="menu-button-text mt-8" x-large min-height="100%" width="25%" v-on:click="
-          selectedCustomerDetails.customerPhoneInputDialog = true;
-        setStoreOrderType(2);
-        " style="height: 10vh">
+        <v-btn
+          class="menu-button-text mt-8"
+          x-large
+          min-height="100%"
+          width="25%"
+          v-on:click="
+            selectedCustomerDetails.customerPhoneInputDialog = true;
+            setStoreOrderType(2);
+          "
+          style="height: 10vh"
+        >
           <div>DELIVERY</div>
         </v-btn>
       </v-row>
     </div>
-    <v-btn v-else class="menu-button-text mt-5" x-large width="97%" min-height="100%" v-on:click="
-      selectedCustomerDetails.openClearSelectedCustomerConfirmationDialog = true
-    " style="height: 10vh">
+    <v-btn
+      v-else
+      class="menu-button-text mt-5"
+      x-large
+      width="97%"
+      min-height="100%"
+      v-on:click="selectedCustomerDetails.changeOrderDetailsDialog = true"
+      style="height: 10vh"
+    >
       <div>
         {{ this.orderTypeString[$store.state.currentOrder.type] }} <br />
         {{
-            $store.state.selectedCustomer.phone.replace(
-              /(\d{3})(\d{3})(\d{3})/,
-              "$1-$2-$3"
-            )
+          $store.state.selectedCustomer.phone.replace(
+            /(\d{3})(\d{3})(\d{3})/,
+            "$1-$2-$3"
+          )
         }}
         <br />
         {{ $store.state.selectedCustomer.address }} <br />
-        {{ $store.state.selectedCustomer.buzzer_number !== '' && $store.state.selectedCustomer.buzzer_number !== null ? `Buzzer:` : '' }}{{
-            $store.state.selectedCustomer.buzzer_number
-        }} <br />
+        {{
+          $store.state.selectedCustomer.buzzer_number !== "" &&
+          $store.state.selectedCustomer.buzzer_number !== null
+            ? `Buzzer:`
+            : ""
+        }}{{ $store.state.selectedCustomer.buzzer_number }} <br />
         {{ $store.state.selectedCustomer.name }} <br />
         {{ $store.state.selectedCustomer.note }}
       </div>
     </v-btn>
-    <MenuDisplayCustomerSelectCustomerPhoneInputDialog v-bind:selectedCustomerDetails="selectedCustomerDetails"
-      @setCreateCustomerFormDialogToBool="setCreateCustomerFormDialogToBool" />
-    <MenuDisplayCustomerSelectCustomerDineInTablesDialog v-bind:selectedCustomerDetails="selectedCustomerDetails" />
-    <MenuDisplayCustomerSelectCreateCustomerFormDialog v-bind:selectedCustomerDetails="selectedCustomerDetails" />
+    <MenuDisplayCustomerSelectCustomerPhoneInputDialog
+      v-bind:selectedCustomerDetails="selectedCustomerDetails"
+      @setCreateCustomerFormDialogToBool="setCreateCustomerFormDialogToBool"
+    />
+    <MenuDisplayCustomerSelectCustomerDineInTablesDialog
+      v-bind:selectedCustomerDetails="selectedCustomerDetails"
+    />
+    <MenuDisplayCustomerSelectCreateCustomerFormDialog
+      v-bind:selectedCustomerDetails="selectedCustomerDetails"
+    />
 
-    <v-dialog v-model="
-      selectedCustomerDetails.openClearSelectedCustomerConfirmationDialog
-    " width="900">
+    <v-dialog
+      v-model="selectedCustomerDetails.changeCustomerDetailsDialog"
+      width="900"
+    >
       <v-card>
         <h2 class="text-center pt-16 pb-12">MODIFY CUSTOMER?</h2>
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn x-large width="33%" v-on:click="
-            selectedCustomerDetails.openClearSelectedCustomerConfirmationDialog = false
-          ">
-            <div>NO<br /></div>
+          <v-btn
+            x-large
+            width="33%"
+            v-on:click="
+              selectedCustomerDetails.changeCustomerDetailsDialog = false
+            "
+          >
+            <div>CANCEL<br /></div>
           </v-btn>
-          <v-btn x-large width="33%" v-on:click="
-            selectedCustomerDetails.openClearSelectedCustomerConfirmationDialog = false;
-          clearSelectedCustomer();
-          ">
+          <v-btn
+            x-large
+            width="33%"
+            v-on:click="
+              selectedCustomerDetails.changeCustomerDetailsDialog = false;
+              clearSelectedCustomer();
+            "
+          >
             <div>CLEAR<br /></div>
           </v-btn>
-          <v-btn x-large width="33%" v-on:click="
-            selectedCustomerDetails.openClearSelectedCustomerConfirmationDialog = false;
-            selectedCustomerDetails.createCustomerFormDialog = true;
-            selectedCustomerDetails.selectedCustomer = $store.state.selectedCustomer;
-          ">
+          <v-btn
+            x-large
+            width="33%"
+            v-on:click="
+              selectedCustomerDetails.changeCustomerDetailsDialog = false;
+              selectedCustomerDetails.createCustomerFormDialog = true;
+              selectedCustomerDetails.selectedCustomer =
+                $store.state.selectedCustomer;
+            "
+          >
             <div>YES<br /></div>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog
+      v-model="selectedCustomerDetails.changeOrderTypeDialog"
+      width="900"
+    >
+      <v-card>
+        <h2 class="text-center pt-16 pb-12">UPDATE ORDER TYPE?</h2>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            x-large
+            width="24%"
+            v-on:click="selectedCustomerDetails.changeOrderTypeDialog = false"
+          >
+            <div>CANCEL<br /></div>
+          </v-btn>
+          <v-btn
+            x-large
+            width="24%"
+            v-on:click="
+              selectedCustomerDetails.changeOrderTypeDialog = false;
+              setStoreOrderType(0);
+            "
+          >
+            <div>DINE IN<br /></div>
+          </v-btn>
+          <v-btn
+            x-large
+            width="24%"
+            v-on:click="
+              selectedCustomerDetails.changeOrderTypeDialog = false;
+              setStoreOrderType(1);
+            "
+          >
+            <div>TAKE OUT<br /></div>
+          </v-btn>
+          <v-btn
+            x-large
+            width="24%"
+            v-on:click="
+              selectedCustomerDetails.changeOrderTypeDialog = false;
+              setStoreOrderType(2);
+            "
+          >
+            <div>DELIVERY<br /></div>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog
+      v-model="selectedCustomerDetails.changeOrderDetailsDialog"
+      width="900"
+    >
+      <v-card>
+        <h2 class="text-center pt-16 pb-12">CHANGE ORDER DETAILS?</h2>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            x-large
+            width="33%"
+            v-on:click="
+              selectedCustomerDetails.changeOrderDetailsDialog = false
+            "
+          >
+            <div>CANCEL<br /></div>
+          </v-btn>
+          <v-btn
+            x-large
+            width="33%"
+            v-on:click="
+              selectedCustomerDetails.changeOrderDetailsDialog = false;
+              selectedCustomerDetails.changeCustomerDetailsDialog = true;
+            "
+          >
+            <div>CUSTOMER<br /></div>
+          </v-btn>
+          <v-btn
+            x-large
+            width="33%"
+            v-on:click="
+              selectedCustomerDetails.changeOrderDetailsDialog = false;
+              selectedCustomerDetails.changeOrderTypeDialog = true;
+              selectedCustomerDetails.selectedCustomer =
+                $store.state.selectedCustomer;
+            "
+          >
+            <div>ORDER TYPE<br /></div>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -109,7 +252,9 @@ export default {
         selectDineInFormDialog: false,
         customerPhoneInputDialog: false,
         createCustomerFormDialog: false,
-        openClearSelectedCustomerConfirmationDialog: false,
+        changeCustomerDetailsDialog: false,
+        changeOrderDetailsDialog: false,
+        changeOrderTypeDialog: false,
       },
       suggestedStreetName: [],
       orderType: null,
@@ -137,17 +282,18 @@ export default {
       );
       currentOrder.type = orderTypeNum;
       store.commit("setCurrentOrder", currentOrder);
-      (this.selectedCustomerDetails.selectedCustomer = {
-        phone: "",
-        unit_number: "",
-        street_number: "",
-        street_name: "",
-        address: "",
-        city: "",
-        name: "",
-        note: "",
-      }),
-        this.storeMixinUpdateStorePriceDetails();
+      // by commenting the following out, we are able to keep the number we entered in the dialog
+      // (this.selectedCustomerDetails.selectedCustomer = {
+      //   // phone: "123",
+      //   unit_number: "",
+      //   street_number: "",
+      //   street_name: "",
+      //   address: "",
+      //   city: "",
+      //   name: "",
+      //   note: "",
+      // }),
+      this.storeMixinUpdateStorePriceDetails();
     },
     clearSelectedCustomer: function () {
       let currentOrder = JSON.parse(

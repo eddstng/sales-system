@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-card outlined tile height="16vh">
-      <CustomerSelect />
+      <MenuDisplayCustomerSelect />
     </v-card>
     <v-card
       outlined
@@ -90,7 +90,7 @@
 
 <script>
 import storeMixin from "../../mixins/storeMixin";
-import CustomerSelect from "./MenuDisplayCustomerSelect";
+import MenuDisplayCustomerSelect from "./MenuDisplayCustomerSelect";
 
 export default {
   props: ["menuComponentDetails"],
@@ -116,7 +116,7 @@ export default {
     },
   },
   components: {
-    CustomerSelect,
+    MenuDisplayCustomerSelect,
   },
 };
 </script>
