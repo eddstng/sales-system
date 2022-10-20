@@ -62,6 +62,7 @@
             phoneError = null;
             phone = '';
             selectedCustomerDetails.customerPhoneInputDialog = false;
+            selectedCustomerDetails.selectedCustomer.phone = '';
           "
         >
           <div>CANCEL<br /></div>
