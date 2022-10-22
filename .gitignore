@@ -12,3 +12,16 @@ server/init.sql
 new-server
 *streets.js
 dumps/*
+
+
+// modify later
+dumps/latest/customers.sql
+dumps/latest/items.sql
+server/docker-compose.yml
+server/init_default.sql
+server/src/database/db.sql
+server/src/repositories/printOrder/header.png
+sh/create-database-dumps.sh
+sh/pos-server.sh
+
+vue-client/src/components/Menu/images/
