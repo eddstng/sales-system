@@ -43,7 +43,7 @@
               {{ value.node.name_chn }}
             </v-col>
             <v-col :cols="2" class="text-center">
-              ${{ value.node.price.toFixed(2) }}
+              ${{ Number(value.node.price).toFixed(2) }}
             </v-col>
           </v-row>
           <v-list-item-content

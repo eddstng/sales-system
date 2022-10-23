@@ -39,6 +39,7 @@ export async function getAllOrdersItems(): Promise<Record<string, unknown>[]> {
 }
 
 export async function getOneOrdersItems(id: number): Promise<orders_items> {
+    console.log('arewe fkodkfogksodf')
     try {
         const oneOrdersItems = await prisma.orders_items.findUnique({
             where: {
@@ -47,6 +48,7 @@ export async function getOneOrdersItems(id: number): Promise<orders_items> {
         })
         if (oneOrdersItems !== null) {
             await validateClassFields(OrdersItems, <JSON><unknown>oneOrdersItems)
+            console.log(JSON.stringify(oneOrdersItems))
             return oneOrdersItems
         }
         logInfo(getOneOrdersItems.name, `OrdersItems Record ID:${id} retrieved.`)
@@ -75,6 +77,8 @@ export async function createOrdersItemsBulk(items: {
     customizations: any;
     timestamp: string;
     price: any;
+    custom_price: any;
+    custom_item_id: any;
 }[]) {
     try {
         // items.forEach(async item => {

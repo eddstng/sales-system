@@ -184,7 +184,7 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
                 })
             }
 
-            if (element.item_custom === true && element.item_name_chn.length === 0) {
+            if (element.item_name_chn.length === 0) {
                 kitchenBillString += `\n\nx${element.orders_items_quantity} ____________${kitchenCustomizationString ? `\n\n${kitchenCustomizationString}` : ''}
                 
                 `
@@ -223,7 +223,7 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
             clientBillString += `
             ${element.item_name_chn.length !== 0 ? `⊵ ${element.item_name_chn}` : `⊵ Custom Item`}
             ${element.item_name_eng}${clientCustomizationString ? clientCustomizationString : ''}
-            ${element.orders_items_quantity}x ${(element.item_price as number).toFixed(2)}`
+            ${element.orders_items_quantity}x ${element.item_custom_price ? (Number(element.item_custom_price as number)).toFixed(2) : (Number(element.item_price as number)).toFixed(2)}`
         })
 
         kitchenBillString += `${kitchenBillStringEnglish}
@@ -233,10 +233,10 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
         clientBillString += `
         -----------------------
         Number of Items: ${res[0].items_quantity_total}
-        Subtotal: $${(res[0].order_subtotal as number).toFixed(2)}` +
-            `${res[0].order_discount !== 0 ? `
-        Discount: -$${(res[0].order_discount as number).toFixed(2)}` : ''}` + `
-        GST: $${(res[0].order_gst as number).toFixed(2)}
+        Subtotal: $${(Number(res[0].order_subtotal)).toFixed(2)}` +
+            `${Number(res[0].order_discount) !== 0 ? `
+        Discount: -$${(Number(res[0].order_discount)).toFixed(2)}` : ''}` + `
+        GST: $${(Number(res[0].order_gst)).toFixed(2)}
         Total: $${res[0].order_total.toFixed(2)}
         `
 

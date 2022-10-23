@@ -40,7 +40,8 @@
               {{ value.node.name_chn }}
             </v-col>
             <v-col :cols="2" class="text-center">
-              ${{ value.node.price.toFixed(2) }}
+              ${{ Number(((value.node.custom_price ? value.node.custom_price : value.node.price))).toFixed(2) }}
+
             </v-col>
           </v-row>
           <v-list-item-content v-for="customization in value.customizations" v-bind:key="customization.id">

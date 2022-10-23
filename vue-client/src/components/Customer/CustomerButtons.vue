@@ -101,8 +101,6 @@ export default {
       //   });
       //   // Update the $store.state.selectedCustomer.
 
-      console.log(customer);
-
       const customerOrderHistory = (
         await axios.get(
           `http://localhost:3000/get/customerorders/customerid/${customer.id}`
@@ -115,8 +113,6 @@ export default {
       };
 
       this.updateCustomerOptionDetails();
-
-      console.log(JSON.stringify(customerOrderHistory));
 
       store.commit("setSelectedCustomer", {
         address: customer.address,

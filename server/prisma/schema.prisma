@@ -24,7 +24,7 @@ model customers {
 model items {
   id           Int            @id @default(autoincrement())
   menu_id      Int?
-  price        Float?
+  price        Decimal?       @db.Decimal
   name_eng     String         @db.VarChar(100)
   name_chn     String         @default("") @db.VarChar(100)
   category     Int?
@@ -34,10 +34,10 @@ model items {
 model orders {
   id              Int            @id @default(autoincrement())
   number          Int?
-  total           Float?
-  subtotal        Float?
-  gst             Float?
-  discount        Float?
+  total           Decimal?       @db.Decimal
+  subtotal        Decimal?       @db.Decimal
+  gst             Decimal?       @db.Decimal
+  discount        Decimal?       @db.Decimal
   timestamp       DateTime?      @default(now()) @db.Timestamp(6)
   type            Int?           @db.SmallInt
   void            Boolean        @default(false)
@@ -51,9 +51,11 @@ model orders {
 
 model orders_items {
   id             Int       @id @default(autoincrement())
-  quantity       Float?
+  quantity       Int?
   customizations Json?
-  price          Float?
+  price          Decimal?  @db.Decimal
+  custom_price   Decimal?  @db.Decimal
+  custom_item_id String?   @db.VarChar(20)
   timestamp      DateTime? @db.Timestamp(6)
   item_id        Int?
   order_id       Int?
@@ -66,7 +68,7 @@ model orders_history {
   order_number          Int?
   order_timestamp       DateTime? @default(now()) @db.Timestamp(6)
   order_type            Int?      @db.SmallInt
-  order_total           Float?
+  order_total           Decimal?
   order_void            Boolean   @default(false)
   order_paid            Boolean   @default(false)
   order_internal        Boolean   @default(false)
@@ -81,10 +83,10 @@ model orders_items_detail {
   order_number                Int?
   order_timestamp             DateTime? @default(now()) @db.Timestamp(6)
   order_type                  Int?      @db.SmallInt
-  order_total                 Float
-  order_subtotal              Float
-  order_gst                   Float
-  order_discount              Float
+  order_total                 Decimal
+  order_subtotal              Decimal
+  order_gst                   Decimal
+  order_discount              Decimal
   order_void                  Boolean   @default(false)
   order_paid                  Boolean   @default(false)
   order_internal              Boolean   @default(false)
@@ -103,10 +105,11 @@ model orders_items_detail {
   item_category               Int?
   item_name_eng               String?   @unique @db.VarChar(100)
   item_name_chn               String?   @unique @db.VarChar(100)
-  item_price                  Float?
-  item_custom                 Boolean   @default(false)
+  item_price                  Decimal?
+  item_custom_price           Decimal?
+  item_custom_id         String?
   items_quantity_total        Int
-  orders_items_quantity       Float?
+  orders_items_quantity       Decimal?
   orders_items_customizations Json?
   orders_items_timestamp      DateTime? @db.Timestamp(6)
 }
