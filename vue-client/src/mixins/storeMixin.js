@@ -43,7 +43,8 @@ export default {
       let priceDetails = Object.assign({}, this.$store.state.priceDetails); 
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
       Object.keys(selectedItems).forEach((key) => {
-        const itemPrice = selectedItems[key].node.price; 
+        const itemPrice = selectedItems[key].node.custom_price !== undefined ? selectedItems[key].node.custom_price : selectedItems[key].node.price; 
+
         const itemQuantity = selectedItems[key].quantity;
         if (selectedItems[key].node.name_eng.includes("Dinner Special") || selectedItems[key].node.name_eng.includes("(SP)")) {
           specialItemNegatingDiscount = true;
@@ -113,7 +114,7 @@ export default {
         return obj;
       }, {});
       store.commit("setOrderHistory", orderHistoryObj);
-      store.commit("setOrderHistoryPriceTotal", orderHistoryPriceTotal.toFixed(2) );
+      store.commit("setOrderHistoryPriceTotal", Number(orderHistoryPriceTotal).toFixed(2) );
     },
     async storeMixinUpdateStoreCustomerArray() {
       const allCustomers = (await axios.get("http://localhost:3000/get/customers/all")).data

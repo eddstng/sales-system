@@ -184,10 +184,12 @@ export async function submitOrder(
                     id: number;
                     menu_id: number;
                     price: number;
+                    custom_price: number;
                     name_eng: string;
                     name_chn: string;
                     category: number;
                     custom_id: string,
+                    custom_item_id: string,
                 }
                 quantity: number,
                 timestamp: Date,
@@ -215,6 +217,7 @@ function createOrdersItemsCreateManyInputData(order_id: number, items: {
             id: number;
             menu_id: number;
             price: number;
+            custom_price: number;
             name_eng: string;
             name_chn: string;
             category: number;
@@ -225,11 +228,17 @@ function createOrdersItemsCreateManyInputData(order_id: number, items: {
         customizations: { name_eng: string, name_chn: string }[]
     }
 }): {
-    order_id: any; item_id: any; quantity: any; customizations: any; timestamp: string; price: any;
+    order_id: any; item_id: any; quantity: any; customizations: any; timestamp: string; price: any, custom_price: any, custom_item_id: any;
 }[] {
+    console.log('yyyyyyyyyyyyyyyyyyyyyyy')
+    console.log(JSON.stringify(items))
+    console.log('yyyyyyyyyyyyyyyyyyyyyyy')
     const ordersItemsCreateManyInputData = [];
     for (const value of Object.entries(items)) {
         const item = value[1];
+        console.log('99999999999999999999999')
+        console.log(item.node)
+        console.log('99999999999999999999999')
         ordersItemsCreateManyInputData.push({
             order_id: order_id,
             item_id: item.node.id,
@@ -237,6 +246,8 @@ function createOrdersItemsCreateManyInputData(order_id: number, items: {
             customizations: item.customizations ? item.customizations : undefined,
             timestamp: new Date(item.timestamp).toISOString(),
             price: item.node.price,
+            custom_price: item.node.custom_price,
+            custom_item_id: item.node.custom_id,
         });
     }
     return ordersItemsCreateManyInputData;
@@ -245,18 +256,20 @@ function createOrdersItemsCreateManyInputData(order_id: number, items: {
 export async function modifyOrder(
     data: {
         customer_id: number,
-        orderDetails: {id: number,  type: number, number: number | null, internal: boolean, internal_number: number | null},
+        orderDetails: { id: number, type: number, number: number | null, internal: boolean, internal_number: number | null },
         items: {
             [key: string]: {
                 node: {
                     id: number;
                     menu_id: number;
                     price: number;
+                    custom_price: number;
                     name_eng: string;
                     name_chn: string;
                     category: number;
                     custom_id: string,
                     custom_name: string,
+                    custom_item_id: string,
                 }
                 quantity: number,
                 timestamp: Date,
@@ -293,7 +306,7 @@ export async function modifyOrder(
         await updateOrder(data.orderDetails.id, { ...data.priceDetails, type: data.orderDetails.type, customer_id: data.customer_id, void: voidOrder })
         if (!voidOrder) {
             await createAndPrintOrderBill({ order_id: data.orderDetails.id, printKitchen: true, printClient: true });
-        } 
+        }
     } catch (err) {
         console.log(err)
         throw err

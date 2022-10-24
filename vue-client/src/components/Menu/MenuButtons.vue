@@ -239,7 +239,7 @@
                 }}
               </p>
               <p class="menu-button-text-chn">{{ item.name_chn }}</p>
-              <p class="menu-button-text-price">{{ item.price.toFixed(2) }}</p>
+              <p class="menu-button-text-price">{{ (Number(item.price)).toFixed(2) }}</p>
             </div>
           </v-btn>
           <v-btn

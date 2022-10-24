@@ -3,10 +3,11 @@
     v-if="menuComponentDetails.openCustomizeSelectedItemDialog"
     v-model="menuComponentDetails.selectedItemDialog"
     width="1300px"
+    height="100%"
   >
     <v-card>
       <div>
-        <h3 class="text-center pt-10 pb-5">
+        <h3 class="text-center pt-10 pb-3">
           CUSTOMIZE ITEM
           <br />
           <br />
@@ -17,11 +18,11 @@
         <br />
         <v-btn
           v-for="obj in customizationObjs"
-          v-bind:key="obj"
+          v-bind:key="obj.name_eng"
           x-large
           width="15%"
           height="100"
-          class="mb-5 mr-2 ml-3 customization-button"
+          class="mb-4 mr-2 ml-3 customization-button"
           v-on:click="
             phone = '';
             addCustomizationToCustomizationInput(obj);
@@ -33,24 +34,8 @@
             <p class="pb-10 customization-button-chn">{{ obj.name_chn }}</p>
           </div>
         </v-btn>
-        <!-- <v-row class="justify-center mt-10 mb-10">
-          <v-btn
-            class="mt-3 mb-3"
-            x-large
-            width="20%"
-            height="80px"
-            v-on:click="
-              addCustomizationToCustomizationInput({
-                name_eng: '&',
-                name_chn: '&',
-              })
-            "
-          >
-            <p>&</p>
-          </v-btn>
-        </v-row> -->
         <v-row class="justify-center mt-10">
-          <v-col cols="12" md="6">
+          <v-col cols="12" md="4">
             <v-text-field
               v-model="customizationInput.eng"
               label="Customization"
@@ -60,7 +45,7 @@
             ></v-text-field>
           </v-col>
           <v-btn
-            width="20%"
+            width="10%"
             height="60px"
             v-on:click="removeLastWordIncustomizationInput()"
           >
@@ -68,30 +53,24 @@
             <p class="pt-4">⌫</p>
           </v-btn>
         </v-row>
-        <v-row class="justify-center mb-10 customization-button-chn">
-          <p label="Customization" required width="10%" autofocus>
+        <v-row class="justify-center customization-button-chn">
+          <p>
             {{ customizationInput.chn }}
           </p>
         </v-row>
-        <!-- <v-row class="justify-center mt-10 additional-price-row">
+        <v-row class="justify-center">
           <v-col cols="12" md="4">
             <v-text-field
-              class="additional-price-text"
               prefix="$"
-              value="0.00"
-              label="Additional Price"
-              required
-              autofocus
+              v-model="customizationInput.price"
+              label="Price"
+              width="10%"
             ></v-text-field>
           </v-col>
-          <v-btn
-            width="26%"
-            height="60px"
-            v-on:click="removeLastWordIncustomizationInput()"
-          >
+          <v-btn width="10%" height="60px" v-on:click="clearPriceInput()">
             <p class="pt-4">CLEAR</p>
           </v-btn>
-        </v-row> -->
+        </v-row>
       </div>
       <v-divider></v-divider>
       <v-card-actions>
@@ -112,8 +91,9 @@
             addCustomizationToItem(menuComponentDetails.removeSelectedItem, {
               name_eng: customizationInput.eng.toUpperCase(),
               name_chn: customizationInput.chn,
+              price: parseFloat(customizationInput.price),
             });
-            customizationInput = { eng: '', chn: '' };
+            customizationInput = { eng: '', chn: '', price: 0 };
           "
         >
           <div>ADD<br /></div>
@@ -138,13 +118,14 @@
 
 <script>
 import storeMixin from "../../mixins/storeMixin";
+import searchMixin from "../../mixins/searchMixin";
 import { store } from "../../store/store";
 export default {
-  mixins: [storeMixin],
+  mixins: [storeMixin, searchMixin],
   props: ["menuComponentDetails"],
   data() {
     return {
-      customizationInput: { eng: "", chn: "" },
+      customizationInput: { eng: "", chn: "", price: 0.0 },
       customizationObjs: [
         { name_eng: "NO", name_chn: "走" },
         { name_eng: "LESS", name_chn: "小" },
@@ -179,6 +160,9 @@ export default {
       ],
     };
   },
+
+  // ADD A PRICE INPUT FIELD AND THIS FIELD WILL ADD A SUBSTITUTION ITEM WITH THE PRICE USING addItemToSelectedItems()
+
   methods: {
     addCustomizationToCustomizationInput(customizationObj) {
       if (this.customizationInput.eng.slice(-1) !== " ") {
@@ -201,9 +185,6 @@ export default {
       }
       const lastIndexOfSpaceEng = this.customizationInput.eng.lastIndexOf(" ");
       const lastIndexOfSpaceChn = this.customizationInput.chn.lastIndexOf(" ");
-      // if (lastIndexOfSpace === -1) {
-      //   return;
-      // }
 
       this.customizationInput.eng = this.customizationInput.eng.substring(
         0,
@@ -214,6 +195,10 @@ export default {
         lastIndexOfSpaceChn
       );
     },
+
+    clearPriceInput() {
+      this.customizationInput.price = 0;
+    },
     //repeated
     closeCustomizeSelectedItemDialog() {
       this.$emit("closeCustomizeSelectedItemDialog");
@@ -221,28 +206,27 @@ export default {
     closeSelectedItemDialog() {
       this.$emit("closeSelectedItemDialog");
     },
+
     addCustomizationToItem: function (selectedItem, customizationObj) {
-      const selectedItemIdToUseString =
-        selectedItem.node.custom_id ?? selectedItem.node.id.toString();
-
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
-
-      if (
-        selectedItemIdToUseString in selectedItems &&
-        selectedItems[selectedItemIdToUseString].customizations !== undefined &&
-        selectedItems[selectedItemIdToUseString].customizations !== null
-      ) {
-        selectedItems[selectedItemIdToUseString].customizations.push(
-          customizationObj
-        );
+      let customizedItemKeyName = `${selectedItem.node.id.toString()}C-`;
+      let customizedItemKeyNumber = 0;
+      if (selectedItem.node.custom_id) {
+        const selectedItemIdToUseString = selectedItem.node.custom_id;
+        if (
+          selectedItems[selectedItemIdToUseString].customizations !==
+            undefined &&
+          selectedItems[selectedItemIdToUseString].customizations !== null
+        ) {
+          selectedItems[selectedItemIdToUseString].customizations.push(
+            customizationObj
+          );
+        } else {
+          selectedItems[selectedItemIdToUseString].customizations = [
+            customizationObj,
+          ];
+        }
       } else {
-        const selectedItemWithCustomizations = {
-          ...selectedItem,
-          customizations: [customizationObj],
-        };
-        let customizedItemKeyName = `${selectedItem.node.id.toString()}C-`;
-        let customizedItemKeyNumber = 0;
-
         while (
           selectedItems[
             `${customizedItemKeyName}${customizedItemKeyNumber}`
@@ -250,9 +234,11 @@ export default {
         ) {
           customizedItemKeyNumber++;
         }
-        selectedItems[`${customizedItemKeyName}${customizedItemKeyNumber}`] =
-          JSON.parse(JSON.stringify(selectedItemWithCustomizations));
 
+        selectedItems[`${customizedItemKeyName}${customizedItemKeyNumber}`] = {
+          ...selectedItem,
+          customizations: [customizationObj],
+        };
         selectedItems[
           `${customizedItemKeyName}${customizedItemKeyNumber}`
         ].node.custom_id = `${customizedItemKeyName}${customizedItemKeyNumber}`;
@@ -263,9 +249,26 @@ export default {
             .node.name_eng
         } [C-${customizedItemKeyNumber}]`;
 
-        delete selectedItems[selectedItemIdToUseString];
+        delete selectedItems[selectedItem.node.id];
+      }
+
+      if (this.customizationInput.price !== 0) {
+        const customPriceSum =
+          selectedItem.node.custom_price === undefined ||
+          selectedItem.node.custom_price === null
+            ? parseFloat(selectedItem.node.price) +
+              parseFloat(this.customizationInput.price)
+            : parseFloat(selectedItem.node.custom_price) +
+              parseFloat(this.customizationInput.price);
+
+        const idToUse = selectedItem.node.custom_id
+          ? selectedItem.node.custom_id
+          : `${customizedItemKeyName}${customizedItemKeyNumber}`;
+
+        selectedItems[idToUse].node.custom_price = customPriceSum;
       }
       store.commit("setSelectedItems", selectedItems);
+      this.storeMixinUpdateStorePriceDetails();
     },
   },
 };

@@ -44,7 +44,7 @@
                 <v-col v-if="customer.void === true"> VOID </v-col>
                 <v-col v-else-if="customer.paid === true"> PAID </v-col>
                 <v-col v-else> </v-col>
-                <v-col> {{ customer.total.toFixed(2) }} </v-col>
+                <v-col> {{ Number(customer.total).toFixed(2) }} </v-col>
               </v-row>
             </v-btn>
           </div>
@@ -100,6 +100,7 @@ export default {
         name_chn: ordersItemsDetailWithOrderId.item_name_chn,
         category: ordersItemsDetailWithOrderId.item_category,
         price: ordersItemsDetailWithOrderId.item_price,
+        custom_price: ordersItemsDetailWithOrderId.item_custom_price,
       };
       selectedItems[displayId].customizations =
         ordersItemsDetailWithOrderId.orders_items_customizations;
@@ -192,8 +193,6 @@ export default {
       //   });
       //   // Update the $store.state.selectedCustomer.
 
-      console.log(customer);
-
       const customerOrderHistory = (
         await axios.get(
           `http://localhost:3000/get/customerorders/customerid/${customer.id}`
@@ -206,8 +205,6 @@ export default {
       };
 
       this.updateCustomerOptionDetails();
-
-      console.log(JSON.stringify(customerOrderHistory));
 
       store.commit("setSelectedCustomer", {
         address: customer.address,

@@ -1,16 +1,31 @@
 DROP TABLE IF EXISTS orders_items;
+
 DROP TABLE IF EXISTS orders;
+
 DROP TABLE IF EXISTS items;
+
 DROP TABLE IF EXISTS customers;
+
 \c postgres;
+
+-- DROP OWNED BY sales_system_db;
+
+-- DROP DATABASE IF EXISTS sales_system_db;
+
+-- CREATE DATABASE sales_system_db;
+
+-- DROP ROLE IF EXISTS sales_system_db;
+
 CREATE ROLE sales_system_db WITH LOGIN;
+
 ALTER USER sales_system_db WITH PASSWORD 'salessystemdb';
+
 \c sales_system_db;
 
 CREATE TABLE items (
     id SERIAL NOT NULL PRIMARY KEY,
     menu_id INTEGER,
-    price FLOAT,
+    price DECIMAL,
     name_eng VARCHAR(100) NOT NULL,
     name_chn VARCHAR(100) NOT NULL DEFAULT '',
     category INTEGER
@@ -32,25 +47,30 @@ CREATE TABLE customers (
 
 CREATE TABLE orders_items (
     id SERIAL NOT NULL PRIMARY KEY,
-    quantity FLOAT,
+    quantity INT,
     customizations jsonb,
-    price FLOAT,
+    price DECIMAL,
+    custom_price DECIMAL,
+    custom_item_id VARCHAR(20),
     timestamp TIMESTAMP WITHOUT TIME ZONE
+    --  item_id INT FOREIGN KEY REFERENCES items (id)
+    --  order_id INT FOREIGN KEY REFERENCES orders (id)
 );
 
 CREATE TABLE orders (
     id SERIAL NOT NULL PRIMARY KEY,
     number INT,
-    total FLOAT,
-    subtotal FLOAT,
-    gst FLOAT,
-    discount FLOAT,
+    total DECIMAL,
+    subtotal DECIMAL,
+    gst DECIMAL,
+    discount DECIMAL,
     timestamp TIMESTAMP WITHOUT TIME ZONE DEFAULT (NOW()),
     type SMALLINT,
     void BOOLEAN NOT NULL DEFAULT FALSE,
     paid BOOLEAN NOT NULL DEFAULT FALSE,
     internal BOOLEAN NOT NULL DEFAULT FALSE,
     internal_number INT
+    --  customer_id INT FOREIGN KEY REFERENCES customers (id)
 );
 
 ALTER TABLE
@@ -126,11 +146,9 @@ i.menu_id as item_menu_id,
 i.category as item_category,
 i.name_eng as item_name_eng,
 i.name_chn as item_name_chn,
-case
-	when oi.price IS NULL then i.price
-	when oi.price IS NOT NULL then oi.price
-end as item_price,
-i.custom as item_custom,
+i.price as item_price,
+oi.custom_price as item_custom_price,
+oi.custom_item_id as item_custom_id,
 oi.quantity as orders_items_quantity,
 oi.customizations as orders_items_customizations,
 oi.timestamp as orders_items_timestamp,

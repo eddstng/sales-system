@@ -81,15 +81,15 @@ function createHistoryStatement(history: orders_history[], options?: { internal?
 
     let historyStatementTotal = 0
     history.forEach((element: orders_history) => {
-        let formattedOrderTotal = `${element.order_total?.toFixed(2)}`;
-        if (element.order_total?.toFixed(2).length === 4) {
-            formattedOrderTotal = `${`\xa0`.repeat(6)}${element.order_total?.toFixed(2)}`
+        let formattedOrderTotal = `${Number(element.order_total).toFixed(2)}`;
+        if (Number(element.order_total).toFixed(2).length === 4) {
+            formattedOrderTotal = `${`\xa0`.repeat(6)}${Number(element.order_total).toFixed(2)}`
         }
-        if (element.order_total?.toFixed(2).length === 5) {
-            formattedOrderTotal = `${`\xa0`.repeat(4)}${element.order_total?.toFixed(2)}`
+        if (Number(element.order_total).toFixed(2).length === 5) {
+            formattedOrderTotal = `${`\xa0`.repeat(4)}${Number(element.order_total).toFixed(2)}`
         }
-        if (element.order_total?.toFixed(2).length === 6) {
-            formattedOrderTotal = `${`\xa0`.repeat(2)}${element.order_total?.toFixed(2)}`
+        if (Number(element.order_total).toFixed(2).length === 6) {
+            formattedOrderTotal = `${`\xa0`.repeat(2)}${Number(element.order_total).toFixed(2)}`
         }
         let elementTimestamp = `${element.order_timestamp?.toLocaleDateString("zh-Hans-CN")} ${element.order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}`
 
@@ -103,11 +103,11 @@ function createHistoryStatement(history: orders_history[], options?: { internal?
             elementTimestamp = `\xa0`.repeat(3) + elementTimestamp
         }
         historyStatementString += `\n ${element.order_number ?? 'I-' + element.order_internal_number} ${elementTimestamp} ${`\xa0`.repeat(2)}${element.order_void ? `${`\xa0`.repeat(5)}VOID` : formattedOrderTotal}`
-        if (element.order_total === null) {
+        if (Number(element.order_total) === null) {
             throw new Error('total is null')
         }
         if (element.order_void !== true) {
-            historyStatementTotal += element.order_total
+            historyStatementTotal += Number(element.order_total)
         }
     })
     let totalSpacing = `\xa0`.repeat(35)

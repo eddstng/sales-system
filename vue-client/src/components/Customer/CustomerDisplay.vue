@@ -72,7 +72,13 @@
                   x {{ item.quantity }}
                 </div>
                 <div class="history-display-item-text text-right">
-                  {{ (item.node.price * item.quantity).toFixed(2) }}
+                  {{
+                    (
+                      (item.node.custom_price
+                        ? item.node.custom_price
+                        : item.node.price) * item.quantity
+                    ).toFixed(2)
+                  }}
                 </div>
               </v-list-item-content>
             </v-list-item>

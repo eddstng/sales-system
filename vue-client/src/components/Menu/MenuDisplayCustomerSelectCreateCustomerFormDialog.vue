@@ -328,6 +328,15 @@ export default {
             this.selectedCustomerValueEmptyStringToNull(
               this.selectedCustomerDetails.selectedCustomer
             );
+
+            delete selectedCustomerWithNullEmptyValues['id']
+
+            console.log({
+              ...selectedCustomerWithNullEmptyValues,
+              street_number: parseInt(
+                this.selectedCustomerDetails.selectedCustomer.street_number
+              ),
+            })
           const res = await axios.post(
             "http://localhost:3000/post/customers/create",
             {

@@ -26,7 +26,7 @@
                   customItem.name = '';
                 "
                 >{{ item.menu_id }} - {{ item.name_eng }} - ${{
-                  item.price.toFixed(2)
+                  parseFloat(item.price).toFixed(2)
                 }}</v-btn
               >
               <br />

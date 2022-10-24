@@ -40,7 +40,7 @@
               order.customer_phone.replace(/(\d{3})(\d{3})(\d{3})/, "$1-$2-$3")
             }}
           </v-col>
-          <v-col> {{ order.order_total.toFixed(2) }} </v-col>
+          <v-col> {{ Number(order.order_total).toFixed(2) }} </v-col>
         </v-row>
       </v-btn>
     </div>
@@ -85,9 +85,7 @@ export default {
     addHistoryItemToSelectedItems(ordersItemsDetailWithOrderId) {
       const displayId =
         ordersItemsDetailWithOrderId.orders_items_customizations !== null
-          ? `${ordersItemsDetailWithOrderId.item_id}${JSON.stringify(
-              ordersItemsDetailWithOrderId.orders_items_customizations
-            )}`
+          ? ordersItemsDetailWithOrderId.item_custom_id
           : ordersItemsDetailWithOrderId.item_id;
       let selectedItems = store.state.selectedItems;
 
@@ -97,17 +95,23 @@ export default {
       selectedItems[displayId].node = {
         id: ordersItemsDetailWithOrderId.item_id,
         menu_id: ordersItemsDetailWithOrderId.item_menu_id,
-        custom_id: displayId,
+        // custom_id: displayId,
+        custom_id: ordersItemsDetailWithOrderId.item_custom_id,
         // custom_name: ordersItemsDetailWithOrderId.item_custom_name,
         name_eng: ordersItemsDetailWithOrderId.item_name_eng,
         name_chn: ordersItemsDetailWithOrderId.item_name_chn,
         category: ordersItemsDetailWithOrderId.item_category,
-        price: ordersItemsDetailWithOrderId.item_price,
+        price: parseFloat(ordersItemsDetailWithOrderId.item_price),
+        // custom_price: parseFloat(ordersItemsDetailWithOrderId.item_custom_price),
+        custom_price: ordersItemsDetailWithOrderId.item_custom_price
+          ? parseFloat(ordersItemsDetailWithOrderId.item_custom_price)
+          : undefined,
       };
       selectedItems[displayId].customizations =
         ordersItemsDetailWithOrderId.orders_items_customizations;
-      selectedItems[displayId].quantity =
-        ordersItemsDetailWithOrderId.orders_items_quantity;
+      selectedItems[displayId].quantity = parseFloat(
+        ordersItemsDetailWithOrderId.orders_items_quantity
+      );
       selectedItems[displayId].timestamp = new Date(
         ordersItemsDetailWithOrderId.orders_items_timestamp
       ).getTime(); // TO DO: Do we need this? I don't think so.
