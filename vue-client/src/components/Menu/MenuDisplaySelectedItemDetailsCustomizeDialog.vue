@@ -208,28 +208,25 @@ export default {
     },
 
     addCustomizationToItem: function (selectedItem, customizationObj) {
-      console.log("are we here 1");
-      const selectedItemIdToUseString =
-        selectedItem.node.custom_id ?? selectedItem.node.id.toString();
-
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
       let customizedItemKeyName = `${selectedItem.node.id.toString()}C-`;
       let customizedItemKeyNumber = 0;
-
-      if (
-        selectedItemIdToUseString in selectedItems &&
-        selectedItems[selectedItemIdToUseString].customizations !== undefined &&
-        selectedItems[selectedItemIdToUseString].customizations !== null
-      ) {
-        selectedItems[selectedItemIdToUseString].customizations.push(
-          customizationObj
-        );
+      if (selectedItem.node.custom_id) {
+        const selectedItemIdToUseString = selectedItem.node.custom_id;
+        if (
+          selectedItems[selectedItemIdToUseString].customizations !==
+            undefined &&
+          selectedItems[selectedItemIdToUseString].customizations !== null
+        ) {
+          selectedItems[selectedItemIdToUseString].customizations.push(
+            customizationObj
+          );
+        } else {
+          selectedItems[selectedItemIdToUseString].customizations = [
+            customizationObj,
+          ];
+        }
       } else {
-        const selectedItemWithCustomizations = {
-          ...selectedItem,
-          customizations: [customizationObj],
-        };
-
         while (
           selectedItems[
             `${customizedItemKeyName}${customizedItemKeyNumber}`
@@ -237,9 +234,11 @@ export default {
         ) {
           customizedItemKeyNumber++;
         }
-        selectedItems[`${customizedItemKeyName}${customizedItemKeyNumber}`] =
-          JSON.parse(JSON.stringify(selectedItemWithCustomizations));
 
+        selectedItems[`${customizedItemKeyName}${customizedItemKeyNumber}`] = {
+          ...selectedItem,
+          customizations: [customizationObj],
+        };
         selectedItems[
           `${customizedItemKeyName}${customizedItemKeyNumber}`
         ].node.custom_id = `${customizedItemKeyName}${customizedItemKeyNumber}`;
@@ -250,14 +249,10 @@ export default {
             .node.name_eng
         } [C-${customizedItemKeyNumber}]`;
 
-        delete selectedItems[selectedItemIdToUseString];
+        delete selectedItems[selectedItem.node.id];
       }
 
       if (this.customizationInput.price !== 0) {
-        console.log("are we here 2");
-
-        console.log(typeof this.customizationInput.price);
-        console.log(typeof selectedItem.node.custom_price);
         const customPriceSum =
           selectedItem.node.custom_price === undefined ||
           selectedItem.node.custom_price === null
@@ -266,22 +261,11 @@ export default {
             : parseFloat(selectedItem.node.custom_price) +
               parseFloat(this.customizationInput.price);
 
-        console.log(customPriceSum);
+        const idToUse = selectedItem.node.custom_id
+          ? selectedItem.node.custom_id
+          : `${customizedItemKeyName}${customizedItemKeyNumber}`;
 
-        console.log(
-          `${customizedItemKeyName}${customizedItemKeyNumber}`
-        );
-
-        selectedItems[
-          `${customizedItemKeyName}${customizedItemKeyNumber}`
-        ].node.custom_price = customPriceSum;
-
-        // musth andle if it is string
-
-        ///
-        ///
-
-        ///
+        selectedItems[idToUse].node.custom_price = customPriceSum;
       }
       store.commit("setSelectedItems", selectedItems);
       this.storeMixinUpdateStorePriceDetails();

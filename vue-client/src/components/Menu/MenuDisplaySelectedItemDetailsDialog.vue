@@ -30,7 +30,9 @@
                     <div class="pa-2">
                       {{ customization.name_eng }}
                       {{ customization.name_chn }}
-                      {{ customization.price ? `- $${customization.price}` : '' }}
+                      {{
+                        customization.price ? `- $${customization.price}` : ""
+                      }}
                     </div>
                   </v-col>
                   <div class="pa-1">
@@ -380,6 +382,7 @@ export default {
       }
       selectedItems[customIdOrId].node.custom_price = customPrice;
       store.commit("setSelectedItems", selectedItems);
+      this.storeMixinUpdateStorePriceDetails();
     },
   },
 };

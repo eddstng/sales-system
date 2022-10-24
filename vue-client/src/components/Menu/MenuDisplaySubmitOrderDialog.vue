@@ -7,10 +7,10 @@
           <div>
             <v-col :cols="15">
               {{
-                  $store.state.selectedCustomer.phone.replace(
-                    /(\d{3})(\d{3})(\d{3})/,
-                    "$1-$2-$3"
-                  )
+                $store.state.selectedCustomer.phone.replace(
+                  /(\d{3})(\d{3})(\d{3})/,
+                  "$1-$2-$3"
+                )
               }}
               <br />
               {{ $store.state.selectedCustomer.address }} <br />
@@ -24,14 +24,19 @@
               {{ $store.state.currentOrder.itemQuantity }}
             </v-col>
             <v-col v-if="$store.state.currentOrder.internal === true">
-              Internal Order:
-              TRUE</v-col
+              Internal Order: TRUE</v-col
             >
             <br />
           </div>
         </v-row>
-        <div v-for="value in $store.state.selectedItemsOrderedByEntry" v-bind:key="value.id">
-          <v-row v-if="value.node !== undefined" class="submitOrderDialogText mt-5 mb-5">
+        <div
+          v-for="value in $store.state.selectedItemsOrderedByEntry"
+          v-bind:key="value.id"
+        >
+          <v-row
+            v-if="value.node !== undefined"
+            class="submitOrderDialogText mt-5 mb-5"
+          >
             <v-col> x{{ value.quantity }} </v-col>
             <v-col :cols="5">
               {{ value.node.name_eng }}
@@ -40,18 +45,27 @@
               {{ value.node.name_chn }}
             </v-col>
             <v-col :cols="2" class="text-center">
-              ${{ Number(((value.node.custom_price ? value.node.custom_price : value.node.price))).toFixed(2) }}
-
+              ${{
+                Number(
+                  value.node.custom_price
+                    ? value.node.custom_price
+                    : value.node.price
+                ).toFixed(2)
+              }}
             </v-col>
           </v-row>
-          <v-list-item-content v-for="customization in value.customizations" v-bind:key="customization.id">
+          <v-list-item-content
+            v-for="customization in value.customizations"
+            v-bind:key="customization.id"
+          >
             <div class="submitOrderDialogText pl-25 mb-5">
               ➡ {{ customization.name_eng }}
               {{
-                  customization.name_chn === ""
-                    ? ""
-                    : "/" + customization.name_chn
+                customization.name_chn === ""
+                  ? ""
+                  : "/" + customization.name_chn
               }}
+              {{ customization.price !== 0 ? `- $${customization.price}` : "" }}
             </div>
           </v-list-item-content>
         </div>
@@ -78,7 +92,11 @@
         <v-btn x-large width="50%" v-on:click="closeSubmitOrderDialog()">
           <div>CANCEL<br /></div>
         </v-btn>
-        <v-btn x-large width="50%" v-on:click="closeSubmitOrderDialog(), submitOrder()">
+        <v-btn
+          x-large
+          width="50%"
+          v-on:click="closeSubmitOrderDialog(), submitOrder()"
+        >
           <div>SUBMIT<br /></div>
         </v-btn>
       </v-card-actions>
@@ -111,19 +129,24 @@ export default {
           customer_id: this.$store.state.selectedCustomer.id,
           orderDetails: this.$store.state.currentOrder,
           items: this.$store.state.selectedItems,
-          priceDetails: this.$store.state.priceDetails
-        })
+          priceDetails: this.$store.state.priceDetails,
+        });
         this.storeMixinClearOrderRelatedDetails();
         this.closeSubmitOrderDialog();
         store.commit("setNotification", 1);
       } catch (err) {
         this.closeSubmitOrderDialog();
-        store.commit('setErrorToDisplay', err.response.data)
+        store.commit("setErrorToDisplay", err.response.data);
         store.commit("setNotification", 5);
       }
     },
 
-    submitOrderFunction: async function ({ customer_id, orderDetails, items, priceDetails }) {
+    submitOrderFunction: async function ({
+      customer_id,
+      orderDetails,
+      items,
+      priceDetails,
+    }) {
       await axios.post("http://localhost:3000/post/submitorder", {
         customer_id: customer_id,
         orderDetails: orderDetails,

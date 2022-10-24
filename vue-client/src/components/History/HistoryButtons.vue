@@ -103,13 +103,15 @@ export default {
         category: ordersItemsDetailWithOrderId.item_category,
         price: parseFloat(ordersItemsDetailWithOrderId.item_price),
         // custom_price: parseFloat(ordersItemsDetailWithOrderId.item_custom_price),
-        custom_price: ordersItemsDetailWithOrderId.item_custom_price ? parseFloat(ordersItemsDetailWithOrderId.item_custom_price) : undefined,
-
+        custom_price: ordersItemsDetailWithOrderId.item_custom_price
+          ? parseFloat(ordersItemsDetailWithOrderId.item_custom_price)
+          : undefined,
       };
       selectedItems[displayId].customizations =
         ordersItemsDetailWithOrderId.orders_items_customizations;
-      selectedItems[displayId].quantity =
-        parseFloat(ordersItemsDetailWithOrderId.orders_items_quantity);
+      selectedItems[displayId].quantity = parseFloat(
+        ordersItemsDetailWithOrderId.orders_items_quantity
+      );
       selectedItems[displayId].timestamp = new Date(
         ordersItemsDetailWithOrderId.orders_items_timestamp
       ).getTime(); // TO DO: Do we need this? I don't think so.
