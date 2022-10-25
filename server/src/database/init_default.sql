@@ -28,7 +28,8 @@ CREATE TABLE items (
     price DECIMAL,
     name_eng VARCHAR(100) NOT NULL,
     name_chn VARCHAR(100) NOT NULL DEFAULT '',
-    category INTEGER
+    category INTEGER,
+    special BOOLEAN DEFAULT FALSE
     -- custom BOOLEAN NOT NULL DEFAULT FALSE
 );
 
@@ -147,6 +148,7 @@ i.category as item_category,
 i.name_eng as item_name_eng,
 i.name_chn as item_name_chn,
 i.price as item_price,
+i.special as item_special,
 oi.custom_price as item_custom_price,
 oi.custom_item_id as item_custom_id,
 oi.quantity as orders_items_quantity,
