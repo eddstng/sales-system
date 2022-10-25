@@ -106,6 +106,7 @@ export default {
         custom_price: ordersItemsDetailWithOrderId.item_custom_price
           ? parseFloat(ordersItemsDetailWithOrderId.item_custom_price)
           : undefined,
+        special: ordersItemsDetailWithOrderId.item_special,
       };
       selectedItems[displayId].customizations =
         ordersItemsDetailWithOrderId.orders_items_customizations;

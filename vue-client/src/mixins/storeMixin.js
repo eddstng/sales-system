@@ -11,53 +11,46 @@ export default {
         discount: 0,
       });
     },
-    storeMixinCalculatePriceDetails(priceDetails, itemPrice, itemQuantity, specialItemNegatingDiscount) {
-      let priceDetailsReturn = Object.assign({}, priceDetails);
-      priceDetailsReturn.subtotal = this.storeMixinCalculatePriceDetailsSubtotal(priceDetailsReturn.subtotal, itemPrice, itemQuantity)
-      if (priceDetailsReturn.subtotal >= 35 && specialItemNegatingDiscount !== true && this.$store.state.currentOrder.type === 1) {
-        const tenPercentDiscount = priceDetailsReturn.subtotal * 0.10;
-        priceDetailsReturn.discount = Math.abs(tenPercentDiscount);
-      } else {
-        priceDetailsReturn.discount = 0;
-      }
-      const discountedSubtotal = priceDetailsReturn.subtotal - priceDetailsReturn.discount;
-      priceDetailsReturn.gst = this.storeMixinCalculatePriceDetailsGst(discountedSubtotal);
-      priceDetailsReturn.total = (discountedSubtotal) + priceDetailsReturn.gst;
-      return priceDetailsReturn
-    },
-    storeMixinCalculatePriceDetailsSubtotal(currentSubtotal, itemPrice, itemQuantity) {
-      return (itemPrice * itemQuantity) + currentSubtotal;
-    },
-    storeMixinCalculatePriceDetailsGst(currentSubtotal) {
-      return parseFloat(
-        (currentSubtotal * 0.05).toFixed(2)
-      );
-    },
     storeMixinSetStoreSelectedItems(selectedItems) {
       store.commit("setSelectedItems", {});
       store.commit("setSelectedItems", selectedItems);
     },
     storeMixinUpdateStorePriceDetails() {
-      let specialItemNegatingDiscount = false;
-      this.storeMixinClearStorePriceDetails();
-      let priceDetails = Object.assign({}, this.$store.state.priceDetails); 
-      const selectedItems = Object.assign({}, this.$store.state.selectedItems);
-      Object.keys(selectedItems).forEach((key) => {
-        const itemPrice = selectedItems[key].node.custom_price !== undefined ? selectedItems[key].node.custom_price : selectedItems[key].node.price; 
+      const selectedItems = this.$store.state.selectedItems;
+      let itemPriceSum = 0
+      let itemPriceSumExcludingSpecials = 0
 
+      Object.keys(selectedItems).forEach((key) => {
         const itemQuantity = selectedItems[key].quantity;
-        if (selectedItems[key].node.name_eng.includes("Dinner Special") || selectedItems[key].node.name_eng.includes("(SP)")) {
-          specialItemNegatingDiscount = true;
+        const itemPrice = (selectedItems[key].node.custom_price !== undefined ? selectedItems[key].node.custom_price : selectedItems[key].node.price) * itemQuantity;
+
+        if (selectedItems[key].node.special !== true) {
+          itemPriceSum += itemPrice
+          itemPriceSumExcludingSpecials += itemPrice
+        } else {
+          itemPriceSum += itemPrice
         }
-        priceDetails = this.storeMixinCalculatePriceDetails(priceDetails, itemPrice, itemQuantity, specialItemNegatingDiscount);
+
       });
-      store.commit("setPriceDetails", priceDetails);
+      store.commit("setPriceDetails", this.storeMixinCalculatePriceDetails(itemPriceSum, itemPriceSumExcludingSpecials));
+    },
+    storeMixinCalculatePriceDetails(itemPriceSum, itemPriceSumExcludingSpecials) {
+      let discountAmount = 0
+      if (itemPriceSumExcludingSpecials > 35 && this.$store.state.currentOrder.type === 1) {
+        discountAmount = itemPriceSumExcludingSpecials * 0.10;
+      }
+      const gstAmount = parseFloat(((itemPriceSum - discountAmount) * 0.05).toFixed(2));
+      let priceDetails = {
+        subtotal: itemPriceSum,
+        discount: discountAmount,
+        gst: gstAmount,
+        total: (itemPriceSum - discountAmount) + gstAmount
+      }
+      return priceDetails
     },
     storeMixinClearOrderRelatedDetails() {
-      // store.commit("setSelectedItems", {});
       this.storeMixinClearSelectedItems();
       this.storeMixinClearSelectedCustomer();
-      // store.commit("setSelectedCustomer", {phone: ''});
       store.commit("setCurrentOrder", {
         id: null,
         type: null,
@@ -89,9 +82,9 @@ export default {
     },
 
     storeMixinClearSelectedCustomer() {
-      store.commit("setSelectedCustomer", {phone: ''});
+      store.commit("setSelectedCustomer", { phone: '' });
     },
-    
+
     storeMixinSumSelectedItemsQuantity() {
       let selectedItemsQuantitySum = 0;
       for (const value of Object.entries(this.$store.state.selectedItems)) {
@@ -114,7 +107,7 @@ export default {
         return obj;
       }, {});
       store.commit("setOrderHistory", orderHistoryObj);
-      store.commit("setOrderHistoryPriceTotal", Number(orderHistoryPriceTotal).toFixed(2) );
+      store.commit("setOrderHistoryPriceTotal", Number(orderHistoryPriceTotal).toFixed(2));
     },
     async storeMixinUpdateStoreCustomerArray() {
       const allCustomers = (await axios.get("http://localhost:3000/get/customers/all")).data
