@@ -32,7 +32,18 @@ echo 'items.sql saved to ../dumps/latest/'
 echo ''
 echo '> CREATING SQL DUMP FOR CUSTOMERS IN DATABASE'
 PGPASSWORD=salessystemdb pg_dump -h localhost -U sales_system_db --column-inserts --data-only --table=customers sales_system_db > ../dumps/latest/customers.sql
+sed -i 's/SELECT.*/SELECT pg_catalog.setval("public.customers_id_seq", SELECT MAX(id) FROM public.customers);/g' ../dumps/latest/customers.sql
 echo 'customers.sql saved to ../dumps/latest/'
+
+# echo ''
+# echo '> CREATING SQL DUMP FOR ORDERS IN DATABASE'
+# PGPASSWORD=salessystemdb pg_dump -h localhost -U sales_system_db --column-inserts --data-only --table=orders sales_system_db > ../dumps/latest/orders.sql
+# echo 'orders.sql saved to ../dumps/latest/'
+
+# echo ''
+# echo '> CREATING SQL DUMP FOR ORDER_ITEMS IN DATABASE'
+# PGPASSWORD=salessystemdb pg_dump -h localhost -U sales_system_db --column-inserts --data-only --table=orders_items sales_system_db > ../dumps/latest/orders_items.sql
+# echo 'orders_items.sql saved to ../dumps/latest/'
 
 echo ''
 echo '> SAVING ../DUMPS BY DATE'
@@ -40,6 +51,10 @@ echo 'item.sql saved to ../dumps/'`date +%Y/%m/%d/`
 cp ../dumps/latest/items.sql ../dumps/`date +%Y/%m/%d/`
 echo 'customers.sql saved to ../dumps/'`date +%Y/%m/%d/`
 cp ../dumps/latest/customers.sql ../dumps/`date +%Y/%m/%d/`
+# echo 'orders.sql saved to ../dumps/'`date +%Y/%m/%d/`
+# cp ../dumps/latest/orders.sql ../dumps/`date +%Y/%m/%d/`
+# echo 'orders_items.sql saved to ../dumps/'`date +%Y/%m/%d/`
+# cp ../dumps/latest/orders_items.sql ../dumps/`date +%Y/%m/%d/`
 docker exec -t postgres_db pg_dumpall -c -U postgres > ../dumps/`date +%Y/%m/%d/`full-`date +%H:%M:%S`.sql
 # To import full database dump use `PGPASSWORD=postgres psql -h localhost -U postgres -f full.sql `
 echo 'full-'`date +%H:%M:%S`'.sql saved to ../dumps/'`date +%Y/%m/%d/`
