@@ -282,17 +282,16 @@ export default {
       );
       currentOrder.type = orderTypeNum;
       store.commit("setCurrentOrder", currentOrder);
-      // by commenting the following out, we are able to keep the number we entered in the dialog
-      // (this.selectedCustomerDetails.selectedCustomer = {
-      //   // phone: "123",
-      //   unit_number: "",
-      //   street_number: "",
-      //   street_name: "",
-      //   address: "",
-      //   city: "",
-      //   name: "",
-      //   note: "",
-      // }),
+      this.selectedCustomerDetails.selectedCustomer = {
+        phone: "",
+        unit_number: "",
+        street_number: "",
+        street_name: "",
+        address: "",
+        city: "",
+        name: "",
+        note: "",
+      },
       this.storeMixinUpdateStorePriceDetails();
     },
     clearSelectedCustomer: function () {

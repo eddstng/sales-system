@@ -1,6 +1,11 @@
 <template>
   <div>
-    <v-dialog v-model="selectedCustomerDetails.createCustomerFormDialog" width="500">
+    <v-dialog
+      persistent
+      @keydown.esc="selectedCustomerDetails.createCustomerFormDialog = false"
+      v-model="selectedCustomerDetails.createCustomerFormDialog"
+      width="500"
+    >
       <v-card>
         <div>
           <br />
@@ -8,67 +13,128 @@
             <h3 class="text-center">CONFIRM CUSTOMER</h3>
             <br />
             <v-form ref="form" lazy-validation>
-              <v-text-field v-model="selectedCustomerDetails.selectedCustomer.phone" label="Phone Number" required
-                :rules="rules" autocomplete="off" autofocus @keydown.enter.prevent="confirmCustomerSubmit()">
+              <v-text-field
+                v-model="selectedCustomerDetails.selectedCustomer.phone"
+                label="Phone Number"
+                required
+                :rules="rules"
+                autocomplete="off"
+                autofocus
+                @keydown.enter.prevent="confirmCustomerSubmit()"
+              >
               </v-text-field>
               <v-row>
                 <v-col cols="12" md="3">
-                  <v-text-field v-model="
-                    selectedCustomerDetails.selectedCustomer.buzzer_number
-                  " label="Buzzer Number" autocomplete="off" @keydown.enter.prevent="confirmCustomerSubmit()">
+                  <v-text-field
+                    v-model="
+                      selectedCustomerDetails.selectedCustomer.buzzer_number
+                    "
+                    label="Buzzer Number"
+                    autocomplete="off"
+                    @keydown.enter.prevent="confirmCustomerSubmit()"
+                  >
                   </v-text-field>
                 </v-col>
                 <v-col cols="12" md="3">
-                  <v-text-field v-model="
-                    selectedCustomerDetails.selectedCustomer.unit_number
-                  " label="Unit Number" autocomplete="off" @keydown.enter.prevent="confirmCustomerSubmit()">
+                  <v-text-field
+                    v-model="
+                      selectedCustomerDetails.selectedCustomer.unit_number
+                    "
+                    label="Unit Number"
+                    autocomplete="off"
+                    @keydown.enter.prevent="confirmCustomerSubmit()"
+                  >
                   </v-text-field>
                 </v-col>
                 <v-col cols="12" md="6">
-                  <v-text-field v-model="
-                    selectedCustomerDetails.selectedCustomer.street_number
-                  " label="Street Number" autocomplete="off" @keydown.enter.prevent="confirmCustomerSubmit()">
+                  <v-text-field
+                    v-model="
+                      selectedCustomerDetails.selectedCustomer.street_number
+                    "
+                    label="Street Number"
+                    autocomplete="off"
+                    @keydown.enter.prevent="confirmCustomerSubmit()"
+                  >
                   </v-text-field>
                 </v-col>
               </v-row>
-              <v-text-field v-model="selectedCustomerDetails.selectedCustomer.street_name" :counter="50"
-                label="Street Name" autocomplete="off" @keydown.enter.prevent="confirmCustomerSubmit()"></v-text-field>
+              <v-text-field
+                v-model="selectedCustomerDetails.selectedCustomer.street_name"
+                :counter="50"
+                label="Street Name"
+                autocomplete="off"
+                @keydown.enter.prevent="confirmCustomerSubmit()"
+              ></v-text-field>
               <br />
               <!-- <v-select
                 v-model="selectedCustomerDetails.selectedCustomer.city"
                 label="City"
                 dense
               ></v-select> -->
-              <v-text-field v-model="selectedCustomerDetails.selectedCustomer.name" label="Name" autocomplete="off"
-                @keydown.enter.prevent="confirmCustomerSubmit()"></v-text-field>
-              <v-text-field v-model="selectedCustomerDetails.selectedCustomer.note" :counter="100" label="Note"
-                autocomplete="off" @keydown.enter.prevent="confirmCustomerSubmit()"></v-text-field>
+              <v-text-field
+                v-model="selectedCustomerDetails.selectedCustomer.name"
+                label="Name"
+                autocomplete="off"
+                @keydown.enter.prevent="confirmCustomerSubmit()"
+              ></v-text-field>
+              <v-text-field
+                v-model="selectedCustomerDetails.selectedCustomer.note"
+                :counter="100"
+                label="Note"
+                autocomplete="off"
+                @keydown.enter.prevent="confirmCustomerSubmit()"
+              ></v-text-field>
             </v-form>
           </v-col>
-          <div v-if="
-            this.selectedCustomerDetails.suggestedCustomers.length > 0 &&
-            this.selectedCustomerDetails.selectedCustomer.phone.length < 10
-          ">
-            <v-btn v-for="customer in this.selectedCustomerDetails
-            .suggestedCustomers" :key="customer.id" x-large dark width="100%"
-              v-on:click="setSelectedCustomer(customer)">{{
-                  customer.phone.replace(/(\d{3})(\d{3})(\d{3})/, "$1-$2-$3")
+          <div
+            v-if="
+              this.selectedCustomerDetails.suggestedCustomers.length > 0 &&
+              this.selectedCustomerDetails.selectedCustomer.phone.length < 10
+            "
+          >
+            <v-btn
+              v-for="customer in this.selectedCustomerDetails
+                .suggestedCustomers"
+              :key="customer.id"
+              x-large
+              dark
+              width="100%"
+              v-on:click="setSelectedCustomer(customer)"
+              >{{
+                customer.phone.replace(/(\d{3})(\d{3})(\d{3})/, "$1-$2-$3")
               }}
-              - {{ customer.name }}</v-btn>
+              - {{ customer.name }}</v-btn
+            >
           </div>
           <br />
         </div>
-        <v-alert v-if="this.createCustomerError" class="ml-2 mr-2" dense type="error" outlined>
+        <v-alert
+          v-if="this.createCustomerError"
+          class="ml-2 mr-2"
+          dense
+          type="error"
+          outlined
+        >
           Error: {{ this.createCustomerError }}
         </v-alert>
-        <v-alert v-if="this.createCustomerWarning" class="ml-2 mr-2" dense type="warning" outlined>
+        <v-alert
+          v-if="this.createCustomerWarning"
+          class="ml-2 mr-2"
+          dense
+          type="warning"
+          outlined
+        >
           Warning: {{ this.createCustomerWarning }}
         </v-alert>
         <v-card-actions>
-          <v-btn x-large width="50%" v-on:click="
-  phone = '';
-selectedCustomerDetails.createCustomerFormDialog = false;
-          ">
+          <v-btn
+            x-large
+            width="50%"
+            v-on:click="
+              phone = '';
+              selectedCustomerDetails.createCustomerFormDialog = false;
+            "
+          >
             <div>CANCEL<br /></div>
           </v-btn>
           <v-btn x-large width="50%" v-on:click="confirmCustomerSubmit()">
@@ -76,16 +142,23 @@ selectedCustomerDetails.createCustomerFormDialog = false;
           </v-btn>
         </v-card-actions>
         <div v-if="this.suggestedStreetName.length != 0">
-        <br/>
-          <h3 class="text-center"> Suggestions:</h3>
+          <br />
+          <h3 class="text-center">Suggestions:</h3>
 
-          <v-btn v-for="streetName in this.suggestedStreetName" :key="streetName" x-large dark width="100%" class="mt-2"
+          <v-btn
+            v-for="streetName in this.suggestedStreetName"
+            :key="streetName"
+            x-large
+            dark
+            width="100%"
+            class="mt-2"
             v-on:click="
-              selectedCustomerDetails.selectedCustomer.street_name =
-              streetName
-            ">{{ streetName }}</v-btn>
+              selectedCustomerDetails.selectedCustomer.street_name = streetName
+            "
+            >{{ streetName }}</v-btn
+          >
         </div>
-        <br v-if="this.suggestedStreetName.length != 0"/>
+        <br v-if="this.suggestedStreetName.length != 0" />
       </v-card>
     </v-dialog>
     <!-- dialog to confirm updating customer -->
@@ -97,84 +170,139 @@ selectedCustomerDetails.createCustomerFormDialog = false;
             <h3 class="text-center">UPDATE CUSTOMER</h3>
             <br />
             <v-form ref="form" lazy-validation>
-              <v-text-field v-model="selectedCustomerDetails.selectedCustomer.phone" label="Phone Number" required
-                :rules="rules" autocomplete="off" autofocus></v-text-field>
+              <v-text-field
+                v-model="selectedCustomerDetails.selectedCustomer.phone"
+                label="Phone Number"
+                required
+                :rules="rules"
+                autocomplete="off"
+                autofocus
+              ></v-text-field>
               <v-row>
                 <v-col cols="12" md="3">
-                  <v-text-field v-model="
-                    selectedCustomerDetails.selectedCustomer.buzzer_number
-                  " label="Buzzer Number" autocomplete="off" @keydown.enter.prevent="confirmCustomerSubmit()">
+                  <v-text-field
+                    v-model="
+                      selectedCustomerDetails.selectedCustomer.buzzer_number
+                    "
+                    label="Buzzer Number"
+                    autocomplete="off"
+                    @keydown.enter.prevent="confirmCustomerSubmit()"
+                  >
                   </v-text-field>
                 </v-col>
                 <v-col cols="12" md="3">
-                  <v-text-field v-model="
-                    selectedCustomerDetails.selectedCustomer.unit_number
-                  " label="Unit Number" autocomplete="off"></v-text-field>
+                  <v-text-field
+                    v-model="
+                      selectedCustomerDetails.selectedCustomer.unit_number
+                    "
+                    label="Unit Number"
+                    autocomplete="off"
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="12" md="3">
-                  <v-text-field v-model="
-                    selectedCustomerDetails.selectedCustomer.street_number
-                  " label="Street Number" autocomplete="off"></v-text-field>
+                  <v-text-field
+                    v-model="
+                      selectedCustomerDetails.selectedCustomer.street_number
+                    "
+                    label="Street Number"
+                    autocomplete="off"
+                  ></v-text-field>
                 </v-col>
               </v-row>
-              <v-text-field v-model="selectedCustomerDetails.selectedCustomer.street_name" :counter="50"
-                label="Street Name" autocomplete="off"></v-text-field>
+              <v-text-field
+                v-model="selectedCustomerDetails.selectedCustomer.street_name"
+                :counter="50"
+                label="Street Name"
+                autocomplete="off"
+              ></v-text-field>
               <br />
-              <v-text-field v-model="selectedCustomerDetails.selectedCustomer.name" label="Name" autocomplete="off">
+              <v-text-field
+                v-model="selectedCustomerDetails.selectedCustomer.name"
+                label="Name"
+                autocomplete="off"
+              >
               </v-text-field>
-              <v-text-field v-model="selectedCustomerDetails.selectedCustomer.note" :counter="100" label="Note"
-                autocomplete="off"></v-text-field>
+              <v-text-field
+                v-model="selectedCustomerDetails.selectedCustomer.note"
+                :counter="100"
+                label="Note"
+                autocomplete="off"
+              ></v-text-field>
             </v-form>
           </v-col>
-          <div v-if="
-            this.selectedCustomerDetails.suggestedCustomers.length > 0 &&
-            this.selectedCustomerDetails.selectedCustomer.phone.length < 10
-          ">
-            <v-btn v-for="customer in this.selectedCustomerDetails
-            .suggestedCustomers" :key="customer.id" x-large dark width="100%"
-              v-on:click="setSelectedCustomer(customer)">{{
-                  customer.phone.replace(/(\d{3})(\d{3})(\d{3})/, "$1-$2-$3")
+          <div
+            v-if="
+              this.selectedCustomerDetails.suggestedCustomers.length > 0 &&
+              this.selectedCustomerDetails.selectedCustomer.phone.length < 10
+            "
+          >
+            <v-btn
+              v-for="customer in this.selectedCustomerDetails
+                .suggestedCustomers"
+              :key="customer.id"
+              x-large
+              dark
+              width="100%"
+              v-on:click="setSelectedCustomer(customer)"
+              >{{
+                customer.phone.replace(/(\d{3})(\d{3})(\d{3})/, "$1-$2-$3")
               }}
-              - {{ customer.name }}</v-btn>
+              - {{ customer.name }}</v-btn
+            >
           </div>
         </div>
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn x-large width="50%" v-on:click="
-  phone = '';
-confirmCustomerUpdateDialog = false;
-selectedCustomerDetails.selectedCustomer = JSON.parse(
-  JSON.stringify(
-    $store.state.customers[
-    selectedCustomerDetails.selectedCustomer.id
-    ]
-  )
-);
-createCustomerError = null;
-createCustomerWarning = 'DATA RESET';
-selectedCustomerDetails.createCustomerFormDialog = false;
-selectedCustomerDetails.createCustomerFormDialog = true;
-          ">
+          <v-btn
+            x-large
+            width="50%"
+            v-on:click="
+              phone = '';
+              confirmCustomerUpdateDialog = false;
+              selectedCustomerDetails.selectedCustomer = JSON.parse(
+                JSON.stringify(
+                  $store.state.customers[
+                    selectedCustomerDetails.selectedCustomer.id
+                  ]
+                )
+              );
+              createCustomerError = null;
+              createCustomerWarning = 'DATA RESET';
+              selectedCustomerDetails.createCustomerFormDialog = false;
+              selectedCustomerDetails.createCustomerFormDialog = true;
+            "
+          >
             <div>CANCEL<br /></div>
           </v-btn>
-          <v-btn x-large width="50%" v-on:click="
-            updateCustomerSubmit(selectedCustomerDetails.selectedCustomer)
-          ">
+          <v-btn
+            x-large
+            width="50%"
+            v-on:click="
+              updateCustomerSubmit(selectedCustomerDetails.selectedCustomer)
+            "
+          >
             <div>UPDATE<br /></div>
           </v-btn>
         </v-card-actions>
-           <div v-if="this.suggestedStreetName.length != 0">
-        <br/>
-          <h3 class="text-center"> Suggestions:</h3>
+        <div v-if="this.suggestedStreetName.length != 0">
+          <br />
+          <h3 class="text-center">Suggestions:</h3>
 
-          <v-btn v-for="streetName in this.suggestedStreetName" :key="streetName" x-large dark width="100%" class="mt-2"
+          <v-btn
+            v-for="streetName in this.suggestedStreetName"
+            :key="streetName"
+            x-large
+            dark
+            width="100%"
+            class="mt-2"
             v-on:click="
-              selectedCustomerDetails.selectedCustomer.street_name =
-              streetName
-            ">{{ streetName }}</v-btn>
+              selectedCustomerDetails.selectedCustomer.street_name = streetName
+            "
+            >{{ streetName }}</v-btn
+          >
         </div>
-        <br v-if="this.suggestedStreetName.length != 0"/>
+        <br v-if="this.suggestedStreetName.length != 0" />
         <!-- dialog to confirm updating customer -->
       </v-card>
     </v-dialog>
@@ -294,7 +422,7 @@ export default {
       this.createCustomerError = null;
       this.checkIfIsDeliveryAndHasValidAddress();
       if (this.createCustomerError !== null) {
-        return
+        return;
       }
       // If there is a selectedCustomer (set in CustomerSelectCustomerPhoneInputDialog if the customer exists),
       // then check if the customer details have been updated in the form,
@@ -329,14 +457,14 @@ export default {
               this.selectedCustomerDetails.selectedCustomer
             );
 
-            delete selectedCustomerWithNullEmptyValues['id']
+          delete selectedCustomerWithNullEmptyValues["id"];
 
-            console.log({
-              ...selectedCustomerWithNullEmptyValues,
-              street_number: parseInt(
-                this.selectedCustomerDetails.selectedCustomer.street_number
-              ),
-            })
+          console.log({
+            ...selectedCustomerWithNullEmptyValues,
+            street_number: parseInt(
+              this.selectedCustomerDetails.selectedCustomer.street_number
+            ),
+          });
           const res = await axios.post(
             "http://localhost:3000/post/customers/create",
             {
@@ -357,11 +485,14 @@ export default {
     },
     updateCustomerSubmit: async function (selectedCustomer) {
       try {
-        // If the customer was newly created, selectedCustomer will not be updated with the database generated id. 
-        // The following line adds the will retrieve the id from the store if necessary. 
-        const selectedCustomerId = selectedCustomer.id ?? this.$store.state.selectedCustomer.id;
+        // If the customer was newly created, selectedCustomer will not be updated with the database generated id.
+        // The following line adds the will retrieve the id from the store if necessary.
+        const selectedCustomerId =
+          selectedCustomer.id ?? this.$store.state.selectedCustomer.id;
         if (isNaN(selectedCustomerId)) {
-          throw new Error('Error occured while trying to update customer details due to invalid customer id.')
+          throw new Error(
+            "Error occured while trying to update customer details due to invalid customer id."
+          );
         }
 
         // Update customer details of the selectedCustomer.
@@ -370,13 +501,13 @@ export default {
           selectedCustomer
         );
         if (res.status !== 200) {
-          throw new Error('Error occured while trying to update customer details during PUT request.')
+          throw new Error(
+            "Error occured while trying to update customer details during PUT request."
+          );
         }
 
-        // If the PUT request was successful, update the store with the new customer details. 
-        this.customerSelectMixinSetSelectedCustomer(
-          res.data
-        );
+        // If the PUT request was successful, update the store with the new customer details.
+        this.customerSelectMixinSetSelectedCustomer(res.data);
 
         this.confirmCustomerUpdateDialog = false;
         this.selectedCustomerDetails.createCustomerFormDialog = false;
@@ -393,7 +524,8 @@ export default {
       if (
         this.$store.state.currentOrder.type === 2 &&
         (this.selectedCustomerDetails.selectedCustomer.street_number == "" ||
-          this.selectedCustomerDetails.selectedCustomer.street_name == "" || this.selectedCustomerDetails.selectedCustomer.street_number == null ||
+          this.selectedCustomerDetails.selectedCustomer.street_name == "" ||
+          this.selectedCustomerDetails.selectedCustomer.street_number == null ||
           this.selectedCustomerDetails.selectedCustomer.street_name == null)
       ) {
         this.createCustomerError = "DELIVERY REQUIRES A VALID ADDRESS";

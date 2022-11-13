@@ -32,7 +32,7 @@ echo 'items.sql saved to ../dumps/latest/'
 echo ''
 echo '> CREATING SQL DUMP FOR CUSTOMERS IN DATABASE'
 PGPASSWORD=salessystemdb pg_dump -h localhost -U sales_system_db --column-inserts --data-only --table=customers sales_system_db > ../dumps/latest/customers.sql
-sed -i 's/SELECT.*/SELECT pg_catalog.setval("public.customers_id_seq", SELECT MAX(id) FROM public.customers);/g' ../dumps/latest/customers.sql
+sed -i "s/SELECT.*/SELECT pg_catalog.setval('public.customers_id_seq', (SELECT MAX(id) FROM public.customers));/g" ../dumps/latest/customers.sql
 echo 'customers.sql saved to ../dumps/latest/'
 
 # echo ''

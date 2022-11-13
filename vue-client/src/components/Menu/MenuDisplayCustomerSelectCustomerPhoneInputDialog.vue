@@ -1,6 +1,8 @@
 <template>
   <v-dialog
+    persistent
     v-model="selectedCustomerDetails.customerPhoneInputDialog"
+    @keydown.esc="selectedCustomerDetails.customerPhoneInputDialog = false"
     width="500"
   >
     <v-card>
@@ -46,8 +48,8 @@
               toggleCreateCustomerFormDialogOn();
               setSelectedCustomerIfCustomerExists(customer);
             "
-            >{{ customer.phone.replace(/(\d{3})(\d{3})(\d{3})/, "$1-$2-$3") }} {{ customer.name !== null ?  '-' : ''}}
-            {{ customer.name }}</v-btn
+            >{{ customer.phone.replace(/(\d{3})(\d{3})(\d{3})/, "$1-$2-$3") }}
+            {{ customer.name !== null ? "-" : "" }} {{ customer.name }}</v-btn
           >
         </div>
         <br />
