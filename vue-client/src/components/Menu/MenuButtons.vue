@@ -1,127 +1,51 @@
 <template>
   <div>
+    <div>
+      <v-btn
+        v-if="$store.state.selectedCustomer.phone.length === 0"
+        class="history-button-text mr-1"
+        width="24.5%"
+        height="80px"
+        dark
+        v-on:click="
+          displayedButtonsConfig.displayCategoryButtons = true;
+          displayMenuButtons = false;
+          selectedCategory = null;
+        "
+      >
+        BACK
+      </v-btn>
+      <v-btn
+        v-on:click="menuComponentDetails.addCustomItemDialog = true"
+        class="history-button-text"
+        width="24.5%"
+        height="80px"
+        dark
+      >
+        CUSTOM
+      </v-btn>
+            <v-btn
+        v-on:click="scrollButtonsUp"
+        class="history-button-text ml-1"
+        width="24.5%"
+        height="80px"
+        dark
+      >
+        <div v-if="displayedButtonsConfig.hasPrevButtons">⮝</div>
+      </v-btn>
+      <v-btn
+        v-on:click="scrollButtonsDown"
+        class="history-button-text ml-1"
+        width="24.5%"
+        height="80px"
+        dark
+      >
+        <div v-if="displayedButtonsConfig.hasNextButtons">⮟</div>
+      </v-btn>
+    </div>
     <v-card outlined tile class="overflow-y-auto" height="92.4vh">
       <div class="p-0" v-if="displayMenuButtons" max-height="400">
-        <!-- Lets handle soup sizes here. -->
-        <div v-if="selectedCategory === 12">
-          <v-btn
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="
-              displayCategoriesButtons = true;
-              displayMenuButtons = false;
-              selectedCategory = null;
-            "
-          >
-            <div>
-              <p class="menu-button-text-eng">BACK</p>
-            </div>
-          </v-btn>
-          <v-btn
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="menuComponentDetails.addCustomItemDialog = true"
-          >
-            <div>
-              <p class="menu-button-text-eng">CUSTOM</p>
-            </div>
-          </v-btn>
-          <v-btn
-            v-for="item in chowMeinItems"
-            v-bind:key="item.name_eng"
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="
-              onClickMenuButton(item);
-              displayCategoriesButtons = true;
-              displayMenuButtons = false;
-            "
-          >
-            <div>
-              <p class="menu-button-text-eng">#{{ item.menu_id }}</p>
-              <p class="mb-0 menu-button-text-eng">
-                {{ item.name_eng.match(/.{1,20}(\s|$)/g)[0] }}
-              </p>
-              <p class="mb-0 menu-button-text-eng">
-                {{
-                  item.name_eng.toString().length > 20
-                    ? item.name_eng.match(/.{1,20}(\s|$)/g)[1]
-                    : "⠀"
-                }}
-              </p>
-              <p class="menu-button-text-chn">{{ item.name_chn }}</p>
-              <!-- <p class="menu-button-text-price">
-                {{ item.price.toFixed(2) }}
-              </p> -->
-            </div>
-          </v-btn>
-          <v-btn
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="menuComponentDetails.addCustomItemDialog = true"
-          >
-            <div>
-              <p class="menu-button-text-eng">CUSTOM</p>
-            </div>
-          </v-btn>
-          <v-btn
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="
-              displayCategoriesButtons = true;
-              displayMenuButtons = false;
-              selectedCategory = null;
-            "
-          >
-            <div>
-              <p class="menu-button-text-eng">BACK</p>
-            </div>
-          </v-btn>
-        </div>
         <div v-if="selectedCategory === 1">
-          <v-btn
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="
-              displayCategoriesButtons = true;
-              displayMenuButtons = false;
-              selectedCategory = null;
-            "
-          >
-            <div>
-              <p class="menu-button-text-eng">BACK</p>
-            </div>
-          </v-btn>
-          <v-btn
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="menuComponentDetails.addCustomItemDialog = true"
-          >
-            <div>
-              <p class="menu-button-text-eng">CUSTOM</p>
-            </div>
-          </v-btn>
           <v-btn
             v-for="item in soupItems"
             v-bind:key="item.name_eng"
@@ -132,7 +56,7 @@
             class="mt-1 mr-1"
             v-on:click="
               onClickMenuButton(item);
-              displayCategoriesButtons = true;
+              displayedButtonsConfig.displayCategoryButtons = true;
               displayMenuButtons = false;
             "
           >
@@ -154,75 +78,21 @@
               </p> -->
             </div>
           </v-btn>
-          <v-btn
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="menuComponentDetails.addCustomItemDialog = true"
-          >
-            <div>
-              <p class="menu-button-text-eng">CUSTOM</p>
-            </div>
-          </v-btn>
-          <v-btn
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="
-              displayCategoriesButtons = true;
-              displayMenuButtons = false;
-              selectedCategory = null;
-            "
-          >
-            <div>
-              <p class="menu-button-text-eng">BACK</p>
-            </div>
-          </v-btn>
         </div>
-        <div v-if="selectedCategory !== 1 && selectedCategory !== 12">
+        <!-- <div v-if="selectedCategory !== 1 && selectedCategory !== 12"> -->
+        <div v-if="selectedCategory !== 1">
+          <!-- v-for="item in $store.state.categorizedItems[selectedCategory]" -->
           <v-btn
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="
-              displayCategoriesButtons = true;
-              displayMenuButtons = false;
-              selectedCategory = null;
-            "
-          >
-            <div>
-              <p class="menu-button-text-eng">BACK</p>
-            </div>
-          </v-btn>
-          <v-btn
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="menuComponentDetails.addCustomItemDialog = true"
-          >
-            <div>
-              <p class="menu-button-text-eng">CUSTOM</p>
-            </div>
-          </v-btn>
-          <v-btn
-            v-for="item in $store.state.categorizedItems[selectedCategory]"
+            v-for="item in displayedButtonsConfig.slicedCategoryMenuObj"
             v-bind:key="item.name_eng"
             x-large
             dark
-            height="250px"
+            height="200px"
             width="19.6%"
             class="mt-1 mr-1"
             v-on:click="
               onClickMenuButton(item);
-              displayCategoriesButtons = true;
+              displayedButtonsConfig.displayCategoryButtons = true;
               displayMenuButtons = false;
             "
           >
@@ -239,40 +109,18 @@
                 }}
               </p>
               <p class="menu-button-text-chn">{{ item.name_chn }}</p>
-              <p class="menu-button-text-price">{{ (Number(item.price)).toFixed(2) }}</p>
-            </div>
-          </v-btn>
-          <v-btn
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="menuComponentDetails.addCustomItemDialog = true"
-          >
-            <div>
-              <p class="menu-button-text-eng">CUSTOM</p>
-            </div>
-          </v-btn>
-          <v-btn
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="
-              displayCategoriesButtons = true;
-              displayMenuButtons = false;
-              selectedCategory = null;
-            "
-          >
-            <div>
-              <p class="menu-button-text-eng">BACK</p>
+              <p class="menu-button-text-price">
+                {{ Number(item.price).toFixed(2) }}
+              </p>
             </div>
           </v-btn>
         </div>
       </div>
-      <div class="p-0" v-if="displayCategoriesButtons" max-height="400">
+      <div
+        class="p-0"
+        v-if="displayedButtonsConfig.displayCategoryButtons"
+        max-height="400"
+      >
         <v-btn
           v-for="item in categories"
           v-bind:key="item.id"
@@ -283,13 +131,14 @@
           class="mt-1 mr-1"
           v-on:click="
             selectedCategory = item.id;
-            displayCategoriesButtons = false;
+            displayedButtonsConfig.displayCategoryButtons = false;
             displayMenuButtons = true;
+
+            updateSlicedCategoryMenuObj(0, 20);
           "
         >
           <div>
             <p class="menu-button-text-eng">{{ item.name_eng }}</p>
-            <!-- <p class="menu-button-text-eng" >{{ item.name_chn }}</p> -->
             <p class="menu-button-text-eng">{{ item.num_range }}</p>
           </div>
         </v-btn>
@@ -434,7 +283,7 @@
 }
 
 .menu-button-text-chn {
-  font-size: 1.7em;
+  font-size: 1.2em;
 }
 
 .menu-button-text-price {
@@ -502,14 +351,24 @@ export default {
       return chowMeinItemsOneSize;
     },
     chowMeinItemsObj: function () {
-      return this.$store.state.categorizedItems[12].reduce(
+      const chowMeinItemsObj = this.$store.state.categorizedItems[12].reduce(
         (accumulator, value) => ({ ...accumulator, [value.id]: value }),
         {}
       );
+      return chowMeinItemsObj;
     },
   },
   data() {
     return {
+      displayedButtonsConfig: {
+        displayCategoryButtons: true,
+        startIndex: 0,
+        endIndex: 20,
+        slicedCategoryMenuObj: {},
+        fullCategoryMenuObj: {},
+        hasPrevButtons: false,
+        hasNextButtons: false,
+      },
       customizeChowMeinTypeDialog: false,
       customizeSoupSizeDialog: false,
       itemThatRequiresCustomization: null,
@@ -638,16 +497,82 @@ export default {
           id: 18,
         },
       ],
-      displayCategoriesButtons: true,
       displayMenuButtons: false,
     };
   },
 
   methods: {
+    scrollButtonsDown: function () {
+      if (
+        this.$store.state.categorizedItems[this.selectedCategory].length < 20 ||
+        this.displayedButtonsConfig.slicedCategoryMenuObj.length < 20
+      ) {
+        return;
+      }
+      this.updateSlicedCategoryMenuObj(
+        this.displayedButtonsConfig.startIndex + 20,
+        this.displayedButtonsConfig.endIndex + 20
+      );
+    },
+    scrollButtonsUp: function () {
+      console.log("12312");
+      if (
+        this.displayedButtonsConfig.startIndex == 0 &&
+        this.displayedButtonsConfig.endIndex == 20
+      ) {
+        return;
+      }
+      this.updateSlicedCategoryMenuObj(
+        this.displayedButtonsConfig.startIndex - 20,
+        this.displayedButtonsConfig.endIndex - 20
+      );
+    },
     onClickMenuButton(item) {
       this.checkIfSelectedItemRequiresCustomization(item);
     },
 
+    updateSlicedCategoryMenuObj(startIndex, endIndex) {
+      this.displayedButtonsConfig.startIndex = startIndex;
+      this.displayedButtonsConfig.endIndex = endIndex;
+      if (this.selectedCategory === 12) {
+        this.fullCategoryMenuObj = this.chowMeinItems;
+        this.displayedButtonsConfig.slicedCategoryMenuObj =
+          this.chowMeinItems.slice(startIndex, endIndex);
+
+        this.displayedButtonsConfig.hasPrevButtons =
+          this.fullCategoryMenuObj.length > 20 &&
+          this.displayedButtonsConfig.startIndex > 19;
+        this.displayedButtonsConfig.hasNextButtons =
+          this.fullCategoryMenuObj.length > 20 &&
+          this.displayedButtonsConfig.endIndex < 21;
+        return;
+      }
+      if (this.selectedCategory === 1) {
+        this.fullCategoryMenuObj = this.soupItems;
+        this.displayedButtonsConfig.slicedCategoryMenuObj =
+          this.soupItems.slice(startIndex, endIndex);        this.displayedButtonsConfig.hasPrevButtons =
+          this.fullCategoryMenuObj.length > 20 &&
+          this.displayedButtonsConfig.startIndex > 19;
+        this.displayedButtonsConfig.hasNextButtons =
+          this.fullCategoryMenuObj.length > 20 &&
+          this.displayedButtonsConfig.endIndex < 21;
+        return;
+      }
+      this.fullCategoryMenuObj =
+        this.$store.state.categorizedItems[this.selectedCategory];
+      this.displayedButtonsConfig.slicedCategoryMenuObj =
+        this.$store.state.categorizedItems[this.selectedCategory].slice(
+          startIndex,
+          endIndex
+        );
+
+        console.log( this.displayedButtonsConfig.startIndex )
+        console.log( this.displayedButtonsConfig.endIndex )
+                this.displayedButtonsConfig.hasPrevButtons =
+           this.displayedButtonsConfig.startIndex !== 0
+        this.displayedButtonsConfig.hasNextButtons =
+          this.fullCategoryMenuObj.length > this.displayedButtonsConfig.endIndex
+    },
     checkIfSelectedItemRequiresCustomization(item) {
       if (
         item.category === 12 &&
