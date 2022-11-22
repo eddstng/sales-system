@@ -61,7 +61,7 @@ export async function getOneOrder(id: number): Promise<orders> {
     }
 }
 
-export async function createOrder(body: { total: number, customer_id: number, type: number, internal: boolean }): Promise<orders> {
+export async function createOrder(body: { total: number, customer_id: number, type: number, internal: boolean, customizations: any }): Promise<orders> {
 
     let latestInternalOrderNumberToInsert = undefined;
     if (body.internal) {
@@ -177,7 +177,7 @@ export async function updateOrder(id: number, order: Prisma.ordersUncheckedUpdat
 export async function submitOrder(
     data: {
         customer_id: number,
-        orderDetails: { type: number, internal: boolean },
+        orderDetails: { type: number, internal: boolean, customizations: any, customizations_price: number},
         items: {
             [key: string]: {
                 node: {
@@ -200,7 +200,7 @@ export async function submitOrder(
         priceDetails: { subtotal: number, gst: number, total: number, discount: number }
     }) {
     try {
-        const newOrder = await createOrder({ total: 0, customer_id: data.customer_id, type: data.orderDetails.type, internal: data.orderDetails.internal });
+        const newOrder = await createOrder({ total: 0, customer_id: data.customer_id, type: data.orderDetails.type, internal: data.orderDetails.internal, customizations: data.orderDetails.customizations });
         const itemsArray = createOrdersItemsCreateManyInputData(newOrder.id, data.items)
         await createOrdersItemsBulk(itemsArray);
         await updateOrder(newOrder.id, data.priceDetails) // update price details
@@ -256,7 +256,7 @@ function createOrdersItemsCreateManyInputData(order_id: number, items: {
 export async function modifyOrder(
     data: {
         customer_id: number,
-        orderDetails: { id: number, type: number, number: number | null, internal: boolean, internal_number: number | null },
+        orderDetails: { id: number, type: number, number: number | null, internal: boolean, internal_number: number | null, customizations: any, customizations_price: number},
         items: {
             [key: string]: {
                 node: {

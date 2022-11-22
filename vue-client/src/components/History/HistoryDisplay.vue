@@ -55,7 +55,49 @@
           </v-list-item-content>
         </v-card>
       </template>
+            <v-card
+        class="mx-auto pt-2"
+        outlined
+        v-for="item in $store.state.currentOrder.customizations"
+        v-bind:key="item.timestamp"
+        width="100vw"
+        v-on:click="openSelectedItemDialog(item)"
+      >
+        <v-list-item three-line>
+          <v-list-item-content>
+            <!-- <div class="menu-display-item-text">{{ item.name_eng || item.node.name_eng }}</div> -->
+            <div class="menu-display-item-text">Order Customization</div>
+            <div class="menu-display-item-text mt-2">全改</div>
+            <div class="menu-display-item-text mt-5">
+              ➡ {{ item.name_eng }}
+              {{ item.name_chn.length === 0 ? "" : `/ ${item.name_chn}` }}
+            </div>
+            <!-- <div class="menu-display-item-text">{{ item.node.name_chn.length === 0 ? 'Custom Item' : item.node.name_chn }}</div> -->
+          </v-list-item-content>
+          <v-list-item-content>
+            <div class="menu-display-item-text text-right">
+              <!-- {{ item.quantity ? `x ${item.quantity}` : ''}} -->
+            </div>
+            <div class="menu-display-item-text text-right">
+              <!-- {{ (item.node.custom_price || item.node.price) ? `${((item.node.custom_price ? item.node.custom_price : item.node.price) * item.quantity).toFixed(2)}` : ''}} -->
+            </div>
+            <br />
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item-content
+          v-for="customization in item.customizations"
+          v-bind:key="customization.id"
+        >
+          <div class="menu-display-item-text pl-5">
+            ➡ {{ customization.name_eng }}
+            {{
+              customization.name_chn === "" ? "" : "/" + customization.name_chn
+            }}
+          </div>
+        </v-list-item-content>
+      </v-card>
     </v-card>
+    
     <v-card v-on:click="historyOptionsDetails.openHistoryOptionsDialog = true">
       <v-list-item three-line>
         <v-list-item-content>

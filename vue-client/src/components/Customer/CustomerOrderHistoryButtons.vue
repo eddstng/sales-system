@@ -144,6 +144,8 @@ export default {
         number: ordersItemsDetailWithOrderIdArray[0].order_number,
         internal_number:
           ordersItemsDetailWithOrderIdArray[0].order_internal_number,
+        customizations: ordersItemsDetailWithOrderIdArray[0].order_customizations,
+          
       });
 
       // Provide a total item count to the $store.state.currentOrder details.

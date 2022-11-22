@@ -2,7 +2,6 @@
   <div>
     <div>
       <v-btn
-        v-if="$store.state.selectedCustomer.phone.length === 0"
         class="history-button-text mr-1"
         width="24.5%"
         height="80px"
@@ -16,7 +15,7 @@
         BACK
       </v-btn>
       <v-btn
-        v-on:click="menuComponentDetails.addCustomItemDialog = true"
+        v-on:click="menuComponentDetails.customOptionsDialog = true"
         class="history-button-text"
         width="24.5%"
         height="80px"
@@ -24,7 +23,7 @@
       >
         CUSTOM
       </v-btn>
-            <v-btn
+      <v-btn
         v-on:click="scrollButtonsUp"
         class="history-button-text ml-1"
         width="24.5%"
@@ -43,7 +42,7 @@
         <div v-if="displayedButtonsConfig.hasNextButtons">⮟</div>
       </v-btn>
     </div>
-    <v-card outlined tile class="overflow-y-auto" height="92.4vh">
+    <v-card outlined tile class="overflow-y-auto" height="84vh">
       <div class="p-0" v-if="displayMenuButtons" max-height="400">
         <div v-if="selectedCategory === 1">
           <v-btn
@@ -126,7 +125,7 @@
           v-bind:key="item.id"
           x-large
           dark
-          height="200px"
+          height="163px"
           width="24.5%"
           class="mt-1 mr-1"
           v-on:click="
@@ -550,7 +549,8 @@ export default {
       if (this.selectedCategory === 1) {
         this.fullCategoryMenuObj = this.soupItems;
         this.displayedButtonsConfig.slicedCategoryMenuObj =
-          this.soupItems.slice(startIndex, endIndex);        this.displayedButtonsConfig.hasPrevButtons =
+          this.soupItems.slice(startIndex, endIndex);
+        this.displayedButtonsConfig.hasPrevButtons =
           this.fullCategoryMenuObj.length > 20 &&
           this.displayedButtonsConfig.startIndex > 19;
         this.displayedButtonsConfig.hasNextButtons =
@@ -566,12 +566,12 @@ export default {
           endIndex
         );
 
-        console.log( this.displayedButtonsConfig.startIndex )
-        console.log( this.displayedButtonsConfig.endIndex )
-                this.displayedButtonsConfig.hasPrevButtons =
-           this.displayedButtonsConfig.startIndex !== 0
-        this.displayedButtonsConfig.hasNextButtons =
-          this.fullCategoryMenuObj.length > this.displayedButtonsConfig.endIndex
+      console.log(this.displayedButtonsConfig.startIndex);
+      console.log(this.displayedButtonsConfig.endIndex);
+      this.displayedButtonsConfig.hasPrevButtons =
+        this.displayedButtonsConfig.startIndex !== 0;
+      this.displayedButtonsConfig.hasNextButtons =
+        this.fullCategoryMenuObj.length > this.displayedButtonsConfig.endIndex;
     },
     checkIfSelectedItemRequiresCustomization(item) {
       if (

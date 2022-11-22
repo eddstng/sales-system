@@ -132,7 +132,34 @@ export default {
       ordersItemsDetailWithOrderIdArray.forEach((v) => {
         this.addHistoryItemToSelectedItems(v);
       });
+
+
+
+
+
+
+
+
+
+
+// currently tring to get currentOrder.customizations into history and orderitemdetails api call
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       // Update the $store.state.currentOrder.
+      console.log(ordersItemsDetailWithOrderIdArray[0])
       store.commit("setCurrentOrder", {
         id: ordersItemsDetailWithOrderIdArray[0].order_id,
         type: ordersItemsDetailWithOrderIdArray[0].order_type,
@@ -145,6 +172,8 @@ export default {
         number: ordersItemsDetailWithOrderIdArray[0].order_number,
         internal_number:
           ordersItemsDetailWithOrderIdArray[0].order_internal_number,
+        customizations: ordersItemsDetailWithOrderIdArray[0].order_customizations
+        // customizations: ordersItemsDetailWithOrderIdArray[0].order_customizations
       });
       // Update the $store.state.selectedCustomer.
       store.commit("setSelectedCustomer", {

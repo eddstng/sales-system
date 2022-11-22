@@ -26,6 +26,8 @@ export const store = new Vuex.Store({
       paid: null,
       itemQuantity: 0,
       internal: false,
+      customizations: [],
+      customizations_price: 0,
     }, // the details of the current order
     menuDisplayType: "ORDER", // sets the menu mode - either "ORDER" or "MODIFY"
     notification: 0, // determines whether to display a notification and which notification to display

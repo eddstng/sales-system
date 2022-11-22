@@ -28,7 +28,7 @@
                 <v-row no-gutters>
                   <v-col>
                     <div class="pa-2">
-                      {{ customization.name_eng }}
+                      {{ customization.name_eng }} /
                       {{ customization.name_chn }}
                       {{
                         customization.price ? `- $${customization.price}` : ""
@@ -40,7 +40,11 @@
                       small
                       width="5px"
                       v-on:click="
-                        removeCustomizationFromSelectedItem(customization)
+                        menuComponentDetails.removeSelectedItem.node.category ==
+                        'customizations'
+                          ? removeCustomizationFromCurrentOrder(customization)
+                          : removeCustomizationFromSelectedItem(customization);
+                        menuComponentDetails.selectedItemDialog = false;
                       "
                     >
                       <div>X<br /></div>
@@ -67,11 +71,26 @@
             <div>CANCEL<br /></div>
           </v-btn>
           <v-btn
+            v-if="
+              menuComponentDetails.removeSelectedItem.node.category !==
+              'customizations'
+            "
             x-large
             width="15%"
             v-on:click="openCustomizeSelectedItemDialog(true)"
           >
             <div>CUSTOMIZE<br /></div>
+          </v-btn>
+          <v-btn
+            v-if="
+              menuComponentDetails.removeSelectedItem.node.category ===
+              'customizations'
+            "
+            x-large
+            width="15%"
+            v-on:click="openCustomizeCurrentOrderDialog(true)"
+          >
+            <div>CUSTOMIZE2<br /></div>
           </v-btn>
           <v-btn
             x-large
@@ -251,6 +270,7 @@
 
 
 <script>
+import utilsMixin from "../../mixins/utilsMixin";
 import storeMixin from "../../mixins/storeMixin";
 import { store } from "../../store/store";
 export default {
@@ -265,8 +285,9 @@ export default {
       updateQuantityDialogItem: {},
     };
   },
-  mixins: [storeMixin],
+  mixins: [storeMixin, utilsMixin],
   props: ["menuComponentDetails"],
+
   methods: {
     toggleUpdateQuantityDialogTrue() {
       this.updateQuantityDialogItem = Object.assign(
@@ -279,7 +300,12 @@ export default {
       this.$emit("closeSelectedItemDialog");
     },
     openCustomizeSelectedItemDialog() {
+      console.log('here')
       this.$emit("openCustomizeSelectedItemDialog");
+    },
+    openCustomizeCurrentOrderDialog() {
+      console.log('12312')
+      this.$emit("openCustomizeCurrentOrderDialog");
     },
     handleKeypad(buttonValue) {
       if (buttonValue === "🠔") {
@@ -361,7 +387,45 @@ export default {
       store.commit("setSelectedItems", selectedItems);
       this.storeMixinUpdateStorePriceDetails();
     },
+    removeCustomizationFromCurrentOrder(customization) {
+      console.log("heycall");
+      // const newCurrentOrder = this.deepCopyObj(this.$store.state.currentOrder);
+      const newCurrentOrder = this.$store.state.currentOrder;
+      newCurrentOrder.customizations = newCurrentOrder.customizations.filter(
+        function (cus) {
+          return cus.name_eng !== customization.name_eng;
+        }
+      );
+      console.log(newCurrentOrder.customizations);
+      console.log(customization);
+      console.log(customization);
+      console.log(customization);
+      console.log(customization);
+
+      store.commit("setCurrentOrder", Object.assign({}, newCurrentOrder));
+
+      this.menuComponentDetails.removeSelectedItem.customizations =
+        newCurrentOrder.customizations;
+
+      store.commit("setCurrentOrder", newCurrentOrder);
+
+      let totalCustomizationPrice = 0;
+      this.menuComponentDetails.removeSelectedItem.customizations.forEach(
+        (customization) => {
+          totalCustomizationPrice += customization.price;
+        }
+      );
+      // currentOrder = this.deepCopyArray(this.$store.state.currentOrder); //need to copy the customization array before the math below works
+      newCurrentOrder.customizations_price = parseFloat(
+        totalCustomizationPrice
+      );
+
+      // WHAT HAPPENS TO THE DIALOG AFTER YOU REMOVE ALL CUSTOMIZATIONS FOR ORDER? THERE IS A CUSTOMIZE BUTTON IN THE DIALOG AFTER REMOVAL. WOULD THAT BE CONFUSING?
+
+      this.storeMixinUpdateStorePriceDetails();
+    },
     removeCustomizationFromSelectedItem(customization) {
+      console.log(this.menuComponentDetails.removeSelectedItem);
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
       const customIdOrId =
         this.menuComponentDetails.removeSelectedItem.node.custom_id ??

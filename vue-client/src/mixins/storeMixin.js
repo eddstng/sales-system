@@ -1,8 +1,34 @@
 import { store } from "../store/store";
 import axios from "axios";
 
+
 export default {
+  emptyCurrentOrder: {
+    id: null,
+    type: null,
+    total: 0,
+    customer_id: null,
+    void: null,
+    paid: null,
+    itemQuantity: 0,
+    internal: false,
+    customizations: []
+  },
   methods: {
+    storeMixinClearCurrentOrder() {
+      store.commit("setCurrentOrder", {
+        id: null,
+        type: null,
+        total: 1,
+        customer_id: null,
+        void: null,
+        paid: null,
+        itemQuantity: 0,
+        internal: false,
+        customizations: [],
+        customizations_price: 0,
+      })
+    },
     storeMixinClearStorePriceDetails() {
       store.commit("setPriceDetails", {
         subtotal: 0,
@@ -41,7 +67,7 @@ export default {
       }
       const gstAmount = parseFloat(((itemPriceSum - discountAmount) * 0.05).toFixed(2));
       let priceDetails = {
-        subtotal: itemPriceSum,
+        subtotal: itemPriceSum + this.$store.state.currentOrder.customizations_price,
         discount: discountAmount,
         gst: gstAmount,
         total: (itemPriceSum - discountAmount) + gstAmount
@@ -51,30 +77,8 @@ export default {
     storeMixinClearOrderRelatedDetails() {
       this.storeMixinClearSelectedItems();
       this.storeMixinClearSelectedCustomer();
-      store.commit("setCurrentOrder", {
-        id: null,
-        type: null,
-        total: 0,
-        customer_id: null,
-        void: null,
-        paid: null,
-        itemQuantity: 0,
-        internal: false
-      });
+      this.storeMixinClearCurrentOrder()
       this.storeMixinClearStorePriceDetails();
-    },
-
-    storeMixinClearCurrentOrder() {
-      store.commit("setCurrentOrder", {
-        id: null,
-        type: null,
-        total: 0,
-        customer_id: null,
-        void: null,
-        paid: null,
-        itemQuantity: 0,
-        internal: false
-      });
     },
 
     storeMixinClearSelectedItems() {

@@ -70,7 +70,9 @@ CREATE TABLE orders (
     void BOOLEAN NOT NULL DEFAULT FALSE,
     paid BOOLEAN NOT NULL DEFAULT FALSE,
     internal BOOLEAN NOT NULL DEFAULT FALSE,
-    internal_number INT
+    internal_number INT,
+    customizations jsonb,
+    customizations_price DECIMAL
     --  customer_id INT FOREIGN KEY REFERENCES customers (id)
 );
 
@@ -133,6 +135,8 @@ o.void as order_void,
 o.paid as order_paid,
 o.internal as order_internal,
 o.internal_number as order_internal_number,
+o.customizations as order_customizations,
+o.customizations_price as order_customizations_price,
 c.id as customer_id,
 c.name as customer_name,
 c.phone as customer_phone,
@@ -172,6 +176,8 @@ o.void as order_void,
 o.paid as order_paid,
 o.internal as order_internal,
 o.internal_number as order_internal_number,
+o.customizations as order_customizations,
+o.customizations_price as order_customizations_price,
 c.id as customer_id,
 c.name as customer_name,
 c.phone as customer_phone

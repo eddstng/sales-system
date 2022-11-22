@@ -11,15 +11,74 @@
     <MenuDisplaySelectedItemDetailsDialog
       v-bind:menuComponentDetails="menuComponentDetails"
       @openCustomizeSelectedItemDialog="openCustomizeSelectedItemDialog"
+      @openCustomizeCurrentOrderDialog="openCustomizeCurrentOrderDialog"
     />
     <MenuDisplaySelectedItemDetailsCustomizeDialog
       v-bind:menuComponentDetails="menuComponentDetails"
       @closeCustomizeSelectedItemDialog="closeCustomizeSelectedItemDialog"
       @closeSelectedItemDialog="closeSelectedItemDialog"
     />
+
+    <MenuDisplayCurrentOrderCustomizeOrderDialog
+      v-bind:menuComponentDetails="menuComponentDetails"
+      @closeCustomizeSelectedItemDialog="closeCustomizeSelectedItemDialog"
+      @closeSelectedItemDialog="closeSelectedItemDialog"
+    />
+
     <MenuButtonsCustomItemDialog
       v-bind:menuComponentDetails="menuComponentDetails"
     />
+
+    <v-dialog
+      persistent
+      @keydown.esc="menuComponentDetails.customOptionsDialog = false"
+      v-model="menuComponentDetails.customOptionsDialog"
+      width="45%"
+    >
+      <v-card class="pt-5 pl-2 pr-2">
+        <div>
+          <div>
+            <h3 class="text-center pt-10 pb-5">CUSTOM OPTIONS</h3>
+
+            <br />
+          </div>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-btn
+              x-large
+              width="33%"
+              v-on:click="
+                phone = '';
+                menuComponentDetails.customOptionsDialog = false;
+              "
+            >
+              <div>CANCEL<br /></div>
+            </v-btn>
+            <v-btn
+              x-large
+              width="33%"
+              v-on:click="
+                menuComponentDetails.customizeOrderDialog = true;
+                menuComponentDetails.customOptionsDialog = false;
+              "
+            >
+              <div>CUSTOMIZE ORDER<br /></div>
+            </v-btn>
+            <v-btn
+              x-large
+              width="33%"
+              v-on:click="
+                menuComponentDetails.addCustomItemDialog = true;
+                menuComponentDetails.customOptionsDialog = false;
+              "
+            >
+              <div>CUSTOM ITEM<br /></div>
+            </v-btn>
+          </v-card-actions>
+        </div>
+      </v-card>
+    </v-dialog>
+
     <v-row no-gutters>
       <v-col lg="1">
         <Sidebar />
@@ -36,7 +95,7 @@
           </v-container>
         </v-card>
       </v-col>
-      <v-col lg="7" height="100vh">
+      <v-col lg="7">
         <v-card class="fill-height" tile>
           <v-container class="grey lighten-5">
             <MenuButtons v-bind:menuComponentDetails="menuComponentDetails" />
@@ -58,6 +117,7 @@ import MenuDisplayModifyOrderDialog from "./MenuDisplayModifyOrderDialog";
 import MenuDisplaySelectedItemDetailsDialog from "./MenuDisplaySelectedItemDetailsDialog";
 import MenuDisplaySelectedItemDetailsCustomizeDialog from "./MenuDisplaySelectedItemDetailsCustomizeDialog";
 import MenuButtonsCustomItemDialog from "./MenuButtonsCustomItemDialog";
+import MenuDisplayCurrentOrderCustomizeOrderDialog from "./MenuDisplayCurrentOrderCustomizeOrderDialog";
 
 export default {
   mixins: [storeMixin],
@@ -71,6 +131,7 @@ export default {
     MenuDisplaySelectedItemDetailsDialog,
     MenuDisplaySelectedItemDetailsCustomizeDialog,
     MenuButtonsCustomItemDialog,
+    MenuDisplayCurrentOrderCustomizeOrderDialog,
   },
   data() {
     return {
@@ -78,6 +139,8 @@ export default {
         openCustomizeSelectedItemDialog: false,
         selectedItemDialog: false,
         addCustomItemDialog: false,
+        customizeOrderDialog: false,
+        customOptionsDialog: false,
         removeSelectedItem: {},
       },
       submitOrderDialog: false,
@@ -90,10 +153,16 @@ export default {
       this.menuComponentDetails.openCustomizeSelectedItemDialog = false;
       this.menuComponentDetails.openCustomizeSelectedItemDialog = true;
     },
+    openCustomizeCurrentOrderDialog: function () {
+      console.log("12312312312312312");
+      this.menuComponentDetails.customizeOrderDialog = false;
+      this.menuComponentDetails.customizeOrderDialog = true;
+    },
     closeCustomizeSelectedItemDialog: function () {
       this.menuComponentDetails.openCustomizeSelectedItemDialog = false;
     },
     openSelectedItemDialog: function (item) {
+      console.log(item);
       this.menuComponentDetails.selectedItemDialog = true;
       this.menuComponentDetails.openCustomizeSelectedItemDialog = false;
       this.menuComponentDetails.removeSelectedItem = item;

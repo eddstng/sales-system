@@ -45,6 +45,7 @@ model orders {
   paid            Boolean        @default(false)
   internal        Boolean        @default(false)
   internal_number Int?
+  customizations  Json?
   customer_id     Int?
   customers       customers?     @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_customers")
   orders_items    orders_items[]
@@ -92,6 +93,8 @@ model orders_items_detail {
   order_paid                  Boolean   @default(false)
   order_internal              Boolean   @default(false)
   order_internal_number       Int?
+  order_customizations        Json?
+  order_customizations_price  Int?      @default(0)   
   customer_id                 Int       @default(autoincrement())
   customer_name               String?   @db.VarChar(100)
   customer_phone              String?   @unique @db.VarChar(15)

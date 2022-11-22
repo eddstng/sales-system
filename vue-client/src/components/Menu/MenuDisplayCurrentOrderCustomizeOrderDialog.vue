@@ -1,47 +1,44 @@
 <template>
   <v-dialog
-    v-if="menuComponentDetails.openCustomizeSelectedItemDialog"
-    v-model="menuComponentDetails.selectedItemDialog"
+    v-if="menuComponentDetails.customizeOrderDialog"
+    v-model="menuComponentDetails.customizeOrderDialog"
     width="65%"
   >
     <v-card>
       <div>
         <h3 class="text-center pt-10 pb-3">
-          CUSTOMIZE ITEM
+          CUSTOMIZE ORDER
           <br />
-          {{ menuComponentDetails.removeSelectedItem.node.name_eng }}
-          {{ `${menuComponentDetails.removeSelectedItem.node.name_chn ? ` - ` + menuComponentDetails.removeSelectedItem.node.name_chn : ''}` }}
         </h3>
         <br />
         <div class="">
-        <v-btn
-          v-for="obj in customizationObjs"
-          v-bind:key="obj.name_eng"
-          x-large
-          width="15%"
-          height="77"
-          class="mb-4 mr-2 ml-3 customization-button"
-          v-on:click="
-            phone = '';
-            addCustomizationToCustomizationInput(obj);
-          "
-        >
-          <div>
-            <br />
-            <p class="mb-1">{{ obj.name_eng }}</p>
-            <p class="customization-button-chn">{{ obj.name_chn }}</p>
-          </div>
-        </v-btn>
+          <v-btn
+            v-for="obj in customizationObjs"
+            v-bind:key="obj.name_eng"
+            x-large
+            width="15%"
+            height="77"
+            class="mb-4 mr-2 ml-3 customization-button"
+            v-on:click="
+              phone = '';
+              addCustomizationToCustomizationInput(obj);
+            "
+          >
+            <div>
+              <br />
+              <p class="mb-1">{{ obj.name_eng }}</p>
+              <p class="customization-button-chn">{{ obj.name_chn }}</p>
+            </div>
+          </v-btn>
         </div>
         <v-row class="justify-center mt-5">
           <v-col cols="12" md="4">
             <div class="chn-text">
-          <p>
-            {{ customizationInput.chn ? customizationInput.chn : '-' }} 
-          </p>
+              <p>
+                {{ customizationInput.chn ? customizationInput.chn : "-" }}
+              </p>
             </div>
-        <v-row class="justify-center customization-button-chn">
-        </v-row>
+            <v-row class="justify-center customization-button-chn"> </v-row>
             <v-text-field
               v-model="customizationInput.eng"
               label="Customization"
@@ -80,7 +77,7 @@
         <v-btn
           x-large
           width="50%"
-          v-on:click="closeCustomizeSelectedItemDialog(false)"
+          v-on:click="menuComponentDetails.customizeOrderDialog = false"
         >
           <div>CANCEL<br /></div>
         </v-btn>
@@ -88,7 +85,7 @@
           x-large
           width="50%"
           v-on:click="
-            openCustomizeSelectedItemDialog = false;
+            menuComponentDetails.customizeOrderDialog = false;
             menuComponentDetails.selectedItemDialog = false;
             addCustomizationToItem(menuComponentDetails.removeSelectedItem, {
               name_eng: customizationInput.eng.toUpperCase(),
@@ -124,11 +121,13 @@
 
 <script>
 import storeMixin from "../../mixins/storeMixin";
+import utilsMixin from "../../mixins/utilsMixin";
 import searchMixin from "../../mixins/searchMixin";
 import { customizationOptions } from "../../data/customizationOptions";
 import { store } from "../../store/store";
+
 export default {
-  mixins: [storeMixin, searchMixin],
+  mixins: [storeMixin, searchMixin, utilsMixin],
   props: ["menuComponentDetails"],
   data() {
     return {
@@ -184,66 +183,16 @@ export default {
     },
 
     addCustomizationToItem: function (selectedItem, customizationObj) {
-      const selectedItems = Object.assign({}, this.$store.state.selectedItems);
-      let customizedItemKeyName = `${selectedItem.node.id.toString()}C-`;
-      let customizedItemKeyNumber = 0;
-      if (selectedItem.node.custom_id) {
-        const selectedItemIdToUseString = selectedItem.node.custom_id;
-        if (
-          selectedItems[selectedItemIdToUseString].customizations !==
-            undefined &&
-          selectedItems[selectedItemIdToUseString].customizations !== null
-        ) {
-          selectedItems[selectedItemIdToUseString].customizations.push(
-            customizationObj
-          );
-        } else {
-          selectedItems[selectedItemIdToUseString].customizations = [
-            customizationObj,
-          ];
-        }
-      } else {
-        while (
-          selectedItems[
-            `${customizedItemKeyName}${customizedItemKeyNumber}`
-          ] !== undefined
-        ) {
-          customizedItemKeyNumber++;
-        }
-
-        selectedItems[`${customizedItemKeyName}${customizedItemKeyNumber}`] = {
-          ...selectedItem,
-          customizations: [customizationObj],
-        };
-        selectedItems[
-          `${customizedItemKeyName}${customizedItemKeyNumber}`
-        ].node.custom_id = `${customizedItemKeyName}${customizedItemKeyNumber}`;
-        selectedItems[
-          `${customizedItemKeyName}${customizedItemKeyNumber}`
-        ].node.custom_name = `${
-          selectedItems[`${customizedItemKeyName}${customizedItemKeyNumber}`]
-            .node.name_eng
-        } [C-${customizedItemKeyNumber}]`;
-
-        delete selectedItems[selectedItem.node.id];
-      }
-
-      if (this.customizationInput.price !== 0) {
-        const customPriceSum =
-          selectedItem.node.custom_price === undefined ||
-          selectedItem.node.custom_price === null
-            ? parseFloat(selectedItem.node.price) +
-              parseFloat(this.customizationInput.price)
-            : parseFloat(selectedItem.node.custom_price) +
-              parseFloat(this.customizationInput.price);
-
-        const idToUse = selectedItem.node.custom_id
-          ? selectedItem.node.custom_id
-          : `${customizedItemKeyName}${customizedItemKeyNumber}`;
-
-        selectedItems[idToUse].node.custom_price = customPriceSum;
-      }
-      store.commit("setSelectedItems", selectedItems);
+      let currentOrder = this.deepCopyArray(this.$store.state.currentOrder);
+      currentOrder.customizations.push(customizationObj);
+      let totalCustomizationPrice = 0;
+      store.commit("setCurrentOrder", currentOrder);
+      this.$store.state.currentOrder.customizations.forEach((customization) => {
+        totalCustomizationPrice += customization.price;
+      });
+      // currentOrder = this.deepCopyArray(this.$store.state.currentOrder); //need to copy the customization array before the math below works
+      currentOrder.customizations_price = parseFloat(totalCustomizationPrice);
+      store.commit("setCurrentOrder", currentOrder);
       this.storeMixinUpdateStorePriceDetails();
     },
   },

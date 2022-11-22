@@ -1,47 +1,51 @@
 <template>
-  <v-dialog v-model="submitOrderDialog" width="900">
+  <v-dialog v-model="submitOrderDialog" width="60%">
     <v-card>
       <div>
         <br />
-        <v-row class="submitOrderDialogText mt-10">
-          <div>
-            <v-col :cols="15">
-              {{
-                $store.state.selectedCustomer.phone.replace(
-                  /(\d{3})(\d{3})(\d{3})/,
-                  "$1-$2-$3"
-                )
-              }}
-              <br />
-              {{ $store.state.selectedCustomer.address }} <br />
-              {{ $store.state.selectedCustomer.name }}
-            </v-col>
-            <v-col v-if="$store.state.selectedCustomer.note">
-              * {{ $store.state.selectedCustomer.note }} <br />
-            </v-col>
-            <v-col>
-              Number of Items:
-              {{ $store.state.currentOrder.itemQuantity }}
-            </v-col>
-            <v-col v-if="$store.state.currentOrder.internal === true">
-              Internal Order: TRUE</v-col
-            >
-            <br />
-          </div>
+        <v-row class="submitOrderDialogText mt-2 mb-2">
+          <v-col :cols="4">
+            {{
+              $store.state.selectedCustomer.phone.replace(
+                /(\d{3})(\d{3})(\d{3})/,
+                "$1-$2-$3"
+              )
+            }}
+          </v-col>
+          <v-col :cols="4">
+            {{ $store.state.selectedCustomer.address }}
+          </v-col>
+          <v-col :cols="4">
+            {{ $store.state.selectedCustomer.name }}
+          </v-col>
         </v-row>
+        <v-row class="submitOrderDialogText">
+          <v-col :cols="4" v-if="$store.state.selectedCustomer.note">
+            <!-- <v-col :cols="4"> -->
+            Note: {{ $store.state.selectedCustomer.note }}
+          </v-col>
+          <v-col :cols="4">
+            Number of Items:
+            {{ $store.state.currentOrder.itemQuantity }}
+          </v-col>
+          <v-col v-if="$store.state.currentOrder.internal === true">
+            Internal Order: TRUE</v-col
+          >
+        </v-row>
+        <v-row class="submitOrderDialogText"> </v-row>
+        <br />
+
         <div
           v-for="value in $store.state.selectedItemsOrderedByEntry"
           v-bind:key="value.id"
         >
-          <v-row
-            v-if="value.node !== undefined"
-            class="submitOrderDialogText mt-5 mb-5"
-          >
+          <v-divider></v-divider>
+          <v-row v-if="value.node !== undefined" class="submitOrderDialogText mt-1">
             <v-col> x{{ value.quantity }} </v-col>
             <v-col :cols="5">
               {{ value.node.name_eng }}
             </v-col>
-            <v-col :cols="3">
+            <v-col :cols="4">
               {{ value.node.name_chn }}
             </v-col>
             <v-col :cols="2" class="text-center">
@@ -58,7 +62,7 @@
             v-for="customization in value.customizations"
             v-bind:key="customization.id"
           >
-            <div class="submitOrderDialogText pl-25 mb-5">
+            <div class="submitOrderItemCustomizationText">
               ➡ {{ customization.name_eng }}
               {{
                 customization.name_chn === ""
@@ -69,8 +73,44 @@
             </div>
           </v-list-item-content>
         </div>
-        <br />
-        <v-row class="submitOrderDialogText mt-5 mb-5">
+        <v-divider class="mt-3"></v-divider>
+        <div>
+          <div>
+            <v-row
+              v-if="$store.state.currentOrder.customizations.length !== 0"
+              class="submitOrderDialogText mt-2"
+            >
+              <v-col :cols="1"> ❂</v-col>
+              <v-col :cols="5"> Order Customization</v-col>
+              <v-col :cols="4"> 全改 </v-col>
+              <v-col :cols="2" class="pl-10"> ${{(this.$store.state.currentOrder.customizations_price).toFixed(2)}}</v-col>
+            </v-row>
+            <div
+              v-for="customization in $store.state.currentOrder.customizations"
+              v-bind:key="customization.id"
+            >
+              <v-list-item-content>
+                <div class="submitOrderItemCustomizationText">
+                  ➡ {{ customization.name_eng }}
+                  {{
+                    customization.name_chn === ""
+                      ? ""
+                      : "/" + customization.name_chn
+                  }}
+              + ${{
+                Number(
+                  customization.custom_price
+                    ? customization.custom_price
+                    : customization.price
+                ).toFixed(2)
+              }}
+                </div>
+              </v-list-item-content>
+            </div>
+          </div>
+        </div>
+        <v-divider> </v-divider>
+        <v-row class="submitOrderDialogText mt-2 mb-2">
           <v-col :cols="3">
             Subtotal: {{ $store.state.priceDetails.subtotal.toFixed(2) }}
           </v-col>
@@ -84,7 +124,6 @@
             Total: ${{ $store.state.priceDetails.total.toFixed(2) }}
           </v-col>
         </v-row>
-        <br />
       </div>
       <v-divider></v-divider>
       <v-card-actions>
@@ -107,6 +146,10 @@
 <style>
 .pl-25 {
   padding-left: 8em;
+}
+
+.submitOrderItemCustomizationText {
+  margin-left: 22%;
 }
 </style>
 
