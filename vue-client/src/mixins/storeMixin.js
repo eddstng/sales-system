@@ -19,7 +19,7 @@ export default {
       store.commit("setCurrentOrder", {
         id: null,
         type: null,
-        total: 1,
+        total: 0,
         customer_id: null,
         void: null,
         paid: null,
@@ -67,7 +67,7 @@ export default {
       }
       const gstAmount = parseFloat(((itemPriceSum - discountAmount) * 0.05).toFixed(2));
       let priceDetails = {
-        subtotal: itemPriceSum + this.$store.state.currentOrder.customizations_price,
+        subtotal: itemPriceSum + (this.$store.state.currentOrder.customizations_price ?? 0),
         discount: discountAmount,
         gst: gstAmount,
         total: (itemPriceSum - discountAmount) + gstAmount

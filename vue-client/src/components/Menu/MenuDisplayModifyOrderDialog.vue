@@ -54,7 +54,7 @@
           </v-list-item-content>
         </div>
         <br />
-        <v-row class="submitOrderDialogText mt-5 mb-5">
+        <v-row class="submitOrderDialogText mb-5">
           <v-col :cols="3">
             Subtotal: {{ $store.state.priceDetails.subtotal.toFixed(2) }}
           </v-col>

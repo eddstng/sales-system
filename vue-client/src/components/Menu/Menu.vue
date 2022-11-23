@@ -96,7 +96,7 @@
         </v-card>
       </v-col>
       <v-col lg="7">
-        <v-card class="fill-height" tile>
+        <v-card tile>
           <v-container class="grey lighten-5">
             <MenuButtons v-bind:menuComponentDetails="menuComponentDetails" />
           </v-container>

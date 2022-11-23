@@ -33,22 +33,23 @@ model items {
 }
 
 model orders {
-  id              Int            @id @default(autoincrement())
-  number          Int?
-  total           Decimal?       @db.Decimal
-  subtotal        Decimal?       @db.Decimal
-  gst             Decimal?       @db.Decimal
-  discount        Decimal?       @db.Decimal
-  timestamp       DateTime?      @default(now()) @db.Timestamp(6)
-  type            Int?           @db.SmallInt
-  void            Boolean        @default(false)
-  paid            Boolean        @default(false)
-  internal        Boolean        @default(false)
-  internal_number Int?
-  customizations  Json?
-  customer_id     Int?
-  customers       customers?     @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_customers")
-  orders_items    orders_items[]
+  id                   Int            @id @default(autoincrement())
+  number               Int?
+  total                Decimal?       @db.Decimal
+  subtotal             Decimal?       @db.Decimal
+  gst                  Decimal?       @db.Decimal
+  discount             Decimal?       @db.Decimal
+  timestamp            DateTime?      @default(now()) @db.Timestamp(6)
+  type                 Int?           @db.SmallInt
+  void                 Boolean        @default(false)
+  paid                 Boolean        @default(false)
+  internal             Boolean        @default(false)
+  internal_number      Int?
+  customizations       Json?
+  customizations_price Decimal?       @db.Decimal
+  customer_id          Int?
+  customers            customers?     @relation(fields: [customer_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_customers")
+  orders_items         orders_items[]
 }
 
 model orders_items {

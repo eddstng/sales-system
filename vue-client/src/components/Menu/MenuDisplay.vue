@@ -1,13 +1,13 @@
 h<template>
   <v-container>
-    <v-card outlined tile height="16vh">
+    <v-card outlined tile height="13vh">
       <MenuDisplayCustomerSelect />
     </v-card>
     <v-card
       outlined
       tile
       class="overflow-y-auto d-block"
-      height="60vh"
+      height="62vh"
       v-chat-scroll
     >
       <template>
@@ -16,15 +16,14 @@ h<template>
           outlined
           v-for="item in $store.state.selectedItemsOrderedByEntry"
           v-bind:key="item.timestamp"
-          width="100vw"
           v-on:click="openSelectedItemDialog(item)"
         >
           <v-list-item three-line v-if="item.node !== undefined">
-            <v-list-item-content>
-              <div class="menu-display-item-text">
+            <v-list-item-content style="width: 100px">
+              <div class="menu-display-item-text" style="width: 90%">
                 {{ item.node.custom_name || item.node.name_eng }}
               </div>
-              <div class="menu-display-item-text">
+              <div class="menu-display-item-text" style="width: 90%">
                 {{
                   item.node.name_chn.length === 0
                     ? "Custom Item"
@@ -100,9 +99,11 @@ h<template>
             </div>
             <!-- <div class="menu-display-item-text">{{ item.node.name_chn.length === 0 ? 'Custom Item' : item.node.name_chn }}</div> -->
           </v-list-item-content>
-  
+
           <v-list-item-content>
-            <div class="menu-display-item-text text-right">${{currentOrderCustomizationPrice}}</div>
+            <div class="menu-display-item-text text-right">
+              ${{ currentOrderCustomizationPrice }}
+            </div>
             <br />
           </v-list-item-content>
         </v-list-item>
@@ -163,24 +164,8 @@ export default {
 
       return parseFloat(totalCustomizationPrice).toFixed(2);
     },
- },
+  },
   mixins: [storeMixin, utilsMixin],
-  // computed: {
-  //   selectedItemsOrderedByEntryWithCustomization: function (){
-  //     if ((this.$store.state.currentOrder.customizations).length !== 0) {
-  //       let selectedItems = this.deepCopyObj(this.$store.state.selectedItemsOrderedByEntry)
-  //       selectedItems.orderCustomization = {
-  //         customizations: this.$store.state.currentOrder.customizations,
-  //         node: {
-  //           name_eng: "Order Customization",
-  //           name_chn: "全改"
-  //         }
-  //       }
-  //       return selectedItems;
-  //     }
-  //   return this.$store.state.selectedItemsOrderedByEntry
-  //   }
-  // },
   methods: {
     openMenuDisplayDialog() {
       if (this.$store.state.menuDisplayType === "ORDER") {

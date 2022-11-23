@@ -61,7 +61,7 @@ export async function getOneOrder(id: number): Promise<orders> {
     }
 }
 
-export async function createOrder(body: { total: number, customer_id: number, type: number, internal: boolean, customizations: any }): Promise<orders> {
+export async function createOrder(body: { total: number, customer_id: number, type: number, internal: boolean, customizations: any, customizations_price: any }): Promise<orders> {
 
     let latestInternalOrderNumberToInsert = undefined;
     if (body.internal) {
@@ -161,7 +161,9 @@ export async function updateOrder(id: number, order: Prisma.ordersUncheckedUpdat
                 discount: order.discount,
                 internal: order.internal,
                 internal_number: order.internal_number,
-                number: order.number
+                number: order.number,
+                customizations: order.customizations,
+                customizations_price: order.customizations_price
             },
         })
         if (res.void === true) {
@@ -200,7 +202,7 @@ export async function submitOrder(
         priceDetails: { subtotal: number, gst: number, total: number, discount: number }
     }) {
     try {
-        const newOrder = await createOrder({ total: 0, customer_id: data.customer_id, type: data.orderDetails.type, internal: data.orderDetails.internal, customizations: data.orderDetails.customizations });
+        const newOrder = await createOrder({ total: 0, customer_id: data.customer_id, type: data.orderDetails.type, internal: data.orderDetails.internal, customizations: data.orderDetails.customizations, customizations_price: data.orderDetails.customizations_price});
         const itemsArray = createOrdersItemsCreateManyInputData(newOrder.id, data.items)
         await createOrdersItemsBulk(itemsArray);
         await updateOrder(newOrder.id, data.priceDetails) // update price details
@@ -303,7 +305,7 @@ export async function modifyOrder(
         const itemsArray = createOrdersItemsCreateManyInputData(data.orderDetails.id, data.items)
         await createOrdersItemsBulk(itemsArray);
 
-        await updateOrder(data.orderDetails.id, { ...data.priceDetails, type: data.orderDetails.type, customer_id: data.customer_id, void: voidOrder })
+        await updateOrder(data.orderDetails.id, { ...data.priceDetails, type: data.orderDetails.type, customer_id: data.customer_id, void: voidOrder, customizations: data.orderDetails.customizations, customizations_price: data.orderDetails.customizations_price })
         if (!voidOrder) {
             await createAndPrintOrderBill({ order_id: data.orderDetails.id, printKitchen: true, printClient: true });
         }

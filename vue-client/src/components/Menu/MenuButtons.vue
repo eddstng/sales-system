@@ -24,7 +24,6 @@
         CUSTOM
       </v-btn>
       <v-btn
-        v-on:click="scrollButtonsUp"
         class="history-button-text ml-1"
         width="24.5%"
         height="80px"
@@ -33,7 +32,6 @@
         <div v-if="displayedButtonsConfig.hasPrevButtons">⮝</div>
       </v-btn>
       <v-btn
-        v-on:click="scrollButtonsDown"
         class="history-button-text ml-1"
         width="24.5%"
         height="80px"
@@ -42,8 +40,8 @@
         <div v-if="displayedButtonsConfig.hasNextButtons">⮟</div>
       </v-btn>
     </div>
-    <v-card outlined tile class="overflow-y-auto" height="84vh">
-      <div class="p-0" v-if="displayMenuButtons" max-height="400">
+    <v-card outlined tile class="overflow-y-auto" height="83.5vh">
+      <div v-if="displayMenuButtons" max-height="400">
         <div v-if="selectedCategory === 1">
           <v-btn
             v-for="item in soupItems"
@@ -82,7 +80,7 @@
         <div v-if="selectedCategory !== 1">
           <!-- v-for="item in $store.state.categorizedItems[selectedCategory]" -->
           <v-btn
-            v-for="item in displayedButtonsConfig.slicedCategoryMenuObj"
+            v-for="item in displayedButtonsConfig.fullCategoryMenuObj"
             v-bind:key="item.name_eng"
             x-large
             dark
@@ -125,7 +123,7 @@
           v-bind:key="item.id"
           x-large
           dark
-          height="163px"
+          height="158px"
           width="24.5%"
           class="mt-1 mr-1"
           v-on:click="
@@ -133,7 +131,7 @@
             displayedButtonsConfig.displayCategoryButtons = false;
             displayMenuButtons = true;
 
-            updateSlicedCategoryMenuObj(0, 20);
+            updateSlicedCategoryMenuObj(0, 1000);
           "
         >
           <div>
@@ -361,12 +359,7 @@ export default {
     return {
       displayedButtonsConfig: {
         displayCategoryButtons: true,
-        startIndex: 0,
-        endIndex: 20,
-        slicedCategoryMenuObj: {},
         fullCategoryMenuObj: {},
-        hasPrevButtons: false,
-        hasNextButtons: false,
       },
       customizeChowMeinTypeDialog: false,
       customizeSoupSizeDialog: false,
@@ -501,31 +494,6 @@ export default {
   },
 
   methods: {
-    scrollButtonsDown: function () {
-      if (
-        this.$store.state.categorizedItems[this.selectedCategory].length < 20 ||
-        this.displayedButtonsConfig.slicedCategoryMenuObj.length < 20
-      ) {
-        return;
-      }
-      this.updateSlicedCategoryMenuObj(
-        this.displayedButtonsConfig.startIndex + 20,
-        this.displayedButtonsConfig.endIndex + 20
-      );
-    },
-    scrollButtonsUp: function () {
-      console.log("12312");
-      if (
-        this.displayedButtonsConfig.startIndex == 0 &&
-        this.displayedButtonsConfig.endIndex == 20
-      ) {
-        return;
-      }
-      this.updateSlicedCategoryMenuObj(
-        this.displayedButtonsConfig.startIndex - 20,
-        this.displayedButtonsConfig.endIndex - 20
-      );
-    },
     onClickMenuButton(item) {
       this.checkIfSelectedItemRequiresCustomization(item);
     },
@@ -534,44 +502,15 @@ export default {
       this.displayedButtonsConfig.startIndex = startIndex;
       this.displayedButtonsConfig.endIndex = endIndex;
       if (this.selectedCategory === 12) {
-        this.fullCategoryMenuObj = this.chowMeinItems;
-        this.displayedButtonsConfig.slicedCategoryMenuObj =
-          this.chowMeinItems.slice(startIndex, endIndex);
-
-        this.displayedButtonsConfig.hasPrevButtons =
-          this.fullCategoryMenuObj.length > 20 &&
-          this.displayedButtonsConfig.startIndex > 19;
-        this.displayedButtonsConfig.hasNextButtons =
-          this.fullCategoryMenuObj.length > 20 &&
-          this.displayedButtonsConfig.endIndex < 21;
+        this.displayedButtonsConfig.fullCategoryMenuObj = this.chowMeinItems;
         return;
       }
       if (this.selectedCategory === 1) {
-        this.fullCategoryMenuObj = this.soupItems;
-        this.displayedButtonsConfig.slicedCategoryMenuObj =
-          this.soupItems.slice(startIndex, endIndex);
-        this.displayedButtonsConfig.hasPrevButtons =
-          this.fullCategoryMenuObj.length > 20 &&
-          this.displayedButtonsConfig.startIndex > 19;
-        this.displayedButtonsConfig.hasNextButtons =
-          this.fullCategoryMenuObj.length > 20 &&
-          this.displayedButtonsConfig.endIndex < 21;
+        this.displayedButtonsConfig.fullCategoryMenuObj = this.soupItems;
         return;
       }
-      this.fullCategoryMenuObj =
+      this.displayedButtonsConfig.fullCategoryMenuObj =
         this.$store.state.categorizedItems[this.selectedCategory];
-      this.displayedButtonsConfig.slicedCategoryMenuObj =
-        this.$store.state.categorizedItems[this.selectedCategory].slice(
-          startIndex,
-          endIndex
-        );
-
-      console.log(this.displayedButtonsConfig.startIndex);
-      console.log(this.displayedButtonsConfig.endIndex);
-      this.displayedButtonsConfig.hasPrevButtons =
-        this.displayedButtonsConfig.startIndex !== 0;
-      this.displayedButtonsConfig.hasNextButtons =
-        this.fullCategoryMenuObj.length > this.displayedButtonsConfig.endIndex;
     },
     checkIfSelectedItemRequiresCustomization(item) {
       if (

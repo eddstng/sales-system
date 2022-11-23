@@ -1,9 +1,9 @@
 <template>
-  <div class="p-0" max-height="400">
+  <div max-height="400">
     <div v-if="$store.state.selectedCustomer.phone === ''">
       <v-row align="center" justify="space-around">
         <v-btn
-          class="menu-button-text mt-8"
+          class="menu-button-text mt-5"
           min-height="100%"
           width="25%"
           style="height: 10vh"
@@ -15,7 +15,7 @@
           <div>DINE IN</div>
         </v-btn>
         <v-btn
-          class="menu-button-text mt-8"
+          class="menu-button-text mt-7"
           x-large
           min-height="100%"
           width="25%"
@@ -28,7 +28,7 @@
           <div>TAKE OUT</div>
         </v-btn>
         <v-btn
-          class="menu-button-text mt-8"
+          class="menu-button-text mt-7"
           x-large
           min-height="100%"
           width="25%"
@@ -44,12 +44,11 @@
     </div>
     <v-btn
       v-else
-      class="menu-button-text mt-5"
       x-large
-      width="97%"
-      min-height="100%"
+      width="100%"
       v-on:click="selectedCustomerDetails.changeOrderDetailsDialog = true"
-      style="height: 10vh"
+      style="height: 12vh"
+      class="mt-1"
     >
       <div>
         {{ this.orderTypeString[$store.state.currentOrder.type] }} <br />
@@ -60,13 +59,22 @@
           )
         }}
         <br />
-        {{ $store.state.selectedCustomer.address }} <br />
-        {{
-          $store.state.selectedCustomer.buzzer_number !== "" &&
-          $store.state.selectedCustomer.buzzer_number !== null
-            ? `Buzzer:`
-            : ""
-        }}{{ $store.state.selectedCustomer.buzzer_number }} <br />
+        {{ $store.state.selectedCustomer.address }}
+        <div
+          v-if="
+            $store.state.selectedCustomer.buzzer_number !== '' &&
+            $store.state.selectedCustomer.buzzer_number !== null
+          "
+        >
+          <br />
+          {{
+            $store.state.selectedCustomer.buzzer_number !== "" &&
+            $store.state.selectedCustomer.buzzer_number !== null
+              ? `Buzzer:`
+              : ""
+          }}{{ $store.state.selectedCustomer.buzzer_number }}
+        </div>
+        <br />
         {{ $store.state.selectedCustomer.name }} <br />
         {{ $store.state.selectedCustomer.note }}
       </div>
@@ -282,7 +290,7 @@ export default {
       );
       currentOrder.type = orderTypeNum;
       store.commit("setCurrentOrder", currentOrder);
-      this.selectedCustomerDetails.selectedCustomer = {
+      (this.selectedCustomerDetails.selectedCustomer = {
         phone: "",
         unit_number: "",
         street_number: "",
@@ -291,8 +299,8 @@ export default {
         city: "",
         name: "",
         note: "",
-      },
-      this.storeMixinUpdateStorePriceDetails();
+      }),
+        this.storeMixinUpdateStorePriceDetails();
     },
     clearSelectedCustomer: function () {
       let currentOrder = JSON.parse(

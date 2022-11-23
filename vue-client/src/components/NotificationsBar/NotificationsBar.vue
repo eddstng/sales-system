@@ -2,7 +2,7 @@
     <div v-if="render">
         <v-row no-gutters>
             <v-col>
-                <v-alert class="menu-notification text-center">
+                <v-alert class="menu-notification text-center pb-2 pt-2.5" style="font-size:21px" >
                     {{ currentDate() }} - {{ hours }}:{{ minutes }}:{{ seconds }}
                     {{ amPm }}
                 </v-alert>
@@ -60,6 +60,7 @@ export default {
             this.hours = date.getHours();
             this.minutes = date.getMinutes();
             this.seconds = date.getSeconds();
+            this.amPm = this.hours >= 12 ? 'PM' : 'AM';
             this.hours = this.hours % 12 || 12;
             this.hours = this.hours < 10 ? `0${this.hours}` : this.hours;
             this.minutes = this.minutes < 10 ? `0${this.minutes}` : this.minutes;

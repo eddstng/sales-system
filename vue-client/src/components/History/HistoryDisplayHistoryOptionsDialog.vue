@@ -1,4 +1,4 @@
-<template>
+ <template>
   <v-dialog
     v-model="historyOptionsDetails.openHistoryOptionsDialog"
     width="1300"
