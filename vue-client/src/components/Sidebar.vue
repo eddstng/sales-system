@@ -10,7 +10,7 @@
                   <v-btn
                     class="my-2"
                     x-large
-                    color="success"
+                     v-bind:color="$store.state.component==='ORDER' ? 'green' : 'grey'"
                     dark
                     height="180px"
                     width="100%"
@@ -20,8 +20,7 @@
                   <v-btn
                     class="my-2"
                     x-large
-                    color="success"
-                    dark
+                     v-bind:color="$store.state.component==='HISTORY' ? 'green' : 'grey'"                    dark
                     height="180px"
                     width="100%"
                     v-on:click="changeComponent('HISTORY')"
@@ -30,8 +29,7 @@
                   <v-btn
                     class="my-2"
                     x-large
-                    color="success"
-                    dark
+v-bind:color="$store.state.component==='CUSTOMER' ? 'green' : 'grey'"                    dark
                     height="180px"
                     width="100%"
                     v-on:click="changeComponent('CUSTOMER')"
@@ -206,7 +204,7 @@ export default {
     },
 
     setOrderWarning() {
-      console.log(JSON.stringify(this.$store.state.currentOrder))
+      console.log(JSON.stringify(this.$store.state.currentOrder));
       if (
         (JSON.stringify(this.$store.state.selectedItems) !== "{}" ||
           this.$store.state.selectedCustomer.phone !== "" ||

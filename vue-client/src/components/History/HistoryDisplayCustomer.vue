@@ -1,11 +1,11 @@
 <template>
   <div class="p-0" max-height="400">
     <v-btn
-      class="menu-button-text mt-1"
+      class="menu-button-text"
       x-large
       width="100%"
       min-height="100%"
-      style="height: 12vh"
+      style="height: 14vh"
     >
       <div>
         {{ this.orderTypeString[$store.state.currentOrder.type] }} <br />

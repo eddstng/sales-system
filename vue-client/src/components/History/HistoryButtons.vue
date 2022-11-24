@@ -1,5 +1,5 @@
 <template>
-  <v-card outlined tile class="overflow-y-auto" height="90.4vh" v-chat-scroll>
+  <v-card outlined tile class="overflow-y-auto" height="90.5vh" v-chat-scroll>
     <div
       v-if="Object.keys($store.state.orderHistory).length === 0"
       class="p-0"
@@ -14,6 +14,9 @@
         v-bind:key="order.order_id"
         x-large
         dark
+        v-bind:color="
+          $store.state.currentOrder.id == order.order_id ? 'green' : 'gray'
+        "
         height="100px"
         width="100%"
         v-on:click="onClickHistoryButton(order.order_id)"
@@ -145,8 +148,10 @@ export default {
         number: ordersItemsDetailWithOrderIdArray[0].order_number,
         internal_number:
           ordersItemsDetailWithOrderIdArray[0].order_internal_number,
-        customizations: ordersItemsDetailWithOrderIdArray[0].order_customizations,
-        customizations_price: ordersItemsDetailWithOrderIdArray[0].order_customizations_price ?? 0
+        customizations:
+          ordersItemsDetailWithOrderIdArray[0].order_customizations,
+        customizations_price:
+          ordersItemsDetailWithOrderIdArray[0].order_customizations_price ?? 0,
       });
       // Update the $store.state.selectedCustomer.
       store.commit("setSelectedCustomer", {

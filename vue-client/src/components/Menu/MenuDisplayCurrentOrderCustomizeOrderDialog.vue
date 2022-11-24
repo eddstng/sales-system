@@ -49,7 +49,7 @@
           </v-col>
           <v-btn
             width="10%"
-            height="60px"
+            height="70px"
             class="mt-8"
             v-on:click="removeLastWordIncustomizationInput()"
           >
@@ -116,6 +116,9 @@
 
 .chn-text {
   font-size: 20px;
+}
+.row {
+  margin: 0
 }
 </style>
 

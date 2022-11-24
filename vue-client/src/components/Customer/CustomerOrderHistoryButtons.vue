@@ -4,16 +4,17 @@
       <v-card
         outlined
         tile
-        class="overflow-y-auto"
-        height="90.4vh"
+        class="overflow-y-auto mt-1"
+        height="82vh"
+        dark
         v-chat-scroll
       >
         <div
-          v-if="Object.keys($store.state.customers).length === 0"
+          v-if="(customerOptionDetails.customerOrderHistory).length === 0"
           class="p-0"
           max-height="400"
         >
-          <p class="text-subtitle-2 text-center pt-35p">NO CUSTOMERS FOUND</p>
+          <p class="text-subtitle-2 text-center pt-35p">NO CUSTOMER ORDERS FOUND</p>
         </div>
         <div v-else class="p-0" max-height="400">
           <div>

@@ -58,7 +58,45 @@
           <br />
         </div>
         <v-divider></v-divider>
-        <v-card-actions>
+        <v-card-actions
+          v-if="
+            menuComponentDetails.removeSelectedItem.node.category ===
+            'customizations'
+          "
+          class="mr-2"
+        >
+          <v-spacer></v-spacer>
+          <v-btn
+            x-large
+            width="50%"
+            v-on:click="
+              closeSelectedItemDialog();
+              menuComponentDetails.removeSelectedItem = {};
+            "
+          >
+            <div>CANCEL<br /></div>
+          </v-btn>
+          <v-btn
+            x-large
+            width="50%"
+            v-on:click="openCustomizeCurrentOrderDialog(true)"
+          >
+            <div>CUSTOMIZE<br /></div>
+          </v-btn>
+          <!-- <v-btn
+            x-large
+            width="32.5%"
+            v-on:click="
+              closeSelectedItemDialog();
+              removeSelectedItemAll(menuComponentDetails.removeSelectedItem);
+              menuComponentDetails.removeSelectedItem = {};
+              storeMixinSumSelectedItemsQuantity();
+            "
+          >
+            <div>REMOVE ALL<br /></div>
+          </v-btn> -->
+        </v-card-actions>
+        <v-card-actions v-else>
           <v-spacer></v-spacer>
           <v-btn
             x-large
@@ -90,7 +128,7 @@
             width="15%"
             v-on:click="openCustomizeCurrentOrderDialog(true)"
           >
-            <div>CUSTOMIZE2<br /></div>
+            <div>CUSTOMIZE<br /></div>
           </v-btn>
           <v-btn
             x-large
@@ -300,11 +338,11 @@ export default {
       this.$emit("closeSelectedItemDialog");
     },
     openCustomizeSelectedItemDialog() {
-      console.log('here')
+      console.log("here");
       this.$emit("openCustomizeSelectedItemDialog");
     },
     openCustomizeCurrentOrderDialog() {
-      console.log('12312')
+      console.log("12312");
       this.$emit("openCustomizeCurrentOrderDialog");
     },
     handleKeypad(buttonValue) {

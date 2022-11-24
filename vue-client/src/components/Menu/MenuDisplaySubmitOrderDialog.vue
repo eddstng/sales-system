@@ -1,90 +1,87 @@
 <template>
-  <v-dialog v-model="submitOrderDialog" width="80%">
+  <v-dialog v-model="submitOrderDialog" width="70%">
     <v-card>
       <div>
         <div>
-          <br />
-          <v-row class="submitOrderDialogText mt-2">
-            <v-col>
-              {{ orderTypeString[$store.state.currentOrder.type] }}</v-col
-            >
-            <v-col :cols="3">
-              {{
-                $store.state.selectedCustomer.phone.replace(
-                  /(\d{3})(\d{3})(\d{3})/,
-                  "$1-$2-$3"
-                )
-              }}
-            </v-col>
-            <v-col :cols="3">
-              {{ $store.state.selectedCustomer.name }}
-            </v-col>
-            <v-col :cols="4">
-              {{ $store.state.selectedCustomer.address }}
-            </v-col>
-
-          </v-row>
-          <v-row class="submitOrderDialogText">
-            <v-col :cols="5" v-if="$store.state.selectedCustomer.note">
-              <!-- <v-col :cols="4"> -->
-              {{ `Note: ${$store.state.selectedCustomer.note}` }}
-            </v-col>
-            <v-col
-              v-if="$store.state.currentOrder.internal === true"
-            >
-              Internal Order: TRUE</v-col
-            >
-          </v-row>
-          <v-row class="submitOrderDialogText"> </v-row>
-          <br />
-          <div style="overflow-y: scroll; height: 570px">
-            <vue-touch-scroll class="user-select-disabled" type="vertical">
-              <div
-                v-for="value in $store.state.selectedItemsOrderedByEntry"
-                v-bind:key="value.id"
+          <div class="dialog-header-font">
+            <br />
+            <v-row class="submitOrderDialogText mt-2">
+              <v-col>
+                {{ orderTypeString[$store.state.currentOrder.type] }}</v-col
               >
-                <v-divider></v-divider>
-                <v-row
-                  v-if="value.node !== undefined"
-                  class="submitOrderDialogText mt-1 mb-1"
-                >
-                  <v-col> x{{ value.quantity }} </v-col>
-                  <v-col :cols="5">
-                    {{ value.node.name_eng }}
-                  </v-col>
-                  <v-col :cols="4">
-                    {{ value.node.name_chn }}
-                  </v-col>
-                  <v-col :cols="2" class="text-center">
-                    ${{
-                      Number(
-                        value.node.custom_price
-                          ? value.node.custom_price
-                          : value.node.price
-                      ).toFixed(2)
-                    }}
-                  </v-col>
-                </v-row>
-                <v-list-item-content
-                  v-for="customization in value.customizations"
-                  v-bind:key="customization.id"
-                >
-                  <div class="submitOrderItemCustomizationText">
-                    ➡ {{ customization.name_eng }}
-                    {{
-                      customization.name_chn === ""
-                        ? ""
-                        : "/" + customization.name_chn
-                    }}
-                    {{
-                      customization.price !== 0
-                        ? `- $${customization.price}`
-                        : ""
-                    }}
-                  </div>
-                </v-list-item-content>
-              </div>
-            </vue-touch-scroll>
+              <v-col :cols="3">
+                {{ $store.state.selectedCustomer.name }}
+              </v-col>
+              <v-col :cols="3">
+                {{
+                  $store.state.selectedCustomer.phone.replace(
+                    /(\d{3})(\d{3})(\d{3})/,
+                    "$1-$2-$3"
+                  )
+                }}
+              </v-col>
+              <v-col :cols="4">
+                {{ $store.state.selectedCustomer.address }}
+              </v-col>
+            </v-row>
+            <v-row class="submitOrderDialogText">
+              <v-col :cols="5" v-if="$store.state.selectedCustomer.note">
+                <!-- <v-col :cols="4"> -->
+                {{ `Note: ${$store.state.selectedCustomer.note}` }}
+              </v-col>
+              <v-col v-if="$store.state.currentOrder.internal === true">
+                Internal Order: TRUE</v-col
+              >
+            </v-row>
+            <v-row class="submitOrderDialogText"> </v-row>
+            <br />
+          </div>
+          <div style="overflow-y: scroll; height: 570px">
+            <div class="text-center">[ ▼ ]</div>
+            <v-divider></v-divider>
+            <div
+              v-for="value in $store.state.selectedItemsOrderedByEntry"
+              v-bind:key="value.id"
+            >
+              <v-divider></v-divider>
+              <v-row
+                v-if="value.node !== undefined"
+                class="submitOrderDialogText mt-1 mb-1"
+              >
+                <v-col> x{{ value.quantity }} </v-col>
+                <v-col :cols="5">
+                  {{ value.node.name_eng }}
+                </v-col>
+                <v-col :cols="4">
+                  {{ value.node.name_chn }}
+                </v-col>
+                <v-col :cols="2" class="text-center">
+                  ${{
+                    Number(
+                      value.node.custom_price
+                        ? value.node.custom_price
+                        : value.node.price
+                    ).toFixed(2)
+                  }}
+                </v-col>
+              </v-row>
+              <v-list-item-content
+                v-for="customization in value.customizations"
+                v-bind:key="customization.id"
+              >
+                <div class="submitOrderItemCustomizationText">
+                  ➡ {{ customization.name_eng }}
+                  {{
+                    customization.name_chn === ""
+                      ? ""
+                      : "/" + customization.name_chn
+                  }}
+                  {{
+                    customization.price !== 0 ? `- $${customization.price}` : ""
+                  }}
+                </div>
+              </v-list-item-content>
+            </div>
 
             <v-divider></v-divider>
             <div>
@@ -127,6 +124,9 @@
                     </div>
                   </v-list-item-content>
                 </div>
+
+                <v-divider></v-divider>
+                <div class="text-center mt-3">[ ▲ ]</div>
               </div>
             </div>
           </div>
@@ -176,6 +176,11 @@
 
 .submitOrderItemCustomizationText {
   margin-left: 22%;
+}
+
+.dialog-header-font {
+  font-weight: bold;
+  font-size: 18px;
 }
 
 .user-select-disabled {

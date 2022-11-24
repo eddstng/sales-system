@@ -33,11 +33,12 @@
           </v-container>
         </v-card>
       </v-col>
-      <v-col lg="7" height="100vh">
+      <v-col lg="7" height="19vh">
         <v-card class="fill-height" tile>
           <v-container class="grey lighten-5">
             <CustomerButtonsHeader />
             <CustomerButtons
+            class="mt-1"
               v-if="$store.state.selectedCustomer.phone === ''"
               v-bind:customerOptionDetails="customerOptionDetails"
               @setCustomerOptionDetails="setCustomerOptionDetails"

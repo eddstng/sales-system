@@ -1,15 +1,15 @@
 <template>
   <div>
     <v-container>
-      <v-card
-        outlined
-        tile
-        height="16vh"
-        v-on:click="
+        <!-- v-on:click="
           selectedCustomerDetails.createCustomerFormDialog = true;
           selectedCustomerDetails.selectedCustomer =
             $store.state.selectedCustomer;
-        "
+        " -->
+      <v-card
+        outlined
+        tile
+        height="13vh"
       >
         <CustomerDisplayCustomer />
       </v-card>
@@ -17,49 +17,39 @@
         outlined
         tile
         class="overflow-y-auto d-block"
-        height="62.5vh"
+        height="62vh"
         v-chat-scroll
       >
         <template>
-          <!-- <v-btn
-            class="history-button-text"
-            v-for="customer in customerOptionDetails.customerOrderHistory"
-            v-bind:key="customer.order_id"
-            x-large
-            dark
-            height="80px"
-            width="100%"
-            v-on:click="onClickCustomerButton(customer)"
+          <div
+          v-if="$store.state.selectedCustomer.phone == ''"
+            class="p-0"
+            max-height="400"
           >
-            <v-row>
-              <v-col>
-                {{ new Date(customer.timestamp).toLocaleDateString() }}
-                {{ getFormattedTimeStamp(new Date(customer.timestamp)) }}
-                {{ customer.id }}
-                ${{ customer.total.toFixed(2) }}
-              </v-col>
-              <v-col>
-                {{ customer.name }}
-              </v-col>
-              <v-col class="">
-                {{ customer.address }}
-              </v-col>
-            </v-row>
-          </v-btn> -->
-
+            <p class="text-subtitle-2 text-center pt-35p">SELECT A CUSTOMER</p>
+          </div>
+          <div
+            v-else-if="
+              $store.state.selectedItemsOrderedByEntry &&
+              Object.keys($store.state.selectedItemsOrderedByEntry).length === 0
+            "
+            class="p-0"
+            max-height="400"
+          >
+            <p class="text-subtitle-2 text-center pt-35p">SELECT AN ORDER</p>
+          </div>
           <v-card
             class="mx-auto pt-2"
             outlined
             v-for="item in $store.state.selectedItemsOrderedByEntry"
-            v-bind:key="item.id"
-            width="100vw"
+            v-bind:key="item.timestamp"
           >
-            <v-list-item three-line>
-              <v-list-item-content>
-                <div class="history-display-item-text">
-                  {{ item.node.name_eng }}
+            <v-list-item three-line v-if="item.node !== undefined">
+              <v-list-item-content style="width: 100px">
+                <div class="menu-display-item-text" style="width: 90%">
+                  {{ item.node.custom_name || item.node.name_eng }}
                 </div>
-                <div class="history-display-item-text">
+                <div class="menu-display-item-text" style="width: 90%">
                   {{
                     item.node.name_chn.length === 0
                       ? "Custom Item"
@@ -68,18 +58,21 @@
                 </div>
               </v-list-item-content>
               <v-list-item-content>
-                <div class="history-display-item-text text-right">
-                  x {{ item.quantity }}
+                <div class="menu-display-item-text text-right">
+                  {{ item.quantity ? `x ${item.quantity}` : "" }}
                 </div>
-                <div class="history-display-item-text text-right">
+                <div class="menu-display-item-text text-right">
                   {{
-                    (
-                      (item.node.custom_price
-                        ? item.node.custom_price
-                        : item.node.price) * item.quantity
-                    ).toFixed(2)
+                    item.node.custom_price || item.node.price
+                      ? `$${(
+                          (item.node.custom_price
+                            ? item.node.custom_price
+                            : item.node.price) * item.quantity
+                        ).toFixed(2)}`
+                      : ""
                   }}
                 </div>
+                <br />
               </v-list-item-content>
             </v-list-item>
             <v-list-item-content
@@ -97,10 +90,52 @@
             </v-list-item-content>
           </v-card>
         </template>
+        <v-card
+          class="mx-auto pt-2"
+          outlined
+          v-if="$store.state.currentOrder.customizations.length !== 0"
+          width="100vw"
+          v-on:click="
+            openSelectedItemDialog({
+              node: {
+                name_chn: '全改',
+                name_eng: 'Order Customization',
+                category: 'customizations',
+              },
+              customizations: $store.state.currentOrder.customizations,
+            })
+          "
+        >
+          <v-list-item three-line>
+            <v-list-item-content>
+              <div class="menu-display-item-text">Order Customization</div>
+              <div class="menu-display-item-text mt-2">全改</div>
+              <div
+                class="menu-display-item-text mt-5"
+                v-for="customization in $store.state.currentOrder
+                  .customizations"
+                v-bind:key="customization.id"
+              >
+                ➡ {{ customization.name_eng }}
+                {{
+                  customization.name_chn.length === 0
+                    ? ""
+                    : `/ ${customization.name_chn}`
+                }}
+              </div>
+            </v-list-item-content>
+
+            <v-list-item-content>
+              <div class="menu-display-item-text text-right">
+                ${{ currentOrderCustomizationPrice }}
+              </div>
+              <br />
+            </v-list-item-content>
+          </v-list-item>
+        </v-card>
       </v-card>
-      <v-card
-        v-on:click="customerOptionDetails.openHistoryOptionsDialog = true"
-      >
+
+      <v-card v-on:click="openHistoryOptionDialog">
         <v-list-item three-line>
           <v-list-item-content>
             <div class="menu-display-item-text">Subtotal:</div>

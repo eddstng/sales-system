@@ -3,7 +3,7 @@
     <div>
       <v-btn
         class="history-button-text mr-1"
-        width="24.5%"
+        width="32.8%"
         height="80px"
         dark
         v-on:click="
@@ -15,29 +15,22 @@
         BACK
       </v-btn>
       <v-btn
-        v-on:click="menuComponentDetails.customOptionsDialog = true"
+        v-on:click="menuComponentDetails.addCustomItemDialog = true"
+        class="history-button-text mr-1"
+        width="32.8%"
+        height="80px"
+        dark
+      >
+        CUSTOM ITEMS
+      </v-btn>
+      <v-btn
+        v-on:click="menuComponentDetails.customizeOrderDialog = true"
         class="history-button-text"
-        width="24.5%"
+        width="32.8%"
         height="80px"
         dark
       >
-        CUSTOM
-      </v-btn>
-      <v-btn
-        class="history-button-text ml-1"
-        width="24.5%"
-        height="80px"
-        dark
-      >
-        <div v-if="displayedButtonsConfig.hasPrevButtons">⮝</div>
-      </v-btn>
-      <v-btn
-        class="history-button-text ml-1"
-        width="24.5%"
-        height="80px"
-        dark
-      >
-        <div v-if="displayedButtonsConfig.hasNextButtons">⮟</div>
+        CUSTOMIZE ORDER
       </v-btn>
     </div>
     <v-card outlined tile class="overflow-y-auto" height="83.5vh">

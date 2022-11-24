@@ -3,7 +3,7 @@
     <v-card outlined tile height="13vh">
       <HistoryDisplayCustomer />
     </v-card>
-     <v-card
+    <v-card
       outlined
       tile
       class="overflow-y-auto d-block"
@@ -11,6 +11,16 @@
       v-chat-scroll
     >
       <template>
+        <div
+          v-if="
+            $store.state.selectedItemsOrderedByEntry &&
+            Object.keys($store.state.selectedItemsOrderedByEntry).length == 0
+          "
+          class="p-0"
+          max-height="400"
+        >
+          <p class="text-subtitle-2 text-center pt-35p">SELECT AN ORDER</p>
+        </div>
         <v-card
           class="mx-auto pt-2"
           outlined
@@ -107,8 +117,7 @@
       </v-card>
     </v-card>
 
-
-    <v-card v-on:click="historyOptionsDetails.openHistoryOptionsDialog = true">
+    <v-card v-on:click="openHistoryOptionDialog">
       <v-list-item three-line>
         <v-list-item-content>
           <div class="menu-display-item-text">Subtotal:</div>
@@ -148,7 +157,16 @@ export default {
   components: {
     HistoryDisplayCustomer,
   },
-    computed: {
+  methods: {
+    openHistoryOptionDialog() {
+      if (
+        this.$store.state.selectedItemsOrderedByEntry &&
+        Object.keys(this.$store.state.selectedItemsOrderedByEntry).length !== 0
+      )
+        this.historyOptionsDetails.openHistoryOptionsDialog = true;
+    },
+  },
+  computed: {
     currentOrderCustomizationPrice: function () {
       let totalCustomizationPrice = 0;
       this.$store.state.currentOrder.customizations.forEach((customization) => {

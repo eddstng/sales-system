@@ -9,7 +9,7 @@ export const store = new Vuex.Store({
     categorizedItems: {}, // object of all items categorized and sorted by key
     customers: [], // array of all customers that are not tables
     tables: [], // array of all customers that are tables
-    selectedCustomer: {phone: ''}, // the selected customer of the current order
+    selectedCustomer: { phone: '' }, // the selected customer of the current order
     selectedItems: {}, // the selected items of the current order with item id as key
     priceDetails: {
       subtotal: 0,
@@ -80,8 +80,8 @@ export const store = new Vuex.Store({
       for (const [key, selectedItem] of Object.entries(state.selectedItems)) {
         selectedItemsTimestampCustomIdArray.push([key, selectedItem.timestamp, selectedItem])
       }
-      
-      const sortedArray = selectedItemsTimestampCustomIdArray.sort(function(a, b) {
+
+      const sortedArray = selectedItemsTimestampCustomIdArray.sort(function (a, b) {
         return a[1] - b[1];
       });
 
@@ -93,6 +93,9 @@ export const store = new Vuex.Store({
     },
     setSelectedCustomer(state, selectedCustomer) {
       state.selectedCustomer = selectedCustomer;
+    },
+    setSelectedItemsOrderedByEntry(state, selectedItemsOrderedByEntry) {
+      state.selectedItemsOrderedByEntry = selectedItemsOrderedByEntry;
     },
     setPriceDetails(state, priceDetails) {
       state.priceDetails = priceDetails;
