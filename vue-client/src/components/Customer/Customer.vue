@@ -36,9 +36,12 @@
       <v-col lg="7" height="19vh">
         <v-card class="fill-height" tile>
           <v-container class="grey lighten-5">
-            <CustomerButtonsHeader />
+            <CustomerButtonsHeader
+              v-bind:customerOptionDetails="customerOptionDetails"
+              @setHistoryOptionsDetails="setCustomerOptionDetails"
+            />
             <CustomerButtons
-            class="mt-1"
+              class="mt-1"
               v-if="$store.state.selectedCustomer.phone === ''"
               v-bind:customerOptionDetails="customerOptionDetails"
               @setCustomerOptionDetails="setCustomerOptionDetails"

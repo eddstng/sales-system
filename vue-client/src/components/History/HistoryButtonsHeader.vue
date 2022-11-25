@@ -11,7 +11,7 @@
         updateCustomerOptionDetails(customerOptionDetails);
       "
     >
-      SEARCH
+      <!-- SEARCH -->
     </v-btn>
     <v-btn
       v-if="$store.state.selectedCustomer.phone.length > 0"

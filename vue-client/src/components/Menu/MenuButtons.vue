@@ -33,7 +33,7 @@
         CUSTOMIZE ORDER
       </v-btn>
     </div>
-    <v-card outlined tile class="overflow-y-auto" height="83.5vh">
+    <v-card outlined tile class="overflow-y-auto" height="83vh">
       <div v-if="displayMenuButtons" max-height="400">
         <div v-if="selectedCategory === 1">
           <v-btn
@@ -116,7 +116,7 @@
           v-bind:key="item.id"
           x-large
           dark
-          height="158px"
+          height="155px"
           width="24.5%"
           class="mt-1 mr-1"
           v-on:click="

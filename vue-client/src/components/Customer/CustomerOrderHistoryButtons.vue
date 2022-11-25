@@ -10,42 +10,44 @@
         v-chat-scroll
       >
         <div
-          v-if="(customerOptionDetails.customerOrderHistory).length === 0"
+          v-if="customerOptionDetails.customerOrderHistory.length === 0"
           class="p-0"
           max-height="400"
         >
-          <p class="text-subtitle-2 text-center pt-35p">NO CUSTOMER ORDERS FOUND</p>
+          <p class="text-subtitle-2 text-center pt-35p">
+            NO CUSTOMER ORDERS FOUND
+          </p>
         </div>
         <div v-else class="p-0" max-height="400">
           <div>
             <v-btn
               class="history-button-text"
-              v-for="customer in customerOptionDetails.customerOrderHistory"
-              v-bind:key="customer.order_id"
+              v-for="order in customerOptionDetails.customerOrderHistory"
+              v-bind:key="order.order_id"
               x-large
-              dark
+              v-bind:color="
+                $store.state.currentOrder.id == order.id ? 'green' : 'gray'
+              "
               height="80px"
               width="100%"
-              v-on:click="onClickHistoryButton(customer.id)"
+              v-on:click="onClickHistoryButton(order.id)"
             >
               <v-row>
                 <v-col>
-                  {{ new Date(customer.timestamp).toLocaleDateString() }}
-                  {{ getFormattedTimeStamp(new Date(customer.timestamp)) }}
+                  {{ new Date(order.timestamp).toLocaleDateString() }}
+                  {{ getFormattedTimeStamp(new Date(order.timestamp)) }}
                 </v-col>
-                <!-- <v-col> {{ customer.order_id }} </v-col> -->
+                <!-- <v-col> {{ order.order_id }} </v-col> -->
                 <v-col>
                   {{
-                    customer.number
-                      ? customer.number
-                      : `I - ` + customer.internal_number
+                    order.number ? order.number : `I - ` + order.internal_number
                   }}
                 </v-col>
-                <v-col> {{ orderTypeString[customer.type] }} </v-col>
-                <v-col v-if="customer.void === true"> VOID </v-col>
-                <v-col v-else-if="customer.paid === true"> PAID </v-col>
+                <v-col> {{ orderTypeString[order.type] }} </v-col>
+                <v-col v-if="order.void === true"> VOID </v-col>
+                <v-col v-else-if="order.paid === true"> PAID </v-col>
                 <v-col v-else> </v-col>
-                <v-col> {{ Number(customer.total).toFixed(2) }} </v-col>
+                <v-col> {{ Number(order.total).toFixed(2) }} </v-col>
               </v-row>
             </v-btn>
           </div>
@@ -117,10 +119,6 @@ export default {
       // Clear $store.state.selectedCustomer, $store.state.selectedItems, and $store.state.currentOrder.
       this.storeMixinClearStorePriceDetails();
       this.storeMixinClearSelectedItems();
-      this.storeMixinClearStorePriceDetails();
-
-
-
 
       // Get specified order details.
       const ordersItemsDetailWithOrderIdArray = (
@@ -145,14 +143,17 @@ export default {
         number: ordersItemsDetailWithOrderIdArray[0].order_number,
         internal_number:
           ordersItemsDetailWithOrderIdArray[0].order_internal_number,
-        customizations: ordersItemsDetailWithOrderIdArray[0].order_customizations,
-          
+        customizations:
+          ordersItemsDetailWithOrderIdArray[0].order_customizations,
+        customizations_price:
+          ordersItemsDetailWithOrderIdArray[0].order_customizations_price,
       });
 
       // Provide a total item count to the $store.state.currentOrder details.
       this.storeMixinSumSelectedItemsQuantity();
       // Provide price details to $store.state.priceDetails.
       this.storeMixinUpdateStorePriceDetails();
+      
     },
     getFormattedTimeStamp: function (orderTimestamp) {
       var hours = orderTimestamp.getHours();

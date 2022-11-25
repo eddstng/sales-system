@@ -1,15 +1,11 @@
 <template>
   <div>
     <v-container>
-        <!-- v-on:click="
-          selectedCustomerDetails.createCustomerFormDialog = true;
-          selectedCustomerDetails.selectedCustomer =
-            $store.state.selectedCustomer;
-        " -->
       <v-card
         outlined
         tile
         height="13vh"
+        v-on:click="openModifyCustomerDialog()"
       >
         <CustomerDisplayCustomer />
       </v-card>
@@ -22,7 +18,7 @@
       >
         <template>
           <div
-          v-if="$store.state.selectedCustomer.phone == ''"
+            v-if="$store.state.selectedCustomer.phone == ''"
             class="p-0"
             max-height="400"
           >
@@ -163,6 +159,10 @@
     <MenuDisplayCustomerSelectCreateCustomerFormDialog
       v-bind:selectedCustomerDetails="selectedCustomerDetails"
     />
+    <HistoryDisplayHistoryOptionsDialog
+      v-bind:historyOptionsDetails="historyOptionsDetails"
+      @setHistoryOptionsDetails="setHistoryOptionsDetails"
+    />
   </div>
 </template>
 
@@ -174,15 +174,33 @@
 
 <script>
 import CustomerDisplayCustomer from "../Customer/CustomerDisplayCustomer";
+import HistoryDisplayHistoryOptionsDialog from "../History/HistoryDisplayHistoryOptionsDialog";
 import MenuDisplayCustomerSelectCreateCustomerFormDialog from "../Menu/MenuDisplayCustomerSelectCreateCustomerFormDialog";
 export default {
   props: ["customerOptionDetails"],
   components: {
     MenuDisplayCustomerSelectCreateCustomerFormDialog,
     CustomerDisplayCustomer,
+    HistoryDisplayHistoryOptionsDialog,
+  },
+  computed: {
+    currentOrderCustomizationPrice: function () {
+      let totalCustomizationPrice = 0;
+      this.$store.state.currentOrder.customizations.forEach((customization) => {
+        totalCustomizationPrice += customization.price;
+      });
+
+      return parseFloat(totalCustomizationPrice).toFixed(2);
+    },
   },
   data() {
     return {
+       historyOptionsDetails: {
+        confirmingAction: "",
+        openHistoryOptionsConfirmationDialog: false,
+        openHistoryOptionsReprintDialog: false,
+        openHistoryOptionsDialog: false,
+      },
       selectedCustomerDetails: {
         selectedCustomer: {
           phone: "",
@@ -205,6 +223,23 @@ export default {
     };
   },
   methods: {
+        setHistoryOptionsDetails: function (historyOptionsDetails) {
+      this.historyOptionsDetails = historyOptionsDetails;
+    },
+    openHistoryOptionDialog() {
+      if (
+        this.$store.state.selectedItemsOrderedByEntry &&
+        Object.keys(this.$store.state.selectedItemsOrderedByEntry).length !== 0
+      )
+        this.historyOptionsDetails.openHistoryOptionsDialog = true;
+    },
+    openModifyCustomerDialog: function () {
+      if (this.$store.state.selectedCustomer.phone !== "") {
+        this.selectedCustomerDetails.createCustomerFormDialog = true;
+        this.selectedCustomerDetails.selectedCustomer =
+          this.$store.state.selectedCustomer;
+      }
+    },
     getFormattedTimeStamp: function (orderTimestamp) {
       var hours = orderTimestamp.getHours();
       var minutes = orderTimestamp.getMinutes();

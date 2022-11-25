@@ -97,7 +97,7 @@
                   <v-col :cols="4"> 全改 </v-col>
                   <v-col :cols="2" class="pl-16">
                     ${{
-                      this.$store.state.currentOrder.customizations_price.toFixed(
+                      (this.$store.state.currentOrder.customizations_price !== null ? this.$store.state.currentOrder.customizations_price : 0).toFixed(
                         2
                       )
                     }}</v-col
@@ -158,12 +158,12 @@
         <v-spacer></v-spacer>
         <v-btn
           x-large
-          width="13.8%"
+          width="100%"
           v-on:click="historyOptionsDetails.openHistoryOptionsDialog = false"
         >
           <div>CANCEL<br /></div>
         </v-btn>
-        <v-btn
+        <!-- <v-btn
           x-large
           width="13.8%"
           v-on:click="
@@ -228,7 +228,7 @@
           "
         >
           <div>MODIFY<br /></div>
-        </v-btn>
+        </v-btn> -->
         <!-- <v-btn
           :disabled="true"
           x-large

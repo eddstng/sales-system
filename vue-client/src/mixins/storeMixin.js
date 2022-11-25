@@ -42,13 +42,14 @@ export default {
       store.commit("setSelectedItems", selectedItems);
     },
     storeMixinUpdateStorePriceDetails() {
+      console.log("her13r")
       const selectedItems = this.$store.state.selectedItems;
       let itemPriceSum = 0
       let itemPriceSumExcludingSpecials = 0
 
       Object.keys(selectedItems).forEach((key) => {
         const itemQuantity = selectedItems[key].quantity;
-        const itemPrice = (selectedItems[key].node.custom_price !== undefined ? selectedItems[key].node.custom_price : selectedItems[key].node.price) * itemQuantity;
+        const itemPrice = ((selectedItems[key].node.custom_price !== undefined && selectedItems[key].node.custom_price !== null) ? selectedItems[key].node.custom_price : selectedItems[key].node.price) * itemQuantity;
 
         if (selectedItems[key].node.special !== true) {
           itemPriceSum += itemPrice
@@ -72,6 +73,8 @@ export default {
         gst: gstAmount,
         total: (itemPriceSum - discountAmount) + gstAmount
       }
+      console.log('h12341234124124')
+      console.log(gstAmount)
       return priceDetails
     },
     storeMixinClearOrderRelatedDetails() {
@@ -92,7 +95,7 @@ export default {
     storeMixinSumSelectedItemsQuantity() {
       let selectedItemsQuantitySum = 0;
       for (const value of Object.entries(this.$store.state.selectedItems)) {
-        selectedItemsQuantitySum = selectedItemsQuantitySum + value[1].quantity;
+        selectedItemsQuantitySum = parseInt(selectedItemsQuantitySum) + parseInt(value[1].quantity);
       }
       let currentOrder = JSON.parse(JSON.stringify(this.$store.state.currentOrder))
       currentOrder.itemQuantity = selectedItemsQuantitySum;

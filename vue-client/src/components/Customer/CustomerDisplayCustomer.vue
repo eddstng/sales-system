@@ -3,8 +3,7 @@
     <v-btn
       x-large
       width="100%"
-      style="height: 12vh"
-      class="mt-1"
+      style="height: 14vh"
     >
       <div>
         {{ this.orderTypeString[$store.state.currentOrder.type] }} <br />
