@@ -35,7 +35,7 @@
     </div>
     <v-card outlined tile class="overflow-y-auto" height="83vh">
       <div v-if="displayMenuButtons" max-height="400">
-        <div v-if="selectedCategory === 1">
+        <!-- <div v-if="selectedCategory === 1">
           <v-btn
             v-for="item in soupItems"
             v-bind:key="item.name_eng"
@@ -63,14 +63,11 @@
                 }}
               </p>
               <p class="menu-button-text-chn">{{ item.name_chn }}</p>
-              <!-- <p class="menu-button-text-price">
-                {{ item.price.toFixed(2) }}
-              </p> -->
             </div>
           </v-btn>
-        </div>
+        </div> -->
         <!-- <div v-if="selectedCategory !== 1 && selectedCategory !== 12"> -->
-        <div v-if="selectedCategory !== 1">
+        <div v-if="selectedCategory">
           <!-- v-for="item in $store.state.categorizedItems[selectedCategory]" -->
           <v-btn
             v-for="item in displayedButtonsConfig.fullCategoryMenuObj"
@@ -492,13 +489,17 @@ export default {
     },
 
     updateSlicedCategoryMenuObj(startIndex, endIndex) {
+
       this.displayedButtonsConfig.startIndex = startIndex;
       this.displayedButtonsConfig.endIndex = endIndex;
       if (this.selectedCategory === 12) {
+        console.log('111111')
         this.displayedButtonsConfig.fullCategoryMenuObj = this.chowMeinItems;
         return;
       }
       if (this.selectedCategory === 1) {
+        console.log('222222')
+console.log(this.soupItems)
         this.displayedButtonsConfig.fullCategoryMenuObj = this.soupItems;
         return;
       }

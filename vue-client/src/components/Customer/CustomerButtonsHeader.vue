@@ -2,9 +2,9 @@
   <div>
     <v-btn
       v-if="$store.state.selectedCustomer.phone.length === 0"
-       class="history-button-text mr-1"
-        width="32.8%"
-        height="80px"
+      class="history-button-text mr-1"
+      width="32.8%"
+      height="80px"
       dark
       v-on:click="
         customerOptionDetails.openCustomerOptionSearchDialog = true;
@@ -15,10 +15,15 @@
     </v-btn>
     <v-btn
       v-if="$store.state.selectedCustomer.phone.length > 0"
-      v-on:click="displayBackButton = false; clearStoreSelectedCustomer(); clearStoreOrderStuff();"
-       class="history-button-text mr-1"
-        width="32.8%"
-        height="80px"
+      v-on:click="
+        displayBackButton = false;
+        storeMixResetSelectedCustomer();
+        storeMixResetSelectedItemsOrderedByEntry();
+        storeMixResetCurrentOrder();
+      "
+      class="history-button-text mr-1"
+      width="32.8%"
+      height="80px"
       dark
     >
       BACK
@@ -28,7 +33,6 @@
       {{ $store.state.selectedCustomer.phone }}
     </v-btn>
     <v-btn class="history-button-text ml-1" width="33%" height="80px" dark>
-      
     </v-btn>
   </div>
 </template>
@@ -40,11 +44,10 @@
 </style>
 
 <script>
-import { store } from "../../store/store";
 import storeMixin from "../../mixins/storeMixin";
 export default {
   props: ["customerOptionDetails"],
-    mixins: [storeMixin],
+  mixins: [storeMixin],
   components: {},
   data() {
     return {
@@ -70,18 +73,18 @@ export default {
     };
   },
   methods: {
-        updateCustomerOptionDetails() {
+    updateCustomerOptionDetails() {
       this.$emit("setCustomerOptionDetails", this.customerOptionDetailsUpdate);
     },
-    clearStoreSelectedCustomer() {
-      store.commit("setSelectedCustomer", {
-        phone: "",
-      });
-    },
-    clearStoreOrderStuff() {
-      store.commit("setSelectedItemsOrderedByEntry", {})
-       this.storeMixinClearCurrentOrder();
-    }, 
+    // clearStoreSelectedCustomer() {
+    //   store.commit("setSelectedCustomer", {
+    //     phone: "",
+    //   });
+    // },
+    // clearStoreOrderStuff() {
+    //   store.commit("setSelectedItemsOrderedByEntry", {})
+    //    this.storeMixinClearCurrentOrder();
+    // },
   },
 };
 </script>

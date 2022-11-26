@@ -15,6 +15,43 @@ export default {
     customizations: []
   },
   methods: {
+    // ------------CLEAR STORE MIXINS
+    // selectedCustomer, selectedItems, priceDetails, currentOrder,orderHistory, orderPriceTotal, selectedItemsOrderedByEntry,
+    storeMixResetSelectedCustomer() {
+      store.commit("setSelectedCustomer", {
+        phone: ""
+      })
+    },
+    storeMixResetSelectedItems() {
+      store.commit("setSelectedItems", {})
+    },
+    storeMixResetPriceDetails() {
+      store.commit("setPriceDetails", { discount: 0, gst: 0, subtotal: 0, total: 0 })
+    },
+    storeMixResetCurrentOrder() {
+      store.commit("setCurrentOrder", {
+        id: null,
+        type: null,
+        total: 0,
+        customer_id: null,
+        void: null,
+        paid: null,
+        itemQuantity: 0,
+        internal: false,
+        customizations: [],
+        customizations_price: 0,
+      })
+    },
+    storeMixResetOrderHistory() {
+      store.commit("setOrderHistory", [])
+    },
+    storeMixResetOrderPriceTotal() {
+      store.commit("setOrderPriceTotal", 0)
+    },
+    storeMixResetSelectedItemsOrderedByEntry() {
+      store.commit("setOrderPriceTotal", {})
+    },
+    // ---------------------------
     storeMixinClearCurrentOrder() {
       store.commit("setCurrentOrder", {
         id: null,
