@@ -1,13 +1,13 @@
 <template>
   <v-app>
     <NotificationsBar />
-    <template v-if="$store.state.component === 'ORDER'">
+    <!-- <template v-if="$store.state.component === 'ORDER'"> -->
       <!-- <Menu /> -->
       <Main />
-    </template>
-    <template v-if="$store.state.component === 'HISTORY'">
+    <!-- </template> -->
+    <!-- <template v-if="$store.state.component === 'HISTORY'">
       <History />
-    </template>
+    </template> -->
     <template v-if="$store.state.component === 'CUSTOMER'">
       <Customer />
     </template>
@@ -18,7 +18,7 @@
 import storeMixin from "./mixins/storeMixin";
 // import Menu from "./components/Menu/Menu";
 import Main from "./components/Main/Main";
-import History from "./components/History/History";
+// import History from "./components/History/History";
 import Customer from "./components/Customer/Customer";
 import NotificationsBar from "./components/NotificationsBar/NotificationsBar";
 export default {
@@ -28,7 +28,7 @@ export default {
     NotificationsBar,
     // Menu,
     Main,
-    History,
+    // History,
     Customer
   },
   // created() {

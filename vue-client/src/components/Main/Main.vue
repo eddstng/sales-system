@@ -1,5 +1,8 @@
 <template>
   <div>
+    <!-- ===================================================== -->
+    <!-- Menu Stuff -->
+    <!-- ===================================================== -->
     <!-- Toggles on submitOrderDialog -->
     <MenuDisplaySubmitOrderDialog
       v-bind:menuComponentDetails="menuComponentDetails"
@@ -33,6 +36,23 @@
       @updateMenuComponentDetails="updateMenuComponentDetails"
     />
 
+    <!-- ===================================================== -->
+    <!-- History Stuff -->
+    <!-- ===================================================== -->
+
+    <HistoryDisplayHistoryOptionsDialog
+      v-bind:historyOptionsDetails="historyOptionsDetails"
+      @setHistoryOptionsDetails="setHistoryOptionsDetails"
+    />
+    <HistoryDisplayHistoryOptionsConfirmationDialog
+      v-bind:historyOptionsDetails="historyOptionsDetails"
+      @setHistoryOptionsDetails="setHistoryOptionsDetails"
+    />
+    <HistoryDisplayHistoryOptionsReprintDialog
+      v-bind:historyOptionsDetails="historyOptionsDetails"
+      @setHistoryOptionsDetails="setHistoryOptionsDetails"
+    />
+
     <v-row no-gutters>
       <v-col lg="1">
         <Sidebar />
@@ -41,8 +61,13 @@
         <v-card outlined tile>
           <v-container class="grey lighten-5">
             <MenuDisplay
+              v-if="$store.state.component === 'ORDER'"
               v-bind:menuComponentDetails="menuComponentDetails"
               @updateMenuComponentDetails="updateMenuComponentDetails"
+            />
+            <HistoryDisplay
+              v-if="$store.state.component === 'HISTORY'"
+              v-bind:historyOptionsDetails="historyOptionsDetails"
             />
           </v-container>
         </v-card>
@@ -51,8 +76,14 @@
         <v-card tile>
           <v-container class="grey lighten-5">
             <MenuButtons
+              v-if="$store.state.component === 'ORDER'"
               v-bind:menuComponentDetails="menuComponentDetails"
               @updateMenuComponentDetails="updateMenuComponentDetails"
+            />
+            <HistoryButtonsHeader v-if="$store.state.component === 'HISTORY'" />
+            <HistoryButtons
+              class="mt-1"
+              v-if="$store.state.component === 'HISTORY'"
             />
           </v-container>
         </v-card>
@@ -73,6 +104,13 @@ import MenuDisplaySelectedItemDetailsCustomizeDialog from "../Menu/MenuDisplaySe
 import MenuButtonsCustomItemDialog from "../Menu/MenuButtonsCustomItemDialog";
 import MenuDisplayCurrentOrderCustomizeOrderDialog from "../Menu/MenuDisplayCurrentOrderCustomizeOrderDialog";
 
+import HistoryButtons from "../History/HistoryButtons";
+import HistoryDisplay from "../History/HistoryDisplay";
+import HistoryButtonsHeader from "../History/HistoryButtonsHeader";
+
+import HistoryDisplayHistoryOptionsDialog from "../History/HistoryDisplayHistoryOptionsDialog";
+import HistoryDisplayHistoryOptionsConfirmationDialog from "../History/HistoryDisplayHistoryOptionsConfirmationDialog";
+import HistoryDisplayHistoryOptionsReprintDialog from "../History/HistoryDisplayHistoryOptionsReprintDialog";
 export default {
   mixins: [storeMixin],
   name: "App",
@@ -86,6 +124,12 @@ export default {
     MenuDisplaySelectedItemDetailsCustomizeDialog,
     MenuButtonsCustomItemDialog,
     MenuDisplayCurrentOrderCustomizeOrderDialog,
+    HistoryButtons,
+    HistoryDisplay,
+    HistoryDisplayHistoryOptionsDialog,
+    HistoryDisplayHistoryOptionsConfirmationDialog,
+    HistoryDisplayHistoryOptionsReprintDialog,
+    HistoryButtonsHeader,
   },
   data() {
     return {
@@ -100,6 +144,12 @@ export default {
         customOptionsDialog: false,
         removeSelectedItem: {},
       },
+      historyOptionsDetails: {
+        confirmingAction: "",
+        openHistoryOptionsConfirmationDialog: false,
+        openHistoryOptionsReprintDialog: false,
+        openHistoryOptionsDialog: false,
+      },
       submitOrderDialog: false,
       modifyOrderDialog: false,
       suggestedStreetName: [],
@@ -108,6 +158,9 @@ export default {
   methods: {
     updateMenuComponentDetails(updatedMenuComponentDetails) {
       this.menuComponentDetails = updatedMenuComponentDetails;
+    },
+    setHistoryOptionsDetails: function (historyOptionsDetails) {
+      this.historyOptionsDetails = historyOptionsDetails;
     },
   },
 };

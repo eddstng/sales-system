@@ -16,10 +16,7 @@
     <v-btn
       v-if="$store.state.selectedCustomer.phone.length > 0"
       v-on:click="
-        displayBackButton = false;
-        storeMixResetSelectedCustomer();
-        storeMixResetSelectedItemsOrderedByEntry();
-        storeMixResetCurrentOrder();
+onClickBack();
       "
       class="history-button-text mr-1"
       width="32.8%"
@@ -73,18 +70,16 @@ export default {
     };
   },
   methods: {
+    onClickBack() {
+        this.displayBackButton = false;
+        this.storeMixResetSelectedCustomer();
+        this.storeMixResetSelectedItemsOrderedByEntry();
+        this.storeMixResetCurrentOrder();
+        this.storeMixResetSelectedItems();
+    },
     updateCustomerOptionDetails() {
       this.$emit("setCustomerOptionDetails", this.customerOptionDetailsUpdate);
     },
-    // clearStoreSelectedCustomer() {
-    //   store.commit("setSelectedCustomer", {
-    //     phone: "",
-    //   });
-    // },
-    // clearStoreOrderStuff() {
-    //   store.commit("setSelectedItemsOrderedByEntry", {});
-    //   this.storeMixinClearCurrentOrder();
-    // },
   },
 };
 </script>
