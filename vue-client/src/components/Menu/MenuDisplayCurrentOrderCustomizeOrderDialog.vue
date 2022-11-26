@@ -1,7 +1,7 @@
 <template>
   <v-dialog
-    v-if="menuComponentDetails.customizeOrderDialog"
-    v-model="menuComponentDetails.customizeOrderDialog"
+    v-if="menuComponentDetails.dialogToggles.customizeOrderDialog"
+    v-model="menuComponentDetails.dialogToggles.customizeOrderDialog"
     width="65%"
   >
     <v-card>
@@ -77,7 +77,7 @@
         <v-btn
           x-large
           width="50%"
-          v-on:click="menuComponentDetails.customizeOrderDialog = false"
+          v-on:click="onClickCancelButton()"
         >
           <div>CANCEL<br /></div>
         </v-btn>
@@ -85,7 +85,7 @@
           x-large
           width="50%"
           v-on:click="
-            menuComponentDetails.customizeOrderDialog = false;
+            menuComponentDetails.dialogToggles.customizeOrderDialog = false;
             menuComponentDetails.selectedItemDialog = false;
             addCustomizationToItem(menuComponentDetails.removeSelectedItem, {
               name_eng: customizationInput.eng.toUpperCase(),
@@ -142,6 +142,11 @@ export default {
   // ADD A PRICE INPUT FIELD AND THIS FIELD WILL ADD A SUBSTITUTION ITEM WITH THE PRICE USING addItemToSelectedItems()
 
   methods: {
+    onClickCancelButton() {
+      let updatedMenuComponentDetails = {...this.menuComponentDetails};
+      updatedMenuComponentDetails.dialogToggles.customizeOrderDialog = false;
+      this.$emit("updateMenuComponentDetails", updatedMenuComponentDetails);
+    },
     addCustomizationToCustomizationInput(customizationObj) {
       if (this.customizationInput.eng.slice(-1) !== " ") {
         this.customizationInput.eng += " ";
@@ -173,18 +178,9 @@ export default {
         lastIndexOfSpaceChn
       );
     },
-
     clearPriceInput() {
       this.customizationInput.price = 0;
     },
-    //repeated
-    closeCustomizeSelectedItemDialog() {
-      this.$emit("closeCustomizeSelectedItemDialog");
-    },
-    closeSelectedItemDialog() {
-      this.$emit("closeSelectedItemDialog");
-    },
-
     addCustomizationToItem: function (selectedItem, customizationObj) {
       let currentOrder = this.deepCopyArray(this.$store.state.currentOrder);
       currentOrder.customizations.push(customizationObj);

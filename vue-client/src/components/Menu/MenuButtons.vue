@@ -6,16 +6,12 @@
         width="32.8%"
         height="80px"
         dark
-        v-on:click="
-          displayedButtonsConfig.displayCategoryButtons = true;
-          displayMenuButtons = false;
-          selectedCategory = null;
-        "
+        v-on:click="onClickBack()"
       >
         BACK
       </v-btn>
       <v-btn
-        v-on:click="menuComponentDetails.addCustomItemDialog = true"
+        v-on:click="onClickCustomItemButton()"
         class="history-button-text mr-1"
         width="32.8%"
         height="80px"
@@ -24,7 +20,7 @@
         CUSTOM ITEMS
       </v-btn>
       <v-btn
-        v-on:click="menuComponentDetails.customizeOrderDialog = true"
+        v-on:click="onClickCustomizeOrder()"
         class="history-button-text"
         width="32.8%"
         height="80px"
@@ -35,40 +31,7 @@
     </div>
     <v-card outlined tile class="overflow-y-auto" height="83vh">
       <div v-if="displayMenuButtons" max-height="400">
-        <!-- <div v-if="selectedCategory === 1">
-          <v-btn
-            v-for="item in soupItems"
-            v-bind:key="item.name_eng"
-            x-large
-            dark
-            height="250px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="
-              onClickMenuButton(item);
-              displayedButtonsConfig.displayCategoryButtons = true;
-              displayMenuButtons = false;
-            "
-          >
-            <div>
-              <p class="menu-button-text-eng">#{{ item.menu_id }}</p>
-              <p class="mb-0 menu-button-text-eng">
-                {{ item.name_eng.match(/.{1,20}(\s|$)/g)[0] }}
-              </p>
-              <p class="mb-0 menu-button-text-eng">
-                {{
-                  item.name_eng.toString().length > 20
-                    ? item.name_eng.match(/.{1,20}(\s|$)/g)[1]
-                    : "⠀"
-                }}
-              </p>
-              <p class="menu-button-text-chn">{{ item.name_chn }}</p>
-            </div>
-          </v-btn>
-        </div> -->
-        <!-- <div v-if="selectedCategory !== 1 && selectedCategory !== 12"> -->
-        <div v-if="selectedCategory">
-          <!-- v-for="item in $store.state.categorizedItems[selectedCategory]" -->
+        <div>
           <v-btn
             v-for="item in displayedButtonsConfig.fullCategoryMenuObj"
             v-bind:key="item.name_eng"
@@ -120,7 +83,6 @@
             selectedCategory = item.id;
             displayedButtonsConfig.displayCategoryButtons = false;
             displayMenuButtons = true;
-
             updateSlicedCategoryMenuObj(0, 1000);
           "
         >
@@ -484,27 +446,44 @@ export default {
   },
 
   methods: {
+    onClickBack() {
+      this.displayedButtonsConfig.displayCategoryButtons = true;
+      this.displayMenuButtons = false;
+      this.selectedCategory = null;
+    },
+    onClickCustomizeOrder() {
+      let updatedMenuComponentDetails = { ...this.menuComponentDetails };
+      updatedMenuComponentDetails.dialogToggles.customizeOrderDialog = true;
+      this.$emit("updateMenuComponentDetails", updatedMenuComponentDetails);
+    },
+    onClickCustomItemButton() {
+      let updatedMenuComponentDetails = { ...this.menuComponentDetails };
+      updatedMenuComponentDetails.dialogToggles.addCustomItemDialog = true;
+      this.$emit("updateMenuComponentDetails", updatedMenuComponentDetails);
+    },
     onClickMenuButton(item) {
       this.checkIfSelectedItemRequiresCustomization(item);
     },
 
     updateSlicedCategoryMenuObj(startIndex, endIndex) {
-
       this.displayedButtonsConfig.startIndex = startIndex;
       this.displayedButtonsConfig.endIndex = endIndex;
       if (this.selectedCategory === 12) {
-        console.log('111111')
+        console.log("111111");
         this.displayedButtonsConfig.fullCategoryMenuObj = this.chowMeinItems;
         return;
       }
       if (this.selectedCategory === 1) {
-        console.log('222222')
-console.log(this.soupItems)
+        console.log("222222");
+        console.log(this.soupItems);
         this.displayedButtonsConfig.fullCategoryMenuObj = this.soupItems;
         return;
       }
+      console.log(this.$store.state.categorizedItems[this.selectedCategory]);
       this.displayedButtonsConfig.fullCategoryMenuObj =
         this.$store.state.categorizedItems[this.selectedCategory];
+
+      console.log(this.displayedButtonsConfig.fullCategoryMenuObj);
     },
     checkIfSelectedItemRequiresCustomization(item) {
       if (

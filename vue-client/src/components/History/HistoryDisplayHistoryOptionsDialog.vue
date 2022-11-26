@@ -158,12 +158,12 @@
         <v-spacer></v-spacer>
         <v-btn
           x-large
-          width="100%"
+          width="13.8%"
           v-on:click="historyOptionsDetails.openHistoryOptionsDialog = false"
         >
           <div>CANCEL<br /></div>
         </v-btn>
-        <!-- <v-btn
+        <v-btn
           x-large
           width="13.8%"
           v-on:click="
@@ -228,7 +228,7 @@
           "
         >
           <div>MODIFY<br /></div>
-        </v-btn> -->
+        </v-btn>
         <!-- <v-btn
           :disabled="true"
           x-large

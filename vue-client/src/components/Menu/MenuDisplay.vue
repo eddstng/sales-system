@@ -16,7 +16,7 @@ h<template>
           outlined
           v-for="item in $store.state.selectedItemsOrderedByEntry"
           v-bind:key="item.timestamp"
-          v-on:click="openSelectedItemDialog(item)"
+          v-on:click="onClickSelectedItem(item)"
         >
           <v-list-item three-line v-if="item.node !== undefined">
             <v-list-item-content style="width: 100px">
@@ -70,7 +70,7 @@ h<template>
         v-if="$store.state.currentOrder.customizations.length !== 0"
         width="100vw"
         v-on:click="
-          openSelectedItemDialog({
+          onClickSelectedItem({
             node: {
               name_chn: '全改',
               name_eng: 'Order Customization',
@@ -167,22 +167,35 @@ export default {
   },
   mixins: [storeMixin, utilsMixin],
   methods: {
+    onClickSelectedItem(item) {
+      let updatedMenuComponentDetails = { ...this.menuComponentDetails };
+      updatedMenuComponentDetails.dialogToggles.selectedItemDialog = true;
+      updatedMenuComponentDetails.dialogToggles.openCustomizeSelectedItemDialog = false;
+      updatedMenuComponentDetails.removeSelectedItem = item;
+      this.$emit("updateMenuComponentDetails", updatedMenuComponentDetails);
+    },
     openMenuDisplayDialog() {
       if (this.$store.state.menuDisplayType === "ORDER") {
-        this.openSubmitOrderDialog();
+        if (
+          this.$store.state.selectedCustomer.phone !== undefined &&
+          Object.keys(this.$store.state.selectedItems).length !== 0
+        ) {
+          console.log("ewrwerwerwerwer");
+          let updatedMenuComponentDetails = { ...this.menuComponentDetails };
+          updatedMenuComponentDetails.dialogToggles.submitOrderDialog = true;
+          this.$emit("updateMenuComponentDetails", updatedMenuComponentDetails);
+        }
       }
       if (this.$store.state.menuDisplayType === "MODIFY") {
-        this.openModifyOrderDialog();
+        if (
+          this.$store.state.selectedCustomer.phone !== undefined &&
+          Object.keys(this.$store.state.selectedItems).length !== 0
+        ) {
+          let updatedMenuComponentDetails = { ...this.menuComponentDetails };
+          updatedMenuComponentDetails.dialogToggles.modifyOrderDialog = true;
+          this.$emit("updateMenuComponentDetails", updatedMenuComponentDetails);
+        }
       }
-    },
-    openSubmitOrderDialog() {
-      this.$emit("openSubmitOrderDialog");
-    },
-    openModifyOrderDialog() {
-      this.$emit("openModifyOrderDialog");
-    },
-    openSelectedItemDialog(item) {
-      this.$emit("openSelectedItemDialog", item);
     },
   },
   components: {

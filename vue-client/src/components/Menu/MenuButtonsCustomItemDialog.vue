@@ -1,5 +1,8 @@
 <template>
-  <v-dialog v-model="menuComponentDetails.addCustomItemDialog" width="500">
+  <v-dialog
+    v-model="menuComponentDetails.dialogToggles.addCustomItemDialog"
+    width="500"
+  >
     <v-card>
       <div>
         <br />
@@ -22,7 +25,7 @@
                 width="100%"
                 v-on:click="
                   addItemToSelectedItems(item);
-                  menuComponentDetails.addCustomItemDialog = false;
+                  menuComponentDetails.dialogToggles.addCustomItemDialog = false;
                   customItem.name = '';
                 "
                 >{{ item.menu_id }} - {{ item.name_eng }} - ${{
@@ -61,15 +64,7 @@
       <v-divider></v-divider>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn
-          x-large
-          width="50%"
-          v-on:click="
-            phone = '';
-            menuComponentDetails.addCustomItemDialog = false;
-            customItem.name = '';
-          "
-        >
+        <v-btn x-large width="50%" v-on:click="onClickCancelButton()">
           <div>CANCEL<br /></div>
         </v-btn>
         <v-btn
@@ -88,7 +83,7 @@
               price: 0.0,
               id: '',
             }),
-              (menuComponentDetails.addCustomItemDialog = false);
+              (menuComponentDetails.dialogToggles.addCustomItemDialog = false);
           "
         >
           <div>ADD<br /></div>
@@ -130,11 +125,20 @@ export default {
   },
   watch: {
     "customItem.name": function () {
+      this.menuComponentDetails.dialogToggles.addCustomItemDialog;
       this.suggestedItems = this.getItemsFromString(this.customItem.name);
     },
     deep: true,
   },
   methods: {
+    onClickCancelButton() {
+      this.phone = "";
+      let updatedMenuComponentDetails = {...this.menuComponentDetails};
+      updatedMenuComponentDetails.dialogToggles.addCustomItemDialog = false;
+      this.$emit("updateMenuComponentDetails", updatedMenuComponentDetails);
+      this.customItem.name = "";
+    },
+
     async createCustomItem() {
       const newCustomItem = await axios.post(
         "http://localhost:3000/post/items/create",
@@ -151,7 +155,7 @@ export default {
       ]);
       return newCustomItem.data;
     },
-   async getOrCreateItem(item) {
+    async getOrCreateItem(item) {
       if (item.id) {
         return item;
       }
@@ -162,7 +166,7 @@ export default {
       );
 
       if (matchedItemInSuggestedItems !== undefined) {
-        return matchedItemInSuggestedItems
+        return matchedItemInSuggestedItems;
       }
 
       return await this.createCustomItem();

@@ -1,5 +1,8 @@
 <template>
-  <v-dialog v-model="submitOrderDialog" width="70%">
+  <v-dialog
+    v-model="menuComponentDetails.dialogToggles.submitOrderDialog"
+    width="70%"
+  >
     <v-card>
       <div>
         <div>
@@ -154,13 +157,13 @@
       <v-divider></v-divider>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn x-large width="50%" v-on:click="closeSubmitOrderDialog()">
+        <v-btn x-large width="50%" v-on:click="onClickCancel()">
           <div>CANCEL<br /></div>
         </v-btn>
         <v-btn
           x-large
           width="50%"
-          v-on:click="closeSubmitOrderDialog(), submitOrder()"
+          v-on:click="onClickCancel(), submitOrder()"
         >
           <div>SUBMIT<br /></div>
         </v-btn>
@@ -197,15 +200,17 @@ import axios from "axios";
 
 export default {
   mixins: [storeMixin],
-  props: ["submitOrderDialog"],
+  props: ["menuComponentDetails"],
   data() {
     return {
       orderTypeString: ["DINE IN", "PICK UP", "DELIVERY"],
     };
   },
   methods: {
-    closeSubmitOrderDialog() {
-      this.$emit("closeSubmitOrderDialog");
+    onClickCancel() {
+      let updatedMenuComponentDetails = { ...this.menuComponentDetails };
+      updatedMenuComponentDetails.dialogToggles.submitOrderDialog = false;
+      this.$emit("updateMenuComponentDetails", updatedMenuComponentDetails);
     },
     submitOrder: async function () {
       try {
@@ -217,10 +222,8 @@ export default {
           priceDetails: this.$store.state.priceDetails,
         });
         this.storeMixinClearOrderRelatedDetails();
-        this.closeSubmitOrderDialog();
         store.commit("setNotification", 1);
       } catch (err) {
-        this.closeSubmitOrderDialog();
         store.commit("setErrorToDisplay", err.response.data);
         store.commit("setNotification", 5);
       }

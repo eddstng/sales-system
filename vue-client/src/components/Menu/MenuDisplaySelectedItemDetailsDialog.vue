@@ -2,7 +2,7 @@
   <div>
     <v-dialog
       v-if="menuComponentDetails.removeSelectedItem.node !== undefined"
-      v-model="menuComponentDetails.selectedItemDialog"
+      v-model="menuComponentDetails.dialogToggles.selectedItemDialog"
       width="1000px"
     >
       <v-card>
@@ -44,7 +44,7 @@
                         'customizations'
                           ? removeCustomizationFromCurrentOrder(customization)
                           : removeCustomizationFromSelectedItem(customization);
-                        menuComponentDetails.selectedItemDialog = false;
+                        menuComponentDetails.dialogToggles.selectedItemDialog = false;
                       "
                     >
                       <div>X<br /></div>
@@ -76,25 +76,10 @@
           >
             <div>CANCEL<br /></div>
           </v-btn>
-          <v-btn
-            x-large
-            width="50%"
-            v-on:click="openCustomizeCurrentOrderDialog(true)"
-          >
-            <div>CUSTOMIZE<br /></div>
+          <v-btn x-large width="50%" v-on:click="onClickCustomizeOrder()">
+            <div>CUSTOMIZE ORDER<br /></div>
           </v-btn>
-          <!-- <v-btn
-            x-large
-            width="32.5%"
-            v-on:click="
-              closeSelectedItemDialog();
-              removeSelectedItemAll(menuComponentDetails.removeSelectedItem);
-              menuComponentDetails.removeSelectedItem = {};
-              storeMixinSumSelectedItemsQuantity();
-            "
-          >
-            <div>REMOVE ALL<br /></div>
-          </v-btn> -->
+
         </v-card-actions>
         <v-card-actions v-else>
           <v-spacer></v-spacer>
@@ -115,18 +100,7 @@
             "
             x-large
             width="15%"
-            v-on:click="openCustomizeSelectedItemDialog(true)"
-          >
-            <div>CUSTOMIZE<br /></div>
-          </v-btn>
-          <v-btn
-            v-if="
-              menuComponentDetails.removeSelectedItem.node.category ===
-              'customizations'
-            "
-            x-large
-            width="15%"
-            v-on:click="openCustomizeCurrentOrderDialog(true)"
+            v-on:click="onClickCustomize()"
           >
             <div>CUSTOMIZE<br /></div>
           </v-btn>
@@ -270,7 +244,7 @@
             width="50%"
             v-on:click="
               updateQuantityDialog = false;
-              menuComponentDetails.selectedItemDialog = false;
+              menuComponentDetails.dialogToggles.selectedItemDialog = false;
             "
           >
             <div>NO<br /></div>
@@ -281,7 +255,7 @@
             v-on:click="
               updateSelectedItemAmount(updateQuantityDialogItem);
               updateQuantityDialog = false;
-              menuComponentDetails.selectedItemDialog = false;
+              menuComponentDetails.dialogToggles.selectedItemDialog = false;
             "
           >
             <div>YES<br /></div>
@@ -327,6 +301,11 @@ export default {
   props: ["menuComponentDetails"],
 
   methods: {
+    onClickCustomize() {
+      let updatedMenuComponentDetails = { ...this.menuComponentDetails };
+      updatedMenuComponentDetails.dialogToggles.openCustomizeSelectedItemDialog = true;
+      this.$emit("updateMenuComponentDetails", updatedMenuComponentDetails);
+    },
     toggleUpdateQuantityDialogTrue() {
       this.updateQuantityDialogItem = Object.assign(
         {},
@@ -337,13 +316,11 @@ export default {
     closeSelectedItemDialog() {
       this.$emit("closeSelectedItemDialog");
     },
-    openCustomizeSelectedItemDialog() {
-      console.log("here");
-      this.$emit("openCustomizeSelectedItemDialog");
-    },
-    openCustomizeCurrentOrderDialog() {
-      console.log("12312");
-      this.$emit("openCustomizeCurrentOrderDialog");
+    onClickCustomizeOrder() {
+      let updatedMenuComponentDetails = { ...this.menuComponentDetails };
+      // this.menuComponentDetails.customizeOrderDialog = false; - maybe be necessary for a bug
+      updatedMenuComponentDetails.dialogToggles.customizeOrderDialog = true;
+      this.$emit("updateMenuComponentDetails", updatedMenuComponentDetails);
     },
     handleKeypad(buttonValue) {
       if (buttonValue === "🠔") {
