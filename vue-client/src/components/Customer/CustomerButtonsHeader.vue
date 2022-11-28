@@ -6,27 +6,19 @@
       width="32.8%"
       height="80px"
       dark
-      v-on:click="
-        customerOptionDetails.openCustomerOptionSearchDialog = true;
-        updateCustomerOptionDetails(customerOptionDetails);
-      "
+      v-on:click="onClickSearch()"
     >
       SEARCH
     </v-btn>
     <v-btn
       v-if="$store.state.selectedCustomer.phone.length > 0"
-      v-on:click="
-        displayBackButton = false;
-        storeMixResetSelectedCustomer();
-        storeMixResetSelectedItemsOrderedByEntry();
-        storeMixResetCurrentOrder();
-      "
+      v-on:click="onClickBack()"
       class="history-button-text mr-1"
       width="32.8%"
       height="80px"
       dark
     >
-      BACK
+      BACK1
     </v-btn>
 
     <v-btn class="history-button-text" width="33%" height="80px" dark>
@@ -73,6 +65,17 @@ export default {
     };
   },
   methods: {
+    onClickBack() {
+      this.displayBackButton = false;
+      this.storeMixResetSelectedCustomer();
+      this.storeMixResetSelectedItemsOrderedByEntry();
+      this.storeMixResetSelectedItems();
+      this.storeMixResetCurrentOrder();
+    },
+    onClickSearch() {
+      this.customerOptionDetails.openCustomerOptionSearchDialog = true;
+      this.updateCustomerOptionDetails(this.customerOptionDetails);
+    },
     updateCustomerOptionDetails() {
       this.$emit("setCustomerOptionDetails", this.customerOptionDetailsUpdate);
     },

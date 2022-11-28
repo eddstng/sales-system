@@ -1,6 +1,8 @@
 <template>
   <v-dialog
+    persistent
     v-model="menuComponentDetails.dialogToggles.submitOrderDialog"
+    @keydown.esc="onEsc()"
     width="70%"
   >
     <v-card>
@@ -160,11 +162,7 @@
         <v-btn x-large width="50%" v-on:click="onClickCancel()">
           <div>CANCEL<br /></div>
         </v-btn>
-        <v-btn
-          x-large
-          width="50%"
-          v-on:click="onClickCancel(), submitOrder()"
-        >
+        <v-btn x-large width="50%" v-on:click="onClickCancel(), submitOrder()">
           <div>SUBMIT<br /></div>
         </v-btn>
       </v-card-actions>
@@ -207,6 +205,9 @@ export default {
     };
   },
   methods: {
+    onEsc() {
+this.onClickCancel();
+    },
     onClickCancel() {
       let updatedMenuComponentDetails = { ...this.menuComponentDetails };
       updatedMenuComponentDetails.dialogToggles.submitOrderDialog = false;

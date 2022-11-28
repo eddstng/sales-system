@@ -85,11 +85,11 @@ export default {
     CustomerButtons,
     CustomerOrderHistoryButtons,
     CustomerDisplay,
+    CustomerButtonsSearchDialog,
+    CustomerButtonsHeader,
     HistoryDisplayHistoryOptionsDialog,
     HistoryDisplayHistoryOptionsReprintDialog,
     HistoryDisplayHistoryOptionsConfirmationDialog,
-    CustomerButtonsSearchDialog,
-    CustomerButtonsHeader,
   },
   data() {
     return {

@@ -9,7 +9,7 @@
         <v-col>
           <v-form ref="form" lazy-validation>
             <v-text-field
-              v-model="selectedCustomerDetails.selectedCustomer.phone"
+              v-model="selectedCustomerDetails.phoneInput"
               :counter="16"
               label="Phone Number"
               @keydown.enter.prevent="
@@ -40,10 +40,10 @@
             width="100%"
             v-on:click="
               customerOptionDetails.openCustomerOptionSearchDialog = false;
+              selectedCustomerDetails.phoneInput = '';
               selectedCustomerDetails.selectedCustomer = JSON.parse(
                 JSON.stringify(customer)
               );
-              toggleCreateCustomerFormDialogOn();
               setSelectedCustomerIfCustomerExists(customer);
               onClickCustomerButton(customer);
             "
@@ -94,6 +94,7 @@ export default {
   props: ["customerOptionDetails"],
   data() {
     return {
+      phoneInput: '',
       phoneError: null,
       selectedCustomerDetails: {
         suggestedCustomers: [],
@@ -104,10 +105,10 @@ export default {
     };
   },
   watch: {
-    "selectedCustomerDetails.selectedCustomer.phone": function () {
+    "selectedCustomerDetails.phoneInput": function () {
       this.suggestCustomerFromPhoneInput();
-      this.selectedCustomerDetails.selectedCustomer.phone =
-        this.selectedCustomerDetails.selectedCustomer.phone.replace(
+      this.selectedCustomerDetails.phoneInput =
+        this.selectedCustomerDetails.phoneInput.replace(
           /(\d{3})(\d{3})(\d{3})/,
           "$1-$2-$3"
         );
@@ -182,13 +183,13 @@ export default {
       var customerArr = JSON.parse(
         JSON.stringify(Object.values(this.$store.state.customers))
       );
-      if (this.selectedCustomerDetails.selectedCustomer.phone.length < 3) {
+      if (this.selectedCustomerDetails.phoneInput.length < 3) {
         this.selectedCustomerDetails.suggestedCustomers = [];
       } else {
         customerArr.forEach((v) => {
           if (
             v.phone.includes(
-              this.selectedCustomerDetails.selectedCustomer.phone
+              this.selectedCustomerDetails.phoneInput
             )
           ) {
             this.selectedCustomerDetails.suggestedCustomers.push(v);
@@ -198,7 +199,7 @@ export default {
       return;
     },
     toggleCreateCustomerFormDialogOn() {
-      if (this.selectedCustomerDetails.selectedCustomer.phone.length < 12) {
+      if (this.selectedCustomerDetails.phoneInput.length < 12) {
         this.phoneError =
           "Invalid phone number. Phone number needs to be at least 10 numbers long.";
       } else {
@@ -209,13 +210,13 @@ export default {
     setSelectedCustomerIfCustomerExists() {
       if (
         this.$store.state.customers[
-          this.selectedCustomerDetails.selectedCustomer.phone
+          this.selectedCustomerDetails.phoneInput
         ] !== undefined
       ) {
         this.selectedCustomerDetails.selectedCustomer = JSON.parse(
           JSON.stringify(
             this.$store.state.customers[
-              this.selectedCustomerDetails.selectedCustomer.phone
+              this.selectedCustomerDetails.phoneInput
             ]
           )
         );
@@ -223,7 +224,7 @@ export default {
           JSON.parse(
             JSON.stringify(
               this.$store.state.customers[
-                this.selectedCustomerDetails.selectedCustomer.phone
+                this.selectedCustomerDetails.phoneInput
               ]
             )
           )

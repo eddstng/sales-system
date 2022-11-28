@@ -177,7 +177,6 @@ import CustomerDisplayCustomer from "../Customer/CustomerDisplayCustomer";
 import HistoryDisplayHistoryOptionsDialog from "../History/HistoryDisplayHistoryOptionsDialog";
 import MenuDisplayCustomerSelectCreateCustomerFormDialog from "../Menu/MenuDisplayCustomerSelectCreateCustomerFormDialog";
 export default {
-  props: ["customerOptionDetails"],
   components: {
     MenuDisplayCustomerSelectCreateCustomerFormDialog,
     CustomerDisplayCustomer,

@@ -8,9 +8,9 @@
     <!-- <template v-if="$store.state.component === 'HISTORY'">
       <History />
     </template> -->
-    <template v-if="$store.state.component === 'CUSTOMER'">
+    <!-- <template v-if="$store.state.component === 'CUSTOMER'">
       <Customer />
-    </template>
+    </template> -->
   </v-app>
 </template>
 
@@ -19,7 +19,7 @@ import storeMixin from "./mixins/storeMixin";
 // import Menu from "./components/Menu/Menu";
 import Main from "./components/Main/Main";
 // import History from "./components/History/History";
-import Customer from "./components/Customer/Customer";
+// import Customer from "./components/Customer/Customer";
 import NotificationsBar from "./components/NotificationsBar/NotificationsBar";
 export default {
   mixins: [storeMixin],
@@ -29,7 +29,7 @@ export default {
     // Menu,
     Main,
     // History,
-    Customer
+    // Customer
   },
   // created() {
   //   this.$root.$refs.App = this;
