@@ -20,6 +20,11 @@
       @updateMenuComponentDetails="updateMenuComponentDetails"
     />
 
+    <MenuRequiredCustomizationDialog
+      v-bind:menuComponentDetails="componentDetails.menuComponentDetails"
+      @updateMenuComponentDetails="updateMenuComponentDetails"
+    />
+
     <MenuDisplaySelectedItemDetailsDialog
       v-bind:menuComponentDetails="componentDetails.menuComponentDetails"
       @updateMenuComponentDetails="updateMenuComponentDetails"
@@ -85,7 +90,7 @@
       </v-col>
       <v-col lg="4">
         <v-card outlined tile>
-          <v-container class="grey lighten-5"> 
+          <v-container class="grey lighten-5">
             <Display
               v-bind:componentDetails="componentDetails"
               @updateMenuComponentDetails="updateMenuComponentDetails"
@@ -109,11 +114,26 @@
       <v-col lg="7">
         <v-card tile>
           <v-container class="grey lighten-5">
-            <MenuButtons
+            <MenuButtonsHeader
               v-if="$store.state.component === 'ORDER'"
-              v-bind:menuComponentDetails="componentDetails.menuComponentDetails"
+              v-bind:menuComponentDetails="
+                componentDetails.menuComponentDetails
+              "
               @updateMenuComponentDetails="updateMenuComponentDetails"
             />
+            <Buttons
+              v-bind:menuComponentDetails="
+                componentDetails.menuComponentDetails
+              "
+              @updateMenuComponentDetails="updateMenuComponentDetails"
+            />
+            <!-- <MenuButtons
+              v-if="$store.state.component === 'ORDER'"
+              v-bind:menuComponentDetails="
+                componentDetails.menuComponentDetails
+              "
+              @updateMenuComponentDetails="updateMenuComponentDetails"
+            /> -->
             <HistoryButtonsHeader v-if="$store.state.component === 'HISTORY'" />
             <HistoryButtons
               class="mt-1"
@@ -121,7 +141,9 @@
             />
             <CustomerButtonsHeader
               v-if="$store.state.component === 'CUSTOMER'"
-              v-bind:customerOptionDetails="componentDetails.customerOptionDetails"
+              v-bind:customerOptionDetails="
+                componentDetails.customerOptionDetails
+              "
               @setHistoryOptionsDetails="setCustomerOptionDetails"
             />
             <CustomerButtons
@@ -130,7 +152,9 @@
                 $store.state.component === 'CUSTOMER' &&
                 $store.state.selectedCustomer.phone === ''
               "
-              v-bind:customerOptionDetails="componentDetails.customerOptionDetails"
+              v-bind:customerOptionDetails="
+                componentDetails.customerOptionDetails
+              "
               @setCustomerOptionDetails="setCustomerOptionDetails"
             />
             <CustomerOrderHistoryButtons
@@ -138,7 +162,9 @@
                 $store.state.component === 'CUSTOMER' &&
                 $store.state.selectedCustomer.phone !== ''
               "
-              v-bind:customerOptionDetails="componentDetails.customerOptionDetails"
+              v-bind:customerOptionDetails="
+                componentDetails.customerOptionDetails
+              "
               @setCustomerOptionDetails="setCustomerOptionDetails"
             />
           </v-container>
@@ -151,7 +177,8 @@
 <script>
 import storeMixin from "../../mixins/storeMixin";
 import Sidebar from "../Sidebar.vue";
-import MenuButtons from "../Menu/MenuButtons.vue";
+// import MenuButtons from "../Menu/MenuButtons.vue";
+import Buttons from "../Main/Buttons.vue";
 // import MenuDisplay from "../Menu/MenuDisplay.vue";
 import MenuDisplaySubmitOrderDialog from "../Menu/MenuDisplaySubmitOrderDialog";
 import MenuDisplayModifyOrderDialog from "../Menu/MenuDisplayModifyOrderDialog";
@@ -160,6 +187,8 @@ import MenuDisplaySelectedItemDetailsCustomizeDialog from "../Menu/MenuDisplaySe
 import MenuButtonsCustomItemDialog from "../Menu/MenuButtonsCustomItemDialog";
 import MenuDisplayCurrentOrderCustomizeOrderDialog from "../Menu/MenuDisplayCurrentOrderCustomizeOrderDialog";
 import MenuDisplayCustomerSelectCreateCustomerFormDialog from "../Menu/MenuDisplayCustomerSelectCreateCustomerFormDialog";
+import MenuButtonsHeader from "../Menu/MenuButtonsHeader";
+import MenuRequiredCustomizationDialog from "../Menu/MenuRequiredCustomizationDialog";
 
 import HistoryButtons from "../History/HistoryButtons";
 // import HistoryDisplay from "../History/HistoryDisplay";
@@ -183,8 +212,10 @@ export default {
   components: {
     Sidebar,
     Display,
-    MenuButtons,
+    // MenuButtons,
+    Buttons,
     // MenuDisplay,
+    MenuButtonsHeader,
     MenuDisplaySubmitOrderDialog,
     MenuDisplayModifyOrderDialog,
     MenuDisplaySelectedItemDetailsDialog,
@@ -192,6 +223,7 @@ export default {
     MenuButtonsCustomItemDialog,
     MenuDisplayCurrentOrderCustomizeOrderDialog,
     MenuDisplayCustomerSelectCreateCustomerFormDialog,
+    MenuRequiredCustomizationDialog,
     HistoryButtons,
     // HistoryDisplay,
     HistoryDisplayHistoryOptionsDialog,
@@ -207,7 +239,7 @@ export default {
   data() {
     return {
       selectedCustomerDetails: {
-        suggestedCustomers:[],
+        suggestedCustomers: [],
         selectedCustomer: {
           phone: "",
           buzzer_number: "",
@@ -227,11 +259,24 @@ export default {
             addCustomitemDialog: false,
             customizeOrderDialog: false,
             openCustomizeSelectedItemDialog: false,
+            customizeChowMeinTypeDialog: false,
+            requiredCustomizationDialog: false,
+          },
+          requiredCustomizationDetails: {
+            reducedItemsObj: null,
+            itemThatRequiresCustomization: null,
+            itemsThatShareTheSameMenuId: null,
+          },
+          displayedButtonsConfig: {
+            displayCategoryButtons: true,
+            fullCategoryMenuObj: {},
           },
           selectedItemDialog: false,
           addCustomItemDialog: false,
           customOptionsDialog: false,
           removeSelectedItem: {},
+          selectedCategory: null,
+          displayMenuButtons: false,
         },
         historyOptionsDetails: {
           confirmingAction: "",
@@ -247,7 +292,6 @@ export default {
           openHistoryOptionsDialog: false,
           openCustomerOptionSearchDialog: false,
         },
-
       },
       submitOrderDialog: false,
       modifyOrderDialog: false,

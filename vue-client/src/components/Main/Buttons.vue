@@ -5,7 +5,8 @@
       <div v-if="menuComponentDetails.displayMenuButtons" max-height="400">
         <div>
           <v-btn
-            v-for="item in menuComponentDetails.displayedButtonsConfig.fullCategoryMenuObj"
+            v-for="item in menuComponentDetails.displayedButtonsConfig
+              .fullCategoryMenuObj"
             v-bind:key="item.name_eng"
             x-large
             dark
@@ -14,8 +15,6 @@
             class="mt-1 mr-1"
             v-on:click="
               onClickMenuButton(item);
-              menuComponentDetails.displayedButtonsConfig.displayCategoryButtons = true;
-              menuComponentDetails.displayMenuButtons = false;
             "
           >
             <div>
@@ -40,7 +39,9 @@
       </div>
       <div
         class="p-0"
-        v-if="menuComponentDetails.displayedButtonsConfig.displayCategoryButtons"
+        v-if="
+          menuComponentDetails.displayedButtonsConfig.displayCategoryButtons
+        "
         max-height="400"
       >
         <v-btn
@@ -66,136 +67,6 @@
       </div>
     </v-card>
 
-    <v-dialog
-      v-if="itemThatRequiresCustomization !== null"
-      v-model="customizeChowMeinTypeDialog"
-      width="1000px"
-    >
-      <v-card>
-        <div>
-          <h3 class="text-center pt-10 pb-5">
-            CHOW MEIN TYPE SELECTION
-            <br />
-            <br />
-            <br />
-            {{ itemThatRequiresCustomization.name_eng }}
-            {{ itemThatRequiresCustomization }}
-            <br />
-
-            {{ itemThatRequiresCustomization.name_chn }}
-
-            <br />
-            <br />
-          </h3>
-
-          <br />
-        </div>
-        <v-divider></v-divider>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            x-large
-            width="24.5%"
-            v-on:click="cancelCustomizeSelectedItem()"
-          >
-            <div>CANCEL<br /></div>
-          </v-btn>
-          <v-btn
-            x-large
-            width="24.5%"
-            v-on:click="
-              addItemToSelectedItems(
-                chowMeinItemsObj[itemThatRequiresCustomization.id]
-              );
-              customizeChowMeinTypeDialog = false;
-            "
-          >
-            <div>CRISPY (湿)<br /></div>
-          </v-btn>
-          <v-btn
-            x-large
-            width="24.5%"
-            v-on:click="
-              addItemToSelectedItems(
-                chowMeinItemsObj[itemThatRequiresCustomization.id + 1]
-              );
-              customizeChowMeinTypeDialog = false;
-            "
-          >
-            <div>DRY (干)<br /></div>
-          </v-btn>
-          <v-btn
-            x-large
-            width="24.5%"
-            v-on:click="
-              addItemToSelectedItems(
-                chowMeinItemsObj[itemThatRequiresCustomization.id + 2]
-              );
-              customizeChowMeinTypeDialog = false;
-            "
-          >
-            <div>SOFT (軟)<br /></div>
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog
-      v-if="itemThatRequiresCustomization !== null"
-      v-model="customizeSoupSizeDialog"
-      width="1000px"
-    >
-      <v-card>
-        <div>
-          <h3 class="text-center pt-10 pb-5">
-            SOUP SIZE SELECTION
-            <br />
-            <br />
-            <br />
-            {{ itemThatRequiresCustomization.name_eng }}
-            <br />
-
-            {{ itemThatRequiresCustomization.name_chn }}
-
-            <br />
-            <br />
-          </h3>
-
-          <br />
-        </div>
-        <v-divider></v-divider>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn x-large width="33%" v-on:click="cancelCustomizeSelectedItem()">
-            <div>CANCEL<br /></div>
-          </v-btn>
-          <v-btn
-            x-large
-            width="33%"
-            v-on:click="
-              addItemToSelectedItems(
-                soupItemsObj[itemThatRequiresCustomization.id]
-              );
-              customizeSoupSizeDialog = false;
-            "
-          >
-            <div>SMALL (小)<br /></div>
-          </v-btn>
-          <v-btn
-            x-large
-            width="33%"
-            v-on:click="
-              addItemToSelectedItems(
-                soupItemsObj[itemThatRequiresCustomization.id + 1]
-              );
-              customizeSoupSizeDialog = false;
-            "
-          >
-            <div>LARGE (大)<br /></div>
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </div>
 </template>
 
@@ -216,7 +87,7 @@
 <script>
 import storeMixin from "../../mixins/storeMixin";
 import { store } from "../../store/store";
-
+import { menuCategories } from "../../data/menuCategories";
 export default {
   mixins: [storeMixin],
   props: ["menuComponentDetails"],
@@ -282,9 +153,7 @@ export default {
   },
   data() {
     return {
-      customizeChowMeinTypeDialog: false,
       customizeSoupSizeDialog: false,
-      itemThatRequiresCustomization: null,
       customItem: {
         id: "",
         name: "",
@@ -300,115 +169,7 @@ export default {
         "Broccoli",
         "Black Bean Sauce",
       ],
-      categories: [
-        {
-          name_eng: "Appetizers",
-          name_chn: "Appetizers",
-          num_range: "1-6",
-          id: 0,
-        },
-        {
-          name_eng: "Soup",
-          name_chn: "Soup",
-          num_range: "7-17",
-          id: 1,
-        },
-        {
-          name_eng: "Egg Foo Yung",
-          name_chn: "Egg Foo Yung",
-          num_range: "18-22",
-          id: 2,
-        },
-        {
-          name_eng: "Vegetables",
-          name_chn: "Vegetables",
-          num_range: "23-27",
-          id: 3,
-        },
-        {
-          name_eng: "Seafood",
-          name_chn: "Seafood",
-          num_range: "28-40",
-          id: 4,
-        },
-        {
-          name_eng: "Oyster/Scallops",
-          name_chn: "Oyster/Scallops",
-          num_range: "41-49",
-          id: 5,
-        },
-        {
-          name_eng: "Hot Pot",
-          name_chn: "Hot Pot",
-          num_range: "50-59",
-          id: 6,
-        },
-        {
-          name_eng: "Pork",
-          name_chn: "Pork",
-          num_range: "60-70",
-          id: 7,
-        },
-        {
-          name_eng: "Beef",
-          name_chn: "Beef",
-          num_range: "71-83",
-          id: 8,
-        },
-        {
-          name_eng: "Chicken",
-          name_chn: "Chicken",
-          num_range: "84-97",
-          id: 9,
-        },
-        {
-          name_eng: "Over Rice",
-          name_chn: "Over Rice",
-          num_range: "98-115",
-          id: 10,
-        },
-        {
-          name_eng: "Fried Rice",
-          name_chn: "Fried Rice",
-          num_range: "116-123",
-          id: 11,
-        },
-        {
-          name_eng: "Chow Mein",
-          name_chn: "Chow Mein",
-          num_range: "124-148",
-          id: 12,
-        },
-        {
-          name_eng: "Noodle Soup",
-          name_chn: "Noodle Soup",
-          num_range: "149-156",
-          id: 13,
-        },
-        {
-          name_eng: "Congee",
-          name_chn: "Congee",
-          num_range: "157-164",
-          id: 14,
-        },
-        {
-          name_eng: "Specials/Drinks",
-          name_chn: "Specials/Drinks",
-          id: 15,
-        },
-        {
-          name_eng: "MINI SPECIAL",
-          name_chn: "MINI SPECIAL",
-          num_range: "1-6",
-          id: 17,
-        },
-        {
-          name_eng: "LUNCH SPECIAL",
-          name_chn: "LUNCH SPECIAL",
-          num_range: "7-17",
-          id: 18,
-        },
-      ],
+      categories: menuCategories,
     };
   },
 
@@ -430,6 +191,7 @@ export default {
     },
     onClickMenuButton(item) {
       this.checkIfSelectedItemRequiresCustomization(item);
+                    // this.menuComponentDetails.displayedButtonsConfig.displayCategoryButtons = true;
     },
 
     updateSlicedCategoryMenuObj(startIndex, endIndex) {
@@ -437,37 +199,75 @@ export default {
       this.menuComponentDetails.displayedButtonsConfig.endIndex = endIndex;
       if (this.selectedCategory === 12) {
         console.log("111111");
-        this.menuComponentDetails.displayedButtonsConfig.fullCategoryMenuObj = this.chowMeinItems;
+        this.menuComponentDetails.displayedButtonsConfig.fullCategoryMenuObj =
+          this.chowMeinItems;
         return;
       }
       if (this.selectedCategory === 1) {
         console.log("222222");
         console.log(this.soupItems);
-        this.menuComponentDetails.displayedButtonsConfig.fullCategoryMenuObj = this.soupItems;
+        this.menuComponentDetails.displayedButtonsConfig.fullCategoryMenuObj =
+          this.soupItems;
         return;
       }
       console.log(this.$store.state.categorizedItems[this.selectedCategory]);
       this.menuComponentDetails.displayedButtonsConfig.fullCategoryMenuObj =
         this.$store.state.categorizedItems[this.selectedCategory];
 
-      console.log(this.menuComponentDetails.displayedButtonsConfig.fullCategoryMenuObj);
+      console.log(
+        this.menuComponentDetails.displayedButtonsConfig.fullCategoryMenuObj
+      );
     },
     checkIfSelectedItemRequiresCustomization(item) {
+      console.log(JSON.stringify(this.menuComponentDetails));
       if (
         item.category === 12 &&
         item.name_eng.includes(" CM")
         // (item.name_eng.includes("(CRISPY)") || item.name_eng.includes("(SOFT)")) - doesn't work due to modification in chowMeinItems
       ) {
-        this.itemThatRequiresCustomization = item;
-        this.customizeChowMeinTypeDialog = true;
+        let updatedMenuComponentDetails = { ...this.menuComponentDetails };
+
+        updatedMenuComponentDetails.requiredCustomizationDetails.reducedItemsObj =
+          this.chowMeinItemsObj;
+        updatedMenuComponentDetails.requiredCustomizationDetails.itemThatRequiresCustomization =
+          item;
+        updatedMenuComponentDetails.dialogToggles.requiredCustomizationDialog = true;
+        updatedMenuComponentDetails.requiredCustomizationDetails.itemsThatShareTheSameMenuId =
+          this.$store.state.categorizedItems[item.category].filter((obj) => {
+            return (
+              obj.menu_id ===
+              this.menuComponentDetails.requiredCustomizationDetails
+                .itemThatRequiresCustomization.menu_id
+            );
+          });
+
+        this.$emit("updateMenuComponentDetails", updatedMenuComponentDetails);
+        // this.menuComponentDetails.dialogToggles.customizeChowMeinTypeDialog = true;
         // add the hard or soft as customization.
         // we will throw up a dialog asking soft or hard
       } else if (item.category === 1) {
-        this.itemThatRequiresCustomization = item;
-        this.customizeSoupSizeDialog = true;
+        let updatedMenuComponentDetails = { ...this.menuComponentDetails };
+
+        updatedMenuComponentDetails.requiredCustomizationDetails.reducedItemsObj =
+          this.soupItemsObj;
+        updatedMenuComponentDetails.requiredCustomizationDetails.itemThatRequiresCustomization =
+          item;
+        updatedMenuComponentDetails.dialogToggles.requiredCustomizationDialog = true;
+        updatedMenuComponentDetails.requiredCustomizationDetails.itemsThatShareTheSameMenuId =
+          this.$store.state.categorizedItems[item.category].filter((obj) => {
+            return (
+              obj.menu_id ===
+              this.menuComponentDetails.requiredCustomizationDetails
+                .itemThatRequiresCustomization.menu_id
+            );
+          });
+
+        this.$emit("updateMenuComponentDetails", updatedMenuComponentDetails);
+        // this.customizeSoupSizeDialog = true;
         // add the hard or soft as customization.
         // we will throw up a dialog asking soft or hard
       } else {
+          this.menuComponentDetails.displayedButtonsConfig.displayCategoryButtons = true;
         this.addItemToSelectedItems(item);
       }
       // if chowmein we need extra dialog
@@ -477,8 +277,12 @@ export default {
     },
 
     cancelCustomizeSelectedItem() {
-      this.removeSelectedItemAll(this.itemThatRequiresCustomization);
-      this.itemThatRequiresCustomization = null;
+      this.removeSelectedItemAll(
+        this.menuComponentDetails.requiredCustomizationDetails
+          .itemThatRequiresCustomization
+      );
+      this.menuComponentDetails.requiredCustomizationDetails.itemThatRequiresCustomization =
+        null;
     },
 
     removeSelectedItemAll: function (selectedItem) {
@@ -490,11 +294,15 @@ export default {
 
     customizeSelectedItem(customizationObj) {
       this.addCustomizationToItem(
-        this.$store.state.selectedItems[this.itemThatRequiresCustomization.id],
+        this.$store.state.selectedItems[
+          this.menuComponentDetails.requiredCustomizationDetails
+            .itemThatRequiresCustomization.id
+        ],
         customizationObj
       );
-      this.itemThatRequiresCustomization = null;
-      this.customizeChowMeinTypeDialog = false;
+      this.menuComponentDetails.requiredCustomizationDetails.itemThatRequiresCustomization =
+        null;
+      this.menuComponentDetails.dialogToggles.customizeChowMeinTypeDialog = false;
     },
 
     addCustomizationToItem: function (selectedItem, customizationObj) {
