@@ -16,7 +16,7 @@
     <v-card>
       <div>
         <h3 class="text-center pt-10 pb-5">
-          CHOW MEIN TYPE SELECTION
+          TYPE SELECTION
           <br />
           <br />
           <br />

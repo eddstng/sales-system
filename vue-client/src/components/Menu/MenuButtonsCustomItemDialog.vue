@@ -1,5 +1,7 @@
 <template>
   <v-dialog
+    persistent
+    @keydown.esc="onEsc()"
     v-model="menuComponentDetails.dialogToggles.addCustomItemDialog"
     width="500"
   >
@@ -131,9 +133,14 @@ export default {
     deep: true,
   },
   methods: {
+    onEsc() {
+      let updatedMenuComponentDetails = { ...this.menuComponentDetails };
+      updatedMenuComponentDetails.dialogToggles.addCustomItemDialog = false;
+      this.$emit("updateMenuComponentDetails", updatedMenuComponentDetails);
+    },
     onClickCancelButton() {
       this.phone = "";
-      let updatedMenuComponentDetails = {...this.menuComponentDetails};
+      let updatedMenuComponentDetails = { ...this.menuComponentDetails };
       updatedMenuComponentDetails.dialogToggles.addCustomItemDialog = false;
       this.$emit("updateMenuComponentDetails", updatedMenuComponentDetails);
       this.customItem.name = "";

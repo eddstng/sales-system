@@ -1,72 +1,10 @@
 <template>
   <div>
-    <!-- <MenuButtonsHeader /> -->
-    <v-card outlined tile class="overflow-y-auto" height="83vh">
-      <div v-if="menuComponentDetails.displayMenuButtons" max-height="400">
-        <div>
-          <v-btn
-            v-for="item in menuComponentDetails.displayedButtonsConfig
-              .fullCategoryMenuObj"
-            v-bind:key="item.name_eng"
-            x-large
-            dark
-            height="200px"
-            width="19.6%"
-            class="mt-1 mr-1"
-            v-on:click="
-              onClickMenuButton(item);
-            "
-          >
-            <div>
-              <p class="menu-button-text-eng">#{{ item.menu_id }}</p>
-              <p class="mb-0 menu-button-text-eng">
-                {{ item.name_eng.match(/.{1,20}(\s|$)/g)[0] }}
-              </p>
-              <p class="mb-0 menu-button-text-eng">
-                {{
-                  item.name_eng.toString().length > 20
-                    ? item.name_eng.match(/.{1,20}(\s|$)/g)[1]
-                    : "⠀"
-                }}
-              </p>
-              <p class="menu-button-text-chn">{{ item.name_chn }}</p>
-              <p class="menu-button-text-price">
-                {{ Number(item.price).toFixed(2) }}
-              </p>
-            </div>
-          </v-btn>
-        </div>
-      </div>
-      <div
-        class="p-0"
-        v-if="
-          menuComponentDetails.displayedButtonsConfig.displayCategoryButtons
-        "
-        max-height="400"
-      >
-        <v-btn
-          v-for="item in categories"
-          v-bind:key="item.id"
-          x-large
-          dark
-          height="155px"
-          width="24.5%"
-          class="mt-1 mr-1"
-          v-on:click="
-            selectedCategory = item.id;
-            menuComponentDetails.displayedButtonsConfig.displayCategoryButtons = false;
-            menuComponentDetails.displayMenuButtons = true;
-            updateSlicedCategoryMenuObj(0, 1000);
-          "
-        >
-          <div>
-            <p class="menu-button-text-eng">{{ item.name_eng }}</p>
-            <p class="menu-button-text-eng">{{ item.num_range }}</p>
-          </div>
-        </v-btn>
-      </div>
-    </v-card>
-
+    <MenuButtons
+      v-if="$store.state.component === 'ORDER'"
+      v-bind:menuComponentDetails="menuComponentDetails"
+      @updateMenuComponentDetails="updateMenuComponentDetails"
+    />
   </div>
 </template>
 
@@ -88,9 +26,14 @@
 import storeMixin from "../../mixins/storeMixin";
 import { store } from "../../store/store";
 import { menuCategories } from "../../data/menuCategories";
+import MenuButtons from "../Menu/MenuButtons.vue";
+
 export default {
   mixins: [storeMixin],
   props: ["menuComponentDetails"],
+  components: {
+    MenuButtons,
+  },
   computed: {
     soupItems: function () {
       const soupItems = this.$store.state.categorizedItems[1];
@@ -191,7 +134,7 @@ export default {
     },
     onClickMenuButton(item) {
       this.checkIfSelectedItemRequiresCustomization(item);
-                    // this.menuComponentDetails.displayedButtonsConfig.displayCategoryButtons = true;
+      // this.menuComponentDetails.displayedButtonsConfig.displayCategoryButtons = true;
     },
 
     updateSlicedCategoryMenuObj(startIndex, endIndex) {
@@ -267,7 +210,7 @@ export default {
         // add the hard or soft as customization.
         // we will throw up a dialog asking soft or hard
       } else {
-          this.menuComponentDetails.displayedButtonsConfig.displayCategoryButtons = true;
+        this.menuComponentDetails.displayedButtonsConfig.displayCategoryButtons = true;
         this.addItemToSelectedItems(item);
       }
       // if chowmein we need extra dialog

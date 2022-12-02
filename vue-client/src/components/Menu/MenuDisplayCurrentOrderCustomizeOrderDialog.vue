@@ -1,5 +1,9 @@
 <template>
   <v-dialog
+      persistent
+    @keydown.esc="
+      menuComponentDetails.dialogToggles.customizeOrderDialog = false;
+    "
     v-if="menuComponentDetails.dialogToggles.customizeOrderDialog"
     v-model="menuComponentDetails.dialogToggles.customizeOrderDialog"
     width="65%"
