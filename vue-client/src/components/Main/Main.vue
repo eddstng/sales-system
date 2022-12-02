@@ -121,10 +121,17 @@
               "
               @updateMenuComponentDetails="updateMenuComponentDetails"
             />
-            <Buttons
-              v-bind:menuComponentDetails="
-                componentDetails.menuComponentDetails
+            <HistoryButtonsHeader v-if="$store.state.component === 'HISTORY'" />
+            <CustomerButtonsHeader
+              v-if="$store.state.component === 'CUSTOMER'"
+              v-bind:customerOptionDetails="
+                componentDetails.customerOptionDetails
               "
+              @setHistoryOptionsDetails="setCustomerOptionDetails"
+            />
+            <Buttons
+              v-bind:componentDetails="componentDetails"
+              @setCustomerOptionDetails="setCustomerOptionDetails"
               @updateMenuComponentDetails="updateMenuComponentDetails"
             />
             <!-- <MenuButtons
@@ -134,19 +141,11 @@
               "
               @updateMenuComponentDetails="updateMenuComponentDetails"
             /> -->
-            <HistoryButtonsHeader v-if="$store.state.component === 'HISTORY'" />
-            <HistoryButtons
+            <!-- <HistoryButtons
               class="mt-1"
               v-if="$store.state.component === 'HISTORY'"
-            />
-            <CustomerButtonsHeader
-              v-if="$store.state.component === 'CUSTOMER'"
-              v-bind:customerOptionDetails="
-                componentDetails.customerOptionDetails
-              "
-              @setHistoryOptionsDetails="setCustomerOptionDetails"
-            />
-            <CustomerButtons
+            /> -->
+            <!-- <CustomerButtons
               class="mt-1"
               v-if="
                 $store.state.component === 'CUSTOMER' &&
@@ -166,7 +165,7 @@
                 componentDetails.customerOptionDetails
               "
               @setCustomerOptionDetails="setCustomerOptionDetails"
-            />
+            /> -->
           </v-container>
         </v-card>
       </v-col>
@@ -190,7 +189,7 @@ import MenuDisplayCustomerSelectCreateCustomerFormDialog from "../Menu/MenuDispl
 import MenuButtonsHeader from "../Menu/MenuButtonsHeader";
 import MenuRequiredCustomizationDialog from "../Menu/MenuRequiredCustomizationDialog";
 
-import HistoryButtons from "../History/HistoryButtons";
+// import HistoryButtons from "../History/HistoryButtons";
 // import HistoryDisplay from "../History/HistoryDisplay";
 import HistoryButtonsHeader from "../History/HistoryButtonsHeader";
 
@@ -198,8 +197,8 @@ import HistoryDisplayHistoryOptionsDialog from "../History/HistoryDisplayHistory
 import HistoryDisplayHistoryOptionsConfirmationDialog from "../History/HistoryDisplayHistoryOptionsConfirmationDialog";
 import HistoryDisplayHistoryOptionsReprintDialog from "../History/HistoryDisplayHistoryOptionsReprintDialog";
 
-import CustomerOrderHistoryButtons from "../Customer/CustomerOrderHistoryButtons";
-import CustomerButtons from "../Customer/CustomerButtons";
+// import CustomerOrderHistoryButtons from "../Customer/CustomerOrderHistoryButtons";
+// import CustomerButtons from "../Customer/CustomerButtons";
 import CustomerButtonsHeader from "../Customer/CustomerButtonsHeader";
 // import CustomerDisplay from "../Customer/CustomerDisplay";
 import CustomerButtonsSearchDialog from "../Customer/CustomerButtonsSearchDialog";
@@ -224,14 +223,14 @@ export default {
     MenuDisplayCurrentOrderCustomizeOrderDialog,
     MenuDisplayCustomerSelectCreateCustomerFormDialog,
     MenuRequiredCustomizationDialog,
-    HistoryButtons,
+    // HistoryButtons,
     // HistoryDisplay,
     HistoryDisplayHistoryOptionsDialog,
     HistoryDisplayHistoryOptionsConfirmationDialog,
     HistoryDisplayHistoryOptionsReprintDialog,
     HistoryButtonsHeader,
-    CustomerButtons,
-    CustomerOrderHistoryButtons,
+    // CustomerButtons,
+    // CustomerOrderHistoryButtons,
     // CustomerDisplay,
     CustomerButtonsSearchDialog,
     CustomerButtonsHeader,
@@ -300,12 +299,15 @@ export default {
   },
   methods: {
     updateMenuComponentDetails(updatedMenuComponentDetails) {
+      console.log("run run run ");
       this.componentDetails.menuComponentDetails = updatedMenuComponentDetails;
     },
     setHistoryOptionsDetails: function (historyOptionsDetails) {
       this.componentDetails.historyOptionsDetails = historyOptionsDetails;
     },
     setCustomerOptionDetails: function (customerOptionDetails) {
+      console.log("HOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+      // store.commit("setCustomerOptionDetails", customerOptionDetails);
       this.componentDetails.customerOptionDetails = customerOptionDetails;
     },
   },

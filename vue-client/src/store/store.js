@@ -35,9 +35,24 @@ export const store = new Vuex.Store({
     orderHistory: [], // an array of all of the saved orders
     orderHistoryPriceTotal: 0, // the total of all of the saved orders - currently not in use
     selectedItemsOrderedByEntry: {}, // the selected items of the current order with timestamp as key
-    errorToDisplay: '' // the error string to be displayed when notification is 5
+    errorToDisplay: '', // the error string to be displayed when notification is 5
+    componentDetails: {
+      customerOptionDetails: {
+        confirmingAction: "",
+        customerOrderHistory: [],
+        dialogs: {
+          openHistoryOptionsConfirmationDialog: false,
+          openHistoryOptionsReprintDialog: false,
+          openHistoryOptionsDialog: false,
+          openCustomerOptionSearchDialog: false,
+        }
+      },
+    }
   },
   mutations: {
+    setCustomerOptionDetails(state, customerOptionDetails) {
+      state.componentDetails.customerOptionDetails = customerOptionDetails;
+    },
     setErrorToDisplay(state, error) {
       state.errorToDisplay = error;
     },

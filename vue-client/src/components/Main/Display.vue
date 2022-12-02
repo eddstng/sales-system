@@ -169,7 +169,6 @@ import HistoryDisplayCustomer from "../History/HistoryDisplayCustomer";
 import MenuDisplayCustomerSelect from "../Menu/MenuDisplayCustomerSelect";
 import CustomerDisplay from "../Customer/CustomerDisplay";
 
-
 export default {
   props: ["componentDetails"],
   computed: {
@@ -190,6 +189,9 @@ export default {
           this.openMenuDisplayDialog();
           break;
         case "HISTORY":
+          this.openHistoryOptionDialog();
+          break;
+        case "CUSTOMER":
           this.openHistoryOptionDialog();
           break;
         default:

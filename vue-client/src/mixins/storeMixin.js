@@ -15,6 +15,14 @@ export default {
     customizations: []
   },
   methods: {
+    // --- Update Component Details 
+
+    storeMixUpdateCustomerOptionDetails(customerOptionDetailsUpdate) {
+      console.log('weeeeeeeeeeeeohhhhhhhhhhhhh')
+      store.commit("setCustomerOptionDetails", customerOptionDetailsUpdate);
+    },
+
+
     // ------------CLEAR STORE MIXINS
     // selectedCustomer, selectedItems, priceDetails, currentOrder,orderHistory, orderPriceTotal, selectedItemsOrderedByEntry,
     storeMixResetSelectedCustomer() {

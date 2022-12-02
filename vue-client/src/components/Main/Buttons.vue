@@ -2,8 +2,23 @@
   <div>
     <MenuButtons
       v-if="$store.state.component === 'ORDER'"
-      v-bind:menuComponentDetails="menuComponentDetails"
-      @updateMenuComponentDetails="updateMenuComponentDetails"
+      v-bind:menuComponentDetails="componentDetails.menuComponentDetails"
+    />
+    <HistoryButtons class="mt-1" v-if="$store.state.component === 'HISTORY'" />
+    <CustomerButtons
+      class="mt-1"
+      v-if="
+        $store.state.component === 'CUSTOMER' &&
+        $store.state.selectedCustomer.phone === ''
+      "
+      v-bind:customerOptionDetails="componentDetails.customerOptionDetails"
+    />
+    <CustomerOrderHistoryButtons
+      v-if="
+        $store.state.component === 'CUSTOMER' &&
+        $store.state.selectedCustomer.phone !== ''
+      "
+      v-bind:customerOptionDetails="componentDetails.customerOptionDetails"
     />
   </div>
 </template>
@@ -27,12 +42,17 @@ import storeMixin from "../../mixins/storeMixin";
 import { store } from "../../store/store";
 import { menuCategories } from "../../data/menuCategories";
 import MenuButtons from "../Menu/MenuButtons.vue";
-
+import HistoryButtons from "../History/HistoryButtons.vue";
+import CustomerOrderHistoryButtons from "../Customer/CustomerOrderHistoryButtons";
+import CustomerButtons from "../Customer/CustomerButtons";
 export default {
   mixins: [storeMixin],
-  props: ["menuComponentDetails"],
+  props: ["componentDetails"],
   components: {
     MenuButtons,
+    HistoryButtons,
+        CustomerButtons,
+    CustomerOrderHistoryButtons,
   },
   computed: {
     soupItems: function () {
@@ -118,57 +138,57 @@ export default {
 
   methods: {
     onClickBack() {
-      this.menuComponentDetails.displayedButtonsConfig.displayCategoryButtons = true;
-      this.menuComponentDetails.displayMenuButtons = false;
-      this.menuComponentDetails.selectedCategory = null;
+      this.componentDetails.menuComponentDetails.displayedButtonsConfig.displayCategoryButtons = true;
+      this.componentDetails.menuComponentDetails.displayMenuButtons = false;
+      this.componentDetails.menuComponentDetails.selectedCategory = null;
     },
     onClickCustomizeOrder() {
-      let updatedMenuComponentDetails = { ...this.menuComponentDetails };
+      let updatedMenuComponentDetails = { ...this.componentDetails.menuComponentDetails };
       updatedMenuComponentDetails.dialogToggles.customizeOrderDialog = true;
       this.$emit("updateMenuComponentDetails", updatedMenuComponentDetails);
     },
     onClickCustomItemButton() {
-      let updatedMenuComponentDetails = { ...this.menuComponentDetails };
+      let updatedMenuComponentDetails = { ...this.componentDetails.menuComponentDetails };
       updatedMenuComponentDetails.dialogToggles.addCustomItemDialog = true;
       this.$emit("updateMenuComponentDetails", updatedMenuComponentDetails);
     },
     onClickMenuButton(item) {
       this.checkIfSelectedItemRequiresCustomization(item);
-      // this.menuComponentDetails.displayedButtonsConfig.displayCategoryButtons = true;
+      // this.componentDetails.menuComponentDetails.displayedButtonsConfig.displayCategoryButtons = true;
     },
 
     updateSlicedCategoryMenuObj(startIndex, endIndex) {
-      this.menuComponentDetails.displayedButtonsConfig.startIndex = startIndex;
-      this.menuComponentDetails.displayedButtonsConfig.endIndex = endIndex;
+      this.componentDetails.menuComponentDetails.displayedButtonsConfig.startIndex = startIndex;
+      this.componentDetails.menuComponentDetails.displayedButtonsConfig.endIndex = endIndex;
       if (this.selectedCategory === 12) {
         console.log("111111");
-        this.menuComponentDetails.displayedButtonsConfig.fullCategoryMenuObj =
+        this.componentDetails.menuComponentDetails.displayedButtonsConfig.fullCategoryMenuObj =
           this.chowMeinItems;
         return;
       }
       if (this.selectedCategory === 1) {
         console.log("222222");
         console.log(this.soupItems);
-        this.menuComponentDetails.displayedButtonsConfig.fullCategoryMenuObj =
+        this.componentDetails.menuComponentDetails.displayedButtonsConfig.fullCategoryMenuObj =
           this.soupItems;
         return;
       }
       console.log(this.$store.state.categorizedItems[this.selectedCategory]);
-      this.menuComponentDetails.displayedButtonsConfig.fullCategoryMenuObj =
+      this.componentDetails.menuComponentDetails.displayedButtonsConfig.fullCategoryMenuObj =
         this.$store.state.categorizedItems[this.selectedCategory];
 
       console.log(
-        this.menuComponentDetails.displayedButtonsConfig.fullCategoryMenuObj
+        this.componentDetails.menuComponentDetails.displayedButtonsConfig.fullCategoryMenuObj
       );
     },
     checkIfSelectedItemRequiresCustomization(item) {
-      console.log(JSON.stringify(this.menuComponentDetails));
+      console.log(JSON.stringify(this.componentDetails.menuComponentDetails));
       if (
         item.category === 12 &&
         item.name_eng.includes(" CM")
         // (item.name_eng.includes("(CRISPY)") || item.name_eng.includes("(SOFT)")) - doesn't work due to modification in chowMeinItems
       ) {
-        let updatedMenuComponentDetails = { ...this.menuComponentDetails };
+        let updatedMenuComponentDetails = { ...this.componentDetails.menuComponentDetails };
 
         updatedMenuComponentDetails.requiredCustomizationDetails.reducedItemsObj =
           this.chowMeinItemsObj;
@@ -179,17 +199,17 @@ export default {
           this.$store.state.categorizedItems[item.category].filter((obj) => {
             return (
               obj.menu_id ===
-              this.menuComponentDetails.requiredCustomizationDetails
+              this.componentDetails.menuComponentDetails.requiredCustomizationDetails
                 .itemThatRequiresCustomization.menu_id
             );
           });
 
         this.$emit("updateMenuComponentDetails", updatedMenuComponentDetails);
-        // this.menuComponentDetails.dialogToggles.customizeChowMeinTypeDialog = true;
+        // this.componentDetails.menuComponentDetails.dialogToggles.customizeChowMeinTypeDialog = true;
         // add the hard or soft as customization.
         // we will throw up a dialog asking soft or hard
       } else if (item.category === 1) {
-        let updatedMenuComponentDetails = { ...this.menuComponentDetails };
+        let updatedMenuComponentDetails = { ...this.componentDetails.menuComponentDetails };
 
         updatedMenuComponentDetails.requiredCustomizationDetails.reducedItemsObj =
           this.soupItemsObj;
@@ -200,7 +220,7 @@ export default {
           this.$store.state.categorizedItems[item.category].filter((obj) => {
             return (
               obj.menu_id ===
-              this.menuComponentDetails.requiredCustomizationDetails
+              this.componentDetails.menuComponentDetails.requiredCustomizationDetails
                 .itemThatRequiresCustomization.menu_id
             );
           });
@@ -210,7 +230,7 @@ export default {
         // add the hard or soft as customization.
         // we will throw up a dialog asking soft or hard
       } else {
-        this.menuComponentDetails.displayedButtonsConfig.displayCategoryButtons = true;
+        this.componentDetails.menuComponentDetails.displayedButtonsConfig.displayCategoryButtons = true;
         this.addItemToSelectedItems(item);
       }
       // if chowmein we need extra dialog
@@ -221,10 +241,10 @@ export default {
 
     cancelCustomizeSelectedItem() {
       this.removeSelectedItemAll(
-        this.menuComponentDetails.requiredCustomizationDetails
+        this.componentDetails.menuComponentDetails.requiredCustomizationDetails
           .itemThatRequiresCustomization
       );
-      this.menuComponentDetails.requiredCustomizationDetails.itemThatRequiresCustomization =
+      this.componentDetails.menuComponentDetails.requiredCustomizationDetails.itemThatRequiresCustomization =
         null;
     },
 
@@ -238,14 +258,14 @@ export default {
     customizeSelectedItem(customizationObj) {
       this.addCustomizationToItem(
         this.$store.state.selectedItems[
-          this.menuComponentDetails.requiredCustomizationDetails
+          this.componentDetails.menuComponentDetails.requiredCustomizationDetails
             .itemThatRequiresCustomization.id
         ],
         customizationObj
       );
-      this.menuComponentDetails.requiredCustomizationDetails.itemThatRequiresCustomization =
+      this.componentDetails.menuComponentDetails.requiredCustomizationDetails.itemThatRequiresCustomization =
         null;
-      this.menuComponentDetails.dialogToggles.customizeChowMeinTypeDialog = false;
+      this.componentDetails.menuComponentDetails.dialogToggles.customizeChowMeinTypeDialog = false;
     },
 
     addCustomizationToItem: function (selectedItem, customizationObj) {

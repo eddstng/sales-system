@@ -78,6 +78,7 @@ export default {
         orderHistory[this.$store.state.currentOrder.id.toString()][
           `order_${actionStr.toLowerCase()}`
         ] = true;
+        // should update this to also render the void status on the customer buttons currently it does not change when you void it from that menu
       }
       if (actionStr === "PAID") {
         this.updateOrderStatus({

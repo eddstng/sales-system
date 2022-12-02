@@ -10,7 +10,10 @@
         v-chat-scroll
       >
         <div
-          v-if="customerOptionDetails.customerOrderHistory.length === 0"
+          v-if="
+            $store.state.componentDetails.customerOptionDetails
+              .customerOrderHistory.length === 0
+          "
           class="p-0"
           max-height="400"
         >
@@ -22,7 +25,8 @@
           <div>
             <v-btn
               class="history-button-text"
-              v-for="order in customerOptionDetails.customerOrderHistory"
+              v-for="order in $store.state.componentDetails
+                .customerOptionDetails.customerOrderHistory"
               v-bind:key="order.order_id"
               x-large
               v-bind:color="
@@ -74,7 +78,6 @@ import { store } from "../../store/store";
 import axios from "axios";
 
 export default {
-  props: ["customerOptionDetails"],
   mixins: [storeMixin],
   data() {
     return {
@@ -88,7 +91,7 @@ export default {
   },
   methods: {
     addHistoryItemToSelectedItems(ordersItemsDetailWithOrderId) {
-      const displayId = ordersItemsDetailWithOrderId.item_id;
+      const displayId = ordersItemsDetailWithOrderId.item_id.toString();
       let selectedItems = store.state.selectedItems;
 
       // Create a key value pair for the custom item.
@@ -107,8 +110,8 @@ export default {
       };
       selectedItems[displayId].customizations =
         ordersItemsDetailWithOrderId.orders_items_customizations;
-      selectedItems[displayId].quantity =
-        ordersItemsDetailWithOrderId.orders_items_quantity;
+      selectedItems[displayId].quantity = parseFloat(
+        ordersItemsDetailWithOrderId.orders_items_quantity);
       selectedItems[displayId].timestamp = new Date(
         ordersItemsDetailWithOrderId.orders_items_timestamp
       ).getTime(); // TO DO: Do we need this? I don't think so.
@@ -153,7 +156,6 @@ export default {
       this.storeMixinSumSelectedItemsQuantity();
       // Provide price details to $store.state.priceDetails.
       this.storeMixinUpdateStorePriceDetails();
-      
     },
     getFormattedTimeStamp: function (orderTimestamp) {
       var hours = orderTimestamp.getHours();
@@ -167,65 +169,6 @@ export default {
     },
     updateCustomerOptionDetails() {
       this.$emit("setCustomerOptionDetails", this.customerOptionDetailsUpdate);
-    },
-    async onClickCustomerButton(customer) {
-      // Clear $store.state.selectedCustomer, $store.state.selectedItems, and $store.state.currentOrder.
-      //   this.storeMixinClearOrderRelatedDetails();
-      // Get specified order details.
-      //   const ordersItemsDetailWithOrderIdArray = (
-      //     await axios.get(
-      //       `http://localhost:3000/get/ordersitemsdetail/id/${order_id}`
-      //     )
-      //   ).data;
-      //   // Add each item to our $store.state.selectedItems.
-      //   ordersItemsDetailWithOrderIdArray.forEach((v) => {
-      //     this.addHistoryItemToSelectedItems(v);
-      //   });
-      //   // Update the $store.state.currentOrder.
-      //   store.commit("setCurrentOrder", {
-      //     id: ordersItemsDetailWithOrderIdArray[0].order_id,
-      //     type: ordersItemsDetailWithOrderIdArray[0].order_type,
-      //     total: ordersItemsDetailWithOrderIdArray[0].order_total,
-      //     customer_id: ordersItemsDetailWithOrderIdArray[0].customer_id,
-      //     void: ordersItemsDetailWithOrderIdArray[0].order_void,
-      //     paid: ordersItemsDetailWithOrderIdArray[0].order_paid,
-      //     timestamp: ordersItemsDetailWithOrderIdArray[0].order_timestamp,
-      //     internal: ordersItemsDetailWithOrderIdArray[0].order_internal,
-      //     number: ordersItemsDetailWithOrderIdArray[0].order_number,
-      //     internal_number:
-      //       ordersItemsDetailWithOrderIdArray[0].order_internal_number,
-      //   });
-      //   // Update the $store.state.selectedCustomer.
-
-      const customerOrderHistory = (
-        await axios.get(
-          `http://localhost:3000/get/customerorders/customerid/${customer.id}`
-        )
-      ).data;
-
-      this.customerOptionDetailsUpdate = {
-        ...this.customerOptionDetails,
-        customerOrderHistory: customerOrderHistory,
-      };
-
-      this.updateCustomerOptionDetails();
-
-      store.commit("setSelectedCustomer", {
-        address: customer.address,
-        city: customer.city,
-        id: customer.id,
-        name: customer.name,
-        note: customer.note,
-        phone: customer.phone,
-        street_name: customer.street_name,
-        street_number: customer.street_number,
-        unit_number: customer.unit_number,
-        buzzer_number: customer.buzzer_number,
-      });
-      // Provide a total item count to the $store.state.currentOrder details.
-      this.storeMixinSumSelectedItemsQuantity();
-      // Provide price details to $store.state.priceDetails.
-      this.storeMixinUpdateStorePriceDetails();
     },
   },
 };

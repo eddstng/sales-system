@@ -131,30 +131,7 @@
         </v-card>
       </v-card>
 
-      <v-card v-on:click="openHistoryOptionDialog">
-        <v-list-item three-line>
-          <v-list-item-content>
-            <div class="menu-display-item-text">Subtotal:</div>
-            <div class="menu-display-item-text">Discount:</div>
-            <div class="menu-display-item-text">GST:</div>
-            <div class="menu-display-item-text mt-5">Total:</div>
-          </v-list-item-content>
-          <v-list-item-content>
-            <div class="menu-display-item-text text-right">
-              {{ $store.state.priceDetails.subtotal.toFixed(2) }}
-            </div>
-            <div class="menu-display-item-text text-right">
-              -{{ $store.state.priceDetails.discount.toFixed(2) }}
-            </div>
-            <div class="menu-display-item-text text-right">
-              {{ $store.state.priceDetails.gst.toFixed(2) }}
-            </div>
-            <div class="menu-display-item-text text-right mt-5 mb-0">
-              ${{ $store.state.priceDetails.total.toFixed(2) }}
-            </div>
-          </v-list-item-content>
-        </v-list-item>
-      </v-card>
+
     </v-container>
     <MenuDisplayCustomerSelectCreateCustomerFormDialog
       v-bind:selectedCustomerDetails="selectedCustomerDetails"
@@ -194,7 +171,7 @@ export default {
   },
   data() {
     return {
-       historyOptionsDetails: {
+      historyOptionsDetails: {
         confirmingAction: "",
         openHistoryOptionsConfirmationDialog: false,
         openHistoryOptionsReprintDialog: false,
@@ -222,10 +199,14 @@ export default {
     };
   },
   methods: {
-        setHistoryOptionsDetails: function (historyOptionsDetails) {
+    setHistoryOptionsDetails: function (historyOptionsDetails) {
       this.historyOptionsDetails = historyOptionsDetails;
     },
     openHistoryOptionDialog() {
+      console.log('are we even fuckingh ere?')
+      console.log('are we even fuckingh ere?')
+      console.log('are we even fuckingh ere?')
+      console.log('are we even fuckingh ere?')
       if (
         this.$store.state.selectedItemsOrderedByEntry &&
         Object.keys(this.$store.state.selectedItemsOrderedByEntry).length !== 0

@@ -1,6 +1,11 @@
 <template>
   <v-dialog
-    v-model="customerOptionDetails.openCustomerOptionSearchDialog"
+    persistent
+    @keydown.esc="onClickCancel()"
+    v-model="
+      $store.state.componentDetails.customerOptionDetails.dialogs
+        .openCustomerOptionSearchDialog
+    "
     width="500"
   >
     <v-card>
@@ -38,15 +43,7 @@
             x-large
             dark
             width="100%"
-            v-on:click="
-              customerOptionDetails.openCustomerOptionSearchDialog = false;
-              selectedCustomerDetails.phoneInput = '';
-              selectedCustomerDetails.selectedCustomer = JSON.parse(
-                JSON.stringify(customer)
-              );
-              setSelectedCustomerIfCustomerExists(customer);
-              onClickCustomerButton(customer);
-            "
+            v-on:click="onClickCustomerButton(customer)"
           >
             <v-row>
               <v-col sm="5">
@@ -67,15 +64,7 @@
       <v-divider></v-divider>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn
-          x-large
-          width="100%"
-          v-on:click="
-            phoneError = null;
-            phone = '';
-            customerOptionDetails.openCustomerOptionSearchDialog = false;
-          "
-        >
+        <v-btn x-large width="100%" v-on:click="onClickCancel()">
           <div>CANCEL<br /></div>
         </v-btn>
       </v-card-actions>
@@ -91,10 +80,9 @@ import storeMixin from "../../mixins/storeMixin";
 import customerSelectMixin from "../../mixins/customerSelectMixin";
 export default {
   mixins: [customerSelectMixin, storeMixin],
-  props: ["customerOptionDetails"],
   data() {
     return {
-      phoneInput: '',
+      phoneInput: "",
       phoneError: null,
       selectedCustomerDetails: {
         suggestedCustomers: [],
@@ -116,51 +104,33 @@ export default {
     deep: true,
   },
   methods: {
-    updateCustomerOptionDetails() {
-      this.$emit("setCustomerOptionDetails", this.customerOptionDetailsUpdate);
+    onClickCancel() {
+      this.phoneError = null;
+      this.phone = "";
+      let customerOptionDetailsUpdate = {
+        ...this.$store.state.componentDetails.customerOptionDetails,
+      };
+      customerOptionDetailsUpdate.dialogs.openCustomerOptionSearchDialog = false;
+      this.storeMixUpdateCustomerOptionDetails(customerOptionDetailsUpdate);
     },
     async onClickCustomerButton(customer) {
-      // Clear $store.state.selectedCustomer, $store.state.selectedItems, and $store.state.currentOrder.
-      //   this.storeMixinClearOrderRelatedDetails();
-      // Get specified order details.
-      //   const ordersItemsDetailWithOrderIdArray = (
-      //     await axios.get(
-      //       `http://localhost:3000/get/ordersitemsdetail/id/${order_id}`
-      //     )
-      //   ).data;
-      //   // Add each item to our $store.state.selectedItems.
-      //   ordersItemsDetailWithOrderIdArray.forEach((v) => {
-      //     this.addHistoryItemToSelectedItems(v);
-      //   });
-      //   // Update the $store.state.currentOrder.
-      //   store.commit("setCurrentOrder", {
-      //     id: ordersItemsDetailWithOrderIdArray[0].order_id,
-      //     type: ordersItemsDetailWithOrderIdArray[0].order_type,
-      //     total: ordersItemsDetailWithOrderIdArray[0].order_total,
-      //     customer_id: ordersItemsDetailWithOrderIdArray[0].customer_id,
-      //     void: ordersItemsDetailWithOrderIdArray[0].order_void,
-      //     paid: ordersItemsDetailWithOrderIdArray[0].order_paid,
-      //     timestamp: ordersItemsDetailWithOrderIdArray[0].order_timestamp,
-      //     internal: ordersItemsDetailWithOrderIdArray[0].order_internal,
-      //     number: ordersItemsDetailWithOrderIdArray[0].order_number,
-      //     internal_number:
-      //       ordersItemsDetailWithOrderIdArray[0].order_internal_number,
-      //   });
-      //   // Update the $store.state.selectedCustomer.
-
+      this.selectedCustomerDetails.phoneInput = "";
+      this.selectedCustomerDetails.selectedCustomer = JSON.parse(
+        JSON.stringify(customer)
+      );
       const customerOrderHistory = (
         await axios.get(
           `http://localhost:3000/get/customerorders/customerid/${customer.id}`
         )
       ).data;
 
-      this.customerOptionDetailsUpdate = {
-        ...this.customerOptionDetails,
+      let customerOptionDetailsUpdate = {
+        ...this.$store.state.componentDetails.customerOptionDetails,
         customerOrderHistory: customerOrderHistory,
       };
-
-      this.updateCustomerOptionDetails();
-
+      customerOptionDetailsUpdate.dialogs.openCustomerOptionSearchDialog = false;
+      this.storeMixUpdateCustomerOptionDetails(customerOptionDetailsUpdate);
+      this.setSelectedCustomerIfCustomerExists(customer);
       store.commit("setSelectedCustomer", {
         address: customer.address,
         city: customer.city,
@@ -187,11 +157,7 @@ export default {
         this.selectedCustomerDetails.suggestedCustomers = [];
       } else {
         customerArr.forEach((v) => {
-          if (
-            v.phone.includes(
-              this.selectedCustomerDetails.phoneInput
-            )
-          ) {
+          if (v.phone.includes(this.selectedCustomerDetails.phoneInput)) {
             this.selectedCustomerDetails.suggestedCustomers.push(v);
           }
         });
@@ -209,15 +175,12 @@ export default {
     },
     setSelectedCustomerIfCustomerExists() {
       if (
-        this.$store.state.customers[
-          this.selectedCustomerDetails.phoneInput
-        ] !== undefined
+        this.$store.state.customers[this.selectedCustomerDetails.phoneInput] !==
+        undefined
       ) {
         this.selectedCustomerDetails.selectedCustomer = JSON.parse(
           JSON.stringify(
-            this.$store.state.customers[
-              this.selectedCustomerDetails.phoneInput
-            ]
+            this.$store.state.customers[this.selectedCustomerDetails.phoneInput]
           )
         );
         this.customerSelectMixinSetSelectedCustomer(

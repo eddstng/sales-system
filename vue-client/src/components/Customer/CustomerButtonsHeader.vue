@@ -38,7 +38,6 @@
 <script>
 import storeMixin from "../../mixins/storeMixin";
 export default {
-  props: ["customerOptionDetails"],
   mixins: [storeMixin],
   components: {},
   data() {
@@ -73,11 +72,19 @@ export default {
       this.storeMixResetCurrentOrder();
     },
     onClickSearch() {
-      this.customerOptionDetails.openCustomerOptionSearchDialog = true;
-      this.updateCustomerOptionDetails(this.customerOptionDetails);
-    },
-    updateCustomerOptionDetails() {
-      this.$emit("setCustomerOptionDetails", this.customerOptionDetailsUpdate);
+      console.log(this.$store.state.componentDetails.customerOptionDetails)
+      console.log(this.$store.state.componentDetails.customerOptionDetails)
+      console.log(this.$store.state.componentDetails.customerOptionDetails)
+      console.log(this.$store.state.componentDetails.customerOptionDetails)
+      // this.customerOptionDetails.openCustomerOptionSearchDialog = true;
+      let customerOptionDetailsUpdate = {
+        ...this.$store.state.componentDetails.customerOptionDetails,
+      };
+      customerOptionDetailsUpdate.dialogs.openCustomerOptionSearchDialog = true;
+      this.storeMixUpdateCustomerOptionDetails(customerOptionDetailsUpdate);
+
+
+      // this.updateCustomerOptionDetails(this.customerOptionDetails);
     },
     // clearStoreSelectedCustomer() {
     //   store.commit("setSelectedCustomer", {
