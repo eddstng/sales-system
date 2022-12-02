@@ -8,15 +8,16 @@
       <p class="text-subtitle-2 text-center pt-35p">NO ORDERS FOUND</p>
     </div>
     <div v-else class="p-0" max-height="400">
+        <!-- v-bind:color="
+          $store.state.currentOrder.id == order.order_id ? 'green' : 'gray'
+        " --> 
+        <!-- binding the colours seem to mess up the scrolling -->
       <v-btn
         class="history-button-text"
         v-for="order in $store.state.orderHistory"
         v-bind:key="order.order_id"
         x-large
         dark
-        v-bind:color="
-          $store.state.currentOrder.id == order.order_id ? 'green' : 'gray'
-        "
         height="100px"
         width="100%"
         v-on:click="onClickHistoryButton(order.order_id)"
