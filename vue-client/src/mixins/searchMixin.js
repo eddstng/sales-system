@@ -32,6 +32,7 @@ export default {
                 "MUSHROOM": "MUSH",
                 "SWEET AND SOUR": "SS",
                 "VEGETABLES": "VEG",
+                "FRIED RICE": "FR"
             };
             let searchStringCopy = (' ' + searchString).slice(1);
             Object.keys(corrections).forEach((key) => {

@@ -38,7 +38,6 @@ export const store = new Vuex.Store({
     errorToDisplay: '', // the error string to be displayed when notification is 5
     componentDetails: {
       customerOptionDetails: {
-        confirmingAction: "",
         customerOrderHistory: [],
         dialogs: {
           openHistoryOptionsConfirmationDialog: false,

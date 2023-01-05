@@ -62,24 +62,21 @@
     <!-- Customer Stuff -->
     <!-- ===================================================== -->
 
-    <CustomerButtonsSearchDialog
-      v-bind:customerOptionDetails="componentDetails.customerOptionDetails"
-      @setCustomerOptionDetails="setCustomerOptionDetails"
-    />
+    <CustomerButtonsSearchDialog />
 
     <HistoryDisplayHistoryOptionsDialog
-      v-bind:historyOptionsDetails="componentDetails.customerOptionDetails"
-      @setHistoryOptionsDetails="setCustomerOptionDetails"
+      v-bind:historyOptionsDetails="componentDetails.historyOptionsDetails"
+      @setHistoryOptionsDetails="setHistoryOptionsDetails"
     />
 
     <HistoryDisplayHistoryOptionsConfirmationDialog
-      v-bind:historyOptionsDetails="componentDetails.customerOptionDetails"
-      @setHistoryOptionsDetails="setCustomerOptionDetails"
+      v-bind:historyOptionsDetails="componentDetails.historyOptionsDetails"
+      @setHistoryOptionsDetails="setHistoryOptionsDetails"
     />
 
     <HistoryDisplayHistoryOptionsReprintDialog
-      v-bind:historyOptionsDetails="componentDetails.customerOptionDetails"
-      @setHistoryOptionsDetails="setCustomerOptionDetails"
+      v-bind:historyOptionsDetails="componentDetails.historyOptionsDetails"
+      @setHistoryOptionsDetails="setHistoryOptionsDetails"
     />
     <MenuDisplayCustomerSelectCreateCustomerFormDialog
       v-bind:selectedCustomerDetails="selectedCustomerDetails"
@@ -95,19 +92,6 @@
               v-bind:componentDetails="componentDetails"
               @updateMenuComponentDetails="updateMenuComponentDetails"
             />
-            <!-- <MenuDisplay
-              v-if="$store.state.component === 'ORDER'"
-              v-bind:menuComponentDetails="componentDetails.menuComponentDetails"
-              @updateMenuComponentDetails="updateMenuComponentDetails"
-            />
-            <HistoryDisplay
-              v-if="$store.state.component === 'HISTORY'"
-              v-bind:historyOptionsDetails="componentDetails.historyOptionsDetails"
-            /> -->
-            <!-- <CustomerDisplay
-              v-if="$store.state.component === 'CUSTOMER'"
-              v-bind:customerOptionDetails="componentDetails.customerOptionDetails"
-            /> -->
           </v-container>
         </v-card>
       </v-col>
@@ -124,48 +108,12 @@
             <HistoryButtonsHeader v-if="$store.state.component === 'HISTORY'" />
             <CustomerButtonsHeader
               v-if="$store.state.component === 'CUSTOMER'"
-              v-bind:customerOptionDetails="
-                componentDetails.customerOptionDetails
-              "
-              @setHistoryOptionsDetails="setCustomerOptionDetails"
+              @setHistoryOptionsDetails="setHistoryOptionsDetails"
             />
             <Buttons
               v-bind:componentDetails="componentDetails"
-              @setCustomerOptionDetails="setCustomerOptionDetails"
               @updateMenuComponentDetails="updateMenuComponentDetails"
             />
-            <!-- <MenuButtons
-              v-if="$store.state.component === 'ORDER'"
-              v-bind:menuComponentDetails="
-                componentDetails.menuComponentDetails
-              "
-              @updateMenuComponentDetails="updateMenuComponentDetails"
-            /> -->
-            <!-- <HistoryButtons
-              class="mt-1"
-              v-if="$store.state.component === 'HISTORY'"
-            /> -->
-            <!-- <CustomerButtons
-              class="mt-1"
-              v-if="
-                $store.state.component === 'CUSTOMER' &&
-                $store.state.selectedCustomer.phone === ''
-              "
-              v-bind:customerOptionDetails="
-                componentDetails.customerOptionDetails
-              "
-              @setCustomerOptionDetails="setCustomerOptionDetails"
-            />
-            <CustomerOrderHistoryButtons
-              v-if="
-                $store.state.component === 'CUSTOMER' &&
-                $store.state.selectedCustomer.phone !== ''
-              "
-              v-bind:customerOptionDetails="
-                componentDetails.customerOptionDetails
-              "
-              @setCustomerOptionDetails="setCustomerOptionDetails"
-            /> -->
           </v-container>
         </v-card>
       </v-col>
@@ -176,9 +124,7 @@
 <script>
 import storeMixin from "../../mixins/storeMixin";
 import Sidebar from "../Sidebar.vue";
-// import MenuButtons from "../Menu/MenuButtons.vue";
 import Buttons from "../Main/Buttons.vue";
-// import MenuDisplay from "../Menu/MenuDisplay.vue";
 import MenuDisplaySubmitOrderDialog from "../Menu/MenuDisplaySubmitOrderDialog";
 import MenuDisplayModifyOrderDialog from "../Menu/MenuDisplayModifyOrderDialog";
 import MenuDisplaySelectedItemDetailsDialog from "../Menu/MenuDisplaySelectedItemDetailsDialog";
@@ -189,18 +135,12 @@ import MenuDisplayCustomerSelectCreateCustomerFormDialog from "../Menu/MenuDispl
 import MenuButtonsHeader from "../Menu/MenuButtonsHeader";
 import MenuRequiredCustomizationDialog from "../Menu/MenuRequiredCustomizationDialog";
 
-// import HistoryButtons from "../History/HistoryButtons";
-// import HistoryDisplay from "../History/HistoryDisplay";
 import HistoryButtonsHeader from "../History/HistoryButtonsHeader";
-
 import HistoryDisplayHistoryOptionsDialog from "../History/HistoryDisplayHistoryOptionsDialog";
 import HistoryDisplayHistoryOptionsConfirmationDialog from "../History/HistoryDisplayHistoryOptionsConfirmationDialog";
 import HistoryDisplayHistoryOptionsReprintDialog from "../History/HistoryDisplayHistoryOptionsReprintDialog";
 
-// import CustomerOrderHistoryButtons from "../Customer/CustomerOrderHistoryButtons";
-// import CustomerButtons from "../Customer/CustomerButtons";
 import CustomerButtonsHeader from "../Customer/CustomerButtonsHeader";
-// import CustomerDisplay from "../Customer/CustomerDisplay";
 import CustomerButtonsSearchDialog from "../Customer/CustomerButtonsSearchDialog";
 
 import Display from "./Display";
@@ -211,9 +151,7 @@ export default {
   components: {
     Sidebar,
     Display,
-    // MenuButtons,
     Buttons,
-    // MenuDisplay,
     MenuButtonsHeader,
     MenuDisplaySubmitOrderDialog,
     MenuDisplayModifyOrderDialog,
@@ -223,15 +161,10 @@ export default {
     MenuDisplayCurrentOrderCustomizeOrderDialog,
     MenuDisplayCustomerSelectCreateCustomerFormDialog,
     MenuRequiredCustomizationDialog,
-    // HistoryButtons,
-    // HistoryDisplay,
     HistoryDisplayHistoryOptionsDialog,
     HistoryDisplayHistoryOptionsConfirmationDialog,
     HistoryDisplayHistoryOptionsReprintDialog,
     HistoryButtonsHeader,
-    // CustomerButtons,
-    // CustomerOrderHistoryButtons,
-    // CustomerDisplay,
     CustomerButtonsSearchDialog,
     CustomerButtonsHeader,
   },
@@ -283,14 +216,6 @@ export default {
           openHistoryOptionsReprintDialog: false,
           openHistoryOptionsDialog: false,
         },
-        customerOptionDetails: {
-          confirmingAction: "",
-          customerOrderHistory: [],
-          openHistoryOptionsConfirmationDialog: false,
-          openHistoryOptionsReprintDialog: false,
-          openHistoryOptionsDialog: false,
-          openCustomerOptionSearchDialog: false,
-        },
       },
       submitOrderDialog: false,
       modifyOrderDialog: false,
@@ -299,16 +224,10 @@ export default {
   },
   methods: {
     updateMenuComponentDetails(updatedMenuComponentDetails) {
-      console.log("run run run ");
       this.componentDetails.menuComponentDetails = updatedMenuComponentDetails;
     },
     setHistoryOptionsDetails: function (historyOptionsDetails) {
       this.componentDetails.historyOptionsDetails = historyOptionsDetails;
-    },
-    setCustomerOptionDetails: function (customerOptionDetails) {
-      console.log("HOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
-      // store.commit("setCustomerOptionDetails", customerOptionDetails);
-      this.componentDetails.customerOptionDetails = customerOptionDetails;
     },
   },
 };

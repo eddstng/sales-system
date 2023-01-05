@@ -171,6 +171,7 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
         -----------------------`;
 
         let kitchenBillStringEnglish = '';
+        let prevItemNameChnWasEng = false; //used for formatting
         res.forEach((element: any) => {
             let kitchenCustomizationString: string = '';
             let kitchenBillStringItemNameChnDisplay = getKitchenBillStringItemNameChnDisplay(element.item_name_chn)
@@ -194,16 +195,23 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
                     //  x${element.orders_items_quantity} ${element.item_name_chn}
                     // ${kitchenCustomizationString}
                     // `
-                    kitchenBillStringEnglish += `\nx${element.orders_items_quantity} ${element.item_name_chn}
-                    ${kitchenCustomizationString}\n
-                    `
-
+                    if (prevItemNameChnWasEng) {
+                        kitchenBillStringEnglish += `\nx${element.orders_items_quantity} ${element.item_name_chn}
+                        ${kitchenCustomizationString}\n
+                        `
+                    } else {
+                        kitchenBillStringEnglish += `\n\nx${element.orders_items_quantity} ${element.item_name_chn}
+                        ${kitchenCustomizationString}\n
+                        `
+                    }
+                    prevItemNameChnWasEng = true;
                 } else {
                     kitchenBillString += `
                     x${element.orders_items_quantity} ${kitchenBillStringItemNameChnDisplay}
                     ${kitchenCustomizationString}
-
+                    
                     `
+                    prevItemNameChnWasEng = false;
                 }
             }
 
@@ -252,7 +260,7 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
 
         const clientBillImageURI = textToImage.generateSync(
             clientBillString,
-            { fontSize: 40, lineHeight: 55, margin: 30, maxWidth: 550 });
+            { fontSize: 32, lineHeight: 42, margin: 35, maxWidth: 450 });
 
         // Consideration: Need to consider whether to save the file with order_number or order_id.
 
@@ -269,9 +277,41 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
         throw err;
     }
 
+    function isNoodleTypeBracket(bracket: string) {
+        switch (bracket) {
+            case '(干)':
+                return true
+            case '(湿)':
+                return true
+            case '(軟)':
+                return true
+            default:
+                return false
+        }
+    }
+
+    function isSizeBracket(bracket: string) {
+        switch (bracket) {
+            case '(小)':
+                return true
+            case '(大)':
+                return true
+            default:
+                return false
+        }
+    }
+
     function getKitchenBillStringItemNameChnDisplay(itemNameChn: string) {
         if (itemNameChn.slice(-1) === ')') {
             const indexOfOpenBracket = itemNameChn.lastIndexOf('(');
+            if (isNoodleTypeBracket(itemNameChn.substring(indexOfOpenBracket))) {
+                return (` ${itemNameChn.substring(indexOfOpenBracket)} ${itemNameChn.replace(itemNameChn.substring(indexOfOpenBracket), '')}`)
+            }
+
+            if (isSizeBracket(itemNameChn.substring(indexOfOpenBracket))) {
+                return (`${itemNameChn.replace(itemNameChn.substring(indexOfOpenBracket), '')} ${itemNameChn.substring(indexOfOpenBracket)}`)
+            }
+
             if (english.test((itemNameChn.substring(indexOfOpenBracket)).charAt(1))) {
                 return (`${itemNameChn.replace(itemNameChn.substring(indexOfOpenBracket), '')}\n\n\n\n\n${`\xa0`.repeat(2)}⤷${itemNameChn.substring(indexOfOpenBracket)}`)
             }

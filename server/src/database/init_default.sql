@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS orders_items;
+iDROP TABLE IF EXISTS orders_items;
 
 DROP TABLE IF EXISTS orders;
 
@@ -26,7 +26,7 @@ CREATE TABLE items (
     id SERIAL NOT NULL PRIMARY KEY,
     menu_id INTEGER,
     price DECIMAL,
-    name_eng VARCHAR(100) NOT NULL,
+    name_eng VARCHAR(100) NOT NULL UNIQUE,
     name_chn VARCHAR(100) NOT NULL DEFAULT '',
     category INTEGER,
     special BOOLEAN DEFAULT FALSE

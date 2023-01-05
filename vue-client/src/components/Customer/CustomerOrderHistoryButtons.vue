@@ -29,9 +29,6 @@
                 .customerOptionDetails.customerOrderHistory"
               v-bind:key="order.order_id"
               x-large
-              v-bind:color="
-                $store.state.currentOrder.id == order.id ? 'green' : 'gray'
-              "
               height="80px"
               width="100%"
               v-on:click="onClickHistoryButton(order.id)"
