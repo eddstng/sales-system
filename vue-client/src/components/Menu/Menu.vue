@@ -154,7 +154,6 @@ export default {
       this.menuComponentDetails.openCustomizeSelectedItemDialog = true;
     },
     openCustomizeCurrentOrderDialog: function () {
-      console.log("12312312312312312");
       this.menuComponentDetails.customizeOrderDialog = false;
       this.menuComponentDetails.customizeOrderDialog = true;
     },
@@ -162,7 +161,6 @@ export default {
       this.menuComponentDetails.openCustomizeSelectedItemDialog = false;
     },
     openSelectedItemDialog: function (item) {
-      console.log(item);
       this.menuComponentDetails.selectedItemDialog = true;
       this.menuComponentDetails.openCustomizeSelectedItemDialog = false;
       this.menuComponentDetails.removeSelectedItem = item;

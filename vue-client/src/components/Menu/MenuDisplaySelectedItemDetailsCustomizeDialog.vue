@@ -4,7 +4,7 @@
     v-model="menuComponentDetails.dialogToggles.selectedItemDialog"
     width="90%"
   >
-    <v-card height="">
+    <v-card>
       <div>
         <h3 class="text-center pt-5 pb-3">
           CUSTOMIZE ITEM
@@ -192,7 +192,6 @@ export default {
     },
 
     addCustomizationToItem: function (selectedItem, customizationObj) {
-      console.log(selectedItem);
       const selectedItems = Object.assign({}, this.$store.state.selectedItems);
       let customizedItemKeyName = `${selectedItem.node.id.toString()}C-`;
       let customizedItemKeyNumber = 0;

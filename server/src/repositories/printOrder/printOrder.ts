@@ -70,9 +70,12 @@ export async function createAndPrintOrderBill(printObj: { order_id: number, prin
 
         if (process.env.PRINTING !== 'false') {
             const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
-            await delay(10)
+            await delay(20)
             await billSetup(printer, printObj, kitchenAndClientBills)
-            printer.execute();
+            if (printObj.printClient || printObj.printKitchen) {
+                console.log('we are here')
+                printer.execute();
+            }
         }
         logInfo(createAndPrintOrderBill.name, `Success!`)
         return;
@@ -260,7 +263,7 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
 
         const clientBillImageURI = textToImage.generateSync(
             clientBillString,
-            { fontSize: 30, lineHeight: 38, margin: 35, maxWidth: 600 });
+            { fontSize: 35, lineHeight: 43, margin: 35, maxWidth: 600 });
 
         // Consideration: Need to consider whether to save the file with order_number or order_id.
 

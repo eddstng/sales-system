@@ -190,25 +190,17 @@ export default {
       this.menuComponentDetails.displayedButtonsConfig.startIndex = startIndex;
       this.menuComponentDetails.displayedButtonsConfig.endIndex = endIndex;
       if (this.selectedCategory === 12) {
-        console.log("111111");
         this.menuComponentDetails.displayedButtonsConfig.fullCategoryMenuObj =
           this.chowMeinItems;
         return;
       }
       if (this.selectedCategory === 1) {
-        console.log("222222");
-        console.log(this.soupItems);
         this.menuComponentDetails.displayedButtonsConfig.fullCategoryMenuObj =
           this.soupItems;
         return;
       }
-      console.log(this.$store.state.categorizedItems[this.selectedCategory]);
       this.menuComponentDetails.displayedButtonsConfig.fullCategoryMenuObj =
         this.$store.state.categorizedItems[this.selectedCategory];
-
-      console.log(
-        this.menuComponentDetails.displayedButtonsConfig.fullCategoryMenuObj
-      );
     },
     checkIfSelectedItemRequiresCustomization(item) {
       if (item.category === 12 && item.name_eng.includes(" CM")) {

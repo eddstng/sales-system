@@ -203,10 +203,6 @@ export default {
       this.historyOptionsDetails = historyOptionsDetails;
     },
     openHistoryOptionDialog() {
-      console.log('are we even fuckingh ere?')
-      console.log('are we even fuckingh ere?')
-      console.log('are we even fuckingh ere?')
-      console.log('are we even fuckingh ere?')
       if (
         this.$store.state.selectedItemsOrderedByEntry &&
         Object.keys(this.$store.state.selectedItemsOrderedByEntry).length !== 0

@@ -13,6 +13,12 @@
       v-bind:menuComponentDetails="componentDetails.menuComponentDetails"
       @updateMenuComponentDetails="updateMenuComponentDetails"
     />
+
+    <MenuDisplayPrintModifiedOrderDialog
+      v-bind:menuComponentDetails="componentDetails.menuComponentDetails"
+      @updateMenuComponentDetails="updateMenuComponentDetails"
+    />
+
     <!-- Toggles on menuComponentDetails.selectedItemDialog  && menuComponentDetails.removeSelectedItem.node !== undefined -->
     <!-- Toggles on menuComponentDetails.selectedItemDialog && menuComponentDetails.openCustomizeSelectedItemDialog -->
     <MenuDisplaySelectedItemDetailsCustomizeDialog
@@ -127,6 +133,7 @@ import Sidebar from "../Sidebar.vue";
 import Buttons from "../Main/Buttons.vue";
 import MenuDisplaySubmitOrderDialog from "../Menu/MenuDisplaySubmitOrderDialog";
 import MenuDisplayModifyOrderDialog from "../Menu/MenuDisplayModifyOrderDialog";
+import MenuDisplayPrintModifiedOrderDialog from "../Menu/MenuDisplayPrintModifiedOrderDialog";
 import MenuDisplaySelectedItemDetailsDialog from "../Menu/MenuDisplaySelectedItemDetailsDialog";
 import MenuDisplaySelectedItemDetailsCustomizeDialog from "../Menu/MenuDisplaySelectedItemDetailsCustomizeDialog";
 import MenuButtonsCustomItemDialog from "../Menu/MenuButtonsCustomItemDialog";
@@ -155,6 +162,7 @@ export default {
     MenuButtonsHeader,
     MenuDisplaySubmitOrderDialog,
     MenuDisplayModifyOrderDialog,
+    MenuDisplayPrintModifiedOrderDialog,
     MenuDisplaySelectedItemDetailsDialog,
     MenuDisplaySelectedItemDetailsCustomizeDialog,
     MenuButtonsCustomItemDialog,
@@ -193,6 +201,7 @@ export default {
             openCustomizeSelectedItemDialog: false,
             customizeChowMeinTypeDialog: false,
             requiredCustomizationDialog: false,
+            printModifiedOrderDialog: false,
           },
           requiredCustomizationDetails: {
             reducedItemsObj: null,

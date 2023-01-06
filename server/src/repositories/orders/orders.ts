@@ -307,7 +307,7 @@ export async function modifyOrder(
 
         await updateOrder(data.orderDetails.id, { ...data.priceDetails, type: data.orderDetails.type, customer_id: data.customer_id, void: voidOrder, customizations: data.orderDetails.customizations, customizations_price: data.orderDetails.customizations_price })
         if (!voidOrder) {
-            await createAndPrintOrderBill({ order_id: data.orderDetails.id, printKitchen: true, printClient: true });
+            await createAndPrintOrderBill({ order_id: data.orderDetails.id, printKitchen: false, printClient: false });
         }
     } catch (err) {
         console.log(err)

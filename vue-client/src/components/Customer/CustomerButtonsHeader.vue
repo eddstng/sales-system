@@ -72,10 +72,6 @@ export default {
       this.storeMixResetCurrentOrder();
     },
     onClickSearch() {
-      console.log(this.$store.state.componentDetails.customerOptionDetails)
-      console.log(this.$store.state.componentDetails.customerOptionDetails)
-      console.log(this.$store.state.componentDetails.customerOptionDetails)
-      console.log(this.$store.state.componentDetails.customerOptionDetails)
       // this.customerOptionDetails.openCustomerOptionSearchDialog = true;
       let customerOptionDetailsUpdate = {
         ...this.$store.state.componentDetails.customerOptionDetails,

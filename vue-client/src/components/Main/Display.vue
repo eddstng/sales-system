@@ -216,7 +216,6 @@ export default {
           this.$store.state.selectedCustomer.phone !== undefined &&
           Object.keys(this.$store.state.selectedItems).length !== 0
         ) {
-          console.log("ewrwerwerwerwer");
           let updatedMenuComponentDetails = {
             ...this.componentDetails.menuComponentDetails,
           };

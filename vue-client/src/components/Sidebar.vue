@@ -204,7 +204,6 @@ export default {
     },
 
     setOrderWarning() {
-      console.log(JSON.stringify(this.$store.state.currentOrder));
       if (
         (JSON.stringify(this.$store.state.selectedItems) !== "{}" ||
           this.$store.state.selectedCustomer.phone !== "" ||

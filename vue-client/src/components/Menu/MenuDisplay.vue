@@ -180,7 +180,6 @@ export default {
           this.$store.state.selectedCustomer.phone !== undefined &&
           Object.keys(this.$store.state.selectedItems).length !== 0
         ) {
-          console.log("ewrwerwerwerwer");
           let updatedMenuComponentDetails = { ...this.menuComponentDetails };
           updatedMenuComponentDetails.dialogToggles.submitOrderDialog = true;
           this.$emit("updateMenuComponentDetails", updatedMenuComponentDetails);

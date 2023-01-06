@@ -1,5 +1,8 @@
 <template>
-  <v-dialog v-model="menuComponentDetails.dialogToggles.modifyOrderDialog" width="900">
+  <v-dialog
+    v-model="menuComponentDetails.dialogToggles.modifyOrderDialog"
+    width="900"
+  >
     <v-card>
       <div>
         <br />
@@ -92,11 +95,7 @@
         <v-btn x-large width="50%" v-on:click="onClickCancel()">
           <div>CANCEL<br /></div>
         </v-btn>
-        <v-btn
-          x-large
-          width="50%"
-          v-on:click="onClickCancel(), modifyOrder()"
-        >
+        <v-btn x-large width="50%" v-on:click="onClickCancel(), modifyOrder()">
           <div>MODIFY<br /></div>
         </v-btn>
       </v-card-actions>
@@ -123,6 +122,11 @@ export default {
       updatedMenuComponentDetails.dialogToggles.modifyOrderDialog = false;
       this.$emit("updateMenuComponentDetails", updatedMenuComponentDetails);
     },
+    togglePrintModifiedOrderDialog() {
+      let updatedMenuComponentDetails = { ...this.menuComponentDetails };
+      updatedMenuComponentDetails.dialogToggles.printModifiedOrderDialog = true;
+      this.$emit("updateMenuComponentDetails", updatedMenuComponentDetails);
+    },
     modifyOrder: async function () {
       try {
         store.commit("setNotification", 4);
@@ -133,7 +137,7 @@ export default {
           customer_id: this.$store.state.selectedCustomer.id,
           type: this.$store.state.currentOrder.type,
         });
-        this.storeMixinClearOrderRelatedDetails();
+        this.togglePrintModifiedOrderDialog();
         store.commit("setMenuDisplayType", "ORDER");
         store.commit("setNotification", 1);
       } catch (err) {

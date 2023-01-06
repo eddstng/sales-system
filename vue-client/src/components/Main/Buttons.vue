@@ -161,28 +161,19 @@ export default {
       this.componentDetails.menuComponentDetails.displayedButtonsConfig.startIndex = startIndex;
       this.componentDetails.menuComponentDetails.displayedButtonsConfig.endIndex = endIndex;
       if (this.selectedCategory === 12) {
-        console.log("111111");
         this.componentDetails.menuComponentDetails.displayedButtonsConfig.fullCategoryMenuObj =
           this.chowMeinItems;
         return;
       }
       if (this.selectedCategory === 1) {
-        console.log("222222");
-        console.log(this.soupItems);
         this.componentDetails.menuComponentDetails.displayedButtonsConfig.fullCategoryMenuObj =
           this.soupItems;
         return;
       }
-      console.log(this.$store.state.categorizedItems[this.selectedCategory]);
       this.componentDetails.menuComponentDetails.displayedButtonsConfig.fullCategoryMenuObj =
         this.$store.state.categorizedItems[this.selectedCategory];
-
-      console.log(
-        this.componentDetails.menuComponentDetails.displayedButtonsConfig.fullCategoryMenuObj
-      );
     },
     checkIfSelectedItemRequiresCustomization(item) {
-      console.log(JSON.stringify(this.componentDetails.menuComponentDetails));
       if (
         item.category === 12 &&
         item.name_eng.includes(" CM")

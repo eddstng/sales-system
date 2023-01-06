@@ -412,7 +412,6 @@ export default {
       this.storeMixinUpdateStorePriceDetails();
     },
     removeCustomizationFromCurrentOrder(customization) {
-      console.log("heycall");
       // const newCurrentOrder = this.deepCopyObj(this.$store.state.currentOrder);
       const newCurrentOrder = this.$store.state.currentOrder;
       newCurrentOrder.customizations = newCurrentOrder.customizations.filter(
@@ -420,12 +419,6 @@ export default {
           return cus.name_eng !== customization.name_eng;
         }
       );
-      console.log(newCurrentOrder.customizations);
-      console.log(customization);
-      console.log(customization);
-      console.log(customization);
-      console.log(customization);
-
       store.commit("setCurrentOrder", Object.assign({}, newCurrentOrder));
 
       this.menuComponentDetails.removeSelectedItem.customizations =

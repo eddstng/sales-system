@@ -18,7 +18,6 @@ export default {
     // --- Update Component Details 
 
     storeMixUpdateCustomerOptionDetails(customerOptionDetailsUpdate) {
-      console.log('weeeeeeeeeeeeohhhhhhhhhhhhh')
       store.commit("setCustomerOptionDetails", customerOptionDetailsUpdate);
     },
 
@@ -87,7 +86,6 @@ export default {
       store.commit("setSelectedItems", selectedItems);
     },
     storeMixinUpdateStorePriceDetails() {
-      console.log("her13r")
       const selectedItems = this.$store.state.selectedItems;
       let itemPriceSum = 0
       let itemPriceSumExcludingSpecials = 0
@@ -118,8 +116,6 @@ export default {
         gst: gstAmount,
         total: (itemPriceSum - discountAmount) + gstAmount
       }
-      console.log('h12341234124124')
-      console.log(gstAmount)
       return priceDetails
     },
     storeMixinClearOrderRelatedDetails() {
