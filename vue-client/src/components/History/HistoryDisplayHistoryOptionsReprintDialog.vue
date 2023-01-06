@@ -19,8 +19,7 @@
             width="24%"
             v-on:click="
               historyOptionsDetailsUpdate = historyOptionsDetails;
-              historyOptionsDetailsUpdate.confirmingAction = 'REPRINT KITCHEN';
-              historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialog = true;
+              reprintKitchen()
               updateHistoryOptionsDetails(historyOptionsDetails);
             "
           >
@@ -31,8 +30,7 @@
             width="24%"
             v-on:click="
               historyOptionsDetailsUpdate = historyOptionsDetails;
-              historyOptionsDetailsUpdate.confirmingAction = 'REPRINT CLIENT';
-              historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialog = true;
+              reprintClient()
               updateHistoryOptionsDetails(historyOptionsDetails);
             "
           >
@@ -43,8 +41,7 @@
             width="24%"
             v-on:click="
               historyOptionsDetailsUpdate = historyOptionsDetails;
-              historyOptionsDetailsUpdate.confirmingAction = 'REPRINT BOTH';
-              historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialog = true;
+              reprintBoth()
               updateHistoryOptionsDetails(historyOptionsDetails);
             "
           >
@@ -55,8 +52,6 @@
             width="24%"
             v-on:click="
               historyOptionsDetailsUpdate = historyOptionsDetails;
-              historyOptionsDetailsUpdate.openHistoryOptionsReprintDialog = false;
-              historyOptionsDetailsUpdate.openHistoryOptionsConfirmationDialog = false;
               updateHistoryOptionsDetails(historyOptionsDetails);
             "
           >
@@ -69,7 +64,11 @@
 </template>
 
 <script>
+import printMixin from "../../mixins/printMixin";
+
 export default {
+    mixins: [printMixin],
+
   props: ["historyOptionsDetails"],
   data() {
     return {

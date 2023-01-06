@@ -228,10 +228,10 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
                 })
             }
 
+            let itemPrice = `${element.item_custom_price ? (Number(element.item_custom_price as number)).toFixed(2) : (Number(element.item_price as number)).toFixed(2)}`
             clientBillString += `
-            ${element.item_name_chn.length !== 0 ? `⊵ ${element.item_name_chn}` : `⊵ Custom Item`}
-            ${element.item_name_eng}${clientCustomizationString ? clientCustomizationString : ''}
-            ${element.orders_items_quantity}x ${element.item_custom_price ? (Number(element.item_custom_price as number)).toFixed(2) : (Number(element.item_price as number)).toFixed(2)}`
+            ${element.item_name_chn.length !== 0 ? `${element.orders_items_quantity}x  ${itemPrice} - ${element.item_name_chn}` : `${element.orders_items_quantity}x  ${itemPrice} - Custom Item`}
+            ${`\xa0`.repeat(5)}${element.item_name_chn.length !== 0 ? '' : '⊵'}${element.item_name_eng}${clientCustomizationString ? clientCustomizationString : ''}`
         })
 
         kitchenBillString += `${kitchenBillStringEnglish}
@@ -260,7 +260,7 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
 
         const clientBillImageURI = textToImage.generateSync(
             clientBillString,
-            { fontSize: 32, lineHeight: 42, margin: 35, maxWidth: 450 });
+            { fontSize: 30, lineHeight: 38, margin: 35, maxWidth: 600 });
 
         // Consideration: Need to consider whether to save the file with order_number or order_id.
 

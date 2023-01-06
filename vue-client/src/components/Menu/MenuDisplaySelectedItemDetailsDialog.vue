@@ -1,9 +1,11 @@
 <template>
   <div>
     <v-dialog
+      persistent
       v-if="menuComponentDetails.removeSelectedItem.node !== undefined"
       v-model="menuComponentDetails.dialogToggles.selectedItemDialog"
       width="1000px"
+      @keydown.esc="onEsc()"
     >
       <v-card>
         <div>
@@ -79,7 +81,6 @@
           <v-btn x-large width="50%" v-on:click="onClickCustomizeOrder()">
             <div>CUSTOMIZE ORDER<br /></div>
           </v-btn>
-
         </v-card-actions>
         <v-card-actions v-else>
           <v-spacer></v-spacer>
@@ -301,6 +302,14 @@ export default {
   props: ["menuComponentDetails"],
 
   methods: {
+        onEsc() {
+      this.onClickCancel();
+    },
+    onClickCancel() {
+      let updatedMenuComponentDetails = { ...this.menuComponentDetails };
+      updatedMenuComponentDetails.dialogToggles.selectedItemDialog = false;
+      this.$emit("updateMenuComponentDetails", updatedMenuComponentDetails);
+    },
     onClickCustomize() {
       let updatedMenuComponentDetails = { ...this.menuComponentDetails };
       updatedMenuComponentDetails.dialogToggles.openCustomizeSelectedItemDialog = true;

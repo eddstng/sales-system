@@ -2,11 +2,11 @@
   <v-dialog
     v-if="menuComponentDetails.dialogToggles.openCustomizeSelectedItemDialog"
     v-model="menuComponentDetails.dialogToggles.selectedItemDialog"
-    width="65%"
+    width="90%"
   >
-    <v-card>
+    <v-card height="">
       <div>
-        <h3 class="text-center pt-10 pb-3">
+        <h3 class="text-center pt-5 pb-3">
           CUSTOMIZE ITEM
           <br />
           {{ menuComponentDetails.removeSelectedItem.node.name_eng }}
@@ -24,8 +24,8 @@
             v-for="obj in customizationObjs"
             v-bind:key="obj.name_eng"
             x-large
-            width="15%"
-            height="77"
+            width="13.1%"
+            height="87"
             class="mb-4 mr-2 ml-3 customization-button"
             v-on:click="
               phone = '';
@@ -40,7 +40,7 @@
           </v-btn>
         </div>
         <v-row class="justify-center mt-5">
-          <v-col cols="12" md="4">
+          <v-col class="pb-0 pt-0" cols="12" md="4">
             <div class="chn-text">
               <p>
                 {{ customizationInput.chn ? customizationInput.chn : "-" }}
@@ -58,7 +58,7 @@
           <v-btn
             width="10%"
             height="60px"
-            class="mt-8"
+            class="mt-5"
             v-on:click="removeLastWordIncustomizationInput()"
           >
             <!-- lets make this a input bar where we can input our custom order for name_eng -->
@@ -68,10 +68,12 @@
         <v-row class="justify-center">
           <v-col cols="12" md="4">
             <v-text-field
+              class="pt-0 mt-4"
               prefix="$"
               v-model="customizationInput.price"
               label="Price"
               width="10%"
+              @focus="onPriceFocus"
             ></v-text-field>
           </v-col>
           <v-btn width="10%" height="60px" v-on:click="clearPriceInput()">
@@ -89,14 +91,11 @@
           x-large
           width="50%"
           v-on:click="
-            onClickAdd(
-              menuComponentDetails.removeSelectedItem,
-              {
-                name_eng: customizationInput.eng.toUpperCase(),
-                name_chn: customizationInput.chn,
-                price: parseFloat(customizationInput.price),
-              })
-            
+            onClickAdd(menuComponentDetails.removeSelectedItem, {
+              name_eng: customizationInput.eng.toUpperCase(),
+              name_chn: customizationInput.chn,
+              price: parseFloat(customizationInput.price),
+            })
           "
         >
           <div>ADD<br /></div>
@@ -141,6 +140,7 @@ export default {
   // ADD A PRICE INPUT FIELD AND THIS FIELD WILL ADD A SUBSTITUTION ITEM WITH THE PRICE USING addItemToSelectedItems()
 
   methods: {
+    onPriceFocus() {this.customizationInput.price = ''},
     addCustomizationToCustomizationInput(customizationObj) {
       if (this.customizationInput.eng.slice(-1) !== " ") {
         this.customizationInput.eng += " ";
