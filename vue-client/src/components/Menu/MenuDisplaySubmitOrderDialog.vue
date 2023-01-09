@@ -3,14 +3,14 @@
     persistent
     v-model="menuComponentDetails.dialogToggles.submitOrderDialog"
     @keydown.esc="onEsc()"
-    width="70%"
+    width="80%"
   >
     <v-card>
       <div>
         <div>
           <div class="dialog-header-font">
             <br />
-            <v-row class="submitOrderDialogText mt-2">
+            <v-row class="submitOrderDialogText mt-1">
               <v-col>
                 {{ orderTypeString[$store.state.currentOrder.type] }}</v-col
               >
@@ -29,7 +29,7 @@
                 {{ $store.state.selectedCustomer.address }}
               </v-col>
             </v-row>
-            <v-row class="submitOrderDialogText">
+            <v-row class="submitOrderDialogText mt-0">
               <v-col :cols="5" v-if="$store.state.selectedCustomer.note">
                 <!-- <v-col :cols="4"> -->
                 {{ `Note: ${$store.state.selectedCustomer.note}` }}
@@ -41,9 +41,8 @@
             <v-row class="submitOrderDialogText"> </v-row>
             <br />
           </div>
-          <div style="overflow-y: scroll; height: 570px">
+          <v-card class="overflow-y-auto" height="58vh">
             <div class="text-center">[ ▼ ]</div>
-            <v-divider></v-divider>
             <div
               v-for="value in $store.state.selectedItemsOrderedByEntry"
               v-bind:key="value.id"
@@ -51,7 +50,7 @@
               <v-divider></v-divider>
               <v-row
                 v-if="value.node !== undefined"
-                class="submitOrderDialogText mt-1 mb-1"
+                class="submitOrderDialogText pt-2 pb-2"
               >
                 <v-col> x{{ value.quantity }} </v-col>
                 <v-col :cols="5">
@@ -90,11 +89,11 @@
 
             <v-divider></v-divider>
             <div>
-              <div class="mt-5 mb-3">
-                <v-row
-                  v-if="$store.state.currentOrder.customizations.length !== 0"
-                  class="submitOrderDialogText"
-                >
+              <div
+                v-if="$store.state.currentOrder.customizations.length !== 0"
+                class="mt-5 mb-3"
+              >
+                <v-row class="submitOrderDialogText">
                   <v-col :cols="1"> ❂</v-col>
                   <v-col :cols="5"> Order Customization</v-col>
                   <v-col :cols="4"> 全改 </v-col>
@@ -129,48 +128,57 @@
                     </div>
                   </v-list-item-content>
                 </div>
-
                 <v-divider></v-divider>
-                <div class="text-center mt-3">[ ▲ ]</div>
               </div>
+              <div class="text-center mb-1">[ ▲ ]</div>
             </div>
-          </div>
+          </v-card>
         </div>
       </div>
-      <v-divider> </v-divider>
-      <v-row class="submitOrderDialogText mt-2 mb-2">
-        <v-col :cols="3">
-          Number of Items:
-          {{ $store.state.currentOrder.itemQuantity }}
-        </v-col>
-        <v-col :cols="2">
-          Subtotal: {{ $store.state.priceDetails.subtotal.toFixed(2) }}
-        </v-col>
-        <v-col :cols="2" class="text-end">
-          Discount: -{{ $store.state.priceDetails.discount.toFixed(2) }}
-        </v-col>
-        <v-col :cols="2" class="text-end">
-          GST: {{ $store.state.priceDetails.gst.toFixed(2) }}
-        </v-col>
-        <v-col :cols="2" class="text-end">
-          Total: ${{ $store.state.priceDetails.total.toFixed(2) }}
-        </v-col>
-      </v-row>
-      <v-divider></v-divider>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn x-large width="50%" v-on:click="onClickCancel()">
-          <div>CANCEL<br /></div>
-        </v-btn>
-        <v-btn x-large width="50%" v-on:click="onClickCancel(), submitOrder()">
-          <div>SUBMIT<br /></div>
-        </v-btn>
-      </v-card-actions>
+      <div class="card-actions">
+        <v-divider> </v-divider>
+        <v-row class="submitOrderDialogText mt-1 mb-1">
+          <v-col :cols="3">
+            Number of Items:
+            {{ $store.state.currentOrder.itemQuantity }}
+          </v-col>
+          <v-col :cols="3">
+            Subtotal: {{ $store.state.priceDetails.subtotal.toFixed(2) }}
+          </v-col>
+          <v-col :cols="2" class="text-end">
+            Discount: -{{ $store.state.priceDetails.discount.toFixed(2) }}
+          </v-col>
+          <v-col :cols="2" class="text-end">
+            GST: {{ $store.state.priceDetails.gst.toFixed(2) }}
+          </v-col>
+          <v-col :cols="2" class="text-end">
+            Total: ${{ $store.state.priceDetails.total.toFixed(2) }}
+          </v-col>
+        </v-row>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn x-large width="50%" v-on:click="onClickCancel()">
+            <div>CANCEL<br /></div>
+          </v-btn>
+          <v-btn
+            x-large
+            width="50%"
+            v-on:click="onClickCancel(), submitOrder()"
+          >
+            <div>SUBMIT<br /></div>
+          </v-btn>
+        </v-card-actions>
+      </div>
     </v-card>
   </v-dialog>
 </template>
 
 <style>
+.card-actions {
+  bottom: 0;
+}
+
 .pl-25 {
   padding-left: 8em;
 }
@@ -206,7 +214,7 @@ export default {
   },
   methods: {
     onEsc() {
-this.onClickCancel();
+      this.onClickCancel();
     },
     onClickCancel() {
       let updatedMenuComponentDetails = { ...this.menuComponentDetails };

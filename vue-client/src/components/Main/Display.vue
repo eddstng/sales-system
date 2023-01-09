@@ -1,5 +1,5 @@
 h<template>
-  <v-container>
+  <v-container class="px-0 py-0">
     <v-card outlined tile height="13vh">
       <MenuDisplayCustomerSelect v-if="$store.state.component === 'ORDER'" />
       <HistoryDisplayCustomer v-if="$store.state.component === 'HISTORY'" />
@@ -9,7 +9,7 @@ h<template>
       outlined
       tile
       class="overflow-y-auto d-block"
-      height="58vh"
+      height="64vh"
       v-chat-scroll
     >
       <template>
@@ -26,7 +26,7 @@ h<template>
           </div>
         </div>
         <v-card
-          class="mx-auto pt-2"
+          class="mx-auto"
           outlined
           v-for="item in $store.state.selectedItemsOrderedByEntry"
           v-bind:key="item.timestamp"
@@ -79,7 +79,7 @@ h<template>
         </v-card>
       </template>
       <v-card
-        class="mx-auto pt-2"
+        class="mx-auto"
         outlined
         v-if="$store.state.currentOrder.customizations.length !== 0"
         width="100vw"
@@ -130,7 +130,7 @@ h<template>
           <div class="menu-display-item-text">Subtotal:</div>
           <div class="menu-display-item-text">Discount:</div>
           <div class="menu-display-item-text">GST:</div>
-          <div class="menu-display-item-text mt-5">Total:</div>
+          <div class="menu-display-item-text mt-2">Total:</div>
         </v-list-item-content>
         <v-list-item-content>
           <div class="menu-display-item-text text-right">
@@ -142,7 +142,7 @@ h<template>
           <div class="menu-display-item-text text-right">
             {{ $store.state.priceDetails.gst.toFixed(2) }}
           </div>
-          <div class="menu-display-item-text text-right mt-5 mb-0">
+          <div class="menu-display-item-text text-right mt-2 mb-0">
             ${{ $store.state.priceDetails.total.toFixed(2) }}
           </div>
         </v-list-item-content>
@@ -153,7 +153,7 @@ h<template>
 
 <style>
 .menu-display-item-text {
-  font-size: 1.2em;
+  font-size: 15px;
 }
 
 .submitOrderDialogText {

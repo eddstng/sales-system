@@ -4,7 +4,7 @@
       v-if="$store.state.selectedCustomer.phone.length === 0"
       class="history-button-text mr-1"
       width="32.8%"
-      height="80px"
+      height="75px"
       dark
       v-on:click="onClickSearch()"
     >
@@ -15,16 +15,16 @@
       v-on:click="onClickBack()"
       class="history-button-text mr-1"
       width="32.8%"
-      height="80px"
+      height="75px"
       dark
     >
-      BACK1
+      BACK
     </v-btn>
 
-    <v-btn class="history-button-text" width="33%" height="80px" dark>
+    <v-btn class="history-button-text" width="33%" height="75px" dark>
       {{ $store.state.selectedCustomer.phone }}
     </v-btn>
-    <v-btn class="history-button-text ml-1" width="33%" height="80px" dark>
+    <v-btn class="history-button-text ml-1" width="33%" height="75px" dark>
     </v-btn>
   </div>
 </template>

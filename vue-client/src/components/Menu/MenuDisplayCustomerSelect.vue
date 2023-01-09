@@ -3,7 +3,7 @@
     <div v-if="$store.state.selectedCustomer.phone === ''">
       <v-row align="center" justify="space-around">
         <v-btn
-          class="menu-button-text mt-5"
+          class="menu-button-text mt-6"
           min-height="100%"
           width="25%"
           style="height: 10vh"
@@ -15,7 +15,7 @@
           <div>DINE IN</div>
         </v-btn>
         <v-btn
-          class="menu-button-text mt-7"
+          class="menu-button-text mt-6"
           x-large
           min-height="100%"
           width="25%"
@@ -28,7 +28,7 @@
           <div>TAKE OUT</div>
         </v-btn>
         <v-btn
-          class="menu-button-text mt-7"
+          class="menu-button-text mt-6"
           x-large
           min-height="100%"
           width="25%"
@@ -50,7 +50,7 @@
       style="height: 12vh"
       class="mt-1"
     >
-      <div>
+      <div class="customer-detail-text">
         {{ this.orderTypeString[$store.state.currentOrder.type] }} <br />
         {{
           $store.state.selectedCustomer.phone.replace(
@@ -66,7 +66,6 @@
             $store.state.selectedCustomer.buzzer_number !== null
           "
         >
-          <br />
           {{
             $store.state.selectedCustomer.buzzer_number !== "" &&
             $store.state.selectedCustomer.buzzer_number !== null
@@ -74,7 +73,6 @@
               : ""
           }}{{ $store.state.selectedCustomer.buzzer_number }}
         </div>
-        <br />
         {{ $store.state.selectedCustomer.name }} <br />
         {{ $store.state.selectedCustomer.note }}
       </div>
@@ -229,6 +227,8 @@
     </v-dialog>
   </div>
 </template>
+
+<style scoped> .customer-detail-text{font-size: 14px;}</style>
 
 <script>
 import { store } from "../../store/store";

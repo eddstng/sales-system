@@ -3,15 +3,14 @@
     persistent
     @keydown.esc="onEsc()"
     v-model="menuComponentDetails.dialogToggles.addCustomItemDialog"
-    width="50%"
+    width="70%"
   >
-    <v-card class="card-outter">
+    <v-card>
       <div>
-               <h3 class="text-center pt-10 pb-3">
-          CUSTOMIZE ORDER
+        <h3 class="text-center pt-6">
+          CUSTOM ITEM
           <br />
         </h3>
-        <br />
         <div>
           <v-col>
             <v-form ref="form" lazy-validation>
@@ -29,9 +28,7 @@
                 required
                 prefix="$"
               ></v-text-field>
-              <br />
               <div>
-                <v-divider></v-divider>
                 <v-btn
                   class="mt-2 ml-2"
                   v-for="suggestion in customItemSuggestions"
@@ -51,7 +48,7 @@
               <div
                 v-if="suggestedItems.length !== 0 && customItem.name.length > 0"
               >
-                <v-card class="overflow-y-auto" height="24vh">
+                <v-card class="overflow-y-auto" height="28.7vh">
                   <div v-if="customItem.name.length > 0">
                     <v-btn
                       class="mb-1 mr-1"
@@ -81,12 +78,12 @@
       <v-divider></v-divider>
       <v-card-actions class="card-actions">
         <v-spacer></v-spacer>
-        <v-btn x-large width="308%" v-on:click="onClickCancelButton()">
+        <v-btn x-large width="50%" v-on:click="onClickCancelButton()">
           <div>CANCEL<br /></div>
         </v-btn>
         <v-btn
           x-large
-          width="308%"
+          width="50%"
           v-on:click="
             addItemToSelectedItems({
               name_eng: customItem.name,
@@ -111,11 +108,7 @@
 </template>
 
 <style scoped>
-.card-outter {
-  padding-bottom: 50px;
-}
 .card-actions {
-  position: absolute;
   bottom: 0;
 }
 </style>

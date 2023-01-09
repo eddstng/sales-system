@@ -14,7 +14,7 @@
             class="mt-1 mr-1"
             v-on:click="onClickMenuButton(item)"
           >
-            <div class="mt-5">
+            <div class="mt-5 mb-1">
               <p class="menu-button-text-eng">#{{ item.menu_id }}</p>
               <p class="mb-0 menu-button-text-eng">
                 {{ item.name_eng.match(/.{1,20}(\s|$)/g)[0] }}
@@ -46,7 +46,7 @@
           v-bind:key="item.id"
           x-large
           dark
-          height="155px"
+          height="128px"
           width="24.5%"
           class="mt-1 mr-1"
           v-on:click="
