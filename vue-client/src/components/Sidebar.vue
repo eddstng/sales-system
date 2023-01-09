@@ -8,39 +8,47 @@
               <div>
                 <div>
                   <v-btn
-                    class="my-2"
+                    class="my-2 text-md-body-1"
                     x-large
-                     v-bind:color="$store.state.component==='ORDER' ? 'green' : 'grey'"
+                    v-bind:color="
+                      $store.state.component === 'ORDER' ? 'green' : 'grey'
+                    "
                     dark
-                    height="180px"
+                    height="150px"
                     width="100%"
                     v-on:click="changeComponent('ORDER')"
                     >ORDER</v-btn
                   >
                   <v-btn
-                    class="my-2"
+                    class="my-2 text-md-body-1"
                     x-large
-                     v-bind:color="$store.state.component==='HISTORY' ? 'green' : 'grey'"                    dark
-                    height="180px"
+                    v-bind:color="
+                      $store.state.component === 'HISTORY' ? 'green' : 'grey'
+                    "
+                    dark
+                    height="150px"
                     width="100%"
                     v-on:click="changeComponent('HISTORY')"
                     >HISTORY</v-btn
                   >
                   <v-btn
-                    class="my-2"
+                    class="my-2 text-md-body-2"
                     x-large
-v-bind:color="$store.state.component==='CUSTOMER' ? 'green' : 'grey'"                    dark
-                    height="180px"
+                    v-bind:color="
+                      $store.state.component === 'CUSTOMER' ? 'green' : 'grey'
+                    "
+                    dark
+                    height="150px"
                     width="100%"
                     v-on:click="changeComponent('CUSTOMER')"
                     >CUSTOMER</v-btn
                   >
                   <v-btn
-                    class="my-2"
+                    class="my-2 text-md-body-1"
                     x-large
                     color="orange"
                     dark
-                    height="180px"
+                    height="150px"
                     width="100%"
                     v-on:click="openOptions()"
                     >OPTIONS</v-btn

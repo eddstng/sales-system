@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card outlined tile class="overflow-y-auto" height="83vh">
+    <v-card outlined tile class="overflow-y-auto" height="80.5vh">
       <div v-if="menuComponentDetails.displayMenuButtons" max-height="400">
         <div>
           <v-btn
@@ -9,12 +9,12 @@
             v-bind:key="item.name_eng"
             x-large
             dark
-            height="200px"
-            width="19.6%"
+            height="170px"
+            width="24.5%"
             class="mt-1 mr-1"
             v-on:click="onClickMenuButton(item)"
           >
-            <div>
+            <div class="mt-5">
               <p class="menu-button-text-eng">#{{ item.menu_id }}</p>
               <p class="mb-0 menu-button-text-eng">
                 {{ item.name_eng.match(/.{1,20}(\s|$)/g)[0] }}

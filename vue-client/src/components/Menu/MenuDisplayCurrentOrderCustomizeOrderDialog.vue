@@ -1,16 +1,16 @@
 <template>
   <v-dialog
-      persistent
+    persistent
     @keydown.esc="
-      menuComponentDetails.dialogToggles.customizeOrderDialog = false;
+      menuComponentDetails.dialogToggles.customizeOrderDialog = false
     "
     v-if="menuComponentDetails.dialogToggles.customizeOrderDialog"
     v-model="menuComponentDetails.dialogToggles.customizeOrderDialog"
-    width="65%"
+    width="90%"
   >
     <v-card>
       <div>
-        <h3 class="text-center pt-10 pb-3">
+        <h3 class="text-center pt-5">
           CUSTOMIZE ORDER
           <br />
         </h3>
@@ -20,8 +20,8 @@
             v-for="obj in customizationObjs"
             v-bind:key="obj.name_eng"
             x-large
-            width="15%"
-            height="77"
+            width="12.8%"
+            height="81"
             class="mb-4 mr-2 ml-3 customization-button"
             v-on:click="
               phone = '';
@@ -35,14 +35,13 @@
             </div>
           </v-btn>
         </div>
-        <v-row class="justify-center mt-5">
-          <v-col cols="12" md="4">
-            <div class="chn-text">
-              <p>
-                {{ customizationInput.chn ? customizationInput.chn : "-" }}
-              </p>
-            </div>
-            <v-row class="justify-center customization-button-chn"> </v-row>
+        <div class="chn-text">
+          <p>
+            {{ customizationInput.chn ? customizationInput.chn : "-" }}
+          </p>
+        </div>
+        <v-row class="justify-center mx-0">
+          <v-col cols="12" md="4" class="pb-0">
             <v-text-field
               v-model="customizationInput.eng"
               label="Customization"
@@ -53,15 +52,12 @@
           </v-col>
           <v-btn
             width="10%"
-            height="70px"
-            class="mt-8"
+            class="mt-6"
             v-on:click="removeLastWordIncustomizationInput()"
           >
             <!-- lets make this a input bar where we can input our custom order for name_eng -->
             <p class="pt-4">⌫</p>
           </v-btn>
-        </v-row>
-        <v-row class="justify-center">
           <v-col cols="12" md="4">
             <v-text-field
               prefix="$"
@@ -70,7 +66,7 @@
               width="10%"
             ></v-text-field>
           </v-col>
-          <v-btn width="10%" height="60px" v-on:click="clearPriceInput()">
+          <v-btn width="10%" class="mt-6" v-on:click="clearPriceInput()">
             <p class="pt-4">CLEAR</p>
           </v-btn>
         </v-row>
@@ -78,11 +74,7 @@
       <v-divider></v-divider>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn
-          x-large
-          width="50%"
-          v-on:click="onClickCancelButton()"
-        >
+        <v-btn x-large width="50%" v-on:click="onClickCancel()">
           <div>CANCEL<br /></div>
         </v-btn>
         <v-btn
@@ -120,9 +112,7 @@
 
 .chn-text {
   font-size: 20px;
-}
-.row {
-  margin: 0
+  text-align: center;
 }
 </style>
 
@@ -146,8 +136,8 @@ export default {
   // ADD A PRICE INPUT FIELD AND THIS FIELD WILL ADD A SUBSTITUTION ITEM WITH THE PRICE USING addItemToSelectedItems()
 
   methods: {
-    onClickCancelButton() {
-      let updatedMenuComponentDetails = {...this.menuComponentDetails};
+    onClickCancel() {
+      let updatedMenuComponentDetails = { ...this.menuComponentDetails };
       updatedMenuComponentDetails.dialogToggles.customizeOrderDialog = false;
       this.$emit("updateMenuComponentDetails", updatedMenuComponentDetails);
     },

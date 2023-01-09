@@ -5,7 +5,7 @@
       <v-btn
         class="history-button-text mr-1"
         width="32.8%"
-        height="80px"
+        height="75px"
         dark
         v-on:click="onClickBack()"
       >
@@ -15,7 +15,7 @@
         v-on:click="onClickCustomItemButton()"
         class="history-button-text mr-1"
         width="32.8%"
-        height="80px"
+        height="75px"
         dark
       >
         CUSTOM ITEMS
@@ -24,7 +24,7 @@
         v-on:click="onClickCustomizeOrder()"
         class="history-button-text"
         width="32.8%"
-        height="80px"
+        height="75px"
         dark
       >
         CUSTOMIZE ORDER
