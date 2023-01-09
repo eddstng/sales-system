@@ -3,75 +3,90 @@
     persistent
     @keydown.esc="onEsc()"
     v-model="menuComponentDetails.dialogToggles.addCustomItemDialog"
-    width="500"
+    width="50%"
   >
-    <v-card>
+    <v-card class="card-outter">
       <div>
+               <h3 class="text-center pt-10 pb-3">
+          CUSTOMIZE ORDER
+          <br />
+        </h3>
         <br />
-        <v-col>
-          <v-form ref="form" lazy-validation>
-            <v-text-field
-              v-model="customItem.name"
-              label="Custom Item Name"
-              required
-              autocomplete="off"
-              autofocus
-            >
-            </v-text-field>
-            <div v-if="customItem.name.length > 0">
-              <v-btn
-                v-for="item in suggestedItems"
-                :key="item.id"
-                x-large
-                dark
-                width="100%"
-                v-on:click="
-                  addItemToSelectedItems(item);
-                  menuComponentDetails.dialogToggles.addCustomItemDialog = false;
-                  customItem.name = '';
-                "
-                >{{ item.menu_id }} - {{ item.name_eng }} - ${{
-                  parseFloat(item.price).toFixed(2)
-                }}</v-btn
+        <div>
+          <v-col>
+            <v-form ref="form" lazy-validation>
+              <v-text-field
+                v-model="customItem.name"
+                label="Custom Item Name"
+                required
+                autocomplete="off"
+                autofocus
               >
+              </v-text-field>
+              <v-text-field
+                label="Price"
+                v-model="customItem.price"
+                required
+                prefix="$"
+              ></v-text-field>
               <br />
+              <div>
+                <v-divider></v-divider>
+                <v-btn
+                  class="mt-2 ml-2"
+                  v-for="suggestion in customItemSuggestions"
+                  v-bind:key="suggestion"
+                  x-large
+                  width="24.1%"
+                  height="50"
+                  v-on:click="
+                    phone = '';
+                    customItem.name += `${suggestion} `;
+                  "
+                >
+                  <div>{{ suggestion }}<br /></div>
+                </v-btn>
+              </div>
               <br />
-            </div>
-            <v-text-field
-              label="Price"
-              v-model="customItem.price"
-              required
-              prefix="$"
-            ></v-text-field>
-          </v-form>
-          <div v-if="suggestedItems.length === 0">
-            <p>Quick Suggestions</p>
-            <v-divider></v-divider>
-            <v-btn
-              v-for="suggestion in customItemSuggestions"
-              v-bind:key="suggestion"
-              x-large
-              width="50%"
-              v-on:click="
-                phone = '';
-                customItem.name += `${suggestion} `;
-              "
-            >
-              <div>{{ suggestion }}<br /></div>
-            </v-btn>
-          </div>
-        </v-col>
+              <div
+                v-if="suggestedItems.length !== 0 && customItem.name.length > 0"
+              >
+                <v-card class="overflow-y-auto" height="24vh">
+                  <div v-if="customItem.name.length > 0">
+                    <v-btn
+                      class="mb-1 mr-1"
+                      v-for="item in suggestedItems"
+                      :key="item.id"
+                      x-large
+                      dark
+                      width="49.5%"
+                      height="70"
+                      v-on:click="
+                        addItemToSelectedItems(item);
+                        menuComponentDetails.dialogToggles.addCustomItemDialog = false;
+                        customItem.name = '';
+                      "
+                      >{{ item.menu_id }} - {{ item.name_eng }} - ${{
+                        parseFloat(item.price).toFixed(2)
+                      }}</v-btn
+                    >
+                  </div>
+                </v-card>
+              </div>
+            </v-form>
+          </v-col>
+        </div>
         <br />
       </div>
       <v-divider></v-divider>
-      <v-card-actions>
+      <v-card-actions class="card-actions">
         <v-spacer></v-spacer>
-        <v-btn x-large width="50%" v-on:click="onClickCancelButton()">
+        <v-btn x-large width="308%" v-on:click="onClickCancelButton()">
           <div>CANCEL<br /></div>
         </v-btn>
         <v-btn
           x-large
-          width="50%"
+          width="308%"
           v-on:click="
             addItemToSelectedItems({
               name_eng: customItem.name,
@@ -95,6 +110,16 @@
   </v-dialog>
 </template>
 
+<style scoped>
+.card-outter {
+  padding-bottom: 50px;
+}
+.card-actions {
+  position: absolute;
+  bottom: 0;
+}
+</style>
+
 <script>
 import storeMixin from "../../mixins/storeMixin";
 import searchMixin from "../../mixins/searchMixin";
@@ -115,13 +140,17 @@ export default {
       },
       customItemSuggestions: [
         "Beef",
-        "Rice",
         "Chicken",
-        "Chow Mein (Crispy)",
-        "BBQ Pork",
-        "Chow Mein (Soft)",
-        "Broccoli",
-        "Black Bean Sauce",
+        "Pork",
+        "Vegetable",
+        "Chow Mein",
+        "Rice Noodle",
+        "Rice",
+        "Fried Rice",
+        "Deep Fried",
+        "Pan Fried",
+        "Steam",
+        "Black Bean",
       ],
     };
   },
