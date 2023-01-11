@@ -3,7 +3,7 @@ h<template>
     <v-card outlined tile height="13vh">
       <MenuDisplayCustomerSelect v-if="$store.state.component === 'ORDER'" />
       <HistoryDisplayCustomer v-if="$store.state.component === 'HISTORY'" />
-      <CustomerDisplay v-if="$store.state.component === 'CUSTOMER'" />
+      <CustomerDisplay class="px-0 py-0" v-if="$store.state.component === 'CUSTOMER'" />
     </v-card>
     <v-card
       outlined

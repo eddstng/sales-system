@@ -12,7 +12,7 @@
           <v-form ref="form" lazy-validation>
             <v-text-field
               v-model="selectedCustomerDetails.selectedCustomer.phone"
-              :counter="16"
+              :counter="12"
               label="Phone Number"
               @keydown.enter.prevent="
                 toggleCreateCustomerFormDialogOn();
@@ -89,9 +89,19 @@ import customerSelectMixin from "../../mixins/customerSelectMixin";
 export default {
   mixins: [customerSelectMixin],
   props: ["selectedCustomerDetails"],
+  // watch: {
+  //   "phoneWithDash": function () {
+  //     this.selectedCustomerDetails.selectedCustomer.phone = this.phoneWithDash.replaceAll('-', '')
+  //     this.phoneWithDash = this.selectedCustomerDetails.selectedCustomer.phone.replace(
+  //         /(\d{3})(\d{3})(\d{3})/,
+  //         "$1-$2-$3"
+  //       );
+  //   },
+  // },
   data() {
     return {
       phoneError: null,
+      // phoneWithDash: "",
     };
   },
   methods: {

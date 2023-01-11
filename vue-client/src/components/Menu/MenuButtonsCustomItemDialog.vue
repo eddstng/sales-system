@@ -3,7 +3,7 @@
     persistent
     @keydown.esc="onEsc()"
     v-model="menuComponentDetails.dialogToggles.addCustomItemDialog"
-    width="70%"
+    width="60%"
   >
     <v-card>
       <div>

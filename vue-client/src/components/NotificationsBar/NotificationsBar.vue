@@ -2,7 +2,7 @@
     <div v-if="render">
         <v-row no-gutters>
             <v-col>
-                <v-alert class="menu-notification text-center pb-2 pt-2.5" style="font-size:21px" >
+                <v-alert class="menu-notification text-center pb-3 pt-2.5" style="font-size:20px" >
                     {{ currentDate() }} - {{ hours }}:{{ minutes }}:{{ seconds }}
                     {{ amPm }}
                 </v-alert>

@@ -47,8 +47,7 @@
       x-large
       width="100%"
       v-on:click="selectedCustomerDetails.changeOrderDetailsDialog = true"
-      style="height: 12vh"
-      class="mt-1"
+      style="height: 13vh"
     >
       <div class="customer-detail-text">
         {{ this.orderTypeString[$store.state.currentOrder.type] }} <br />
@@ -321,7 +320,7 @@ export default {
         customerArr.forEach((v) => {
           if (
             v.phone.includes(
-              this.selectedCustomerDetails.selectedCustomer.phone
+              this.selectedCustomerDetails.selectedCustomer.phone.replaceAll('-', '')
             )
           ) {
             this.selectedCustomerDetails.suggestedCustomers.push(v);

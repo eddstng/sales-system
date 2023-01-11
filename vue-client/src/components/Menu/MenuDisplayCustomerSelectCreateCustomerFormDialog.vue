@@ -458,7 +458,7 @@ export default {
             );
 
           delete selectedCustomerWithNullEmptyValues["id"];
-  
+
           const res = await axios.post(
             "http://localhost:3000/post/customers/create",
             {

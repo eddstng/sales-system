@@ -41,7 +41,6 @@
           </div>
           <v-card class="overflow-y-auto" height="58vh">
             <div class="text-center">[ ▼ ]</div>
-            <v-divider></v-divider>
             <div
               v-for="value in $store.state.selectedItemsOrderedByEntry"
               v-bind:key="value.id"
@@ -88,11 +87,11 @@
 
             <v-divider></v-divider>
             <div>
-              <div class="mt-5 mb-3">
-                <v-row
-                  v-if="$store.state.currentOrder.customizations.length !== 0"
-                  class="submitOrderDialogText"
-                >
+              <div
+                v-if="$store.state.currentOrder.customizations.length !== 0"
+                class="mt-5 mb-3"
+              >
+                <v-row class="submitOrderDialogText">
                   <v-col :cols="1"> ❂</v-col>
                   <v-col :cols="5"> Order Customization</v-col>
                   <v-col :cols="4"> 全改 </v-col>
@@ -129,10 +128,9 @@
                     </div>
                   </v-list-item-content>
                 </div>
-
                 <v-divider></v-divider>
-                <div class="text-center mt-3">[ ▲ ]</div>
               </div>
+              <div class="text-center mb-1">[ ▲ ]</div>
             </div>
           </v-card>
         </div>

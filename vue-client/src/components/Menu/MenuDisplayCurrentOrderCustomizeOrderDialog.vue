@@ -6,7 +6,7 @@
     "
     v-if="menuComponentDetails.dialogToggles.customizeOrderDialog"
     v-model="menuComponentDetails.dialogToggles.customizeOrderDialog"
-    width="90%"
+    width="86%"
   >
     <v-card>
       <div>
@@ -21,7 +21,7 @@
             v-bind:key="obj.name_eng"
             x-large
             width="12.8%"
-            height="81"
+            height="80"
             class="mb-4 mr-2 ml-3 customization-button"
             v-on:click="
               phone = '';
@@ -35,7 +35,7 @@
             </div>
           </v-btn>
         </div>
-        <div class="chn-text">
+        <div class="chn-text mt-1">
           <p>
             {{ customizationInput.chn ? customizationInput.chn : "-" }}
           </p>
@@ -52,7 +52,7 @@
           </v-col>
           <v-btn
             width="10%"
-            class="mt-6"
+            height="60px"
             v-on:click="removeLastWordIncustomizationInput()"
           >
             <!-- lets make this a input bar where we can input our custom order for name_eng -->
@@ -66,7 +66,7 @@
               width="10%"
             ></v-text-field>
           </v-col>
-          <v-btn width="10%" class="mt-6" v-on:click="clearPriceInput()">
+          <v-btn width="10%" height="60px" v-on:click="clearPriceInput()">
             <p class="pt-4">CLEAR</p>
           </v-btn>
         </v-row>
@@ -83,12 +83,14 @@
           v-on:click="
             menuComponentDetails.dialogToggles.customizeOrderDialog = false;
             menuComponentDetails.selectedItemDialog = false;
+onClickAdd()
             addCustomizationToItem(menuComponentDetails.removeSelectedItem, {
               name_eng: customizationInput.eng.toUpperCase(),
               name_chn: customizationInput.chn,
               price: parseFloat(customizationInput.price),
             });
             customizationInput = { eng: '', chn: '', price: 0 };
+            close;
           "
         >
           <div>ADD<br /></div>
@@ -112,7 +114,7 @@
 
 .chn-text {
   font-size: 20px;
-  text-align: center;
+  margin-left: 8%;
 }
 </style>
 
@@ -136,6 +138,11 @@ export default {
   // ADD A PRICE INPUT FIELD AND THIS FIELD WILL ADD A SUBSTITUTION ITEM WITH THE PRICE USING addItemToSelectedItems()
 
   methods: {
+    onClickAdd() {
+      let updatedMenuComponentDetails = { ...this.menuComponentDetails };
+      updatedMenuComponentDetails.dialogToggles.selectedItemDialog = false;
+      this.$emit("updateMenuComponentDetails", updatedMenuComponentDetails);
+    },
     onClickCancel() {
       let updatedMenuComponentDetails = { ...this.menuComponentDetails };
       updatedMenuComponentDetails.dialogToggles.customizeOrderDialog = false;

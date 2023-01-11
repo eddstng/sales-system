@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <v-card outlined tile class="overflow-y-auto" height="82vh" v-chat-scroll>
+      <v-card outlined tile class="overflow-y-auto" height="80vh" v-chat-scroll>
         <div
           v-if="Object.keys($store.state.customers).length === 0"
           class="p-0"
