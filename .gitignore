@@ -2,7 +2,7 @@ node_modules
 menu*
 .DS_Store
 geo*
-vue-client/src/data
+# vue-client/src/data
 sales_system_db_menu
 sales_system_db_geo
 printing/header/
