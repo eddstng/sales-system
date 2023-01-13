@@ -95,11 +95,11 @@ export default {
   watch: {
     "selectedCustomerDetails.phoneInput": function () {
       this.suggestCustomerFromPhoneInput();
-      // this.selectedCustomerDetails.phoneInput =
-      //   this.selectedCustomerDetails.phoneInput.replace(
-      //     /(\d{3})(\d{3})(\d{3})/,
-      //     "$1-$2-$3"
-      //   );
+      this.selectedCustomerDetails.phoneInput =
+        this.selectedCustomerDetails.phoneInput.replace(
+          /(\d{3})(\d{3})(\d{3})/,
+          "$1-$2-$3"
+        );
     },
     deep: true,
   },
