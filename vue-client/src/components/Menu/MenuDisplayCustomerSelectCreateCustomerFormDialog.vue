@@ -141,24 +141,6 @@
             <div>CONFIRM<br /></div>
           </v-btn>
         </v-card-actions>
-        <div v-if="this.suggestedStreetName.length != 0">
-          <br />
-          <h3 class="text-center">Suggestions:</h3>
-
-          <v-btn
-            v-for="streetName in this.suggestedStreetName"
-            :key="streetName"
-            x-large
-            dark
-            width="100%"
-            class="mt-2"
-            v-on:click="
-              selectedCustomerDetails.selectedCustomer.street_name = streetName
-            "
-            >{{ streetName }}</v-btn
-          >
-        </div>
-        <br v-if="this.suggestedStreetName.length != 0" />
       </v-card>
     </v-dialog>
     <!-- dialog to confirm updating customer -->
@@ -285,25 +267,6 @@
             <div>UPDATE<br /></div>
           </v-btn>
         </v-card-actions>
-        <div v-if="this.suggestedStreetName.length != 0">
-          <br />
-          <h3 class="text-center">Suggestions:</h3>
-
-          <v-btn
-            v-for="streetName in this.suggestedStreetName"
-            :key="streetName"
-            x-large
-            dark
-            width="100%"
-            class="mt-2"
-            v-on:click="
-              selectedCustomerDetails.selectedCustomer.street_name = streetName
-            "
-            >{{ streetName }}</v-btn
-          >
-        </div>
-        <br v-if="this.suggestedStreetName.length != 0" />
-        <!-- dialog to confirm updating customer -->
       </v-card>
     </v-dialog>
   </div>
@@ -311,7 +274,6 @@
 
 <script>
 import axios from "axios";
-import { streetData } from "./streets";
 import customerSelectMixin from "../../mixins/customerSelectMixin";
 import storeMixin from "../../mixins/storeMixin";
 
@@ -321,14 +283,10 @@ export default {
     return {
       createCustomerWarning: null,
       createCustomerError: null,
-      suggestedStreetName: [],
       confirmCustomerUpdateDialog: false,
     };
   },
   watch: {
-    "selectedCustomerDetails.selectedCustomer.street_name": function () {
-      this.suggestStreetNameFromStreetNameInput();
-    },
     "selectedCustomerDetails.selectedCustomer.phone": function () {
       this.selectedCustomerDetails.selectedCustomer.phone =
         this.selectedCustomerDetails.selectedCustomer.phone.replace(
@@ -523,28 +481,6 @@ export default {
           this.selectedCustomerDetails.selectedCustomer.street_name == null)
       ) {
         this.createCustomerError = "DELIVERY REQUIRES A VALID ADDRESS";
-      }
-      return;
-    },
-    suggestStreetNameFromStreetNameInput: function () {
-      this.suggestedStreetName = [];
-      if (this.selectedCustomerDetails.selectedCustomer.street_name === "") {
-        this.suggestedStreetName = [];
-      } else {
-        streetData.forEach((v) => {
-          if (this.suggestedStreetName.length >= 4) {
-            return;
-          }
-          if (
-            v
-              .toLowerCase()
-              .startsWith(
-                this.selectedCustomerDetails.selectedCustomer.street_name
-              )
-          ) {
-            this.suggestedStreetName.push(v);
-          }
-        });
       }
       return;
     },
