@@ -320,7 +320,7 @@ export default {
         customerArr.forEach((v) => {
           if (
             v.phone.includes(
-              this.selectedCustomerDetails.selectedCustomer.phone.replaceAll('-', '')
+              this.selectedCustomerDetails.selectedCustomer.phone
             )
           ) {
             this.selectedCustomerDetails.suggestedCustomers.push(v);
