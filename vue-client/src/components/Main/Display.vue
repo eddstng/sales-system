@@ -9,7 +9,7 @@ h<template>
       outlined
       tile
       class="overflow-y-auto d-block"
-      height="64vh"
+      height="67vh"
       v-chat-scroll
     >
       <template>

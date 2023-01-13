@@ -156,7 +156,10 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
         let kitchenBillString = `\n\n\n\n\n\n${res[0].order_number ?? `I-` + res[0].order_internal_number} \n\n\n ${orderTypeString}
 
 
-        ${res[0].customer_phone}
+        ${res[0].customer_phone?.replace(
+            /(\d{3})(\d{3})(\d{3})/,
+            "$1-$2-$3"
+        )}
 
 
         ` + `${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}
@@ -168,7 +171,10 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
         const buzzerNumber = res[0].customer_buzzer_number ? `Buzzer: ${res[0].customer_buzzer_number} \n` : '';
         let clientBillString = `
         ${res[0].order_number ?? `I-` + res[0].order_internal_number} \n ${orderTypeString}
-        ${res[0].customer_phone}
+        ${res[0].customer_phone?.replace(
+            /(\d{3})(\d{3})(\d{3})/,
+            "$1-$2-$3"
+        )}
         ` + `${res[0].order_type === 2 ? `${res[0].customer_address}
         ` : ''}` + `${buzzerNumber}` + `${res[0].order_timestamp?.toLocaleDateString("zh-Hans-CN")} - ${res[0].order_timestamp?.toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}\n----------------------------------------------`;
 
@@ -232,16 +238,16 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
 
             let itemPrice = `${element.item_custom_price ? (Number(element.item_custom_price as number)).toFixed(2) : (Number(element.item_price as number)).toFixed(2)}`
             clientBillString += `
-            ${element.item_name_chn.length !== 0 ? `${element.orders_items_quantity}x ${element.item_name_chn} - ${(element.orders_items_quantity  * parseFloat(itemPrice)).toFixed(2)}` : `${element.orders_items_quantity}x  ${itemPrice} - Custom Item`}
-            ${`\xa0`.repeat(5)}${element.item_name_chn.length !== 0 ? '' : '⊵'}${element.item_name_eng}${clientCustomizationString ? clientCustomizationString : ''}`
+            ${element.item_name_chn.length !== 0 ? `${element.orders_items_quantity}x ${element.item_name_chn}` : `${element.orders_items_quantity}x Custom Item`} - ${(element.orders_items_quantity * parseFloat(itemPrice)).toFixed(2)}
+            ${`\xa0`.repeat(5)}${element.item_name_eng}${clientCustomizationString ? clientCustomizationString : ''}`
         })
 
         kitchenBillString += `${kitchenBillStringEnglish}
 
         `
-// or is it empty array??????????????????????????
+        // or is it empty array??????????????????????????
 
-let clientOrderCustomizationString = '';
+        let clientOrderCustomizationString = '';
         if (res[0].order_customizations !== null) {
             // clientOrderCustomizationString += '\n';
             (res[0].order_customizations as any[]).forEach((element: { price: string, name_eng: string, name_chn: string }) => {
@@ -261,17 +267,17 @@ let clientOrderCustomizationString = '';
         if (res[0].order_customizations !== null) {
             // clientOrderCustomizationString += '\n';
             (res[0].order_customizations as any[]).forEach((element: { price: string, name_eng: string, name_chn: string }) => {
-                    kitchenOrderCustomizationString += `\n\n\n${`\xa0`.repeat(2)}⤷${element.name_chn}\n`
-                }
+                kitchenOrderCustomizationString += `\n\n\n${`\xa0`.repeat(2)}⤷${element.name_chn}\n`
+            }
             )
         }
 
-        
+
         if (kitchenOrderCustomizationString !== '') {
             kitchenBillString += `Δ 全改 \n` + kitchenOrderCustomizationString + `\n\n`
         }
 
-        clientBillString += `----------------------------------------------
+        clientBillString += `\n----------------------------------------------
         Number of Items: ${res[0].items_quantity_total}
         Subtotal: $${(Number(res[0].order_subtotal)).toFixed(2)}` +
             `${Number(res[0].order_discount) !== 0 ? `

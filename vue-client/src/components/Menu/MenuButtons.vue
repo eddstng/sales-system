@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card outlined tile class="overflow-y-auto" height="80.5vh">
+    <v-card outlined tile class="overflow-y-auto" height="83.5vh">
       <div v-if="menuComponentDetails.displayMenuButtons" max-height="400">
         <div>
           <v-btn

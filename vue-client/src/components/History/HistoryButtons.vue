@@ -1,5 +1,5 @@
 <template>
-  <v-card outlined tile class="overflow-y-auto" height="80vh" v-chat-scroll>
+  <v-card outlined tile class="overflow-y-auto" height="83.5vh" v-chat-scroll>
     <div
       v-if="Object.keys($store.state.orderHistory).length === 0"
       class="p-0"
