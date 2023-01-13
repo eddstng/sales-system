@@ -1,5 +1,5 @@
 node_modules
-menu*
+menu/
 .DS_Store
 geo*
 # vue-client/src/data
