@@ -56,7 +56,7 @@
           :style="`width: ${widthOfButtons};`"
           v-on:click="addItemToSelectedItems(item)"
         >
-          {{ item.name_eng }}
+          {{ getChowMeinType(item.name_eng) }}
           <!-- <div style="font-size: 20px"> -->
           <br />
           {{ item.name_chn }}
@@ -92,6 +92,18 @@ export default {
     },
   },
   methods: {
+    getChowMeinType(nameEng) {
+      if (nameEng.includes("(C)")) {
+        return "CRISPY";
+      }
+      if (nameEng.includes("(D)")) {
+        return "DRY";
+      }
+      if (nameEng.includes("(S)")) {
+        return "SOFT";
+      }
+      return nameEng
+    },
     addItemToSelectedItems(item) {
       let idWeCareAbout = item.custom_id ?? item.id;
       let selectedItems = store.state.selectedItems;

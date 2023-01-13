@@ -84,7 +84,7 @@ export default {
       const chowMeinItems = this.$store.state.categorizedItems[12];
       const chowMeinItemsOneSize = [];
       chowMeinItems.forEach((item) => {
-        if (item.name_eng.includes("(CRISPY)")) {
+        if (item.name_eng.includes("(C)")) {
           const itemCopy = Object.assign({}, item);
           itemCopy.name_eng = itemCopy.name_eng.substring(
             0,
@@ -97,9 +97,9 @@ export default {
           chowMeinItemsOneSize.push(itemCopy);
         }
         if (
-          !item.name_eng.includes("(CRISPY)") &&
-          !item.name_eng.includes("(DRY)") &&
-          !item.name_eng.includes("(SOFT)")
+          !item.name_eng.includes("(C)") &&
+          !item.name_eng.includes("(D)") &&
+          !item.name_eng.includes("(S)")
         ) {
           chowMeinItemsOneSize.push(item);
         }
@@ -122,16 +122,6 @@ export default {
         name: "",
         price: 0.0,
       },
-      customItemSuggestions: [
-        "Beef",
-        "Rice",
-        "Chicken",
-        "Chow Mein (Crispy)",
-        "BBQ Pork",
-        "Chow Mein (Soft)",
-        "Broccoli",
-        "Black Bean Sauce",
-      ],
       categories: menuCategories,
     };
   },
@@ -177,7 +167,7 @@ export default {
       if (
         item.category === 12 &&
         item.name_eng.includes(" CM")
-        // (item.name_eng.includes("(CRISPY)") || item.name_eng.includes("(SOFT)")) - doesn't work due to modification in chowMeinItems
+        // (item.name_eng.includes("(C)") || item.name_eng.includes("(S)")) - doesn't work due to modification in chowMeinItems
       ) {
         let updatedMenuComponentDetails = { ...this.componentDetails.menuComponentDetails };
 

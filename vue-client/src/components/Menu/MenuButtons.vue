@@ -117,18 +117,18 @@ export default {
       const chowMeinItems = this.$store.state.categorizedItems[12];
       const chowMeinItemsOneSize = [];
       chowMeinItems.forEach((item) => {
-        if (item.name_eng.includes("(CRISPY)")) {
+        if (item.name_eng.includes("(C)")) {
           const itemCopy = Object.assign({}, item);
           itemCopy.name_eng = itemCopy.name_eng.substring(
             0,
-            itemCopy.name_eng.length - 8
+            itemCopy.name_eng.length - 3
           );
           chowMeinItemsOneSize.push(itemCopy);
         }
         if (
-          !item.name_eng.includes("(CRISPY)") &&
-          !item.name_eng.includes("(DRY)") &&
-          !item.name_eng.includes("(SOFT)")
+          !item.name_eng.includes("(C)") &&
+          !item.name_eng.includes("(D)") &&
+          !item.name_eng.includes("(S)")
         ) {
           chowMeinItemsOneSize.push(item);
         }
@@ -151,16 +151,6 @@ export default {
         name: "",
         price: 0.0,
       },
-      customItemSuggestions: [
-        "Beef",
-        "Rice",
-        "Chicken",
-        "Chow Mein (Crispy)",
-        "BBQ Pork",
-        "Chow Mein (Soft)",
-        "Broccoli",
-        "Black Bean Sauce",
-      ],
       categories: menuCategories,
     };
   },
