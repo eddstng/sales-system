@@ -105,6 +105,7 @@ export default {
         name_eng: ordersItemsDetailWithOrderId.item_name_eng,
         name_chn: ordersItemsDetailWithOrderId.item_name_chn,
         category: ordersItemsDetailWithOrderId.item_category,
+        alcohol: ordersItemsDetailWithOrderId.item_alcohol,
         price: parseFloat(ordersItemsDetailWithOrderId.item_price),
         // custom_price: parseFloat(ordersItemsDetailWithOrderId.item_custom_price),
         custom_price: ordersItemsDetailWithOrderId.item_custom_price

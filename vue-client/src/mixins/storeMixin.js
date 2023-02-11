@@ -33,7 +33,7 @@ export default {
       store.commit("setSelectedItems", {})
     },
     storeMixResetPriceDetails() {
-      store.commit("setPriceDetails", { discount: 0, gst: 0, subtotal: 0, total: 0 })
+      store.commit("setPriceDetails", { discount: 0, gst: 0, subtotal: 0, total: 0, pst: 0 })
     },
     storeMixResetCurrentOrder() {
       store.commit("setCurrentOrder", {
@@ -79,6 +79,7 @@ export default {
         gst: 0,
         total: 0,
         discount: 0,
+        pst: 0,
       });
     },
     storeMixinSetStoreSelectedItems(selectedItems) {
@@ -89,11 +90,14 @@ export default {
       const selectedItems = this.$store.state.selectedItems;
       let itemPriceSum = 0
       let itemPriceSumExcludingSpecials = 0
+      let alcPriceSum = 0
 
       Object.keys(selectedItems).forEach((key) => {
         const itemQuantity = selectedItems[key].quantity;
         const itemPrice = ((selectedItems[key].node.custom_price !== undefined && selectedItems[key].node.custom_price !== null) ? selectedItems[key].node.custom_price : selectedItems[key].node.price) * itemQuantity;
-
+        if (selectedItems[key].node.alcohol) {
+          alcPriceSum += itemPrice
+        }
         if (selectedItems[key].node.special !== true) {
           itemPriceSum += itemPrice
           itemPriceSumExcludingSpecials += itemPrice
@@ -102,19 +106,21 @@ export default {
         }
 
       });
-      store.commit("setPriceDetails", this.storeMixinCalculatePriceDetails(itemPriceSum, itemPriceSumExcludingSpecials));
+      store.commit("setPriceDetails", this.storeMixinCalculatePriceDetails(itemPriceSum, itemPriceSumExcludingSpecials, alcPriceSum));
     },
-    storeMixinCalculatePriceDetails(itemPriceSum, itemPriceSumExcludingSpecials) {
+    storeMixinCalculatePriceDetails(itemPriceSum, itemPriceSumExcludingSpecials, alcPriceSum) {
       let discountAmount = 0
       if (itemPriceSumExcludingSpecials > 35 && this.$store.state.currentOrder.type === 1) {
         discountAmount = itemPriceSumExcludingSpecials * 0.10;
       }
       const gstAmount = parseFloat(((itemPriceSum - discountAmount) * 0.05).toFixed(2));
+      const pstAmount = parseFloat((alcPriceSum * 0.10).toFixed(2))
       let priceDetails = {
         subtotal: itemPriceSum + (this.$store.state.currentOrder.customizations_price ?? 0),
         discount: discountAmount,
         gst: gstAmount,
-        total: (itemPriceSum - discountAmount) + gstAmount
+        pst: pstAmount,
+        total: (itemPriceSum - discountAmount) + gstAmount + pstAmount,
       }
       return priceDetails
     },

@@ -16,6 +16,7 @@ export const store = new Vuex.Store({
       gst: 0,
       total: 0,
       discount: 0,
+      pst: 0,
     }, // the price details of the current order
     currentOrder: {
       id: null,

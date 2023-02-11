@@ -280,8 +280,10 @@ export async function createKitchenAndClientBill(order_id: number, voided?: bool
         clientBillString += `\n----------------------------------------------
         Number of Items: ${res[0].items_quantity_total}
         Subtotal: $${(Number(res[0].order_subtotal)).toFixed(2)}` +
-            `${Number(res[0].order_discount) !== 0 ? `
-        Discount: -$${(Number(res[0].order_discount)).toFixed(2)}` : ''}` + `
+        `${Number(res[0].order_discount) !== 0 ? `
+        Discount: -$${(Number(res[0].order_discount)).toFixed(2)}` : ''}` + 
+        `${Number(res[0].order_pst) !== 0 ? `
+        PST: $${(Number(res[0].order_pst)).toFixed(2)}` : ''}` + `
         GST: $${(Number(res[0].order_gst)).toFixed(2)}
         Total: $${res[0].order_total.toFixed(2)}
         `

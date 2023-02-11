@@ -158,6 +158,7 @@ export async function updateOrder(id: number, order: Prisma.ordersUncheckedUpdat
                 paid: order.paid,
                 subtotal: order.subtotal,
                 gst: order.gst,
+                pst: order.pst,
                 discount: order.discount,
                 internal: order.internal,
                 internal_number: order.internal_number,
@@ -199,7 +200,7 @@ export async function submitOrder(
             }
 
         }
-        priceDetails: { subtotal: number, gst: number, total: number, discount: number }
+        priceDetails: { subtotal: number, gst: number, total: number, discount: number, pst: number }
     }) {
     try {
         const newOrder = await createOrder({ total: 0, customer_id: data.customer_id, type: data.orderDetails.type, internal: data.orderDetails.internal, customizations: data.orderDetails.customizations, customizations_price: data.orderDetails.customizations_price});
@@ -232,15 +233,9 @@ function createOrdersItemsCreateManyInputData(order_id: number, items: {
 }): {
     order_id: any; item_id: any; quantity: any; customizations: any; timestamp: string; price: any, custom_price: any, custom_item_id: any;
 }[] {
-    console.log('yyyyyyyyyyyyyyyyyyyyyyy')
-    console.log(JSON.stringify(items))
-    console.log('yyyyyyyyyyyyyyyyyyyyyyy')
     const ordersItemsCreateManyInputData = [];
     for (const value of Object.entries(items)) {
         const item = value[1];
-        console.log('99999999999999999999999')
-        console.log(item.node)
-        console.log('99999999999999999999999')
         ordersItemsCreateManyInputData.push({
             order_id: order_id,
             item_id: item.node.id,
@@ -278,7 +273,7 @@ export async function modifyOrder(
                 customizations: { name_eng: string, name_chn: string }[]
             }
         }
-        priceDetails: { subtotal: number, gst: number, total: number, discount: number }
+        priceDetails: { subtotal: number, gst: number, total: number, discount: number, pst: number }
     }) {
     try {
         let latestOrderNumberToInsert = data.orderDetails.number;

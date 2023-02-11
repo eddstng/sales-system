@@ -129,6 +129,7 @@ h<template>
         <v-list-item-content>
           <div class="menu-display-item-text">Subtotal:</div>
           <div class="menu-display-item-text">Discount:</div>
+          <div class="menu-display-item-text">PST:</div>
           <div class="menu-display-item-text">GST:</div>
           <div class="menu-display-item-text mt-2">Total:</div>
         </v-list-item-content>
@@ -138,6 +139,9 @@ h<template>
           </div>
           <div class="menu-display-item-text text-right">
             -{{ $store.state.priceDetails.discount.toFixed(2) }}
+          </div>
+          <div class="menu-display-item-text text-right">
+            {{ $store.state.priceDetails.pst.toFixed(2) }}
           </div>
           <div class="menu-display-item-text text-right">
             {{ $store.state.priceDetails.gst.toFixed(2) }}

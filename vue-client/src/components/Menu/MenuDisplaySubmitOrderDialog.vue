@@ -138,15 +138,18 @@
       <div class="card-actions">
         <v-divider> </v-divider>
         <v-row class="submitOrderDialogText mt-1 mb-1">
-          <v-col :cols="3">
+          <v-col :cols="2">
             Number of Items:
             {{ $store.state.currentOrder.itemQuantity }}
           </v-col>
-          <v-col :cols="3">
+          <v-col :cols="2">
             Subtotal: {{ $store.state.priceDetails.subtotal.toFixed(2) }}
           </v-col>
           <v-col :cols="2" class="text-end">
             Discount: -{{ $store.state.priceDetails.discount.toFixed(2) }}
+          </v-col>
+          <v-col :cols="2" class="text-end">
+            PST: {{ $store.state.priceDetails.pst.toFixed(2) }}
           </v-col>
           <v-col :cols="2" class="text-end">
             GST: {{ $store.state.priceDetails.gst.toFixed(2) }}

@@ -30,7 +30,8 @@ CREATE TABLE items (
     name_chn VARCHAR(100) NOT NULL DEFAULT '',
     category INTEGER,
     special BOOLEAN DEFAULT FALSE,
-    options VARCHAR(100) NOT NULL DEFAULT ''
+    options VARCHAR(100) NOT NULL DEFAULT '',
+    alcohol BOOLEAN DEFAULT FALSE
     -- custom BOOLEAN NOT NULL DEFAULT FALSE
 );
 
@@ -65,6 +66,7 @@ CREATE TABLE orders (
     total DECIMAL,
     subtotal DECIMAL,
     gst DECIMAL,
+    pst DECIMAL,
     discount DECIMAL,
     timestamp TIMESTAMP WITHOUT TIME ZONE DEFAULT (NOW()),
     type SMALLINT,
@@ -131,6 +133,7 @@ o.type as order_type,
 o.total as order_total,
 o.subtotal as order_subtotal,
 o.gst as order_gst,
+o.pst as order_pst,
 o.discount as order_discount,
 o.void as order_void,
 o.paid as order_paid,
@@ -154,6 +157,7 @@ i.name_eng as item_name_eng,
 i.name_chn as item_name_chn,
 i.price as item_price,
 i.special as item_special,
+i.alcohol as item_alcohol,
 oi.custom_price as item_custom_price,
 oi.custom_item_id as item_custom_id,
 oi.quantity as orders_items_quantity,
